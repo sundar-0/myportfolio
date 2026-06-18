@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Class 12 Computer Science Notes</title>
+<title>Class 12 CS Full Syllabus Notes</title>
 
 <style>
 :root{
@@ -15,33 +15,48 @@
 
 body{
     margin:0;
-    font-family:Segoe UI, sans-serif;
+    font-family:Segoe UI;
     background:var(--bg);
     color:var(--text);
+    display:flex;
 }
 
-/* HEADER */
-header{
+/* SIDEBAR */
+.sidebar{
+    width:270px;
+    height:100vh;
+    background:var(--card);
+    padding:15px;
+    position:fixed;
+    overflow:auto;
+}
+
+.sidebar h2{
+    color:var(--accent);
     text-align:center;
-    padding:25px;
-    background:linear-gradient(135deg,#1e3a8a,#0ea5e9);
 }
 
-header h1{
-    margin:0;
-    font-size:28px;
+.sidebar button{
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+    border:none;
+    cursor:pointer;
+    background:transparent;
+    color:var(--text);
+    text-align:left;
+    border-radius:6px;
 }
 
-header p{
-    margin-top:5px;
-    opacity:0.8;
+.sidebar button:hover,
+.sidebar button.active{
+    background:var(--accent);
+    color:black;
 }
 
-/* CONTAINER */
-.container{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:15px;
+/* MAIN */
+.main{
+    margin-left:280px;
     padding:20px;
 }
 
@@ -49,224 +64,200 @@ header p{
 .card{
     background:var(--card);
     padding:15px;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.3);
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-    border:1px solid var(--accent);
-}
-
-.card h2{
-    color:var(--accent);
-    font-size:18px;
-}
-
-/* DETAILS */
-details{
     margin-top:10px;
-    background:#0b1220;
-    padding:8px;
-    border-radius:8px;
+    border-radius:10px;
 }
 
-summary{
-    cursor:pointer;
-    font-weight:bold;
+.hidden{display:none;}
+
+h3{
+    color:var(--accent);
 }
 
-ul{
-    margin:8px 0 0 15px;
+.sub{
+    margin-left:10px;
+    line-height:1.7;
 }
-
-/* SEARCH BAR */
-.search{
-    text-align:center;
-    margin:15px;
-}
-
-.search input{
-    width:60%;
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    outline:none;
-}
-
-/* HIDE */
-.hidden{
-    display:none;
-}
-
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>📘 Class 12 Computer Science Notes</h1>
-<p>Stylish Study Hub (NEB Syllabus)</p>
-</header>
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>📘 Class 12 CS</h2>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search unit...">
+<button class="active" onclick="show(1)">1. DBMS</button>
+<button onclick="show(2)">2. Networking</button>
+<button onclick="show(3)">3. Web Tech II</button>
+<button onclick="show(4)">4. C Programming</button>
+<button onclick="show(5)">5. OOP</button>
+<button onclick="show(6)">6. Software Model</button>
+<button onclick="show(7)">7. Trends</button>
 </div>
 
-<div class="container">
+<!-- MAIN -->
+<div class="main">
 
 <!-- UNIT 1 -->
-<div class="card">
-<h2>1. DBMS</h2>
-
-<details>
-<summary>Basics</summary>
-<ul>
-<li>Data, Database, DBMS</li>
-<li>Primary, Candidate, Alternate Key</li>
-</ul>
-</details>
-
-<details>
-<summary>SQL Concepts</summary>
-<ul>
-<li>DDL vs DML</li>
-<li>CREATE, INSERT, UPDATE</li>
-</ul>
-</details>
-
-<details>
-<summary>Normalization</summary>
-<ul>
-<li>1NF</li>
-<li>2NF</li>
-<li>3NF</li>
-</ul>
-</details>
+<div class="card unit" data-unit="1">
+<h3>1. Database Management System</h3>
+<div class="sub">
+<p>1.1 Introduction to data, database, DBMS</p>
+<p>1.2 Field, Record, Object, Primary Key, Candidate Key, Alternate Key</p>
+<p>1.3 Advantages of DBMS</p>
+<p>1.4 DDL and DML</p>
+<p>1.5 Database Models: Hierarchical, Network, Relational</p>
+<p>1.6 Normalization: 1NF, 2NF, 3NF</p>
+<p>1.7 Centralized vs Distributed Database</p>
+<p>1.8 Database Security</p>
+</div>
 </div>
 
 <!-- UNIT 2 -->
-<div class="card">
-<h2>2. Networking</h2>
-
-<details>
-<summary>Basics</summary>
-<ul>
-<li>LAN, WAN</li>
-<li>Internet, Intranet</li>
-</ul>
-</details>
-
-<details>
-<summary>Devices</summary>
-<ul>
-<li>Router</li>
-<li>Switch</li>
-<li>Modem</li>
-</ul>
-</details>
-
-<details>
-<summary>OSI Model</summary>
-<ul>
-<li>7 Layers</li>
-</ul>
-</details>
+<div class="card unit hidden" data-unit="2">
+<h3>2. Data Communication & Networking</h3>
+<div class="sub">
+<p>2.1 Basic elements of Communication System</p>
+<p>2.2 Concept of Communication System</p>
+<p>2.3 Block Diagram of Communication System</p>
+<p>2.4 Elements of Data Communication</p>
+<p>2.5 Simplex, Half Duplex, Full Duplex</p>
+<p>2.6 LAN and WAN</p>
+<p>2.7 Transmission Media (Guided/Unguided)</p>
+<p>2.8 Noise, Echo, Crosstalk, Distortion, Bandwidth</p>
+<p>2.9 Client Server & Peer-to-Peer</p>
+<p>2.10 IP Address, Subnet Mask, Gateway, MAC</p>
+<p>2.11 Packet Tracer, Remote Login</p>
+<p>2.12 NIC, Router, Switch, Modem</p>
+<p>2.13 Bus, Ring, Star Topology</p>
+<p>2.14 OSI Model</p>
+<p>2.15 Internet Protocol Addressing</p>
+</div>
 </div>
 
 <!-- UNIT 3 -->
-<div class="card">
-<h2>3. Web Technology</h2>
-
-<details>
-<summary>JavaScript</summary>
-<ul>
-<li>Variables</li>
-<li>Functions</li>
-<li>Loops</li>
-</ul>
-</details>
-
-<details>
-<summary>PHP</summary>
-<ul>
-<li>Syntax</li>
-<li>Database Connection</li>
-</ul>
-</details>
+<div class="card unit hidden" data-unit="3">
+<h3>3. Web Technology II</h3>
+<div class="sub">
+<p>3.1 Introduction</p>
+<p>3.2 Client Side & Server Side Scripting</p>
+<p>3.3 Internet Technology</p>
+<p>3.4 JavaScript in HTML</p>
+<p>3.5 JavaScript Fundamentals</p>
+<p>3.6 Data Types</p>
+<p>3.7 Variables and Operators</p>
+<p>3.8 Control Structures (if, switch, loop)</p>
+<p>3.9 Object Based JS & Event Handling</p>
+<p>3.10 Image, Event and Form Objects</p>
+<p>3.11 Form Validation & jQuery</p>
+<p>3.12 PHP Introduction</p>
+<p>3.13 Hardware & Software Requirements</p>
+<p>3.14 OOP with Server Side Scripting</p>
+<p>3.15 Basic PHP Syntax</p>
+<p>3.16 PHP Data Types</p>
+<p>3.17 PHP Programming</p>
+<p>3.18 Operators</p>
+<p>3.19 Variables Manipulation</p>
+<p>3.20 Database Connectivity</p>
+<p>3.21 Server + Database Connection</p>
+<p>3.22 SQL Queries</p>
+<p>3.23 Fetching Data</p>
+<p>3.24 Creating Database using PHP</p>
+<p>3.25 Displaying Query Results</p>
+</div>
 </div>
 
 <!-- UNIT 4 -->
-<div class="card">
-<h2>4. C Programming</h2>
-
-<details>
-<summary>Functions</summary>
-<ul>
-<li>User defined functions</li>
-<li>Recursion</li>
-</ul>
-</details>
-
-<details>
-<summary>Pointers</summary>
-<ul>
-<li>Address & *</li>
-</ul>
-</details>
-
-<details>
-<summary>File Handling</summary>
-<ul>
-<li>fprintf, fscanf</li>
-</ul>
-</details>
+<div class="card unit hidden" data-unit="4">
+<h3>4. Programming in C</h3>
+<div class="sub">
+<p>4.1 Review of C Programming</p>
+<p>4.2 Functions</p>
+<p>4.2.1 Library & User Defined Functions</p>
+<p>4.2.2 Function Definition, Prototype, Call</p>
+<p>4.2.3 Passing Values</p>
+<p>4.2.4 Storage Types</p>
+<p>4.2.5 Recursion (Factorial, Fibonacci)</p>
+<p>4.3 Structures and Unions</p>
+<p>4.3.1 Structure Definition</p>
+<p>4.3.2 Accessing Members</p>
+<p>4.3.3 Array of Structure</p>
+<p>4.3.4 Union Definition</p>
+<p>4.3.5 Structure vs Union</p>
+<p>4.4 Pointers</p>
+<p>4.4.1 Pointer Definition</p>
+<p>4.4.2 & and * operators</p>
+<p>4.4.3 Pointer Expressions</p>
+<p>4.4.4 Call by Value/Reference</p>
+<p>4.5 File Handling</p>
+<p>4.5.1 Data File Concept</p>
+<p>4.5.2 Sequential vs Random File</p>
+<p>4.5.3 File Functions</p>
+<p>4.5.4 Open, Read, Write, Append</p>
+</div>
 </div>
 
 <!-- UNIT 5 -->
-<div class="card">
-<h2>5. OOP</h2>
-<ul>
-<li>Class & Object</li>
-<li>Inheritance</li>
-<li>Polymorphism</li>
-</ul>
+<div class="card unit hidden" data-unit="5">
+<h3>5. OOP</h3>
+<div class="sub">
+<p>5.1 Programming Paradigms</p>
+<p>5.2 Class and Object</p>
+<p>5.3 Polymorphism</p>
+<p>5.4 Inheritance</p>
+<p>5.5 Advantages of OOP</p>
+<p>5.6 Applications of OOP</p>
+</div>
 </div>
 
 <!-- UNIT 6 -->
-<div class="card">
-<h2>6. Software Engineering</h2>
-<ul>
-<li>SDLC</li>
-<li>Waterfall</li>
-<li>Agile</li>
-</ul>
+<div class="card unit hidden" data-unit="6">
+<h3>6. Software Process Model</h3>
+<div class="sub">
+<p>6.1 Software Project Concept</p>
+<p>6.2 Software Development Process</p>
+<p>6.3 SDLC Life Cycle</p>
+<p>6.4 System Analyst vs Software Engineer</p>
+<p>6.5 Requirement Collection Methods</p>
+<p>6.6 System Design Concept</p>
+<p>6.7 Software Quality</p>
+<p>6.8 Waterfall Model</p>
+<p>6.9 Prototype Model</p>
+<p>6.10 Agile Model</p>
+</div>
 </div>
 
 <!-- UNIT 7 -->
-<div class="card">
-<h2>7. Trends</h2>
-<ul>
-<li>AI</li>
-<li>Cloud Computing</li>
-<li>IoT</li>
-</ul>
+<div class="card unit hidden" data-unit="7">
+<h3>7. Recent Trends</h3>
+<div class="sub">
+<p>7.1 Artificial Intelligence</p>
+<p>7.2 Robotics</p>
+<p>7.3 Cloud Computing</p>
+<p>7.4 Big Data</p>
+<p>7.5 Virtual Reality</p>
+<p>7.6 E-commerce / E-gov / E-medicine</p>
+<p>7.7 Internet of Things (IoT)</p>
+</div>
 </div>
 
 </div>
 
 <script>
-// SEARCH FILTER
-document.getElementById("search").addEventListener("keyup", function(){
-    let value = this.value.toLowerCase();
-    let cards = document.querySelectorAll(".card");
-
-    cards.forEach(card=>{
-        let text = card.innerText.toLowerCase();
-        card.classList.toggle("hidden", !text.includes(value));
+function show(n){
+    let units = document.querySelectorAll(".unit");
+    units.forEach(u=>{
+        u.classList.add("hidden");
+        if(u.dataset.unit == n){
+            u.classList.remove("hidden");
+        }
     });
-});
+
+    let btns = document.querySelectorAll(".sidebar button");
+    btns.forEach(b=>b.classList.remove("active"));
+    btns[n-1].classList.add("active");
+}
 </script>
 
 </body>
