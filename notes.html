@@ -1,36 +1,34 @@
+Vai full updated code:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class 12 CS Full Syllabus Notes</title>
-
 <style>
 :root{
     --bg:#0f172a;
     --card:#1e293b;
     --text:#e2e8f0;
     --accent:#38bdf8;
+    --line:rgba(148,163,184,0.25);
 }
-
 body.light{
     --bg:#f8fafc;
     --card:#ffffff;
     --text:#0f172a;
     --accent:#0284c7;
 }
-
 *{
     box-sizing:border-box;
 }
-
 body{
     margin:0;
     font-family:Segoe UI, Arial, sans-serif;
     background:var(--bg);
     color:var(--text);
 }
-
 /* TOP BAR */
 .topbar{
     display:none;
@@ -38,26 +36,23 @@ body{
     top:0;
     left:0;
     width:100%;
-    height:55px;
+    height:65px;
     background:var(--card);
     z-index:1000;
-    padding:10px;
+    padding:10px 18px;
     align-items:center;
     justify-content:space-between;
-    box-shadow:0 2px 10px rgba(0,0,0,0.3);
 }
-
 .topbar button,
 .mode-btn{
     border:none;
     background:var(--accent);
     color:#000;
-    padding:8px 12px;
-    border-radius:8px;
+    padding:10px 14px;
+    border-radius:12px;
     cursor:pointer;
     font-weight:bold;
 }
-
 /* SIDEBAR */
 .sidebar{
     width:270px;
@@ -69,12 +64,10 @@ body{
     transition:0.3s;
     z-index:999;
 }
-
 .sidebar h2{
     color:var(--accent);
     text-align:center;
 }
-
 .sidebar button{
     width:100%;
     padding:12px;
@@ -87,96 +80,99 @@ body{
     border-radius:8px;
     font-size:15px;
 }
-
 .sidebar button:hover,
 .sidebar button.active{
     background:var(--accent);
     color:black;
 }
-
 /* MAIN */
 .main{
     margin-left:280px;
-    padding:20px;
+    padding:25px;
     min-height:100vh;
 }
-
-/* CARD */
 .card{
     background:var(--card);
-    padding:18px;
-    margin-top:10px;
-    border-radius:14px;
+    padding:22px;
+    border-radius:18px;
     box-shadow:0 5px 20px rgba(0,0,0,0.2);
 }
-
 .hidden{
     display:none;
 }
-
 h3{
     color:var(--accent);
-    font-size:24px;
+    font-size:28px;
 }
-
-.sub{
-    margin-left:10px;
-    line-height:1.8;
+/* CLICKABLE TOPIC */
+.topic{
+    padding:15px;
+    margin:12px 0;
+    border-radius:14px;
+    border:1px solid var(--line);
+    cursor:pointer;
+    transition:0.25s;
 }
-
-.sub p{
-    padding:8px;
-    border-bottom:1px solid rgba(148,163,184,0.2);
+.topic:hover{
+    background:rgba(56,189,248,0.12);
+    transform:translateY(-2px);
 }
-
-/* MOBILE RESPONSIVE */
+.topic-title{
+    font-size:18px;
+    font-weight:600;
+}
+.topic-detail{
+    display:none;
+    margin-top:12px;
+    line-height:1.7;
+    background:rgba(15,23,42,0.25);
+    padding:14px;
+    border-radius:12px;
+}
+body.light .topic-detail{
+    background:#f1f5f9;
+}
+.topic.open{
+    border-color:var(--accent);
+    background:rgba(56,189,248,0.10);
+}
+.topic.open .topic-detail{
+    display:block;
+}
+/* MOBILE */
 @media(max-width:768px){
     .topbar{
         display:flex;
     }
-
     .sidebar{
         left:-280px;
-        top:55px;
-        height:calc(100vh - 55px);
+        top:65px;
+        height:calc(100vh - 65px);
     }
-
     .sidebar.show{
         left:0;
     }
-
     .main{
         margin-left:0;
-        padding:75px 12px 20px;
+        padding:90px 14px 20px;
     }
-
-    .card{
-        padding:14px;
-    }
-
     h3{
-        font-size:20px;
+        font-size:24px;
     }
-
-    .sub{
-        margin-left:0;
-        font-size:15px;
+    .card{
+        padding:18px;
     }
 }
 </style>
 </head>
-
 <body>
-
 <div class="topbar">
     <button onclick="toggleSidebar()">☰ Menu</button>
     <strong>📘 Class 12 CS</strong>
     <button onclick="toggleMode()">🌙/☀️</button>
 </div>
-
 <div class="sidebar" id="sidebar">
 <h2>📘 Class 12 CS</h2>
-
 <button class="active" onclick="show(1)">1. DBMS</button>
 <button onclick="show(2)">2. Networking</button>
 <button onclick="show(3)">3. Web Tech II</button>
@@ -184,133 +180,225 @@ h3{
 <button onclick="show(5)">5. OOP</button>
 <button onclick="show(6)">6. Software Model</button>
 <button onclick="show(7)">7. Trends</button>
-
 <br>
 <button class="mode-btn" onclick="toggleMode()">🌙 / ☀️ Light Dark</button>
 </div>
-
 <div class="main">
-
+<!-- UNIT 1 -->
 <div class="card unit" data-unit="1">
 <h3>1. Database Management System</h3>
-<div class="sub">
-<p>1.1 Introduction to data, database, DBMS</p>
-<p>1.2 Field, Record, Object, Primary Key, Candidate Key, Alternate Key</p>
-<p>1.3 Advantages of DBMS</p>
-<p>1.4 DDL and DML</p>
-<p>1.5 Database Models: Hierarchical, Network, Relational</p>
-<p>1.6 Normalization: 1NF, 2NF, 3NF</p>
-<p>1.7 Centralized vs Distributed Database</p>
-<p>1.8 Database Security</p>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">1.1 Introduction to Data, Database and DBMS</div>
+<div class="topic-detail">
+Data means raw facts. Database is an organized collection of data. DBMS is software used to store, manage, update and retrieve data easily.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">1.2 Keys in DBMS</div>
+<div class="topic-detail">
+Primary key uniquely identifies each record. Candidate key can become primary key. Alternate key is candidate key not selected as primary key.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">1.3 Advantages of DBMS</div>
+<div class="topic-detail">
+DBMS reduces data redundancy, improves security, supports data sharing, backup, recovery and maintains data consistency.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">1.4 DDL and DML</div>
+<div class="topic-detail">
+DDL defines database structure like CREATE, ALTER, DROP. DML manipulates data like INSERT, UPDATE, DELETE, SELECT.
+</div>
+</div>
+</div>
+<!-- UNIT 2 -->
 <div class="card unit hidden" data-unit="2">
 <h3>2. Data Communication & Networking</h3>
-<div class="sub">
-<p>2.1 Basic elements of Communication System</p>
-<p>2.2 Concept of Communication System</p>
-<p>2.3 Block Diagram of Communication System</p>
-<p>2.4 Elements of Data Communication</p>
-<p>2.5 Simplex, Half Duplex, Full Duplex</p>
-<p>2.6 LAN and WAN</p>
-<p>2.7 Transmission Media</p>
-<p>2.8 Noise, Echo, Crosstalk, Distortion, Bandwidth</p>
-<p>2.9 Client Server & Peer-to-Peer</p>
-<p>2.10 IP Address, Subnet Mask, Gateway, MAC</p>
-<p>2.11 Packet Tracer, Remote Login</p>
-<p>2.12 NIC, Router, Switch, Modem</p>
-<p>2.13 Bus, Ring, Star Topology</p>
-<p>2.14 OSI Model</p>
-<p>2.15 Internet Protocol Addressing</p>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">2.1 Communication System</div>
+<div class="topic-detail">
+Communication system transfers information from sender to receiver through a medium using rules called protocol.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">2.2 Communication Modes</div>
+<div class="topic-detail">
+Simplex sends data one way only. Half duplex sends both ways but one at a time. Full duplex sends both ways at the same time.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">2.3 LAN and WAN</div>
+<div class="topic-detail">
+LAN covers small area like school or office. WAN covers large area like city, country or world.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">2.4 OSI Model</div>
+<div class="topic-detail">
+OSI model has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation and Application.
+</div>
+</div>
+</div>
+<!-- UNIT 3 -->
 <div class="card unit hidden" data-unit="3">
 <h3>3. Web Technology II</h3>
-<div class="sub">
-<p>3.1 Introduction</p>
-<p>3.2 Client Side & Server Side Scripting</p>
-<p>3.3 Internet Technology</p>
-<p>3.4 JavaScript in HTML</p>
-<p>3.5 JavaScript Fundamentals</p>
-<p>3.6 Data Types</p>
-<p>3.7 Variables and Operators</p>
-<p>3.8 Control Structures</p>
-<p>3.9 Object Based JS & Event Handling</p>
-<p>3.10 Image, Event and Form Objects</p>
-<p>3.11 Form Validation & jQuery</p>
-<p>3.12 PHP Introduction</p>
-<p>3.13 Hardware & Software Requirements</p>
-<p>3.14 OOP with Server Side Scripting</p>
-<p>3.15 Basic PHP Syntax</p>
-<p>3.16 PHP Data Types</p>
-<p>3.17 PHP Programming</p>
-<p>3.18 Operators</p>
-<p>3.19 Variables Manipulation</p>
-<p>3.20 Database Connectivity</p>
-<p>3.21 Server + Database Connection</p>
-<p>3.22 SQL Queries</p>
-<p>3.23 Fetching Data</p>
-<p>3.24 Creating Database using PHP</p>
-<p>3.25 Displaying Query Results</p>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.1 Introduction</div>
+<div class="topic-detail">
+Web Technology II means advanced web development. यसमा website कसरी interactive, dynamic र database connected बनाउने भन्ने पढिन्छ। It includes JavaScript, PHP, form validation, server-side scripting and database connectivity.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.2 Client Side & Server Side Scripting</div>
+<div class="topic-detail">
+Client-side scripting browser मा run हुन्छ, like JavaScript. Server-side scripting server मा run हुन्छ, like PHP. Client side UI interaction को लागि हो भने server side database, login, processing को लागि हो।
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.3 Internet Technology</div>
+<div class="topic-detail">
+Internet Technology includes browser, server, URL, domain, hosting, HTTP/HTTPS and web communication system.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.4 JavaScript in HTML</div>
+<div class="topic-detail">
+JavaScript HTML मा interactive behavior add गर्न प्रयोग हुन्छ। It can be written inside script tag or linked as external JS file.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.5 JavaScript Fundamentals</div>
+<div class="topic-detail">
+JavaScript fundamentals include variables, data types, operators, functions, loops, conditions and events.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.6 Data Types</div>
+<div class="topic-detail">
+Data type means type of value stored in variable. JavaScript data types are String, Number, Boolean, Null, Undefined, Object and Array.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.7 Variables and Operators</div>
+<div class="topic-detail">
+Variables store data. Operators perform calculation and comparison. Examples: +, -, *, /, ==, ===, &gt;, &lt;.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.8 Control Structures</div>
+<div class="topic-detail">
+Control structures control program flow. Examples: if, else, switch, for loop, while loop and do while loop.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">3.9 Object Based JS & Event Handling</div>
+<div class="topic-detail">
+Object based JavaScript uses objects like document, form, image and window. Event handling means responding to user actions like click, submit, keypress and mouseover.
+</div>
+</div>
+</div>
+<!-- UNIT 4 -->
 <div class="card unit hidden" data-unit="4">
 <h3>4. Programming in C</h3>
-<div class="sub">
-<p>4.1 Review of C Programming</p>
-<p>4.2 Functions</p>
-<p>4.3 Structures and Unions</p>
-<p>4.4 Pointers</p>
-<p>4.5 File Handling</p>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">4.1 Review of C Programming</div>
+<div class="topic-detail">
+C is a structured programming language. It supports variables, data types, operators, loops, functions, arrays and pointers.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">4.2 Functions</div>
+<div class="topic-detail">
+Function is a block of code used to perform a specific task. It helps to reduce repetition and make program modular.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">4.3 Structures and Unions</div>
+<div class="topic-detail">
+Structure stores different data types under one name. Union also stores different data types but shares same memory location.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">4.4 Pointers</div>
+<div class="topic-detail">
+Pointer is a variable that stores address of another variable. It is useful in memory handling, arrays, functions and dynamic allocation.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">4.5 File Handling</div>
+<div class="topic-detail">
+File handling is used to store data permanently in files. Common operations are open, read, write, append and close.
+</div>
+</div>
+</div>
+<!-- UNIT 5 -->
 <div class="card unit hidden" data-unit="5">
-<h3>5. OOP</h3>
-<div class="sub">
-<p>5.1 Programming Paradigms</p>
-<p>5.2 Class and Object</p>
-<p>5.3 Polymorphism</p>
-<p>5.4 Inheritance</p>
-<p>5.5 Advantages of OOP</p>
-<p>5.6 Applications of OOP</p>
+<h3>5. Object Oriented Programming</h3>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">5.1 Class and Object</div>
+<div class="topic-detail">
+Class is a blueprint. Object is an instance of class. Example: Student is class, Ram is object.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">5.2 Polymorphism</div>
+<div class="topic-detail">
+Polymorphism means one name many forms. Same function can perform different tasks.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">5.3 Inheritance</div>
+<div class="topic-detail">
+Inheritance allows one class to use properties and methods of another class. It supports code reusability.
+</div>
+</div>
+</div>
+<!-- UNIT 6 -->
 <div class="card unit hidden" data-unit="6">
 <h3>6. Software Process Model</h3>
-<div class="sub">
-<p>6.1 Software Project Concept</p>
-<p>6.2 Software Development Process</p>
-<p>6.3 SDLC Life Cycle</p>
-<p>6.4 System Analyst vs Software Engineer</p>
-<p>6.5 Requirement Collection Methods</p>
-<p>6.6 System Design Concept</p>
-<p>6.7 Software Quality</p>
-<p>6.8 Waterfall Model</p>
-<p>6.9 Prototype Model</p>
-<p>6.10 Agile Model</p>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">6.1 SDLC</div>
+<div class="topic-detail">
+SDLC means Software Development Life Cycle. It includes planning, analysis, design, coding, testing, deployment and maintenance.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">6.2 Waterfall Model</div>
+<div class="topic-detail">
+Waterfall model is a sequential software development model where each phase must be completed before next phase starts.
+</div>
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">6.3 Agile Model</div>
+<div class="topic-detail">
+Agile model is flexible and iterative. Software is developed in small parts with continuous feedback.
+</div>
+</div>
+</div>
+<!-- UNIT 7 -->
 <div class="card unit hidden" data-unit="7">
 <h3>7. Recent Trends</h3>
-<div class="sub">
-<p>7.1 Artificial Intelligence</p>
-<p>7.2 Robotics</p>
-<p>7.3 Cloud Computing</p>
-<p>7.4 Big Data</p>
-<p>7.5 Virtual Reality</p>
-<p>7.6 E-commerce / E-gov / E-medicine</p>
-<p>7.7 Internet of Things</p>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">7.1 Artificial Intelligence</div>
+<div class="topic-detail">
+AI is a branch of computer science that makes machines capable of learning, reasoning and decision making.
 </div>
 </div>
-
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">7.2 Cloud Computing</div>
+<div class="topic-detail">
+Cloud computing provides computing services like storage, database and software through internet.
 </div>
-
+</div>
+<div class="topic" onclick="openTopic(this)">
+<div class="topic-title">7.3 IoT</div>
+<div class="topic-detail">
+Internet of Things connects physical devices to internet so they can collect and exchange data.
+</div>
+</div>
+</div>
+</div>
 <script>
 function show(n){
     let units = document.querySelectorAll(".unit");
@@ -320,37 +408,36 @@ function show(n){
             u.classList.remove("hidden");
         }
     });
-
     let btns = document.querySelectorAll(".sidebar button");
     btns.forEach(b=>b.classList.remove("active"));
     btns[n-1].classList.add("active");
-
-    // mobile मा unit select गरेपछि sidebar auto close
     document.getElementById("sidebar").classList.remove("show");
 }
-
 function toggleSidebar(){
     document.getElementById("sidebar").classList.toggle("show");
 }
-
 function toggleMode(){
     document.body.classList.toggle("light");
-
-    // user ko mode save huncha
     if(document.body.classList.contains("light")){
         localStorage.setItem("theme","light");
     }else{
         localStorage.setItem("theme","dark");
     }
 }
-
-// saved theme load
+function openTopic(element){
+    let topics = element.parentElement.querySelectorAll(".topic");
+    topics.forEach(t=>{
+        if(t !== element){
+            t.classList.remove("open");
+        }
+    });
+    element.classList.toggle("open");
+}
 window.onload = function(){
     if(localStorage.getItem("theme") === "light"){
         document.body.classList.add("light");
     }
 }
 </script>
-
 </body>
 </html>
