@@ -1,5 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+	/*==================== NOTES CARD ====================*/
+.notes{
+    padding: 3rem 0;
+}
+
+.notes__card{
+    background: linear-gradient(135deg, #6c63ff, #4a47a3);
+    padding: 3rem 2rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+
+.notes__content h2{
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.notes__content p{
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.notes__content .button{
+    background: #fff;
+    color: #6c63ff;
+    padding: 1rem 2rem;
+    border-radius: .75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.notes__content .button:hover{
+    transform: translateY(-3px);
+}
 <head>
 	<title>Sundar Dumre's Portfolio</title>
 	<meta charset="utf-8">
@@ -31,6 +68,11 @@
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav nav ml-auto">
 					<li class="nav-item"><a href="#home-section" class="nav-link"><span>Home</span></a></li>
+					<li class="nav__item">
+    <a href="#notes" class="nav__link">
+        <i class="uil uil-book-open nav__icon"></i> Notes
+    </a>
+</li>
 					<li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>
 					<li class="nav-item"><a href="#skills-section" class="nav-link"><span>Skills</span></a></li>
 					<li class="nav-item"><a href="#certificates-section" class="nav-link"><span>Certificate</span></a></li>
@@ -42,7 +84,23 @@
 	</nav>
 
 
+<!--==================== NOTES SECTION ====================-->
+<section class="notes section">
+    <div class="notes__card">
+        <div class="notes__content">
+            <h2>📚 Class 12 Computer Science Notes</h2>
+            <p>
+                Access complete chapter-wise notes, important questions,
+                and explanations for Class 12 Computer Science.
+            </p>
 
+            <a href="notes.html" class="button">
+                View Notes
+                <i class="uil uil-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
 	<section class="ftco-section bg-light" id="home-section">
 		<div class="container">
 			<div class="row">
