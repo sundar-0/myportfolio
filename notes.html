@@ -13,12 +13,49 @@
     --accent:#38bdf8;
 }
 
+body.light{
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --text:#0f172a;
+    --accent:#0284c7;
+}
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
-    font-family:Segoe UI;
+    font-family:Segoe UI, Arial, sans-serif;
     background:var(--bg);
     color:var(--text);
-    display:flex;
+}
+
+/* TOP BAR */
+.topbar{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:55px;
+    background:var(--card);
+    z-index:1000;
+    padding:10px;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 2px 10px rgba(0,0,0,0.3);
+}
+
+.topbar button,
+.mode-btn{
+    border:none;
+    background:var(--accent);
+    color:#000;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
 /* SIDEBAR */
@@ -29,6 +66,8 @@ body{
     padding:15px;
     position:fixed;
     overflow:auto;
+    transition:0.3s;
+    z-index:999;
 }
 
 .sidebar h2{
@@ -38,14 +77,15 @@ body{
 
 .sidebar button{
     width:100%;
-    padding:10px;
+    padding:12px;
     margin:5px 0;
     border:none;
     cursor:pointer;
     background:transparent;
     color:var(--text);
     text-align:left;
-    border-radius:6px;
+    border-radius:8px;
+    font-size:15px;
 }
 
 .sidebar button:hover,
@@ -58,33 +98,83 @@ body{
 .main{
     margin-left:280px;
     padding:20px;
+    min-height:100vh;
 }
 
 /* CARD */
 .card{
     background:var(--card);
-    padding:15px;
+    padding:18px;
     margin-top:10px;
-    border-radius:10px;
+    border-radius:14px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.2);
 }
 
-.hidden{display:none;}
+.hidden{
+    display:none;
+}
 
 h3{
     color:var(--accent);
+    font-size:24px;
 }
 
 .sub{
     margin-left:10px;
-    line-height:1.7;
+    line-height:1.8;
+}
+
+.sub p{
+    padding:8px;
+    border-bottom:1px solid rgba(148,163,184,0.2);
+}
+
+/* MOBILE RESPONSIVE */
+@media(max-width:768px){
+    .topbar{
+        display:flex;
+    }
+
+    .sidebar{
+        left:-280px;
+        top:55px;
+        height:calc(100vh - 55px);
+    }
+
+    .sidebar.show{
+        left:0;
+    }
+
+    .main{
+        margin-left:0;
+        padding:75px 12px 20px;
+    }
+
+    .card{
+        padding:14px;
+    }
+
+    h3{
+        font-size:20px;
+    }
+
+    .sub{
+        margin-left:0;
+        font-size:15px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+<div class="topbar">
+    <button onclick="toggleSidebar()">☰ Menu</button>
+    <strong>📘 Class 12 CS</strong>
+    <button onclick="toggleMode()">🌙/☀️</button>
+</div>
+
+<div class="sidebar" id="sidebar">
 <h2>📘 Class 12 CS</h2>
 
 <button class="active" onclick="show(1)">1. DBMS</button>
@@ -94,12 +184,13 @@ h3{
 <button onclick="show(5)">5. OOP</button>
 <button onclick="show(6)">6. Software Model</button>
 <button onclick="show(7)">7. Trends</button>
+
+<br>
+<button class="mode-btn" onclick="toggleMode()">🌙 / ☀️ Light Dark</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<!-- UNIT 1 -->
 <div class="card unit" data-unit="1">
 <h3>1. Database Management System</h3>
 <div class="sub">
@@ -114,7 +205,6 @@ h3{
 </div>
 </div>
 
-<!-- UNIT 2 -->
 <div class="card unit hidden" data-unit="2">
 <h3>2. Data Communication & Networking</h3>
 <div class="sub">
@@ -124,7 +214,7 @@ h3{
 <p>2.4 Elements of Data Communication</p>
 <p>2.5 Simplex, Half Duplex, Full Duplex</p>
 <p>2.6 LAN and WAN</p>
-<p>2.7 Transmission Media (Guided/Unguided)</p>
+<p>2.7 Transmission Media</p>
 <p>2.8 Noise, Echo, Crosstalk, Distortion, Bandwidth</p>
 <p>2.9 Client Server & Peer-to-Peer</p>
 <p>2.10 IP Address, Subnet Mask, Gateway, MAC</p>
@@ -136,7 +226,6 @@ h3{
 </div>
 </div>
 
-<!-- UNIT 3 -->
 <div class="card unit hidden" data-unit="3">
 <h3>3. Web Technology II</h3>
 <div class="sub">
@@ -147,7 +236,7 @@ h3{
 <p>3.5 JavaScript Fundamentals</p>
 <p>3.6 Data Types</p>
 <p>3.7 Variables and Operators</p>
-<p>3.8 Control Structures (if, switch, loop)</p>
+<p>3.8 Control Structures</p>
 <p>3.9 Object Based JS & Event Handling</p>
 <p>3.10 Image, Event and Form Objects</p>
 <p>3.11 Form Validation & jQuery</p>
@@ -168,37 +257,17 @@ h3{
 </div>
 </div>
 
-<!-- UNIT 4 -->
 <div class="card unit hidden" data-unit="4">
 <h3>4. Programming in C</h3>
 <div class="sub">
 <p>4.1 Review of C Programming</p>
 <p>4.2 Functions</p>
-<p>4.2.1 Library & User Defined Functions</p>
-<p>4.2.2 Function Definition, Prototype, Call</p>
-<p>4.2.3 Passing Values</p>
-<p>4.2.4 Storage Types</p>
-<p>4.2.5 Recursion (Factorial, Fibonacci)</p>
 <p>4.3 Structures and Unions</p>
-<p>4.3.1 Structure Definition</p>
-<p>4.3.2 Accessing Members</p>
-<p>4.3.3 Array of Structure</p>
-<p>4.3.4 Union Definition</p>
-<p>4.3.5 Structure vs Union</p>
 <p>4.4 Pointers</p>
-<p>4.4.1 Pointer Definition</p>
-<p>4.4.2 & and * operators</p>
-<p>4.4.3 Pointer Expressions</p>
-<p>4.4.4 Call by Value/Reference</p>
 <p>4.5 File Handling</p>
-<p>4.5.1 Data File Concept</p>
-<p>4.5.2 Sequential vs Random File</p>
-<p>4.5.3 File Functions</p>
-<p>4.5.4 Open, Read, Write, Append</p>
 </div>
 </div>
 
-<!-- UNIT 5 -->
 <div class="card unit hidden" data-unit="5">
 <h3>5. OOP</h3>
 <div class="sub">
@@ -211,7 +280,6 @@ h3{
 </div>
 </div>
 
-<!-- UNIT 6 -->
 <div class="card unit hidden" data-unit="6">
 <h3>6. Software Process Model</h3>
 <div class="sub">
@@ -228,7 +296,6 @@ h3{
 </div>
 </div>
 
-<!-- UNIT 7 -->
 <div class="card unit hidden" data-unit="7">
 <h3>7. Recent Trends</h3>
 <div class="sub">
@@ -238,7 +305,7 @@ h3{
 <p>7.4 Big Data</p>
 <p>7.5 Virtual Reality</p>
 <p>7.6 E-commerce / E-gov / E-medicine</p>
-<p>7.7 Internet of Things (IoT)</p>
+<p>7.7 Internet of Things</p>
 </div>
 </div>
 
@@ -257,6 +324,31 @@ function show(n){
     let btns = document.querySelectorAll(".sidebar button");
     btns.forEach(b=>b.classList.remove("active"));
     btns[n-1].classList.add("active");
+
+    // mobile मा unit select गरेपछि sidebar auto close
+    document.getElementById("sidebar").classList.remove("show");
+}
+
+function toggleSidebar(){
+    document.getElementById("sidebar").classList.toggle("show");
+}
+
+function toggleMode(){
+    document.body.classList.toggle("light");
+
+    // user ko mode save huncha
+    if(document.body.classList.contains("light")){
+        localStorage.setItem("theme","light");
+    }else{
+        localStorage.setItem("theme","dark");
+    }
+}
+
+// saved theme load
+window.onload = function(){
+    if(localStorage.getItem("theme") === "light"){
+        document.body.classList.add("light");
+    }
 }
 </script>
 
