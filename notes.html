@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 12 Computer Science Notes</title>
+
+<style>
+:root{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#e2e8f0;
+    --accent:#38bdf8;
+}
+
+body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* HEADER */
+header{
+    text-align:center;
+    padding:25px;
+    background:linear-gradient(135deg,#1e3a8a,#0ea5e9);
+}
+
+header h1{
+    margin:0;
+    font-size:28px;
+}
+
+header p{
+    margin-top:5px;
+    opacity:0.8;
+}
+
+/* CONTAINER */
+.container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:15px;
+    padding:20px;
+}
+
+/* CARD */
+.card{
+    background:var(--card);
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border:1px solid var(--accent);
+}
+
+.card h2{
+    color:var(--accent);
+    font-size:18px;
+}
+
+/* DETAILS */
+details{
+    margin-top:10px;
+    background:#0b1220;
+    padding:8px;
+    border-radius:8px;
+}
+
+summary{
+    cursor:pointer;
+    font-weight:bold;
+}
+
+ul{
+    margin:8px 0 0 15px;
+}
+
+/* SEARCH BAR */
+.search{
+    text-align:center;
+    margin:15px;
+}
+
+.search input{
+    width:60%;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+/* HIDE */
+.hidden{
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>📘 Class 12 Computer Science Notes</h1>
+<p>Stylish Study Hub (NEB Syllabus)</p>
+</header>
+
+<div class="search">
+<input type="text" id="search" placeholder="Search unit...">
+</div>
+
+<div class="container">
+
+<!-- UNIT 1 -->
+<div class="card">
+<h2>1. DBMS</h2>
+
+<details>
+<summary>Basics</summary>
+<ul>
+<li>Data, Database, DBMS</li>
+<li>Primary, Candidate, Alternate Key</li>
+</ul>
+</details>
+
+<details>
+<summary>SQL Concepts</summary>
+<ul>
+<li>DDL vs DML</li>
+<li>CREATE, INSERT, UPDATE</li>
+</ul>
+</details>
+
+<details>
+<summary>Normalization</summary>
+<ul>
+<li>1NF</li>
+<li>2NF</li>
+<li>3NF</li>
+</ul>
+</details>
+</div>
+
+<!-- UNIT 2 -->
+<div class="card">
+<h2>2. Networking</h2>
+
+<details>
+<summary>Basics</summary>
+<ul>
+<li>LAN, WAN</li>
+<li>Internet, Intranet</li>
+</ul>
+</details>
+
+<details>
+<summary>Devices</summary>
+<ul>
+<li>Router</li>
+<li>Switch</li>
+<li>Modem</li>
+</ul>
+</details>
+
+<details>
+<summary>OSI Model</summary>
+<ul>
+<li>7 Layers</li>
+</ul>
+</details>
+</div>
+
+<!-- UNIT 3 -->
+<div class="card">
+<h2>3. Web Technology</h2>
+
+<details>
+<summary>JavaScript</summary>
+<ul>
+<li>Variables</li>
+<li>Functions</li>
+<li>Loops</li>
+</ul>
+</details>
+
+<details>
+<summary>PHP</summary>
+<ul>
+<li>Syntax</li>
+<li>Database Connection</li>
+</ul>
+</details>
+</div>
+
+<!-- UNIT 4 -->
+<div class="card">
+<h2>4. C Programming</h2>
+
+<details>
+<summary>Functions</summary>
+<ul>
+<li>User defined functions</li>
+<li>Recursion</li>
+</ul>
+</details>
+
+<details>
+<summary>Pointers</summary>
+<ul>
+<li>Address & *</li>
+</ul>
+</details>
+
+<details>
+<summary>File Handling</summary>
+<ul>
+<li>fprintf, fscanf</li>
+</ul>
+</details>
+</div>
+
+<!-- UNIT 5 -->
+<div class="card">
+<h2>5. OOP</h2>
+<ul>
+<li>Class & Object</li>
+<li>Inheritance</li>
+<li>Polymorphism</li>
+</ul>
+</div>
+
+<!-- UNIT 6 -->
+<div class="card">
+<h2>6. Software Engineering</h2>
+<ul>
+<li>SDLC</li>
+<li>Waterfall</li>
+<li>Agile</li>
+</ul>
+</div>
+
+<!-- UNIT 7 -->
+<div class="card">
+<h2>7. Trends</h2>
+<ul>
+<li>AI</li>
+<li>Cloud Computing</li>
+<li>IoT</li>
+</ul>
+</div>
+
+</div>
+
+<script>
+// SEARCH FILTER
+document.getElementById("search").addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let cards = document.querySelectorAll(".card");
+
+    cards.forEach(card=>{
+        let text = card.innerText.toLowerCase();
+        card.classList.toggle("hidden", !text.includes(value));
+    });
+});
+</script>
+
+</body>
+</html>
