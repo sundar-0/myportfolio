@@ -1,443 +1,376 @@
-Vai full updated code:
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class 12 CS Full Syllabus Notes</title>
+
 <style>
 :root{
-    --bg:#0f172a;
-    --card:#1e293b;
-    --text:#e2e8f0;
-    --accent:#38bdf8;
-    --line:rgba(148,163,184,0.25);
+  --bg:#0f172a;
+  --card:#1e293b;
+  --text:#e2e8f0;
+  --accent:#38bdf8;
+  --line:rgba(148,163,184,.25);
 }
 body.light{
-    --bg:#f8fafc;
-    --card:#ffffff;
-    --text:#0f172a;
-    --accent:#0284c7;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#0f172a;
+  --accent:#0284c7;
 }
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 body{
-    margin:0;
-    font-family:Segoe UI, Arial, sans-serif;
-    background:var(--bg);
-    color:var(--text);
+  margin:0;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
-/* TOP BAR */
 .topbar{
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:65px;
-    background:var(--card);
-    z-index:1000;
-    padding:10px 18px;
-    align-items:center;
-    justify-content:space-between;
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:65px;
+  background:var(--card);
+  z-index:1000;
+  padding:10px 18px;
+  align-items:center;
+  justify-content:space-between;
 }
-.topbar button,
-.mode-btn{
-    border:none;
-    background:var(--accent);
-    color:#000;
-    padding:10px 14px;
-    border-radius:12px;
-    cursor:pointer;
-    font-weight:bold;
+button{
+  font-family:inherit;
 }
-/* SIDEBAR */
+.topbar button,.mode-btn{
+  border:none;
+  background:var(--accent);
+  color:#000;
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+}
 .sidebar{
-    width:270px;
-    height:100vh;
-    background:var(--card);
-    padding:15px;
-    position:fixed;
-    overflow:auto;
-    transition:0.3s;
-    z-index:999;
+  width:270px;
+  height:100vh;
+  background:var(--card);
+  padding:15px;
+  position:fixed;
+  overflow:auto;
+  transition:.3s;
+  z-index:999;
 }
 .sidebar h2{
-    color:var(--accent);
-    text-align:center;
+  color:var(--accent);
+  text-align:center;
 }
 .sidebar button{
-    width:100%;
-    padding:12px;
-    margin:5px 0;
-    border:none;
-    cursor:pointer;
-    background:transparent;
-    color:var(--text);
-    text-align:left;
-    border-radius:8px;
-    font-size:15px;
+  width:100%;
+  padding:12px;
+  margin:5px 0;
+  border:none;
+  cursor:pointer;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  border-radius:8px;
+  font-size:15px;
 }
-.sidebar button:hover,
-.sidebar button.active{
-    background:var(--accent);
-    color:black;
+.sidebar button:hover,.sidebar button.active{
+  background:var(--accent);
+  color:#000;
 }
-/* MAIN */
 .main{
-    margin-left:280px;
-    padding:25px;
-    min-height:100vh;
+  margin-left:280px;
+  padding:25px;
+  min-height:100vh;
 }
 .card{
-    background:var(--card);
-    padding:22px;
-    border-radius:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.2);
+  background:var(--card);
+  padding:22px;
+  border-radius:18px;
+  box-shadow:0 5px 20px rgba(0,0,0,.2);
 }
-.hidden{
-    display:none;
-}
+.hidden{display:none}
 h3{
-    color:var(--accent);
-    font-size:28px;
+  color:var(--accent);
+  font-size:28px;
 }
-/* CLICKABLE TOPIC */
 .topic{
-    padding:15px;
-    margin:12px 0;
-    border-radius:14px;
-    border:1px solid var(--line);
-    cursor:pointer;
-    transition:0.25s;
+  padding:15px;
+  margin:12px 0;
+  border-radius:14px;
+  border:1px solid var(--line);
+  cursor:pointer;
+  transition:.25s;
 }
 .topic:hover{
-    background:rgba(56,189,248,0.12);
-    transform:translateY(-2px);
+  background:rgba(56,189,248,.12);
+  transform:translateY(-2px);
 }
 .topic-title{
-    font-size:18px;
-    font-weight:600;
+  font-size:18px;
+  font-weight:600;
 }
 .topic-detail{
-    display:none;
-    margin-top:12px;
-    line-height:1.7;
-    background:rgba(15,23,42,0.25);
-    padding:14px;
-    border-radius:12px;
+  display:none;
+  margin-top:12px;
+  line-height:1.7;
+  background:rgba(15,23,42,.25);
+  padding:14px;
+  border-radius:12px;
 }
 body.light .topic-detail{
-    background:#f1f5f9;
+  background:#f1f5f9;
 }
 .topic.open{
-    border-color:var(--accent);
-    background:rgba(56,189,248,0.10);
+  border-color:var(--accent);
+  background:rgba(56,189,248,.10);
 }
 .topic.open .topic-detail{
-    display:block;
+  display:block;
 }
-/* MOBILE */
 @media(max-width:768px){
-    .topbar{
-        display:flex;
-    }
-    .sidebar{
-        left:-280px;
-        top:65px;
-        height:calc(100vh - 65px);
-    }
-    .sidebar.show{
-        left:0;
-    }
-    .main{
-        margin-left:0;
-        padding:90px 14px 20px;
-    }
-    h3{
-        font-size:24px;
-    }
-    .card{
-        padding:18px;
-    }
+  .topbar{display:flex}
+  .sidebar{
+    left:-280px;
+    top:65px;
+    height:calc(100vh - 65px);
+  }
+  .sidebar.show{left:0}
+  .main{
+    margin-left:0;
+    padding:90px 14px 20px;
+  }
+  .card{padding:18px}
+  h3{font-size:24px}
+  .topic-title{font-size:17px}
 }
 </style>
 </head>
+
 <body>
+
 <div class="topbar">
-    <button onclick="toggleSidebar()">☰ Menu</button>
-    <strong>📘 Class 12 CS</strong>
-    <button onclick="toggleMode()">🌙/☀️</button>
+  <button onclick="toggleSidebar()">☰ Menu</button>
+  <strong>📘 Class 12 CS</strong>
+  <button onclick="toggleMode()">🌙/☀️</button>
 </div>
+
 <div class="sidebar" id="sidebar">
-<h2>📘 Class 12 CS</h2>
-<button class="active" onclick="show(1)">1. DBMS</button>
-<button onclick="show(2)">2. Networking</button>
-<button onclick="show(3)">3. Web Tech II</button>
-<button onclick="show(4)">4. C Programming</button>
-<button onclick="show(5)">5. OOP</button>
-<button onclick="show(6)">6. Software Model</button>
-<button onclick="show(7)">7. Trends</button>
-<br>
-<button class="mode-btn" onclick="toggleMode()">🌙 / ☀️ Light Dark</button>
+  <h2>📘 Class 12 CS</h2>
+  <button class="active" onclick="show(1)">1. DBMS</button>
+  <button onclick="show(2)">2. Networking</button>
+  <button onclick="show(3)">3. Web Tech II</button>
+  <button onclick="show(4)">4. C Programming</button>
+  <button onclick="show(5)">5. OOP</button>
+  <button onclick="show(6)">6. Software Model</button>
+  <button onclick="show(7)">7. Trends</button>
+  <br>
+  <button class="mode-btn" onclick="toggleMode()">🌙 / ☀️ Light Dark</button>
 </div>
+
 <div class="main">
-<!-- UNIT 1 -->
+
 <div class="card unit" data-unit="1">
 <h3>1. Database Management System</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">1.1 Introduction to Data, Database and DBMS</div>
-<div class="topic-detail">
-Data means raw facts. Database is an organized collection of data. DBMS is software used to store, manage, update and retrieve data easily.
+<div id="u1"></div>
 </div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">1.2 Keys in DBMS</div>
-<div class="topic-detail">
-Primary key uniquely identifies each record. Candidate key can become primary key. Alternate key is candidate key not selected as primary key.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">1.3 Advantages of DBMS</div>
-<div class="topic-detail">
-DBMS reduces data redundancy, improves security, supports data sharing, backup, recovery and maintains data consistency.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">1.4 DDL and DML</div>
-<div class="topic-detail">
-DDL defines database structure like CREATE, ALTER, DROP. DML manipulates data like INSERT, UPDATE, DELETE, SELECT.
-</div>
-</div>
-</div>
-<!-- UNIT 2 -->
+
 <div class="card unit hidden" data-unit="2">
 <h3>2. Data Communication & Networking</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">2.1 Communication System</div>
-<div class="topic-detail">
-Communication system transfers information from sender to receiver through a medium using rules called protocol.
+<div id="u2"></div>
 </div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">2.2 Communication Modes</div>
-<div class="topic-detail">
-Simplex sends data one way only. Half duplex sends both ways but one at a time. Full duplex sends both ways at the same time.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">2.3 LAN and WAN</div>
-<div class="topic-detail">
-LAN covers small area like school or office. WAN covers large area like city, country or world.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">2.4 OSI Model</div>
-<div class="topic-detail">
-OSI model has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation and Application.
-</div>
-</div>
-</div>
-<!-- UNIT 3 -->
+
 <div class="card unit hidden" data-unit="3">
 <h3>3. Web Technology II</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.1 Introduction</div>
-<div class="topic-detail">
-Web Technology II means advanced web development. यसमा website कसरी interactive, dynamic र database connected बनाउने भन्ने पढिन्छ। It includes JavaScript, PHP, form validation, server-side scripting and database connectivity.
+<div id="u3"></div>
 </div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.2 Client Side & Server Side Scripting</div>
-<div class="topic-detail">
-Client-side scripting browser मा run हुन्छ, like JavaScript. Server-side scripting server मा run हुन्छ, like PHP. Client side UI interaction को लागि हो भने server side database, login, processing को लागि हो।
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.3 Internet Technology</div>
-<div class="topic-detail">
-Internet Technology includes browser, server, URL, domain, hosting, HTTP/HTTPS and web communication system.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.4 JavaScript in HTML</div>
-<div class="topic-detail">
-JavaScript HTML मा interactive behavior add गर्न प्रयोग हुन्छ। It can be written inside script tag or linked as external JS file.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.5 JavaScript Fundamentals</div>
-<div class="topic-detail">
-JavaScript fundamentals include variables, data types, operators, functions, loops, conditions and events.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.6 Data Types</div>
-<div class="topic-detail">
-Data type means type of value stored in variable. JavaScript data types are String, Number, Boolean, Null, Undefined, Object and Array.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.7 Variables and Operators</div>
-<div class="topic-detail">
-Variables store data. Operators perform calculation and comparison. Examples: +, -, *, /, ==, ===, &gt;, &lt;.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.8 Control Structures</div>
-<div class="topic-detail">
-Control structures control program flow. Examples: if, else, switch, for loop, while loop and do while loop.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">3.9 Object Based JS & Event Handling</div>
-<div class="topic-detail">
-Object based JavaScript uses objects like document, form, image and window. Event handling means responding to user actions like click, submit, keypress and mouseover.
-</div>
-</div>
-</div>
-<!-- UNIT 4 -->
+
 <div class="card unit hidden" data-unit="4">
 <h3>4. Programming in C</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">4.1 Review of C Programming</div>
-<div class="topic-detail">
-C is a structured programming language. It supports variables, data types, operators, loops, functions, arrays and pointers.
+<div id="u4"></div>
 </div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">4.2 Functions</div>
-<div class="topic-detail">
-Function is a block of code used to perform a specific task. It helps to reduce repetition and make program modular.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">4.3 Structures and Unions</div>
-<div class="topic-detail">
-Structure stores different data types under one name. Union also stores different data types but shares same memory location.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">4.4 Pointers</div>
-<div class="topic-detail">
-Pointer is a variable that stores address of another variable. It is useful in memory handling, arrays, functions and dynamic allocation.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">4.5 File Handling</div>
-<div class="topic-detail">
-File handling is used to store data permanently in files. Common operations are open, read, write, append and close.
-</div>
-</div>
-</div>
-<!-- UNIT 5 -->
+
 <div class="card unit hidden" data-unit="5">
 <h3>5. Object Oriented Programming</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">5.1 Class and Object</div>
-<div class="topic-detail">
-Class is a blueprint. Object is an instance of class. Example: Student is class, Ram is object.
+<div id="u5"></div>
 </div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">5.2 Polymorphism</div>
-<div class="topic-detail">
-Polymorphism means one name many forms. Same function can perform different tasks.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">5.3 Inheritance</div>
-<div class="topic-detail">
-Inheritance allows one class to use properties and methods of another class. It supports code reusability.
-</div>
-</div>
-</div>
-<!-- UNIT 6 -->
+
 <div class="card unit hidden" data-unit="6">
 <h3>6. Software Process Model</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">6.1 SDLC</div>
-<div class="topic-detail">
-SDLC means Software Development Life Cycle. It includes planning, analysis, design, coding, testing, deployment and maintenance.
+<div id="u6"></div>
 </div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">6.2 Waterfall Model</div>
-<div class="topic-detail">
-Waterfall model is a sequential software development model where each phase must be completed before next phase starts.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">6.3 Agile Model</div>
-<div class="topic-detail">
-Agile model is flexible and iterative. Software is developed in small parts with continuous feedback.
-</div>
-</div>
-</div>
-<!-- UNIT 7 -->
+
 <div class="card unit hidden" data-unit="7">
 <h3>7. Recent Trends</h3>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">7.1 Artificial Intelligence</div>
-<div class="topic-detail">
-AI is a branch of computer science that makes machines capable of learning, reasoning and decision making.
+<div id="u7"></div>
 </div>
+
 </div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">7.2 Cloud Computing</div>
-<div class="topic-detail">
-Cloud computing provides computing services like storage, database and software through internet.
-</div>
-</div>
-<div class="topic" onclick="openTopic(this)">
-<div class="topic-title">7.3 IoT</div>
-<div class="topic-detail">
-Internet of Things connects physical devices to internet so they can collect and exchange data.
-</div>
-</div>
-</div>
-</div>
+
 <script>
+const syllabus = {
+u1:[
+["1.1 Introduction to data, database, DBMS","Data means raw facts. Database is an organized collection of related data. DBMS is software used to create, store, update, delete and manage data. Example: MySQL, Oracle, MS Access."],
+["1.2 Field, Record, Object, Primary Key, Candidate Key, Alternate Key","Field means column, record means row. Object is a database item like table/query/form. Primary key uniquely identifies record. Candidate key can become primary key. Alternate key is candidate key not selected as primary key."],
+["1.3 Advantages of DBMS","DBMS reduces data duplication, improves security, supports data sharing, backup, recovery and data consistency. यसले large amount of data व्यवस्थित तरिकाले manage गर्छ।"],
+["1.4 DDL and DML","DDL defines structure of database. Example: CREATE, ALTER, DROP. DML manipulates data. Example: INSERT, UPDATE, DELETE, SELECT."],
+["1.5 Database Models: Hierarchical, Network, Relational","Hierarchical model stores data in tree structure. Network model stores data with many-to-many relationship. Relational model stores data in tables with rows and columns."],
+["1.6 Normalization: 1NF, 2NF, 3NF","Normalization is process of organizing data to reduce redundancy. 1NF removes repeating groups. 2NF removes partial dependency. 3NF removes transitive dependency."],
+["1.7 Centralized vs Distributed Database","Centralized database is stored in one location. Distributed database is stored in multiple locations connected by network. Distributed database is faster and reliable but complex."],
+["1.8 Database Security","Database security protects data from unauthorized access, misuse and damage. It includes password, user permission, encryption, backup and access control."]
+],
+u2:[
+["2.1 Basic elements of Communication System","Basic elements are sender, transmitter, channel, receiver and destination. Sender sends message, channel carries signal and receiver receives it."],
+["2.2 Concept of Communication System","Communication system transfers information from one place to another using medium and protocol. Example: phone call, internet message, email."],
+["2.3 Block Diagram of Communication System","Block diagram: Sender → Transmitter → Channel → Receiver → Destination. Noise may disturb signal during transmission."],
+["2.4 Elements of Data Communication","Main elements are sender, receiver, message, medium and protocol. Protocol means rules used for data communication."],
+["2.5 Simplex, Half Duplex, Full Duplex","Simplex: one-way communication like TV. Half duplex: both way but one at a time like walkie-talkie. Full duplex: both way at same time like telephone."],
+["2.6 LAN and WAN","LAN covers small area like school or office. WAN covers large area like city, country or world. Internet is example of WAN."],
+["2.7 Transmission Media Guided/Unguided","Guided media uses physical cables like twisted pair, coaxial and fiber optic. Unguided media uses wireless signals like radio wave, microwave, infrared and satellite."],
+["2.8 Noise, Echo, Crosstalk, Distortion, Bandwidth","Noise is unwanted signal. Echo is signal reflection. Crosstalk is interference between wires. Distortion changes signal shape. Bandwidth is data carrying capacity."],
+["2.9 Client Server & Peer-to-Peer","Client-server has central server and many clients. Peer-to-peer has equal computers sharing resources directly without central server."],
+["2.10 IP Address, Subnet Mask, Gateway, MAC","IP address identifies device in network. Subnet mask separates network and host part. Gateway connects different networks. MAC address is physical address of NIC."],
+["2.11 Packet Tracer, Remote Login","Packet Tracer is simulation tool for network design. Remote login means accessing another computer/server from distance using tools like SSH or Telnet."],
+["2.12 NIC, Router, Switch, Modem","NIC connects computer to network. Switch connects devices in LAN. Router connects different networks. Modem converts digital and analog signals for internet."],
+["2.13 Bus, Ring, Star Topology","Bus uses single backbone cable. Ring connects devices in circular form. Star connects all devices to central switch/hub."],
+["2.14 OSI Model","OSI model has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation and Application. It explains how data travels in network."],
+["2.15 Internet Protocol Addressing","IP addressing gives unique address to devices. IPv4 uses 32-bit address like 192.168.1.1. IPv6 uses 128-bit address."]
+],
+u3:[
+["3.1 Introduction","Web Technology II means advanced web development. यसमा website dynamic, interactive र database connected कसरी बनाउने भन्ने पढिन्छ।"],
+["3.2 Client Side & Server Side Scripting","Client-side scripting browser मा run हुन्छ, like JavaScript. Server-side scripting server मा run हुन्छ, like PHP. Client side UI interaction को लागि, server side database र processing को लागि।"],
+["3.3 Internet Technology","Internet technology includes browser, server, URL, domain, hosting, HTTP/HTTPS and web communication."],
+["3.4 JavaScript in HTML","JavaScript HTML page मा interactive behavior add गर्न प्रयोग हुन्छ। It can be written inside script tag or linked externally."],
+["3.5 JavaScript Fundamentals","JavaScript fundamentals include variables, data types, operators, functions, loops, conditions and events."],
+["3.6 Data Types","Data types define type of value. JavaScript data types include string, number, boolean, null, undefined, object and array."],
+["3.7 Variables and Operators","Variables store data. Operators perform calculations and comparisons. Example: +, -, *, /, ==, ===, >, <."],
+["3.8 Control Structures if, switch, loop","Control structures control program flow. if/else checks condition, switch handles multiple choices, loops repeat code."],
+["3.9 Object Based JS & Event Handling","Object based JS uses objects like document, window, form and image. Event handling responds to user actions like click, submit and mouseover."],
+["3.10 Image, Event and Form Objects","Image object controls images, event object handles actions, form object accesses form input and validation."],
+["3.11 Form Validation & jQuery","Form validation checks user input before submit. jQuery is JavaScript library used to simplify DOM manipulation, events and effects."],
+["3.12 PHP Introduction","PHP is server-side scripting language used to create dynamic web pages. It can connect website with database."],
+["3.13 Hardware & Software Requirements","Hardware includes computer/server. Software includes web browser, web server, PHP interpreter, database server and code editor."],
+["3.14 OOP with Server Side Scripting","OOP in PHP uses class, object, inheritance and encapsulation to make server-side code reusable and organized."],
+["3.15 Basic PHP Syntax","PHP code starts with <?php and ends with ?>. Statements end with semicolon. Variables start with $ sign."],
+["3.16 PHP Data Types","PHP supports string, integer, float, boolean, array, object, null and resource data types."],
+["3.17 PHP Programming","PHP programming includes variables, operators, condition, loop, function, form handling and database connectivity."],
+["3.18 Operators","Operators are symbols used for operation. PHP operators include arithmetic, assignment, comparison, logical and increment/decrement."],
+["3.19 Variables Manipulation","Variable manipulation means storing, changing, displaying and processing values using PHP variables."],
+["3.20 Database Connectivity","Database connectivity means connecting PHP with database like MySQL to store, retrieve, update and delete data."],
+["3.21 Server + Database Connection","Server handles PHP code and database stores data. PHP connects with database using mysqli or PDO."],
+["3.22 SQL Queries","SQL queries are commands used to manage database. Examples: SELECT, INSERT, UPDATE, DELETE, CREATE."],
+["3.23 Fetching Data","Fetching data means retrieving records from database and displaying them in web page using PHP."],
+["3.24 Creating Database using PHP","PHP can create database using SQL CREATE DATABASE command through database connection."],
+["3.25 Displaying Query Results","Query results are displayed using loops like while loop after fetching rows from database."]
+],
+u4:[
+["4.1 Review of C Programming","C is structured programming language. It uses variables, data types, operators, decision statements, loops, arrays and functions."],
+["4.2 Functions","Function is block of code used to perform specific task. It improves code reusability and reduces repetition."],
+["4.2.1 Library & User Defined Functions","Library functions are predefined like printf, scanf. User-defined functions are created by programmer."],
+["4.2.2 Function Definition, Prototype, Call","Prototype declares function. Definition contains actual code. Function call executes the function."],
+["4.2.3 Passing Values","Passing values means sending data to function using arguments. It can be call by value or call by reference."],
+["4.2.4 Storage Types","Storage classes define scope and lifetime of variables. Types: auto, static, extern and register."],
+["4.2.5 Recursion Factorial Fibonacci","Recursion means function calling itself. It is used in factorial, Fibonacci and mathematical problems."],
+["4.3 Structures and Unions","Structure and union group different data types under one name. Structure uses separate memory, union shares memory."],
+["4.3.1 Structure Definition","Structure is defined using struct keyword. It contains multiple members of different data types."],
+["4.3.2 Accessing Members","Structure members are accessed using dot operator. Pointer structure uses arrow operator."],
+["4.3.3 Array of Structure","Array of structure stores multiple records of same structure type. Example: many student records."],
+["4.3.4 Union Definition","Union is defined using union keyword. All members share same memory location."],
+["4.3.5 Structure vs Union","Structure allocates memory for all members. Union allocates memory for largest member only."],
+["4.4 Pointers","Pointer is variable that stores address of another variable. It is useful for memory, arrays and functions."],
+["4.4.1 Pointer Definition","Pointer is declared using * symbol. Example: int *p; It stores address of integer variable."],
+["4.4.2 & and * operators","& gives address of variable. * gives value stored at address, called dereferencing."],
+["4.4.3 Pointer Expressions","Pointer expressions include increment, decrement, addition, subtraction and comparison of pointer addresses."],
+["4.4.4 Call by Value/Reference","Call by value passes copy of variable. Call by reference passes address, so original value can change."],
+["4.5 File Handling","File handling stores data permanently in file. It includes creating, opening, reading, writing and closing files."],
+["4.5.1 Data File Concept","Data file stores information permanently on storage device. It can be text file or binary file."],
+["4.5.2 Sequential vs Random File","Sequential file accesses data in order. Random file accesses data directly using position."],
+["4.5.3 File Functions","Common file functions are fopen, fclose, fprintf, fscanf, fread, fwrite, fgetc, fputc."],
+["4.5.4 Open, Read, Write, Append","Open creates/accesses file. Read gets data. Write stores new data. Append adds data at end of file."]
+],
+u5:[
+["5.1 Programming Paradigms","Programming paradigm is style of programming. Examples: procedural, object-oriented, functional and event-driven programming."],
+["5.2 Class and Object","Class is blueprint and object is instance of class. Class defines properties and methods; object uses them."],
+["5.3 Polymorphism","Polymorphism means one name many forms. Same function/operator can behave differently in different situations."],
+["5.4 Inheritance","Inheritance allows one class to use properties and methods of another class. It supports code reusability."],
+["5.5 Advantages of OOP","OOP provides reusability, security, modularity, flexibility, easy maintenance and real-world modeling."],
+["5.6 Applications of OOP","OOP is used in software development, games, GUI applications, mobile apps, simulations and web applications."]
+],
+u6:[
+["6.1 Software Project Concept","Software project is planned work to develop software within time, cost and quality constraints."],
+["6.2 Software Development Process","Software development process includes planning, requirement analysis, design, coding, testing, deployment and maintenance."],
+["6.3 SDLC Life Cycle","SDLC is Software Development Life Cycle. It gives systematic steps to develop reliable software."],
+["6.4 System Analyst vs Software Engineer","System analyst studies user requirements and system feasibility. Software engineer designs, codes, tests and maintains software."],
+["6.5 Requirement Collection Methods","Requirement collection methods include interview, questionnaire, observation, document review and meeting with users."],
+["6.6 System Design Concept","System design converts requirements into technical design. It includes input, output, database, process and interface design."],
+["6.7 Software Quality","Software quality means software meets user needs and is reliable, efficient, maintainable, secure and easy to use."],
+["6.8 Waterfall Model","Waterfall model is sequential model. Each phase is completed before next starts. It is simple but less flexible."],
+["6.9 Prototype Model","Prototype model builds sample version first. User feedback is collected and final system is improved."],
+["6.10 Agile Model","Agile model develops software in small iterations. It is flexible and supports continuous feedback and improvement."]
+],
+u7:[
+["7.1 Artificial Intelligence","AI makes machines capable of learning, reasoning and decision making. Examples: chatbot, voice assistant, recommendation system."],
+["7.2 Robotics","Robotics deals with design and use of robots. Robots can perform automatic tasks in industry, medicine and space."],
+["7.3 Cloud Computing","Cloud computing provides storage, software and computing services through internet. Example: Google Drive, AWS."],
+["7.4 Big Data","Big Data means extremely large data sets. It is analyzed to find patterns, trends and useful information."],
+["7.5 Virtual Reality","Virtual Reality creates computer-generated 3D environment. User feels like being inside virtual world using VR devices."],
+["7.6 E-commerce / E-gov / E-medicine","E-commerce means online business. E-government means online government services. E-medicine means health service using digital technology."],
+["7.7 Internet of Things IoT","IoT connects physical devices to internet so they can collect and exchange data. Example: smart watch, smart home, CCTV."]
+]
+};
+
+function loadTopics(){
+  for(let unit in syllabus){
+    let container = document.getElementById(unit);
+    syllabus[unit].forEach(item=>{
+      container.innerHTML += `
+      <div class="topic" onclick="openTopic(this)">
+        <div class="topic-title">${item[0]}</div>
+        <div class="topic-detail">${item[1]}</div>
+      </div>`;
+    });
+  }
+}
+
 function show(n){
-    let units = document.querySelectorAll(".unit");
-    units.forEach(u=>{
-        u.classList.add("hidden");
-        if(u.dataset.unit == n){
-            u.classList.remove("hidden");
-        }
-    });
-    let btns = document.querySelectorAll(".sidebar button");
-    btns.forEach(b=>b.classList.remove("active"));
-    btns[n-1].classList.add("active");
-    document.getElementById("sidebar").classList.remove("show");
+  document.querySelectorAll(".unit").forEach(u=>{
+    u.classList.add("hidden");
+    if(u.dataset.unit == n) u.classList.remove("hidden");
+  });
+
+  let btns=document.querySelectorAll(".sidebar button");
+  btns.forEach(b=>b.classList.remove("active"));
+  btns[n-1].classList.add("active");
+
+  document.getElementById("sidebar").classList.remove("show");
 }
+
 function toggleSidebar(){
-    document.getElementById("sidebar").classList.toggle("show");
+  document.getElementById("sidebar").classList.toggle("show");
 }
+
 function toggleMode(){
-    document.body.classList.toggle("light");
-    if(document.body.classList.contains("light")){
-        localStorage.setItem("theme","light");
-    }else{
-        localStorage.setItem("theme","dark");
-    }
+  document.body.classList.toggle("light");
+  localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 }
+
 function openTopic(element){
-    let topics = element.parentElement.querySelectorAll(".topic");
-    topics.forEach(t=>{
-        if(t !== element){
-            t.classList.remove("open");
-        }
-    });
-    element.classList.toggle("open");
+  let topics = element.parentElement.querySelectorAll(".topic");
+  topics.forEach(t=>{
+    if(t !== element) t.classList.remove("open");
+  });
+  element.classList.toggle("open");
 }
-window.onload = function(){
-    if(localStorage.getItem("theme") === "light"){
-        document.body.classList.add("light");
-    }
+
+window.onload=function(){
+  loadTopics();
+  if(localStorage.getItem("theme")==="light"){
+    document.body.classList.add("light");
+  }
 }
 </script>
+
 </body>
 </html>
