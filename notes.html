@@ -26,8 +26,9 @@ body{
   background:var(--bg);
   color:var(--text);
 }
+/* Topbar updated to be visible on both Desktop & Mobile for the Timer */
 .topbar{
-  display:none;
+  display:flex;
   position:fixed;
   top:0;left:0;
   width:100%;
@@ -37,6 +38,7 @@ body{
   padding:10px 18px;
   align-items:center;
   justify-content:space-between;
+  border-bottom: 1px solid var(--line);
 }
 button{
   font-family:inherit;
@@ -50,9 +52,11 @@ button{
   cursor:pointer;
   font-weight:bold;
 }
+/* Adjusted sidebar for topbar visibility */
 .sidebar{
   width:270px;
-  height:100vh;
+  height:calc(100vh - 65px);
+  top:65px;
   background:var(--card);
   padding:15px;
   position:fixed;
@@ -80,9 +84,10 @@ button{
   background:var(--accent);
   color:#000;
 }
+/* Adjusted main layout padding for topbar */
 .main{
   margin-left:280px;
-  padding:25px;
+  padding:90px 25px 25px;
   min-height:100vh;
 }
 .card{
@@ -119,7 +124,7 @@ h3{
   background:rgba(15,23,42,.25);
   padding:14px;
   border-radius:12px;
-  white-space: pre-wrap; /* Keeps formatting and newlines intact */
+  white-space: pre-wrap; 
 }
 body.light .topic-detail{
   background:#f1f5f9;
@@ -131,12 +136,20 @@ body.light .topic-detail{
 .topic.open .topic-detail{
   display:block;
 }
+/* Timer styling */
+.timer-box {
+  background: rgba(56,189,248,0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-size: 16px;
+}
+
 @media(max-width:768px){
-  .topbar{display:flex}
   .sidebar{
     left:-280px;
-    top:65px;
-    height:calc(100vh - 65px);
   }
   .sidebar.show{left:0}
   .main{
@@ -155,6 +168,8 @@ body.light .topic-detail{
 <div class="topbar">
   <button onclick="toggleSidebar()">☰ Menu</button>
   <strong>📘 Class 12 CS</strong>
+  <!-- Timer Displayed Here -->
+  <div class="timer-box" id="timer-display">⏱️ 35:00</div>
   <button onclick="toggleMode()">🌙/☀️</button>
 </div>
 
@@ -393,7 +408,6 @@ function show(n){
 
   let btns=document.querySelectorAll(".sidebar button");
   btns.forEach(b=>b.classList.remove("active"));
-  // To handle topbar/sidebar differences, target only the indexed sidebar numeric buttons safely
   const navButtons = Array.from(document.querySelectorAll("#sidebar button")).filter(b => !b.classList.contains('mode-btn'));
   if(navButtons[n-1]) navButtons[n-1].classList.add("active");
 
@@ -417,11 +431,76 @@ function openTopic(element){
   element.classList.toggle("open");
 }
 
+// --- 35 Minutes Persistent Timer with Beep Sound ---
+function initTimer() {
+  const TIMER_DURATION = 35 * 60 * 1000; // 35 minutes in milliseconds
+  let endTime = localStorage.getItem("timer_end_time");
+
+  if (!endTime) {
+    endTime = Date.now() + TIMER_DURATION;
+    localStorage.setItem("timer_end_time", endTime);
+  } else {
+    endTime = parseInt(endTime, 10);
+  }
+
+  const timerDisplay = document.getElementById("timer-display");
+
+  function updateTimer() {
+    let now = Date.now();
+    let timeLeft = endTime - now;
+
+    if (timeLeft <= 0) {
+      timerDisplay.innerHTML = "⏱️ Time's Up!";
+      playBeepSound();
+      alert("35 मिनेट पूरा भयो, भाइ! बिश्राम लेऊ वा अर्को सेसन सुरु गर।");
+      // Reset timer for next 35 mins session after alert
+      endTime = Date.now() + TIMER_DURATION;
+      localStorage.setItem("timer_end_time", endTime);
+      return;
+    }
+
+    let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    // Format numbers to always show 2 digits (e.g., 05:09)
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    timerDisplay.innerHTML = `⏱️ ${minutes}:${seconds}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
+
+// Generate Beep sound using Web Audio API (No external file needed)
+function playBeepSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // Frequency in Hz
+    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime); // Volume
+
+    oscillator.start();
+    // Beep for 1 second
+    oscillator.stop(audioCtx.currentTime + 1.0);
+  } catch (e) {
+    console.log("Audio contexts context error or blocked by browser restriction:", e);
+  }
+}
+
 window.onload=function(){
   loadTopics();
   if(localStorage.getItem("theme")==="light"){
     document.body.classList.add("light");
   }
+  initTimer(); // Start timer execution
 }
 </script>
 
