@@ -141,7 +141,27 @@
 
 </div>
 
-<script src="script.js"></script>
+<script>
+let buttons = document.querySelectorAll(".toggle-btn");
 
+buttons.forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+let content = btn.parentElement.nextElementSibling;
+
+if(content.style.display==="block"){
+content.style.display="none";
+btn.innerHTML="+";
+}
+else{
+content.style.display="block";
+btn.innerHTML="-";
+}
+
+});
+
+});
+    </script>
 </body>
 </html>
