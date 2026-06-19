@@ -1,345 +1,1086 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="dark">
 <head>
-    <title>NTC Computer Engineer LMS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTC Computer Engineer LMS (Level 7)</title>
     <style>
-          *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:sans-serif;
-}
+        :root[data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-sidebar: #111827;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-nested: #1e293b;
+            --bg-hover: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #38bdf8;
+            --border: rgba(255, 255, 255, 0.08);
+            --modal-bg: rgba(15, 23, 42, 0.85);
+        }
+        :root[data-theme="light"] {
+            --bg-main: #f1f5f9;
+            --bg-sidebar: #ffffff;
+            --bg-card: #ffffff;
+            --bg-nested: #f8fafc;
+            --bg-hover: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #0284c7;
+            --border: rgba(0, 0, 0, 0.08);
+            --modal-bg: rgba(0, 0, 0, 0.5);
+        }
 
-body{
-background:#0f172a;
-color:white;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
 
-.container{
-display:flex;
-min-height:100vh;
-}
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+        }
 
-/* Sidebar */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
 
-.sidebar{
-width:260px;
-background:#111827;
-padding:30px;
-border-right:1px solid rgba(255,255,255,.1);
-}
+        /* Sidebar Styling */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            padding: 30px 20px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-.logo h2{
-color:#38bdf8;
-}
+        .logo h2 {
+            color: var(--primary);
+            font-size: 22px;
+        }
 
-.logo span{
-color:#94a3b8;
-}
+        .logo span {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
 
-nav{
-margin-top:40px;
-display:flex;
-flex-direction:column;
-gap:15px;
-}
+        nav {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
 
-nav a{
-text-decoration:none;
-color:white;
-padding:12px;
-border-radius:10px;
-transition:.3s;
-}
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-nav a:hover,
-.active{
-background:#1e293b;
-}
+        nav a:hover, nav a.active {
+            background: var(--bg-nested);
+            color: var(--primary);
+        }
 
+        /* Main Workspace Container */
+        main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-/* Main */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
 
-main{
-flex:1;
-padding:40px;
-}
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+        }
 
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-}
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
 
-#search{
-width:300px;
-padding:15px;
-border:none;
-border-radius:15px;
-background:#1e293b;
-color:white;
-}
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
+        #search {
+            width: 260px;
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-nested);
+            color: var(--text-main);
+            font-size: 14px;
+        }
 
-/* Progress */
+        #search:focus {
+            outline: 2px solid var(--primary);
+        }
 
-.progress-card{
-background:#1e293b;
-padding:25px;
-border-radius:20px;
-margin-bottom:25px;
-}
+        /* Profile & Theme Utilities */
+        .theme-toggle {
+            background: var(--bg-nested);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-.progress-bar{
-height:12px;
-background:#334155;
-border-radius:20px;
-margin:15px 0;
-overflow:hidden;
-}
+        .profile-container {
+            position: relative;
+        }
 
-.progress{
-width:25%;
-height:100%;
-background:linear-gradient(90deg,#38bdf8,#06b6d4);
-}
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid var(--border);
+        }
 
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 220px;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
 
-/* Cards */
+        .profile-dropdown.show {
+            display: block;
+        }
 
-.course-card{
-background:rgba(30,41,59,.7);
-backdrop-filter:blur(15px);
-padding:25px;
-border-radius:20px;
-margin-bottom:25px;
-border:1px solid rgba(255,255,255,.08);
-}
+        .profile-dropdown h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
 
-.card-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+        .profile-dropdown p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
 
-.toggle-btn{
-width:40px;
-height:40px;
-border:none;
-border-radius:50%;
-background:#38bdf8;
-font-size:22px;
-cursor:pointer;
-}
+        .profile-dropdown a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 13px;
+            padding: 8px 0;
+        }
 
-.content{
-display:none;
-margin-top:20px;
-}
+        .profile-dropdown a:hover {
+            color: var(--primary);
+        }
 
-.topic{
-margin-bottom:25px;
-}
+        /* Progress Card tracker component */
+        .progress-card {
+            background: var(--bg-nested);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
 
-.topic h3{
-color:#38bdf8;
-margin-bottom:10px;
-}
+        .progress-bar {
+            height: 10px;
+            background: var(--bg-hover);
+            border-radius: 10px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
 
-.topic ul{
-padding-left:20px;
-color:#cbd5e1;
-}
+        .progress {
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #0284c7);
+        }
 
-.topic li{
-margin:8px 0;
-}
+        /* Syllabus Accordion Cards */
+        .section-title {
+            margin: 25px 0 15px 0;
+            font-size: 18px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 5px;
+        }
 
+        .course-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
 
-/* Responsive */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
 
-@media(max-width:768px){
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
 
-.container{
-flex-direction:column;
-}
+        .toggle-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: var(--bg-nested);
+            color: var(--text-main);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.sidebar{
-width:100%;
-}
+        .content {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
 
-.header{
-flex-direction:column;
-gap:20px;
-}
+        .topic {
+            margin-bottom: 20px;
+        }
 
-#search{
-width:100%;
-}
+        .topic h3 {
+            color: var(--primary);
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
 
+        .topic ul {
+            list-style: none;
+            padding-left: 5px;
+        }
+
+        .topic li {
+            margin: 8px 0;
+            color: var(--text-main);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: var(--bg-nested);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topic li:hover {
+            background: var(--bg-hover);
+            transform: translateX(3px);
+        }
+
+        .topic li::after {
+            content: "➔";
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        /* Modal Structure for Subtopic Explanations */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-bg);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--bg-sidebar);
+            color: var(--text-main);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 650px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .close-modal:hover {
+            color: var(--text-main);
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .modal p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+
+        /* Responsive Breakpoints */
+        @media(max-width: 992px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+            nav { flex-direction: row; flex-wrap: wrap; margin-top: 20px; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            #search { width: 100%; }
+        }
     </style>
- 
-
 </head>
 <body>
 
 <div class="container">
 
-    <!-- Sidebar -->
+    <!-- Sidebar Menu Navigation -->
     <aside class="sidebar">
-
         <div class="logo">
-            <h2>NTC LMS</h2>
-            <span>Computer Engineer</span>
+            <h2>NTC LMS 🇳🇵</h2>
+            <span>Computer Engineer (Level 7)</span>
         </div>
-
         <nav>
-            <a href="#" class="active">Dashboard</a>
-            <a href="#">General Awareness</a>
-            <a href="#">Management</a>
-            <a href="#">Technical Subject</a>
-            <a href="#">Progress</a>
+            <a href="#" class="active" onclick="filterSection('all')">Dashboard Overview</a>
+            <a href="#" onclick="filterSection('ga')">General Awareness</a>
+            <a href="#" onclick="filterSection('mgmt')">Management & Laws</a>
+            <a href="#" onclick="filterSection('tech')">Technical Subjects</a>
         </nav>
-
+        <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 20px;">
+            Syllabus Reference: 2081/10/21
+        </div>
     </aside>
 
-
-    <!-- Main -->
+    <!-- Main Workspace Container -->
     <main>
-
         <div class="header">
-
             <div>
-                <h1>NTC Computer Engineer Preparation</h1>
-                <p>Structured Learning Management System</p>
+                <h1>NTC Computer Engineer Prep Tracker</h1>
+                <p>Structured Examination Portal according to Nepal Telecom Public Open Syllabus</p>
             </div>
-
-            <input type="text"
-                   placeholder="Search Topics..."
-                   id="search">
-
+            <div class="header-actions">
+                <input type="text" placeholder="Search syllabus topics..." id="search" onkeyup="searchSyllabus()">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light View">🌓</button>
+                <div class="profile-container">
+                    <div class="avatar" onclick="toggleProfile()">CE</div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <h4>Engineer Candidate</h4>
+                        <p>Computer Technical Group</p>
+                        <a href="#">📋 Exam Scheme Details</a>
+                        <a href="#">📊 Performance Analytics</a>
+                        <a href="#" style="color: #ef4444;">Logout Dashboard</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-
-        <!-- Progress -->
+        <!-- Dashboard Metrics/Progress Status -->
         <div class="progress-card">
-
-            <h3>Your Progress</h3>
-
-            <div class="progress-bar">
-                <div class="progress"></div>
+            <h3 style="font-size: 16px;">Syllabus Coverage Framework</h3>
+            <div class="progress-bar"><div class="progress"></div></div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                <span>Paper I (100 Marks) + Paper II (100 Marks)</span>
+                <span><strong>35% Syllabus Complete</strong></span>
             </div>
-
-            <span>25% Completed</span>
-
         </div>
 
-
-        <!-- Section A -->
-        <div class="course-card">
-
-            <div class="card-header">
-                <h2>📘 General Awareness</h2>
-                <button class="toggle-btn">+</button>
+        <!-- SYLLABUS WRAPPERS -->
+        
+        <!-- SECTION: FIRST PAPER (GENERAL AWARENESS & MANAGEMENT) -->
+        <div class="lms-section" id="section-ga">
+            <div class="section-title">First Paper: General Awareness (MCQ Section)</div>
+            
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🌍 1. General Awareness and Contemporary Issues (30 Marks)</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>1.1 Geography, History & Culture</h3>
+                        <ul>
+                            <li>Physical geography of Nepal and the world</li>
+                            <li>Socio-cultural and economic geography and demography of Nepal</li>
+                            <li>Major natural resources of Nepal</li>
+                            <li>Geographical diversity, climatic conditions, livelihood and lifestyle of people</li>
+                            <li>Major Historical Events of Nepal and the World</li>
+                            <li>Notable Events, Personalities and Socio-Cultural Aspects of Ancient, Medieval and Modern History of Nepal</li>
+                            <li>Customs, Traditions, Values, Religions, Ethnicity, Languages, Cultures, Arts, Literature, Music and Heritages of Nepal</li>
+                        </ul>
+                    </div>
+                    <div class="topic">
+                        <h3>1.2 Economic Aspects of Nepal</h3>
+                        <ul>
+                            <li>Economic Indicators (Economic Growth, GDP, GNP, Per Capita Income, Remittance, Foreign aid & Investment)</li>
+                            <li>Infrastructures of Development (Agriculture, Industry, Trade, Tourism, Transportation, Communication, Health, Electricity)</li>
+                            <li>Government Planning and Budgeting</li>
+                            <li>Current periodical plan of Nepal</li>
+                        </ul>
+                    </div>
+                    <div class="topic">
+                        <h3>1.3 Governance & Organizations</h3>
+                        <ul>
+                            <li>The Constitution of Nepal; Federal, Provincial and local Governments</li>
+                            <li>General Information on the UNO, WTO, ITU, WB, ADB, AIIB, SAARC & BIMSTEC</li>
+                            <li>Public Service Charter and scope of public services</li>
+                        </ul>
+                    </div>
+                    <div class="topic">
+                        <h3>1.4 Contemporary Issues</h3>
+                        <ul>
+                            <li>Information on Sustainable Development, Environment, Pollution, Climate Change, Biodiversity, Demography, Urbanization, Science and Technology</li>
+                            <li>Recent Advance and Major Achievements in Telecommunication Sectors</li>
+                            <li>Major Events and Current Affairs of National and International Importance</li>
+                            <li>Concept of Good Governance</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <div class="content">
-
-                <div class="topic">
-                    <h3>1. Geography, History and Culture</h3>
-
-                    <ul>
-                        <li>Physical geography of Nepal and World</li>
-                        <li>Socio-cultural and Economic Geography</li>
-                        <li>Major Natural Resources</li>
-                        <li>Historical Events</li>
-                        <li>Culture, Arts and Heritage</li>
-                    </ul>
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🧮 2. Mathematics and Statistics (20 Marks)</h2>
+                    <button class="toggle-btn">+</button>
                 </div>
-
-
-                <div class="topic">
-                    <h3>2. Economic Aspects of Nepal</h3>
-
-                    <ul>
-                        <li>GDP, GNP, Per Capita Income</li>
-                        <li>Infrastructure Development</li>
-                        <li>Planning and Budgeting</li>
-                    </ul>
+                <div class="content">
+                    <div class="topic">
+                        <h3>2.1 Mathematics Foundations</h3>
+                        <ul>
+                            <li>Arithmetical Reasoning, Percentage, Ratio, Average, Profit & Loss, Time & Work, Data interpretation & Data verification</li>
+                            <li>Function and Limit, Maxima and Minima, Differentiation and Integration Equations of Straight Lines, Circle, Parabola, Hyperbola, Spheres, Cylinders and Cones</li>
+                            <li>Linear Differential Equations, Fourier Series, Fourier Transforms, Fourier Integral, Odd and Even Function, Laplace Transforms, Taylor Series, Z-Transforms</li>
+                        </ul>
+                    </div>
+                    <div class="topic">
+                        <h3>2.2 Statistics Concepts</h3>
+                        <ul>
+                            <li>Introduction of Statistics, Mean, Median, Mode, Dispersion, Variance, Correlation and Regression</li>
+                            <li>Probability, Random Variables and Probability Distributions, Samples and Sampling</li>
+                        </ul>
+                    </div>
                 </div>
+            </div>
+        </div>
 
+        <div class="lms-section" id="section-mgmt">
+            <div class="section-title">First Paper: Management & Institutional Awareness (Subjective Section)</div>
+            
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>📊 3. General Management and Marketing</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Management Foundations</h3>
+                        <ul>
+                            <li>Management : Concept and Modern Approaches</li>
+                            <li>Motivation, Leadership, Control, Coordination, Teamwork and Group Dynamics</li>
+                            <li>Management Information System</li>
+                            <li>Corporate and Strategic Planning and Management</li>
+                            <li>Corporate Social Responsibility</li>
+                            <li>Ethics, Integrity and Responsibility in Business /Service Like Institution</li>
+                            <li>Business Strategic Planning, Marketing Process, Product Planning, Developing the Marketing Program</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>💼 4. Project Management & Financial Analysis</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Scheduling & Engineering Economics</h3>
+                        <ul>
+                            <li>Project life Cycle framework</li>
+                            <li>Network Models: CPM & PERT, Gantt Chart</li>
+                            <li>Project Scheduling, Resource Leveling, Systems of Project Control, Cost Control, Preparation of Operational Budget, Planning of Quality, Time & Cost Dimensions, Negotiating for Materials, Supplies & Services, Project Monitoring and Evaluation</li>
+                            <li>Quality Management & TQM Techniques</li>
+                            <li>Essential Business & Accounting Terminology, Cost Classification & Analysis, Interest & Time Value of Money, Basic Methodology of Engineering Economics, Cost and Benefit Analysis, Risk Analysis, Investment Decisions, Demand Analysis and Sales Forecasting, Concept of EIRR (Economic Internal Rate of Return) and FIRR (Financial Internal Rate of Return)</li>
+                            <li>Basic Knowledge of Trial Balance & Balance Sheet, Income Statements, Revenue and Capital Expenditure, Budgeting and Capitalization, Depreciation and Subsidy, Procurement Procedures (FOB, CIF, Liquidated Damages, Letter of Credit, Insurance, Invoice, Bid Security, Performance Bond), Competitive Bidding</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>📜 5. संस्थागत ज्ञान र सम्वद्द कानुनहरू (Institutional Laws & Acts)</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>NTC Governance Framework</h3>
+                        <ul>
+                            <li>नेपाल दूरसञ्चार कम्पनी लिमिटेड सम्बन्धी जानकारी: उद्देश्य, संगठनात्मक संरचना र कार्यक्षेत्र</li>
+                            <li>नेपाल दूरसञ्चार कम्पनी लिमिटेडले सेवा प्रवाहमा अवलम्बन गरिएका प्रविधि</li>
+                            <li>सेवाको महशुल दर निर्धारण सम्वन्धि व्यवस्था</li>
+                            <li>नेपाल दूरसञ्चार प्राधिकरण : स्थापना, लक्ष्य, उद्देश्य, कार्यहरू र भूमिका</li>
+                            <li>नेपाल सरकारको चालु आवधिक योजनामा दूरसञ्चार सेवा</li>
+                            <li>नेपाल दूरसञ्चार कम्पनी र नेपाल सरकार तथा अन्य सरोकारवाला निकायहरूसँगको सम्बन्ध</li>
+                            <li>दूरसञ्चार ऐन, २०५३ तथा दूरसञ्चार नियमावली, २०५४</li>
+                            <li>नेपाल दूरसञ्चार कम्पनी लिमिटेडको प्रबन्धपत्र र नियमावली</li>
+                            <li>नेपाल दूरसञ्चार कम्पनी लिमिटेडको कर्मचारी विनियमावली, २०७८ को परिच्छेद-७ बिदा, परिच्छेद-९ आचरण तथा अनुशासन, परिच्छेद-१० सजाय र पुनरावेदन , परिच्छेद-११ अवकाश, उपदान, निबृत्तोभरण तथा अन्य सुबिधा</li>
+                            <li>नेपाल दुरसञ्चार कम्पनी लिमिटेडको आर्थिक विनियमाली, २०७१को भाग -२ को खरिद सम्बन्धी कार्यविधि, भाग ३ को परिच्छेद -१ योजना तर्जुमा वा वार्षिक कार्यक्रम र बजेट, परिच्छेद-३ कम्पनीको सम्पत्तिको जिम्मा, त्यसको लगत, संरक्षण र बरबुझारथ सम्बन्धी व्यवस्था</li>
+                            <li>कम्पनी ऐन, २०६३ को परिच्छेद -२ कम्पनीको संस्थापना, परिच्छेद-३ प्रबन्धपत्र, नियमावली र विवरणपत्र र परिच्छेद -५ कम्पनीको साधारण सभा</li>
+                            <li>दुरसञ्चार नीति,२०६०</li>
+                            <li>डिजिटल नेपाल फ्रेमवर्क, २०७६ (डिजिटल फाउण्डेशन बुुँदा १ देखि १९ सम्म)</li>
+                            <li>सूचना तथा सञ्चार प्रविधि नीति, २०७२</li>
+                            <li>राष्ट्रिय साइबर सुरक्षा नीति, २०८०</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: SECOND PAPER (TECHNICAL SERVICES SPECIFIC) -->
+        <div class="lms-section" id="section-tech">
+            <div class="section-title">Second Paper: Technical Subject (Service Specific - 100 Marks)</div>
+
+            <!-- Unit 1 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>📊 Unit 1: Digital Signal Processing</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>DSP Core Principles</h3>
+                        <ul>
+                            <li>Theory of Discrete-time linear Systems</li>
+                            <li>Digital Filtering</li>
+                            <li>Discrete Fourier Analysis</li>
+                            <li>Application to Voice and Image Processing, Communications</li>
+                            <li>Hardware for Digital Signal Processing, Including Digital Signal Processors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 2 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🔌 Unit 2: Digital Systems Design</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Logic Circuits & Microprocessors</h3>
+                        <ul>
+                            <li>Design of Combinatorial and Sequential Logic</li>
+                            <li>Programmable Logic Devices and Gate Arrays</li>
+                            <li>Characteristics of Digital Integrated Circuit Families</li>
+                            <li>Analysis and Design for Controllers, Processors and Memories</li>
+                            <li>Microprocessors, Including Components, Data flow, Signals and Timing</li>
+                            <li>Small System Design, Interconnection of Associated Devices</li>
+                            <li>Computer Interfacing, Including Parallel and Serial I/O, Interrupts and DMA</li>
+                            <li>Common Bus Structures</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 3 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🏗️ Unit 3: Computer Architectures</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Advanced Processor Layout</h3>
+                        <ul>
+                            <li>Architecture, Programming, I/O and Storage Devices</li>
+                            <li>Computer Structure and Typical Processor Architecture</li>
+                            <li>CPU and Memory Organization, Buses</li>
+                            <li>Processing Unit and Controller Design, Hardwired and Micro Program Control</li>
+                            <li>Instruction Sets and Addressing Modes; Assembly Language Programming, I/O and Interrupt Servicing</li>
+                            <li>RISC and RISC Architecture</li>
+                            <li>Architecture of High Speed Work Station and Personal Processors and Systems</li>
+                            <li>Instruction Set Design for Pipelined Machines</li>
+                            <li>Multiple Processor Architectures, Highly Parallel Machines, Systolic Arrays</li>
+                            <li>Neural Networks, Multitasking Machines, Real-Time Systems, Interconnection of Multiple Processor Systems</li>
+                            <li>Architectures for Specialized Purposes, Array Processors, Vector Processors</li>
+                            <li>Virtual Machines</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 4 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🔬 Unit 4: Principles of VLSI</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Silicon VLSI Engineering</h3>
+                        <ul>
+                            <li>Very Large Scale Integrated Circuits</li>
+                            <li>Simplified Design Rules</li>
+                            <li>Static and Dynamic Logic, Multiphase Clocking</li>
+                            <li>Memory Elements and Memory Structures</li>
+                            <li>Gate Arrays and Standard Cell Technology; Placement and Routing</li>
+                            <li>Programmable Logic Devices</li>
+                            <li>I/O Devices Layout</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 5 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🌐 Unit 5: Computer Communications</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Networking Suite & Topologies</h3>
+                        <ul>
+                            <li>Data Communications, Including Signals, Modulation and Reception</li>
+                            <li>Error Detecting and Correcting Codes</li>
+                            <li>Multiplexing, Including Time, Frequency and Code Division Multiplexing</li>
+                            <li>Protocols: The ISO/OSI Reference Model, X.25</li>
+                            <li>Internetworking and Router-Based Networks: TCP/IP Suite of Protocols, Routing and flow Control</li>
+                            <li>Internet Addressing and Domain Names</li>
+                            <li>Local Area Networks, Topologies, Access schemes, Medium Access and Logic layers; CSMA/CD and Token Ring Protocols; Segmented and Hubbed LANs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 6 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🤖 Unit 6: Artificial Intelligence & Expert Systems</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>AI Knowledge Engineering</h3>
+                        <ul>
+                            <li>Concepts of Artificial Intelligence</li>
+                            <li>Overview of Knowledge-Based and Expert Systems</li>
+                            <li>Logic Programming</li>
+                            <li>Programming Languages (LISP and Prolog) for AI</li>
+                            <li>Knowledge Representation</li>
+                            <li>Rule-Based and Object-Based Systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 7 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>☁️ Unit 7: Distributed Systems & Cloud Computing</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Cloud Frameworks</h3>
+                        <ul>
+                            <li>Characteristics of Distributed Systems</li>
+                            <li>Networked vs. Centralized Systems</li>
+                            <li>Fundamental Concepts and Mechanisms</li>
+                            <li>Client-Server Systems</li>
+                            <li>Process Synchronization and Inter Process Communications</li>
+                            <li>Principles of Fault Tolerance</li>
+                            <li>Transaction Processing Techniques</li>
+                            <li>Distributed File Systems</li>
+                            <li>Operating Systems for Distributed Architectures</li>
+                            <li>Cloud Service Model</li>
+                            <li>Cloud Deployment Model</li>
+                            <li>Cloud Virtualization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 8 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>💻 Unit 8: Program Design and Data Structures</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Modular Coding & Complex Structures</h3>
+                        <ul>
+                            <li>Programming Language Syntax and Semantics</li>
+                            <li>Design of Structured and Modular Programs in a High-level Language (C, C++)</li>
+                            <li>Basics of Object-Oriented Programming Classes</li>
+                            <li>Non-Numerical Processing</li>
+                            <li>Design and Construction of Programs Involving Structured Data: Arrays, Stacks, Queues, Lists, Trees and Records</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 9 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🗄️ Unit 9: Operating Systems</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Kernel Operations</h3>
+                        <ul>
+                            <li>Operating System Principles, Components and Usage</li>
+                            <li>Design and Implementation of Operating Systems</li>
+                            <li>Synchronization of Concurrent Processes, Resource Allocation, Scheduling, Protection and Privacy</li>
+                            <li>Data, Task and Job Management: Loading, Linking; I/O Control</li>
+                            <li>Multitasking and Multi-Processing</li>
+                            <li>Real-time Aspects</li>
+                            <li>Basic Characteristics of Modern Operating Systems: UNIX, Windows</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 10 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>⚙️ Unit 10: Software Engineering</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>SDLC Methodologies</h3>
+                        <ul>
+                            <li>Software Development Lifecycles Models and Software Requirement Specification</li>
+                            <li>Design, Implementation, Test, Verification and Validation, Documentation, Quality Assurance, Control and Life-cycle Management of Correct, Reliable, Maintainable and Cost Effective Software</li>
+                            <li>Object Oriented Design</li>
+                            <li>Graphical Design Tools, Design in High-level Languages and Data Flow Driven Designs</li>
+                            <li>Software Projects Management</li>
+                            <li>Software Maintenance and Configuration Management</li>
+                            <li>Source code Management and Testing</li>
+                            <li>Software Re-engineering, Reverse Engineering and Forward Engineering</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 11 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🛢️ Unit 11: Databases and File Systems</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Relational Design & Query Engines</h3>
+                        <ul>
+                            <li>Data Models, Data Normalization, Data Description Languages, Query Facilities, Data Integrity and Reliability, Concurrency</li>
+                            <li>Databases: Hierarchical, Network and Relational Databases; Data Organization</li>
+                            <li>Relational Query Languages: Relational Algebra and Calculus, SQL</li>
+                            <li>Relational Database Design</li>
+                            <li>Transaction Processing, Query Processing, Reports</li>
+                            <li>Security and Integrity; Concurrency Control</li>
+                            <li>File Organization: Sequential, Indexed and Direct Access, Multiple Key and Hashing</li>
+                            <li>File Processing: Records, Files, Compaction</li>
+                            <li>Sorting, Merging and Updating Files</li>
+                            <li>Algorithms for Inverted Lists, Multi-list, Indexed Sequential and Hierarchical Structures</li>
+                            <li>File I/O: Control, Utility, Space Allocation and Cataloging</li>
+                            <li>Index Organization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 12 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🕸️ Unit 12: Internet Programming</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>CGI, PHP & Java Environments</h3>
+                        <ul>
+                            <li>Common Gateway Interface (CGI) Application</li>
+                            <li>Input to CGI: Environment Variables, Accessing from Input</li>
+                            <li>Output from CGI: CGI and Response Headers</li>
+                            <li>Forms and CGI: Sending Data to The Server Using HTML Tags</li>
+                            <li>Executing External Program and CGI Program</li>
+                            <li>Hypermedia Documents: Creating Dynamic Pages Using CGI, PHP</li>
+                            <li>Introduction to JAVA: JAVA Evolution and Features, Difference Between JAVA and C/C++, Simple JAVA Program, JAVA Program Structure, JAVA Statements, JAVA Virtual Machine - Introduction and Implementation Basics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 13 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🏢 Unit 13: Client Server Computing</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Middleware & Data Warehousing</h3>
+                        <ul>
+                            <li>Client Server Computing Concepts: Building Blocks, State of Client Server Architecture</li>
+                            <li>SQL Database Services: Fundamentals of Database Servers, Functions, Procedures, Triggers and Rules</li>
+                            <li>SQL Middleware Basics: SQL API, Open SQL Gateway</li>
+                            <li>Concept of Data Warehouses</li>
+                            <li>Client Server Transaction Processing: Transaction Concepts, Transaction Models</li>
+                            <li>Processing Monitors, Transaction Management Standards</li>
+                            <li>Caching and Cache Servers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 14 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>🔒 Unit 14: Cryptography and Network Security</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Symmetric Cryptography & Cyber Defense</h3>
+                        <ul>
+                            <li>Introduction to Cryptography: Security Attacks, Conventional Encryption Model, Simplified DES, Block Cypher Principle</li>
+                            <li>Principles of Public-Key Crypto Systems: RSA Algorithm, Diffie-Hellman Key exchange, Number Theory-Prime and Relatively Prime Numbers</li>
+                            <li>Message Authentication and Hash Function</li>
+                            <li>Digital Signatures, Digital Signature Standards and Authentication Protocols</li>
+                            <li>Network Security: Authentication Applications, Kerberos, Electronic Mail Security</li>
+                            <li>Web Security: Web Security Requirements, Secure Sockets Layer and Transport Layer Security, Secure Electronic Transaction</li>
+                            <li>Intruders and Virus Related Threats</li>
+                            <li>Firewall Design Principles</li>
+                            <li>Introduction to Trusted Systems</li>
+                            <li>Concept of Block Chain</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit 15 -->
+            <div class="course-card">
+                <div class="card-header">
+                    <h2>⚡ Unit 15: Basic Electricity and Electronics</h2>
+                    <button class="toggle-btn">+</button>
+                </div>
+                <div class="content">
+                    <div class="topic">
+                        <h3>Electrical Laws & Semiconductors</h3>
+                        <ul>
+                            <li>Circuit Elements, Series & Parallel Circuits, Resistance, Resistivity, Ohm’s laws, Kirchoff’s laws, Single Phase & Three Phase Circuit Analysis</li>
+                            <li>Primary & Secondary Cells, Cells in Series & Parallel, Star & Delta Connections</li>
+                            <li>Fundamentals of Transformers, Generators and Induction Motors</li>
+                            <li>Electrical Shock Hazards, Earthing and Shielding Techniques for Telecom Equipments, Lightning Protections</li>
+                            <li>Diode, Zener Diode, LEDs, Transistors, PNP, NPN, FET, MOSFETS, Op-Amps</li>
+                            <li>Integrated Circuits, NMOS, CMOS, MOSFET Amplifiers, Junction Field Effect Transistor, Quadratic Caracteristics, JFET Amplifiers</li>
+                            <li>Bipolar Transistor and Its Configurations, Load Line Biasing in CE Configuration</li>
+                            <li>Number Systems Foundations</li>
+                            <li>Power Supplies & Voltage Regulators, Half Wave Rectifier, Full Wave Rectifier, Bridge Rectifier</li>
+                            <li>Logic Gates: AND, OR, NOT, NAND, NOR Structured Configuration</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
         </div>
-
-
-
-        <!-- Technical Subject -->
-        <div class="course-card">
-
-            <div class="card-header">
-                <h2>💻 Technical Subject</h2>
-                <button class="toggle-btn">+</button>
-            </div>
-
-            <div class="content">
-
-                <div class="topic">
-                    <h3>1. Digital Signal Processing</h3>
-
-                    <ul>
-                        <li>Discrete-time Linear Systems</li>
-                        <li>Digital Filtering</li>
-                        <li>Fourier Analysis</li>
-                        <li>Voice and Image Processing</li>
-                    </ul>
-
-                </div>
-
-
-                <div class="topic">
-                    <h3>2. Computer Architecture</h3>
-
-                    <ul>
-                        <li>CPU and Memory Organization</li>
-                        <li>RISC Architecture</li>
-                        <li>Pipelining</li>
-                        <li>Parallel Machines</li>
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-
     </main>
+</div>
 
+<!-- Global Summary Modal Structure -->
+<div class="modal" id="summaryModal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Subtopic Details</h2>
+        <p id="modalBody">Loading concise concept explanation summary for NTC level 7 engineering preparation...</p>
+    </div>
 </div>
 
 <script>
-let buttons = document.querySelectorAll(".toggle-btn");
+    // System Interactive Summaries Data Pool
+    const summaries = {
+        "physical geography of nepal and the world": "Focus on global landscape divisions (mountains, plateaus) and Nepal's precise 3 ecological zones (Terai, Hills, Mountains) along with river basins (Koshi, Gandaki, Karnali).",
+        "major historical events of nepal and the world": "Covers the unification era of Nepal, key dates in Shah/Rana regimes, democratic movements (2007, 2046, 2062/63), alongside world wars, industrial, and French revolutions.",
+        "economic indicators (economic growth, gdp, gnp, per capita income, remittance, foreign aid & investment)": "Essential metrics measuring national fiscal health. Understand GDP computation formulas, per-capita targets in current plans, and the profound weight of remittance inflows on country liquidity.",
+        "theory of discrete-time linear systems": "Focuses on LTI systems defined via difference equations. Core parameters include convolution sums, stability checks where $\\sum |h[n]| < \\infty$, and causality traits.",
+        "digital filtering": "Covers design rules for Finite Impulse Response (FIR) utilizing window techniques and Infinite Impulse Response (IIR) utilizing Bilinear Transform mappings.",
+        "discrete fourier analysis": "Study of DFT equations and fast calculation mappings like Fast Fourier Transform (FFT) via decimation-in-time schemes to reduce structural runtime complexity.",
+        "cpu and memory organization, buses": "Analyzes structural hierarchy from ultra-fast internal registers, cache levels (L1/L2/L3), dynamic RAM, down to auxiliary units. Bus architectures handle addresses, instructions, and control signals.",
+        "risc and risc architecture": "Reduced Instruction Set Computers favor uniform, single-cycle execution flows, heavy register allocation structures, and pipelining optimizations over complex multi-step cycles.",
+        "instruction set design for pipelined machines": "Manages pipeline structural hazards (resource sharing), data hazards (dependencies solved by forwarding/stalling), and branch control penalties.",
+        "circuit elements, series & parallel circuits, resistance, resistivity, ohm’s laws, kirchoff’s laws, single phase & three phase circuit analysis": "Fundamental principles: $V = IR$, KCL for nodal charge conservation, and KVL for directional loop energy calculations.",
+        "डिजिटल नेपाल फ्रेमवर्क, २०७६ (डिजिटल फाउण्डेशन बुुँदा १ देखि १९ सम्म)": "The roadmap focusing on 8 structural sectors with 80 distinct initiatives aiming to construct a digitally progressive governance framework across Nepal.",
+        "दूरसञ्चार ऐन, २०५३ तथा दूरसञ्चार नियमावली, २०५४": "The supreme telecom law of Nepal establishing NTA licensing regimes, spectrum ownership distribution patterns, and cross-operator tariff adjudication limits."
+    };
 
-buttons.forEach(btn=>{
+    // Toggle Accordions
+    document.querySelectorAll(".card-header").forEach(header => {
+        header.addEventListener("click", () => {
+            const content = header.nextElementSibling;
+            const btn = header.querySelector(".toggle-btn");
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                btn.innerHTML = "+";
+            } else {
+                content.style.display = "block";
+                btn.innerHTML = "-";
+            }
+        });
+    });
 
-btn.addEventListener("click",()=>{
+    // Subtopic Click Event Listener & Modal Activator
+    document.querySelectorAll(".topic ul li").forEach(li => {
+        li.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const text = li.textContent.trim().toLowerCase();
+            document.getElementById("modalTitle").innerText = li.textContent;
+            
+            // Search match within summaries object dictionary
+            let foundMatch = "Syllabus Note Summary: Focus comprehensively on definitions, practical architectural deployment inside Nepal Telecom systems, related standard formulas, and targeted examination questions.";
+            for (let key in summaries) {
+                if (text.includes(key) || key.includes(text)) {
+                    foundMatch = summaries[key];
+                    break;
+                }
+            }
+            
+            document.getElementById("modalBody").innerHTML = foundMatch;
+            document.getElementById("summaryModal").style.display = "flex";
+        });
+    });
 
-let content = btn.parentElement.nextElementSibling;
+    function closeModal() {
+        document.getElementById("summaryModal").style.display = "none";
+    }
 
-if(content.style.display==="block"){
-content.style.display="none";
-btn.innerHTML="+";
-}
-else{
-content.style.display="block";
-btn.innerHTML="-";
-}
+    // Modal click out dismiss
+    window.onclick = function(event) {
+        let modal = document.getElementById("summaryModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
-});
+    // Toggle Dark / Light Theme
+    function toggleTheme() {
+        const root = document.documentElement;
+        const currentTheme = root.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", newTheme);
+    }
 
-});
-    </script>
+    // Profile Dropdown Toggle
+    function toggleProfile() {
+        document.getElementById("profileDropdown").classList.toggle("show");
+    }
+
+    // Nav Category Filtering
+    function filterSection(id) {
+        document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
+        event.currentTarget.classList.add("active");
+
+        if(id === 'all') {
+            document.querySelectorAll(".lms-section").forEach(s => s.style.display = "block");
+        } else {
+            document.querySelectorAll(".lms-section").forEach(s => s.style.display = "none");
+            document.getElementById("section-" + id).style.display = "block";
+        }
+    }
+
+    // Search Bar Live Filters
+    function searchSyllabus() {
+        let input = document.getElementById('search').value.toLowerCase();
+        let listItems = document.querySelectorAll('.topic ul li');
+        let cards = document.querySelectorAll('.course-card');
+
+        listItems.forEach(item => {
+            if (item.textContent.toLowerCase().includes(input)) {
+                item.style.display = "flex";
+                // Keep structural parent visible if item matches
+                item.closest('.content').style.display = "block";
+                item.closest('.course-card').querySelector('.toggle-btn').innerHTML = "-";
+            } else {
+                item.style.display = "none";
+            }
+        });
+
+        if(input === "") {
+            cards.forEach(card => {
+                card.querySelector('.content').style.display = "none";
+                card.querySelector('.toggle-btn').innerHTML = "+";
+            });
+        }
+    }
+</script>
 </body>
 </html>
