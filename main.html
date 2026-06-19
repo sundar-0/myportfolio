@@ -42,4 +42,180 @@ img {
 .notes__content .button:hover{
     transform: translateY(-3px);
 }
+  *{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+}
+
+.container{
+display:flex;
+min-height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:260px;
+background:#111827;
+padding:30px;
+border-right:1px solid rgba(255,255,255,.1);
+}
+
+.logo h2{
+color:#38bdf8;
+}
+
+.logo span{
+color:#94a3b8;
+}
+
+nav{
+margin-top:40px;
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+nav a{
+text-decoration:none;
+color:white;
+padding:12px;
+border-radius:10px;
+transition:.3s;
+}
+
+nav a:hover,
+.active{
+background:#1e293b;
+}
+
+
+/* Main */
+
+main{
+flex:1;
+padding:40px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+#search{
+width:300px;
+padding:15px;
+border:none;
+border-radius:15px;
+background:#1e293b;
+color:white;
+}
+
+
+/* Progress */
+
+.progress-card{
+background:#1e293b;
+padding:25px;
+border-radius:20px;
+margin-bottom:25px;
+}
+
+.progress-bar{
+height:12px;
+background:#334155;
+border-radius:20px;
+margin:15px 0;
+overflow:hidden;
+}
+
+.progress{
+width:25%;
+height:100%;
+background:linear-gradient(90deg,#38bdf8,#06b6d4);
+}
+
+
+/* Cards */
+
+.course-card{
+background:rgba(30,41,59,.7);
+backdrop-filter:blur(15px);
+padding:25px;
+border-radius:20px;
+margin-bottom:25px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.card-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.toggle-btn{
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+background:#38bdf8;
+font-size:22px;
+cursor:pointer;
+}
+
+.content{
+display:none;
+margin-top:20px;
+}
+
+.topic{
+margin-bottom:25px;
+}
+
+.topic h3{
+color:#38bdf8;
+margin-bottom:10px;
+}
+
+.topic ul{
+padding-left:20px;
+color:#cbd5e1;
+}
+
+.topic li{
+margin:8px 0;
+}
+
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+.header{
+flex-direction:column;
+gap:20px;
+}
+
+#search{
+width:100%;
+}
+
+}
 </style>
