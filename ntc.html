@@ -3,696 +3,701 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTC Computer Engineer LMS (Level 7)</title>
+    <title>Nepal Telecom (NTC) Level 7 CE Complete Exam Portal</title>
     <style>
         :root[data-theme="dark"] {
-            --bg-main: #0f172a;
+            --bg-main: #0b0f19;
             --bg-sidebar: #111827;
-            --bg-card: rgba(30, 41, 59, 0.7);
-            --bg-nested: #1e293b;
-            --bg-hover: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --primary: #38bdf8;
+            --bg-card: rgba(31, 41, 55, 0.7);
+            --bg-nested: #1f2937;
+            --bg-hover: #374151;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #0ea5e9;
             --border: rgba(255, 255, 255, 0.08);
-            --modal-bg: rgba(15, 23, 42, 0.85);
-            --success: #34d399;
-        }
-        :root[data-theme="light"] {
-            --bg-main: #f1f5f9;
-            --bg-sidebar: #ffffff;
-            --bg-card: #ffffff;
-            --bg-nested: #f8fafc;
-            --bg-hover: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --primary: #0284c7;
-            --border: rgba(0, 0, 0, 0.08);
-            --modal-bg: rgba(0, 0, 0, 0.5);
-            --success: #059669;
+            --modal-bg: rgba(3, 7, 18, 0.85);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background 0.3s, color 0.3s;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-main); transition: background 0.3s; }
 
-        body {
-            background: var(--bg-main);
-            color: var(--text-main);
-        }
-
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            width: 280px;
+        /* FIXED TOP BAR FOR TIMER CONTROLS */
+        .top-timer-dashboard {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: var(--bg-sidebar);
-            padding: 30px 20px;
+            border-bottom: 3px solid var(--primary);
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+        }
+
+        .timer-numeric {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--warning);
+            background: #000;
+            padding: 4px 18px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            letter-spacing: 1px;
+        }
+
+        .timer-actions { display: flex; align-items: center; gap: 12px; }
+        .timer-actions select, .timer-actions button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-nested);
+            color: var(--text-main);
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .timer-actions button:hover { background: var(--bg-hover); }
+        .btn-play { border-color: var(--success) !important; color: var(--success) !important; }
+        .btn-pause { border-color: var(--danger) !important; color: var(--danger) !important; }
+
+        /* CORE VIEWPORT */
+        .app-shell { display: flex; min-height: calc(100vh - 65px); }
+        
+        .sidebar-panel {
+            width: 320px;
+            background: var(--bg-sidebar);
+            padding: 25px 20px;
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .logo h2 {
-            color: var(--primary);
-            font-size: 22px;
-        }
-
-        .logo span {
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        nav {
-            margin-top: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex-grow: 1;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-main);
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        nav a:hover, nav a.active {
-            background: var(--bg-nested);
-            color: var(--primary);
-        }
-
-        /* Main Workspace Container */
-        main {
-            flex: 1;
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
             gap: 20px;
         }
 
-        .header h1 {
-            font-size: 26px;
-            font-weight: 700;
-        }
+        .brand-logo h2 { color: var(--primary); font-size: 20px; }
+        .brand-logo p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-        .header p {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        #search {
-            width: 260px;
-            padding: 12px 20px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg-nested);
-            color: var(--text-main);
-            font-size: 14px;
-        }
-
-        #search:focus {
-            outline: 2px solid var(--primary);
-        }
-
-        /* Profile & Theme Utilities */
-        .theme-toggle {
-            background: var(--bg-nested);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .profile-container {
-            position: relative;
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            border: 2px solid var(--border);
-        }
-
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 50px;
-            background: var(--bg-sidebar);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            width: 220px;
-            padding: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 100;
-        }
-
-        .profile-dropdown.show {
-            display: block;
-        }
-
-        .profile-dropdown h4 {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .profile-dropdown p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        .profile-dropdown a {
-            display: block;
+        .nav-menu { display: flex; flex-direction: column; gap: 6px; }
+        .nav-link {
             text-decoration: none;
             color: var(--text-main);
-            font-size: 13px;
-            padding: 8px 0;
-        }
-
-        .profile-dropdown a:hover {
-            color: var(--primary);
-        }
-
-        /* Progress Card tracker component */
-        .progress-card {
-            background: var(--bg-nested);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border);
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: var(--bg-hover);
-            border-radius: 10px;
-            margin: 12px 0;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--success));
-            transition: width 0.4s ease;
-        }
-
-        /* Syllabus Accordion Cards */
-        .section-title {
-            margin: 25px 0 15px 0;
-            font-size: 18px;
-            color: var(--primary);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 5px;
-        }
-
-        .course-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .card-header h2 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .toggle-btn {
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: 50%;
-            background: var(--bg-nested);
-            color: var(--text-main);
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .content {
-            display: none;
-            margin-top: 20px;
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
-        }
-
-        .topic {
-            margin-bottom: 20px;
-        }
-
-        .topic h3 {
-            color: var(--primary);
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-
-        .topic ul {
-            list-style: none;
-            padding-left: 5px;
-        }
-
-        .topic li {
-            margin: 8px 0;
-            color: var(--text-main);
-            font-size: 14px;
-            padding: 8px 12px;
-            background: var(--bg-nested);
+            padding: 12px 14px;
             border-radius: 8px;
-            border-left: 3px solid var(--primary);
+            font-size: 13px;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            user-select: none;
+            background: rgba(255,255,255,0.02);
         }
+        .nav-link:hover, .nav-link.active { background: var(--bg-hover); color: var(--primary); }
 
-        .topic li:hover {
-            background: var(--bg-hover);
-        }
-
-        .item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            flex-grow: 1;
-        }
-
-        .item-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--success);
-        }
-
-        /* Completed item styling */
-        .topic li.completed {
-            border-left-color: var(--success);
-            opacity: 0.7;
-        }
+        /* MAIN MONITOR WORKSPACE */
+        .workspace-view { flex: 1; padding: 35px; max-width: 1300px; margin: 0 auto; width: 100%; }
         
-        .topic li.completed .item-text {
-            text-decoration: line-through;
-            color: var(--text-muted);
+        .meta-heading { margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .meta-heading h1 { font-size: 24px; letter-spacing: -0.5px; }
+        
+        .search-wrapper { margin-top: 15px; }
+        .search-box {
+            width: 100%; max-width: 450px; padding: 10px 16px;
+            border: 1px solid var(--border); border-radius: 8px;
+            background: var(--bg-nested); color: var(--text-main);
         }
 
-        .action-arrow {
-            font-size: 12px;
-            color: var(--primary);
-            cursor: pointer;
-            padding-left: 10px;
+        /* PROGRESS TRACKER */
+        .progress-card {
+            background: var(--bg-nested); padding: 18px 22px; border-radius: 12px;
+            margin-bottom: 30px; border: 1px solid var(--border);
+        }
+        .bar-outer { height: 12px; background: #111; border-radius: 20px; margin-top: 10px; overflow: hidden; }
+        .bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #10b981); transition: width 0.4s ease; }
+
+        /* SYLLABUS LAYOUT SYSTEM */
+        .section-block { margin-bottom: 35px; display: block; }
+        .block-header {
+            font-size: 16px; color: var(--primary); font-weight: bold;
+            margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid var(--border);
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* Modal Structure for Subtopic Explanations */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--modal-bg);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        .unit-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+        .unit-trigger {
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; background: rgba(255,255,255,0.01); user-select: none;
         }
+        .unit-trigger h3 { font-size: 15px; font-weight: 600; }
+        .unit-body { display: none; padding: 15px 20px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); }
 
-        .modal-content {
-            background: var(--bg-sidebar);
-            color: var(--text-main);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 650px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border: 1px solid var(--border);
-            position: relative;
-            animation: slideIn 0.3s ease;
+        .topics-list { list-style: none; }
+        .topic-row {
+            padding: 10px 14px; background: var(--bg-nested); margin-bottom: 6px;
+            border-radius: 6px; border-left: 4px solid var(--primary);
+            display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;
         }
+        .topic-row.checked-node { border-left-color: var(--success); opacity: 0.65; }
+        .topic-row.checked-node .topic-text { text-decoration: line-through; color: var(--text-muted); }
 
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        .row-left { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-grow: 1; }
+        .cb-custom { width: 18px; height: 18px; cursor: pointer; accent-color: var(--success); }
+        .topic-text { font-size: 13.5px; line-height: 1.5; }
+        
+        .arrow-viewer-btn { font-size: 16px; color: var(--primary); cursor: pointer; padding: 2px 8px; transition: transform 0.2s; }
+        .arrow-viewer-btn:hover { transform: scale(1.3); }
 
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-muted);
+        /* MODAL WINDOW FOR EXPERT SYLLABUS VIEWER */
+        .pdf-layer-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-bg); backdrop-filter: blur(6px); z-index: 5000;
+            justify-content: center; align-items: center; padding: 20px;
         }
+        .pdf-viewport-container {
+            background: #1e1e1e; width: 100%; max-width: 950px; height: 85vh;
+            border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .pdf-topbar {
+            background: #2d2d2d; padding: 14px 24px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid #444; color: #fff;
+        }
+        .pdf-close-action { font-weight: bold; cursor: pointer; color: var(--text-muted); }
+        .pdf-close-action:hover { color: var(--danger); }
+        
+        .pdf-content-canvas { flex: 1; padding: 30px; overflow-y: auto; background: #525659; display: flex; justify-content: center; }
+        .pdf-page-sheet {
+            background: white; color: #111; width: 100%; max-width: 750px; min-height: 100%;
+            padding: 45px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); font-family: 'Times New Roman', Times, serif;
+        }
+        .pdf-page-sheet h2 { border-bottom: 2px solid #0284c7; padding-bottom: 6px; margin-bottom: 15px; color: #0284c7; font-size: 20px; }
+        .pdf-page-sheet p { font-size: 15px; line-height: 1.6; margin-bottom: 12px; text-align: justify; }
 
-        .close-modal:hover {
-            color: var(--text-main);
-        }
-
-        .modal h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .modal p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--text-main);
-        }
-
-        /* Responsive Breakpoints */
-        @media(max-width: 992px) {
-            .container { flex-direction: column; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
-            nav { flex-direction: row; flex-wrap: wrap; margin-top: 20px; }
-            .header { flex-direction: column; align-items: flex-start; }
-            .header-actions { width: 100%; justify-content: space-between; }
-            #search { width: 100%; }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="top-timer-dashboard">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 13px; font-weight: bold; color: var(--primary); letter-spacing: 0.5px;">⏱️ COUNTDOWN SESSION:</span>
+        <div class="timer-numeric" id="sessionTimerDisplay">03:00:00</div>
+    </div>
+    <div class="timer-actions">
+        <label style="font-size: 12px; color: var(--text-muted);">Set Target Hours:</label>
+        <select id="durationSelection" onchange="applyTimerPreset()">
+            <option value="60">1 Hour Study Target</option>
+            <option value="120">2 Hours Study Target</option>
+            <option value="180" selected>3 Hours Study Target</option>
+            <option value="240">4 Hours Study Target</option>
+        </select>
+        <button class="btn-play" id="triggerTimerBtn" onclick="toggleTimerState()">Start Session</button>
+        <button class="btn-pause" onclick="pauseTimerState()">Pause</button>
+        <button onclick="clearAndResetTimer()">Reset</button>
+    </div>
+</div>
 
-    <!-- Sidebar Menu Navigation -->
-    <aside class="sidebar">
-        <div class="logo">
-            <h2>NTC LMS 🇳🇵</h2>
-            <span>Computer Engineer (Level 7)</span>
+<div class="app-shell">
+    <aside class="sidebar-panel">
+        <div class="brand-logo">
+            <h2>नेपाल टेलिकम (NTC)</h2>
+            <p>तह ७ कम्प्युटर इन्जिनियर खुला / आ.प्र. पाठ्यक्रम</p>
         </div>
-        <nav>
-            <a href="#" class="active" onclick="filterSection('all')">Dashboard Overview</a>
-            <a href="#" onclick="filterSection('ga')">General Awareness</a>
-            <a href="#" onclick="filterSection('mgmt')">Management & Laws</a>
-            <a href="#" onclick="filterSection('tech')">Technical Subjects</a>
+        <hr style="border: 0; border-top: 1px solid var(--border)">
+        <nav class="nav-menu">
+            <a href="#" class="nav-link active" onclick="switchSectionView('all')"><span>Complete Structure</span></a>
+            <a href="#" class="nav-link" onclick="switchSectionView('p1sA')"><span>P1: General Awareness</span></a>
+            <a href="#" class="nav-link" onclick="switchSectionView('p1sB')"><span>P1: Management & Laws</span></a>
+            <a href="#" class="nav-link" onclick="switchSectionView('p2sA')"><span>P2: Technical Sec A</span></a>
+            <a href="#" class="nav-link" onclick="switchSectionView('p2sB')"><span>P2: Technical Sec B</span></a>
         </nav>
-        <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 20px;">
-            Syllabus Reference: 2081/10/21
-        </div>
     </aside>
 
-    <!-- Main Workspace Container -->
-    <main>
-        <div class="header">
-            <div>
-                <h1>NTC Computer Engineer Prep Tracker</h1>
-                <p>Structured Examination Portal according to Nepal Telecom Public Open Syllabus</p>
-            </div>
-            <div class="header-actions">
-                <input type="text" placeholder="Search syllabus topics..." id="search" onkeyup="searchSyllabus()">
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light View">🌓</button>
-                <div class="profile-container">
-                    <div class="avatar" onclick="toggleProfile()">CE</div>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <h4>Engineer Candidate</h4>
-                        <p>Computer Technical Group</p>
-                        <a href="#">📋 Exam Scheme Details</a>
-                        <a href="#">📊 Performance Analytics</a>
-                        <a href="#" style="color: #ef4444;">Logout Dashboard</a>
-                    </div>
-                </div>
+    <main class="workspace-view">
+        <div class="meta-heading">
+            <h1>Syllabus Tracking & Preparation Environment</h1>
+            <div class="search-wrapper">
+                <input type="text" class="search-box" id="keywordSearch" placeholder="Type to search syllabus subtopics instantly..." onkeyup="executeSyllabusFilter()">
             </div>
         </div>
 
-        <!-- Dashboard Metrics/Progress Status -->
         <div class="progress-card">
-            <h3 style="font-size: 16px;">Syllabus Coverage Framework</h3>
-            <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
-            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
-                <span>Paper I (100 Marks) + Paper II (100 Marks)</span>
-                <span><strong id="progressText">0% Syllabus Complete</strong></span>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold;">
+                <span>OVERALL EXAM COMPLIANCE SCALE</span>
+                <span id="numericCompletionStatus">0% Achieved</span>
             </div>
+            <div class="bar-outer"><div class="bar-inner" id="metricFillIndicator"></div></div>
         </div>
 
-        <!-- SYLLABUS WRAPPERS -->
-        
-        <!-- SECTION: FIRST PAPER (GENERAL AWARENESS & MANAGEMENT) -->
-        <div class="lms-section" id="section-ga">
-            <div class="section-title">First Paper: General Awareness (MCQ Section)</div>
+        <div class="section-block" id="p1sA-block">
+            <div class="block-header">First Paper - Section (A): General Awareness & Math [50 Marks MCQ]</div>
             
-            <div class="course-card">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <h2>🌍 1. General Awareness and Contemporary Issues (30 Marks)</h2>
-                    <button class="toggle-btn">+</button>
-                </div>
-                <div class="content">
-                    <div class="topic">
-                        <h3>1.1 Geography, History & Culture</h3>
-                        <ul>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Physical geography of Nepal and the world</span></div><span class="action-arrow" onclick="openModal('Physical geography of Nepal and the world')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Socio-cultural and economic geography and demography of Nepal</span></div><span class="action-arrow" onclick="openModal('Socio-cultural and economic geography and demography of Nepal')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Major natural resources of Nepal</span></div><span class="action-arrow" onclick="openModal('Major natural resources of Nepal')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Geographical diversity, climatic conditions, livelihood and lifestyle of people</span></div><span class="action-arrow" onclick="openModal('Geographical diversity, climatic conditions, livelihood and lifestyle of people')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Major Historical Events of Nepal and the World</span></div><span class="action-arrow" onclick="openModal('Major Historical Events of Nepal and the World')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Notable Events, Personalities and Socio-Cultural Aspects of Ancient, Medieval and Modern History of Nepal</span></div><span class="action-arrow" onclick="openModal('Notable Events, Personalities and Socio-Cultural Aspects of Ancient, Medieval and Modern History of Nepal')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Customs, Traditions, Values, Religions, Ethnicity, Languages, Cultures, Arts, Literature, Music and Heritages of Nepal</span></div><span class="action-arrow" onclick="openModal('Customs, Traditions, Values, Religions, Ethnicity, Languages, Cultures, Arts, Literature, Music and Heritages of Nepal')">➔</span></li>
-                        </ul>
-                    </div>
-                    <div class="topic">
-                        <h3>1.2 Economic Aspects of Nepal</h3>
-                        <ul>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Economic Indicators (Economic Growth, GDP, GNP, Per Capita Income, Remittance, Foreign aid & Investment)</span></div><span class="action-arrow" onclick="openModal('Economic Indicators')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Infrastructures of Development (Agriculture, Industry, Trade, Tourism, Transportation, Communication, Health, Electricity)</span></div><span class="action-arrow" onclick="openModal('Infrastructures of Development')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Government Planning and Budgeting</span></div><span class="action-arrow" onclick="openModal('Government Planning and Budgeting')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Current periodical plan of Nepal</span></div><span class="action-arrow" onclick="openModal('Current periodical plan of Nepal')">➔</span></li>
-                        </ul>
-                    </div>
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>1. General Awareness and Contemporary Issues (30 Marks)</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-111" class="cb-custom"><span class="topic-text">1.1.1 Physical geography of Nepal and the world</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.1 Physical geography', 'Syllabus Context: Mountains, rivers, ecological zones, structural elevation parameters of Nepal, global geographical configurations.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-112" class="cb-custom"><span class="topic-text">1.1.2 Socio-cultural and economic geography and demography of Nepal</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.2 Socio-cultural Geography', 'Population distribution, census trends, density metrics, and economic resource hubs across provinces.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-113" class="cb-custom"><span class="topic-text">1.1.3 Major natural resources of Nepal</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.3 Natural Resources', 'Water resources, forest distribution, minerals, and clean energy potential fields.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-114" class="cb-custom"><span class="topic-text">1.1.4 Geographical diversity, climatic conditions, livelihood and lifestyle of people</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.4 Diversity & Livelihood', 'Climatic variation (tropical to alpine), agricultural dependencies, and traditional lifestyle vectors.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-115" class="cb-custom"><span class="topic-text">1.1.5 Major Historical Events of Nepal and the World</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.5 Major Historical Events', 'Unification of Nepal, democratic milestones, WWI, WWII, and major global revolutions.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-116" class="cb-custom"><span class="topic-text">1.1.6 Notable Events, Personalities and Socio-Cultural Aspects of History</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.6 Ancient & Medieval Nepal', 'Lichchhavi and Malla dynasties, architecture, cultural contributions, and key historical figures.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-117" class="cb-custom"><span class="topic-text">1.1.7 Customs, Traditions, Religions, Ethnicity, Languages, Arts and Heritage</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.7 Heritage & Arts', 'Intangible cultural expressions, language profiles, architectural monuments, UNESCO heritage sites of Nepal.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-121" class="cb-custom"><span class="topic-text">1.2.1 Economic Indicators (Economic Growth, GDP, GNP, PCI, Remittance, Foreign Aid)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.1 Economic Indicators', 'Current fiscal stats, GDP composition by sectors, per capita milestones, contribution of remittance.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-122" class="cb-custom"><span class="topic-text">1.2.2 Infrastructures of Development (Agriculture, Industry, Trade, Communication, Electricity)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.2 Infrastructure Status', 'Hydro projects, digital telecom access, cross-border trade routes, industrial bottlenecks.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-123" class="cb-custom"><span class="topic-text">1.2.3 Government Planning and Budgeting</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.3 Budgeting Mechanics', 'Formulation workflow, allocation of resources, capital vs current expenditure dynamics.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-124" class="cb-custom"><span class="topic-text">1.2.4 Current periodical plan of Nepal</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.4 National Periodical Plan', 'Long term visions, quantitative objectives, targets for growth, development goals.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-131" class="cb-custom"><span class="topic-text">1.3.1 The Constitution of Nepal; Federal, Provincial and local Governments</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3.1 Constitutional Framework', 'Fundamental Rights, state organs, distribution of power between Three Tiers of governance.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-132" class="cb-custom"><span class="topic-text">1.3.2 General Information on UNO, WTO, ITU, WB, ADB, AIIB, SAARC & BIMSTEC</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3.2 International Bodies', 'ITU specialized standards, SAARC charters, financial instruments of World Bank/ADB.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-133" class="cb-custom"><span class="topic-text">1.3.3 Public Service Charter and scope of public services</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3.3 Public Service Charter', 'Citizen charters, delivery speed, optimization metrics, transparency accountability.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-141" class="cb-custom"><span class="topic-text">1.4.1 Sustainable Development, Climate Change, Biodiversity, Science & Tech</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.1 Sustainability & Environment', 'SDG timelines (17 goals), Paris agreement commitments, electronic waste, smart transformations.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-142" class="cb-custom"><span class="topic-text">1.4.2 Recent Advance and Major Achievements in Telecommunication Sectors</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.2 Telecom Advancements', '5G deployments, fiberization targets, satellite communication pipelines, VoLTE optimizations.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-143" class="cb-custom"><span class="topic-text">1.4.3 Major Events and Current Affairs of National and International Importance</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.3 Current Affairs', 'Global summits, regional treatise, national policy updates.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-144" class="cb-custom"><span class="topic-text">1.4.4 Concept of Good Governance</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.4 Good Governance', 'Rule of law, responsiveness, consensus orientation, equity, effectiveness, accountability.')">➔</span></li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="course-card">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <h2>🧮 2. Mathematics and Statistics (20 Marks)</h2>
-                    <button class="toggle-btn">+</button>
-                </div>
-                <div class="content">
-                    <div class="topic">
-                        <h3>2.1 Mathematics Foundations</h3>
-                        <ul>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Arithmetical Reasoning, Percentage, Ratio, Average, Profit & Loss, Time & Work, Data interpretation & Data verification</span></div><span class="action-arrow" onclick="openModal('Arithmetical Reasoning & Data Interpretation')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Function and Limit, Maxima and Minima, Differentiation and Integration Equations of Straight Lines, Circle</span></div><span class="action-arrow" onclick="openModal('Calculus and Geometry')">➔</span></li>
-                        </ul>
-                    </div>
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>2. Mathematics and Statistics (20 Marks)</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-211" class="cb-custom"><span class="topic-text">2.1.1 Arithmetical Reasoning, Percentage, Ratio, Average, Profit & Loss, Work, Data Interpretation</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1.1 Arithmetic & Data', 'Mathematical reasoning, calculation tricks, interpretation of tables, bar graphs, and charts.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-212" class="cb-custom"><span class="topic-text">2.1.2 Function & Limit, Calculus, Analytical Geometry (Lines, Cones, Cylinders)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1.2 Calculus & Geometry', 'Maxima and minima determination, integration bounds, straight lines, 3D structures equations.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-213" class="cb-custom"><span class="topic-text">2.1.3 Linear Differential Equations, Fourier Series/Transforms, Laplace, Z-Transforms</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1.3 Advanced Transforms', 'Signal representation math, Laplace initial values, Z-transform regions of convergence (ROC).')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-221" class="cb-custom"><span class="topic-text">2.2.1 Mean, Median, Mode, Dispersion, Variance, Correlation & Regression</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.2.1 Statistical Parameters', 'Standard deviation calculations, linear correlation coefficients, least squares regression fits.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-222" class="cb-custom"><span class="topic-text">2.2.2 Probability, Random Variables, Distributions, Sampling</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.2.2 Probability Systems', 'Binomial, Normal distributions, central limit theorem, sampling strategies.')">➔</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="lms-section" id="section-mgmt">
-            <div class="section-title">First Paper: Management & Institutional Awareness (Subjective)</div>
-            <div class="course-card">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <h2>📊 3. General Management and Marketing</h2>
-                    <button class="toggle-btn">+</button>
+        <div class="section-block" id="p1sB-block">
+            <div class="block-header">First Paper - Section (B): Management & Institutional Awareness [50 Marks Subjective]</div>
+            
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>3. General Management and Marketing</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-31" class="cb-custom"><span class="topic-text">3.1 Management: Concept and Modern Approaches</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.1 Management Approaches', 'Scientific management, human relations approach, contingency and systems theory frameworks.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-32" class="cb-custom"><span class="topic-text">3.2 Motivation, Leadership, Control, Coordination, Teamwork and Group Dynamics</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.2 Group Dynamics', 'Maslow/Herzberg motivation models, situational leadership styles, organizational control loops.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-33" class="cb-custom"><span class="topic-text">3.3 Management Information System</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.3 MIS Foundations', 'Data pipelines, decision support systems, reporting architecture for optimization.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-34" class="cb-custom"><span class="topic-text">3.4 Corporate and Strategic Planning and Management</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.4 Strategic Planning', 'SWOT metrics, vision/mission formulation, execution alignment models.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-35" class="cb-custom"><span class="topic-text">3.5 Corporate Social Responsibility</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.5 CSR Concepts', 'Triple bottom line approach, ethical investments, community welfare strategies.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-36" class="cb-custom"><span class="topic-text">3.6 Ethics, Integrity and Responsibility in Business /Service Institutions</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.6 Ethics & Integrity', 'Codes of conduct, conflicts of interest resolution, anti-corruption systems.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-37" class="cb-custom"><span class="topic-text">3.7 Business Strategic Planning, Marketing Process, Product Planning</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.7 Marketing Programs', 'Product life cycle marketing, market segmentation strategies, promotional mix models.')">➔</span></li>
+                    </ul>
                 </div>
-                <div class="content">
-                    <div class="topic">
-                        <h3>Management Foundations</h3>
-                        <ul>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Management: Concept and Modern Approaches</span></div><span class="action-arrow" onclick="openModal('Management Concept')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Motivation, Leadership, Control, Coordination, Teamwork</span></div><span class="action-arrow" onclick="openModal('Leadership & Motivation')">➔</span></li>
-                        </ul>
-                    </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>4. Project Management & Financial Management</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-41" class="cb-custom"><span class="topic-text">4.1 Project Life Cycle</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.1 Project Life Cycle', 'Initiation, planning, execution, tracking control, and closing phases.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-42" class="cb-custom"><span class="topic-text">4.2 Network Models: CPM & PERT, Gantt Chart</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.2 Scheduling Models', 'Critical path discovery, variance calculations, early/late start metrics.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-43" class="cb-custom"><span class="topic-text">4.3 Project Scheduling, Resource Leveling, Quality, Cost Control, Budgeting</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.3 Project Control', 'Resource smoothing algorithms, budget preparations, monitoring and evaluations framework.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-44" class="cb-custom"><span class="topic-text">4.4 Quality Management & TQM Techniques</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.4 TQM Frameworks', 'Six Sigma, Kaizen principles, ISO quality control loops.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-45" class="cb-custom"><span class="topic-text">4.5 Accounting Terminology, Engineering Economics, Cost Benefit, EIRR, FIRR</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.5 Engineering Economics', 'Net Present Value (NPV), internal rate of returns calculations, cash flow analyses.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-46" class="cb-custom"><span class="topic-text">4.6 Trial Balance, Balance Sheet, Procurement (FOB, CIF, L/C, Bidding)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.6 Procurement Loops', 'Income statements, Liquidated damages parameters, Bank guarantees, Bid secure execution.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>5. संस्थागत ज्ञान र सम्वद्द कानुनहरू (Institutional Knowledge & Laws)</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-51" class="cb-custom"><span class="topic-text">5.1 - 5.3 नेपाल दूरसञ्चार कम्पनी लिमिटेड: उद्देश्य, संरचना, प्रविधि र महशुल निर्धारण</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.1-5.3 NTC Overview', 'Organizational workflow, telecommunication infrastructure deployment, tariff policy setting.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-54" class="cb-custom"><span class="topic-text">5.4 - 5.6 नेपाल दूरसञ्चार प्राधिकरण, सरकारी योजना र सरोकारवाला निकाय</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.4-5.6 Regulatory Relations', 'NTA role, frequency allocation models, rural telecommunication development fund (RTDF).')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-57" class="cb-custom"><span class="topic-text">5.7 दूरसञ्चार ऐन, २०५३ तथा दूरसञ्चार नियमावली, २०५४</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.7 Telecom Act 2053', 'Licensing provisions, penalty setups, arbitration pathways.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-58" class="cb-custom"><span class="topic-text">5.8 नेपाल दूरसञ्चार कम्पनी लिमिटेडको प्रबन्धपत्र र नियमावली</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.8 Articles of Association', 'Share capital definitions, board configuration parameters.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-59" class="cb-custom"><span class="topic-text">5.9 कर्मचारी विनियमावली, २०७८ (बिदा, आचरण, अनुशासन, अवकाश, उपदान)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.9 Staff Regulation 2078', 'Leave categories, code of conduct structures, disciplinary appeal levels.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-510" class="cb-custom"><span class="topic-text">5.10 आर्थिक विनियमावली, २०७१ (खरिद कार्यविधि, योजना तर्जुमा, सम्पत्ति बरबुझारथ)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.10 Financial Regulation 2071', 'Annual budgeting lines, asset write-off procedures, valuation systems.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-511" class="cb-custom"><span class="topic-text">5.11 कम्पनी ऐन, २०६३ (संस्थापना, प्रबन्धपत्र, साधारण सभा)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.11 Company Act 2063', 'Shareholder voting conditions, documentation protocols, AGM specifications.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-512" class="cb-custom"><span class="topic-text">5.12 - 5.15 राष्ट्रिय नीतिहरू: दूरसञ्चार, डिजिटल नेपाल फ्रेमवर्क, साइबर सुरक्षा</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.12-5.15 National ICT Policies', 'Digital Nepal Framework 2076 (Foundations 1-19), Cyber Security Policy 2080 architectures.')">➔</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <div class="lms-section" id="section-tech">
-            <div class="section-title">Second Paper: Technical Subject (100 Marks)</div>
-            <div class="course-card">
-                <div class="card-header" onclick="toggleCard(this)">
-                    <h2>📊 Unit 1: Digital Signal Processing</h2>
-                    <button class="toggle-btn">+</button>
+        <div class="section-block" id="p2sA-block">
+            <div class="block-header">Second Paper - Section (A): Core Technical [50 Marks Subjective]</div>
+            
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>1. Digital Signal Processing</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-11" class="cb-custom"><span class="topic-text">1.1 Theory of Discrete-time linear Systems</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1 DSP Linear Systems', 'LTI systems representation, convolution sums, stability/causality conditions.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-12" class="cb-custom"><span class="topic-text">1.2 Digital Filtering</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2 Digital Filtering', 'IIR design via Bilinear Transformation; FIR windowing techniques.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-13" class="cb-custom"><span class="topic-text">1.3 Discrete Fourier Analysis</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3 Fourier Analysis', 'DFT traits, Radix-2 FFT computational acceleration maps (DIT/DIF).')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-14" class="cb-custom"><span class="topic-text">1.4 Application to Voice and Image Processing, Communications</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4 DSP Applications', 'Quantization systems, LPC speech compression, convolution filter masks.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-15" class="cb-custom"><span class="topic-text">1.5 Hardware for DSP, Including Digital Signal Processors</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.5 DSP Chips', 'Harvard bus layout, pipelined MAC networks, bit-reversed addressing structures.')">➔</span></li>
+                    </ul>
                 </div>
-                <div class="content">
-                    <div class="topic">
-                        <h3>DSP Core Principles</h3>
-                        <ul>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Theory of Discrete-time linear Systems</span></div><span class="action-arrow" onclick="openModal('Discrete-time Linear Systems')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Digital Filtering (IIR and FIR Designs)</span></div><span class="action-arrow" onclick="openModal('Digital Filtering')">➔</span></li>
-                            <li><div class="item-left"><input type="checkbox" class="item-checkbox"><span class="item-text">Discrete Fourier Analysis & FFT algorithms</span></div><span class="action-arrow" onclick="openModal('Discrete Fourier Analysis')">➔</span></li>
-                        </ul>
-                    </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>2. Digital Systems Design</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-21" class="cb-custom"><span class="topic-text">2.1 - 2.3 Combinatorial/Sequential Logic, PLDs, IC Families</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1-2.3 Digital Design', 'Mealy/Moore machine synthesis, TTL vs CMOS parameters, FPGA blocks layout.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-24" class="cb-custom"><span class="topic-text">2.4 - 2.6 Microprocessors, Controllers, Small System Design</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.4-2.6 Processors & Systems', 'Timing state charts, data flows optimization, memory address mapping nets.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-27" class="cb-custom"><span class="topic-text">2.7 - 2.8 Computer Interfacing (Parallel/Serial I/O, Interrupts, DMA), Buses</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.7-2.8 Interfaces & Buses', 'Cycle-stealing DMA, interrupt cascading controllers, PCIe/AMBA bus protocols.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>3. Computer Architectures</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-31" class="cb-custom"><span class="topic-text">3.1 - 3.4 Processor Structure, CPU/Memory Organization, Control Units</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.1-3.4 CPU Architectures', 'Cache mapping logic, hardwired vs microprogrammed sequencer designs.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-35" class="cb-custom"><span class="topic-text">3.5 - 3.8 Instruction Sets, Assembly, RISC Systems, Pipelined Machines</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.5-3.8 Instruction & Pipelines', 'Data/Structural pipeline hazards mitigation, speculative execution paths.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-39" class="cb-custom"><span class="topic-text">3.9 - 3.12 Parallel Machines, Systolic Arrays, RTOS, Virtual Machines</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.9-3.12 Advanced Computing', 'Flynn Taxonomy grids, rate monotonic scheduling in RTOS, Hypervisor models.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>4. Principles of VLSI</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-41" class="cb-custom"><span class="topic-text">4.1 - 4.4 Static/Dynamic Logic, Lambda Design Rules, Memory Elements</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.1-4.4 VLSI Structures', '6T SRAM cells geometry, Domino logic configurations, fabrication scaling laws.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-45" class="cb-custom"><span class="topic-text">4.5 - 4.7 Standard Cells, Placement/Routing, PLDs, I/O Pads</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.5-4.7 VLSI CAD Layout', 'Channel routing setups, ESD protection pads, floorplanning cell placements.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>5. Computer Communications</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-51" class="cb-custom"><span class="topic-text">5.1 - 5.3 Modulation (QAM, FSK), Error Correction (Hamming, CRC), Multiplexing</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.1-5.3 Physical Communications', 'Shannon limit math, CDMA orthogonal Walsh codes, CRC polynomial shifts.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-54" class="cb-custom"><span class="topic-text">5.4 - 5.7 OSI vs TCP/IP, Routing Protocols, Internet Addressing, LANs</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.4-5.7 Network Architectures', 'OSPF/BGP state tracking, IPv6 address formatting, backoff curves in CSMA/CD.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>6. Artificial Intelligence and Expert Systems</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-61" class="cb-custom"><span class="topic-text">6.1 - 6.3 AI Concepts, Search Trees, Expert Systems, Logic Programming</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('6.1-6.3 AI Foundries', 'A* heuristic formulations, forward vs backward chaining inference flows.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-64" class="cb-custom"><span class="topic-text">6.4 - 6.6 Languages (LISP, Prolog), Knowledge Representation, Rules Systems</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('6.4-6.6 Representation & Rules', 'Prolog unification loops, semantic network links, conflict resolution matrices.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>7. Distributed Systems & Cloud Computing</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-71" class="cb-custom"><span class="topic-text">7.1 - 7.5 Synchronization, Lamport Clocks, RPC Mechanics, Client-Server</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('7.1-7.5 Distributed Logic', 'Vector timestamps, stateless network loops, remote procedure serialization.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-76" class="cb-custom"><span class="topic-text">7.6 - 7.9 Fault Tolerance, 2PC/3PC Transactions, Distributed File Systems</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('7.6-7.9 Consensus & DFS', 'Byzantine agreements, write-ahead logs, HDFS block replication strategies.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-710" class="cb-custom"><span class="topic-text">7.10 - 7.12 Cloud Service Models (IaaS, PaaS, SaaS), Deployments, Virtualization</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('7.10-7.12 Cloud Engineering', 'Type-1 hypervisor structures, tenant namespace isolation algorithms.')">➔</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
+        <div class="section-block" id="p2sB-block">
+            <div class="block-header">Second Paper - Section (B): Software & Network Systems [50 Marks Subjective]</div>
+            
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>8. Program Design and Data Structures</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-81" class="cb-custom"><span class="topic-text">8.1 - 8.3 Language Syntax, Modular Code (C/C++), OOP Concepts</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('8.1-8.3 Programming & OOP', 'BNF grammar parsers, polymorph method tables, memory leak mitigations.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-84" class="cb-custom"><span class="topic-text">8.4 - 8.5 Non-Numerical Processing, Linked Lists, Stacks, Queues, Trees</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('8.4-8.5 Structural Data', 'BST balancing operations, multiway graph traversals, stack usage models.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>9. Operating Systems</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-91" class="cb-custom"><span class="topic-text">9.1 - 9.3 OS Principles, Semaphores Synchronization, Banker Deadlock Prevention, Scheduling</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('9.1-9.3 OS Internals', 'Context switching steps, thread synchronization barriers, priority inversion mitigation.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-94" class="cb-custom"><span class="topic-text">9.4 - 9.7 Linkers/Loaders, Multiprocessing, Real-time OS, UNIX vs Windows</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('9.4-9.7 Advanced OS Tasks', 'Dynamic linking architectures, deterministic task constraints inside kernels.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>10. Software Engineering</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-101" class="cb-custom"><span class="topic-text">10.1 - 10.4 Lifecycles (Agile, Spiral), SRS, Validation/Verification, UML Tools</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('10.1-10.4 Software Quality', 'White-box test matrices, DFD transformation mapping, software architecture tracks.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-105" class="cb-custom"><span class="topic-text">10.5 - 10.8 Project Management (COCOMO), Configuration, Re-engineering/Reverse Engineering</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('10.5-10.8 PM & Re-engineering', 'Risk matrices calculation, Git code branching logic, abstract models extraction.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>11. Databases and File Systems</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-111" class="cb-custom"><span class="topic-text">11.1 - 11.4 Normalization (1NF-BCNF), Query Algebras, SQL Design</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('11.1-11.4 DB Normalization', 'Functional dependency reductions, tuple relational calculus logic states.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-115" class="cb-custom"><span class="topic-text">11.5 - 11.8 Transaction (ACID), Concurrency Control (2PL), Hashing, Compaction</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('11.5-11.8 Concurrency & Files', 'Deadlock cycles graphs, bucket overflow chaining, file compaction systems.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-119" class="cb-custom"><span class="topic-text">11.9 - 11.12 File I/O Control, B-Trees Index Organization</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('11.9-11.12 Index Structures', 'B+ tree node splitting equations, external multiway merge-sort tracks.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>12. Internet Programming</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-121" class="cb-custom"><span class="topic-text">12.1 - 12.5 CGI Environments, Input Variables parsing, Server Execution</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('12.1-12.5 CGI Mechanisms', 'QUERY_STRING extraction streams, process environment daemon fork lifecycles.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-126" class="cb-custom"><span class="topic-text">12.6 - 12.7 Dynamic Pages (PHP), Java Architecture, JVM Memory Pools</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('12.6-12.7 Java & JVM', 'Bytecode execution stacks, classloader validation loops frameworks.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>13. Client Server Computing</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-131" class="cb-custom"><span class="topic-text">13.1 - 13.4 Server Blocks, PL/SQL Routines (Procedures, Triggers), Middleware API, Data Warehouses</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('13.1-13.4 Middleware & OLAP', 'Star/Snowflake schemas layout, database driver pipeline types, execution hooks.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-135" class="cb-custom"><span class="topic-text">13.5 - 13.7 Transaction Monitors, Cache Servers Architecture</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('13.5-13.7 TP Monitors & Cache', 'Resource management proxies, LRU/LFU cache eviction metrics.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>14. Cryptography and Network Security</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-141" class="cb-custom"><span class="topic-text">14.1 - 14.4 Block Ciphers (DES), Asymmetric Key (RSA, Diffie-Hellman), Hashes (HMAC), Signatures</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('14.1-14.4 Core Cryptography', 'Euler totient modular math, discrete log traps, Feistel function networks.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-145" class="cb-custom"><span class="topic-text">14.5 - 14.10 Kerberos Handshake, TLS/SSL Protocol Layering, Firewalls, Blockchain consensus</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('14.5-14.10 Network Defense', 'Ticket-granting server loops, symmetric master key derivation steps, Merkle trees.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>15. Basic Electricity and Electronics</h3><span>+</span></div>
+                <div class="unit-body">
+                    <ul class="topics-list">
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-151" class="cb-custom"><span class="topic-text">15.1 - 15.4 Ohm\'s/Kirchhoff\'s Laws, AC/DC Networks, Transformers, Grounding/Shielding for Telecom</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('15.1-15.4 Electrical Fundamentals', 'Phasor mesh loops equations, surge divert layouts, low resistance earth paths.')">➔</span></li>
+                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-155" class="cb-custom"><span class="topic-text">15.5 - 15.10 Semiconductors (Diodes, Op-Amps, MOSFETs), Amplifiers, Rectifiers, Logic Gates</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('15.5-15.10 Semiconductor Circuits', 'Virtual ground operational loops, load-line stability curves, ripple filter maths.')">➔</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
 
-<!-- Modal Component -->
-<div class="modal" id="infoModal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle">Topic Reference</h2>
-        <p id="modalBody">Detailed reference content for NTC Level 7 Computer Engineering examination portal framework.</p>
+<div class="pdf-layer-modal" id="systemDocViewer">
+    <div class="pdf-viewport-container">
+        <div class="pdf-topbar">
+            <span id="targetDocumentMetadata" style="font-family: monospace; font-size: 13px;">Document_Ref.pdf</span>
+            <span class="pdf-close-action" onclick="closeDocPreview()">&times; Close Study Guide</span>
+        </div>
+        <div class="pdf-content-canvas">
+            <div class="pdf-page-sheet">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #666; border-bottom: 1px dashed #ccc; padding-bottom: 5px; margin-bottom: 20px;">
+                    <span>NEPAL TELECOM BOARD EXAMINATION REFS</span>
+                    <span>LEVEL 7 COMPUTER ENGINEER</span>
+                </div>
+                <h2 id="modalPageTitle">Syllabus Context Module</h2>
+                <p style="font-weight: bold; color: #444;">Core Conceptual Parameters & Objective/Subjective Breakdown:</p>
+                <p id="modalMainContentBody" style="color: #333;">Syllabus notes instantiation stream...</p>
+                <div style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 15px; border-radius: 4px; margin-top: 25px;">
+                    <strong style="color: #15803d; font-size: 13px;">🎯 Critical Marks Target Matrix:</strong>
+                    <ul style="color: #166534; font-size: 13px; margin-left: 20px; margin-top: 6px;">
+                        <li>Review old questions pattern mapping to this specific directive.</li>
+                        <li>Maintain diagram architectures for subjective questions (5 and 10 marks splits).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // Theme toggle function
-    function toggleTheme() {
-        const html = document.documentElement;
-        const currentTheme = html.getAttribute('data-theme');
-        html.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-    }
+    let clockTickerInstance = null;
+    let balanceSecondsCount = 10800; // Default 3 hours
+    let audioDeviceCtx = null;
+    let alarmOsciNode = null;
 
-    // Dropdown profile toggle
-    function toggleProfile() {
-        document.getElementById('profileDropdown').classList.toggle('show');
-    }
-
-    // Accordion expand/collapse
-    function toggleCard(headerElement) {
-        const content = headerElement.nextElementSibling;
-        const btn = headerElement.querySelector('.toggle-btn');
-        if (content.style.display === "block") {
-            content.style.display = "none";
-            btn.innerText = "+";
+    // ACCORDION MECHANISM
+    function toggleAccordion(element) {
+        const body = element.nextElementSibling;
+        const icon = element.querySelector('span');
+        if (body.style.display === "block") {
+            body.style.display = "none";
+            icon.innerText = "+";
         } else {
-            content.style.display = "block";
-            btn.innerText = "−";
+            body.style.display = "block";
+            icon.innerText = "−";
         }
     }
 
-    // Section filtering
-    function filterSection(id) {
-        const sections = document.querySelectorAll('.lms-section');
-        const navLinks = document.querySelectorAll('nav a');
-        
-        navLinks.forEach(link => link.classList.remove('active'));
+    // INTERACTIVE SIDEBAR NAVIGATION
+    function switchSectionView(viewId) {
+        document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
         event.currentTarget.classList.add('active');
 
-        sections.forEach(sec => {
-            if (id === 'all') {
-                sec.style.display = 'block';
+        const structuralBlocks = ['p1sA-block', 'p1sB-block', 'p2sA-block', 'p2sB-block'];
+        if(viewId === 'all') {
+            structuralBlocks.forEach(b => document.getElementById(b).style.display = 'block');
+        } else {
+            structuralBlocks.forEach(b => document.getElementById(b).style.display = 'none');
+            document.getElementById(viewId + '-block').style.display = 'block';
+        }
+    }
+
+    // EMBEDDED DYNAMIC STUDY GUIDE (PDF MOCK)
+    function openDocPreview(titleText, summaryContext) {
+        document.getElementById('targetDocumentMetadata').innerText = `NTC_Syllabus_Ref_${titleText.replace(/ /g, '_')}.pdf`;
+        document.getElementById('modalPageTitle').innerText = titleText;
+        document.getElementById('modalMainContentBody').innerText = summaryContext + " Ensure deep technical competence in this subdomain. For mathematical segments, solve boundary conditions. For legislative parts, reference accurate section titles from Telecommunications Act 2053 and corporate regulations.";
+        document.getElementById('systemDocViewer').style.display = 'flex';
+    }
+
+    function closeDocPreview() {
+        document.getElementById('systemDocViewer').style.display = 'none';
+    }
+
+    // COUNTDOWN ENGINE
+    function applyTimerPreset() {
+        const selectedMins = parseInt(document.getElementById('durationSelection').value);
+        balanceSecondsCount = selectedMins * 60;
+        refreshTimerUI();
+        silenceAlarmBeep();
+    }
+
+    function refreshTimerUI() {
+        const h = Math.floor(balanceSecondsCount / 3600);
+        const m = Math.floor((balanceSecondsCount % 3600) / 60);
+        const s = balanceSecondsCount % 60;
+        document.getElementById('sessionTimerDisplay').innerText = 
+            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function toggleTimerState() {
+        if (clockTickerInstance) return;
+        silenceAlarmBeep();
+        document.getElementById('triggerTimerBtn').innerText = "Running...";
+        clockTickerInstance = setInterval(() => {
+            if (balanceSecondsCount > 0) {
+                balanceSecondsCount--;
+                refreshTimerUI();
             } else {
-                sec.style.display = sec.id === `section-${id}` ? 'block' : 'none';
+                clearInterval(clockTickerInstance);
+                clockTickerInstance = null;
+                document.getElementById('triggerTimerBtn').innerText = "Done!";
+                fireContinuousAlarm();
             }
-        });
+        }, 1000);
     }
 
-    // Modal helpers
-    function openModal(topicName) {
-        document.getElementById('modalTitle').innerText = topicName;
-        document.getElementById('modalBody').innerText = `Study reference guidelines for: "${topicName}". Review standard reference books and public administration resources matching the 2081 Nepal Telecom directives.`;
-        document.getElementById('infoModal').style.display = 'flex';
+    function pauseTimerState() {
+        clearInterval(clockTickerInstance);
+        clockTickerInstance = null;
+        document.getElementById('triggerTimerBtn').innerText = "Resume Session";
+        silenceAlarmBeep();
     }
 
-    function closeModal() {
-        document.getElementById('infoModal').style.display = 'none';
+    function clearAndResetTimer() {
+        pauseTimerState();
+        applyTimerPreset();
     }
 
-    // Progress Calculation Logic (Triggered on checking items)
-    function calculateProgress() {
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        const totalItems = checkboxes.length;
-        let completedCount = 0;
-
-        checkboxes.forEach(cb => {
-            const listItem = cb.closest('li');
-            if (cb.checked) {
-                completedCount++;
-                listItem.classList.add('completed');
-            } else {
-                listItem.classList.remove('completed');
-            }
-        });
-
-        // Calculate dynamic accurate %
-        const percentage = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
+    // WEB AUDIO BEEP ALARM SYSTEM
+    function fireContinuousAlarm() {
+        if (!audioDeviceCtx) {
+            audioDeviceCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        alarmOsciNode = audioDeviceCtx.createOscillator();
+        const gainNode = audioDeviceCtx.createGain();
         
-        // Update components dynamically
-        document.getElementById('progressBar').style.width = `${percentage}%`;
-        document.getElementById('progressText').innerText = `${percentage}% Syllabus Complete`;
+        alarmOsciNode.type = 'sawtooth';
+        alarmOsciNode.frequency.setValueAtTime(950, audioDeviceCtx.currentTime); 
+        gainNode.gain.setValueAtTime(0.4, audioDeviceCtx.currentTime);
+        
+        alarmOsciNode.connect(gainNode);
+        gainNode.connect(audioDeviceCtx.destination);
+        alarmOsciNode.start();
+
+        document.getElementById('sessionTimerDisplay').style.color = 'var(--danger)';
+        document.getElementById('sessionTimerDisplay').style.animation = 'blink 0.4s infinite';
     }
 
-    // Event listener registration setup
-    document.addEventListener('DOMContentLoaded', () => {
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', calculateProgress);
+    function silenceAlarmBeep() {
+        if (alarmOsciNode) {
+            try { alarmOsciNode.stop(); alarmOsciNode.disconnect(); } catch(err) {}
+            alarmOsciNode = null;
+        }
+        document.getElementById('sessionTimerDisplay').style.color = 'var(--warning)';
+        document.getElementById('sessionTimerDisplay').style.animation = 'none';
+    }
+
+    // LOCAL STORAGE STATE CONTROL
+    function syncAndStoreProgressMetrics() {
+        const nodes = document.querySelectorAll('.cb-custom');
+        let stateMatrix = {};
+        let activeChecks = 0;
+
+        nodes.forEach(node => {
+            stateMatrix[node.id] = node.checked;
+            const containerRow = node.closest('.topic-row');
+            if(node.checked) {
+                activeChecks++;
+                containerRow.classList.add('checked-node');
+            } else {
+                containerRow.classList.remove('checked-node');
+            }
         });
 
-        // Support clicking anywhere on the item text/left container to toggle
-        const itemLeftContainers = document.querySelectorAll('.item-left');
-        itemLeftContainers.forEach(container => {
-            container.addEventListener('click', (e) => {
-                // If checkbox itself wasn't the click target, toggle it
-                if (e.target.className !== 'item-checkbox') {
-                    const cb = container.querySelector('.item-checkbox');
-                    cb.checked = !cb.checked;
-                    calculateProgress();
+        localStorage.setItem('ntc_l7_portal_matrix', JSON.stringify(stateMatrix));
+
+        const grandTotal = nodes.length;
+        const netPercentage = grandTotal > 0 ? Math.round((activeChecks / grandTotal) * 100) : 0;
+        document.getElementById('metricFillIndicator').style.width = `${netPercentage}%`;
+        document.getElementById('numericCompletionStatus').innerText = `${netPercentage}% Achieved`;
+    }
+
+    function loadCachedProgressMetrics() {
+        const storedCache = localStorage.getItem('ntc_l7_portal_matrix');
+        if (storedCache) {
+            const parsedMatrix = JSON.parse(storedCache);
+            Object.keys(parsedMatrix).forEach(id => {
+                const node = document.getElementById(id);
+                if (node) node.checked = parsedMatrix[id];
+            });
+        }
+        syncAndStoreProgressMetrics();
+    }
+
+    // SEARCH SEARCH ENGINE LOOKUP
+    function executeSyllabusFilter() {
+        let textQuery = document.getElementById('keywordSearch').value.toLowerCase();
+        document.querySelectorAll('.topic-row').forEach(row => {
+            let rowText = row.querySelector('.topic-text').innerText.toLowerCase();
+            row.style.display = rowText.includes(textQuery) ? 'flex' : 'none';
+        });
+    }
+
+    // ATTACH EVENT LISTENERS ON PORTAL LOAD
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.cb-custom').forEach(box => {
+            box.addEventListener('change', syncAndStoreProgressMetrics);
+        });
+
+        document.querySelectorAll('.row-left').forEach(clickableArea => {
+            clickableArea.addEventListener('click', (e) => {
+                if (e.target.className !== 'cb-custom') {
+                    const targetBox = clickableArea.querySelector('.cb-custom');
+                    targetBox.checked = !targetBox.checked;
+                    syncAndStoreProgressMetrics();
                 }
             });
         });
 
-        // Initial launch render calculation
-        calculateProgress();
+        loadCachedProgressMetrics();
+        refreshTimerUI();
     });
-
-    // Simple live clean lookup search
-    function searchSyllabus() {
-        let input = document.getElementById('search').value.toLowerCase();
-        let items = document.querySelectorAll('.topic li');
-        items.forEach(item => {
-            let text = item.querySelector('.item-text').innerText.toLowerCase();
-            item.style.display = text.includes(input) ? 'flex' : 'none';
-        });
-    }
 </script>
 </body>
 </html>
