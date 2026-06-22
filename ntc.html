@@ -1,703 +1,1660 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal Telecom (NTC) Level 7 CE Complete Exam Portal</title>
+    <title>NTC Pro Enforcement System — Dynamic Syllabus Suite</title>
     <style>
-        :root[data-theme="dark"] {
-            --bg-main: #0b0f19;
-            --bg-sidebar: #111827;
-            --bg-card: rgba(31, 41, 55, 0.7);
-            --bg-nested: #1f2937;
-            --bg-hover: #374151;
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --primary: #0ea5e9;
-            --border: rgba(255, 255, 255, 0.08);
-            --modal-bg: rgba(3, 7, 18, 0.85);
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+         :root {
+            --bg-main: #040914;
+            --bg-side: #0a1124;
+            --bg-card: #0d1730;
+            --border-blue: #1b3564;
+            --accent-blue: #00bcd4;
+            --text-main: #e2e8f0;
+            --text-muted: #718096;
+            --green-active: #00e676;
+            --red-alert: #ff1744;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: var(--bg-main); color: var(--text-main); transition: background 0.3s; }
-
-        /* FIXED TOP BAR FOR TIMER CONTROLS */
-        .top-timer-dashboard {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: var(--bg-sidebar);
-            border-bottom: 3px solid var(--primary);
-            padding: 12px 30px;
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        /* CENTRAL FLOATING WARNING BANNER */
+        
+        #proctorWarningBanner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 23, 68, 0.98);
+            color: white;
+            text-align: center;
+            padding: 30px 50px;
+            font-weight: bold;
+            font-size: 22px;
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(255, 23, 68, 0.8);
+            z-index: 99999;
+            border: 2px solid #fff;
+            backdrop-filter: blur(10px);
+            animation: pulse 0.6s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+        /* HEADER BAR */
+        
+        .header {
+            background: #060d1f;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+            border-bottom: 2px solid var(--border-blue);
         }
-
-        .timer-numeric {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 28px;
-            font-weight: 900;
-            color: var(--warning);
-            background: #000;
-            padding: 4px 18px;
-            border-radius: 6px;
-            border: 1px solid #333;
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tracker-lbl {
+            color: #00bcd4;
+            font-weight: 800;
+            font-size: 14px;
             letter-spacing: 1px;
         }
-
-        .timer-actions { display: flex; align-items: center; gap: 12px; }
-        .timer-actions select, .timer-actions button {
-            padding: 8px 14px;
+        
+        .timer-display {
+            background: #000;
+            color: #ffb300;
+            font-family: monospace;
+            font-size: 26px;
+            padding: 4px 16px;
             border-radius: 6px;
-            border: 1px solid var(--border);
-            background: var(--bg-nested);
-            color: var(--text-main);
+            border: 1px solid #ffb300;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .time-input {
+            background: #121e36;
+            border: 1px solid var(--border-blue);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            width: 50px;
+            text-align: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
         }
-        .timer-actions button:hover { background: var(--bg-hover); }
-        .btn-play { border-color: var(--success) !important; color: var(--success) !important; }
-        .btn-pause { border-color: var(--danger) !important; color: var(--danger) !important; }
-
-        /* CORE VIEWPORT */
-        .app-shell { display: flex; min-height: calc(100vh - 65px); }
         
-        .sidebar-panel {
+        .btn-apply {
+            background: #121e36;
+            color: white;
+            border: 1px solid var(--border-blue);
+        }
+        
+        .btn-start {
+            background: #005a43;
+            color: #00e676;
+            border: 1px solid #00e676;
+        }
+        
+        .btn-pause {
+            background: #6a1b1b;
+            color: #ff1744;
+            border: 1px solid #ff1744;
+        }
+        /* MAIN APP LAYOUT */
+        
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        /* LEFT SIDEBAR (PROCTOR PANEL) */
+        
+        .left-sidebar {
             width: 320px;
-            background: var(--bg-sidebar);
-            padding: 25px 20px;
-            border-right: 1px solid var(--border);
+            background: var(--bg-side);
+            border-right: 2px solid var(--border-blue);
+            padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
-        .brand-logo h2 { color: var(--primary); font-size: 20px; }
-        .brand-logo p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-        .nav-menu { display: flex; flex-direction: column; gap: 6px; }
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-main);
-            padding: 12px 14px;
+        
+        .brand-title h1 {
+            color: #00bcd4;
+            font-size: 20px;
+            font-weight: 800;
+        }
+        
+        .brand-title p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        
+        .cam-box {
+            background: #000;
+            border: 1px solid var(--border-blue);
             border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 210px;
+        }
+        
+        #webcam {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+        
+        .cam-status-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--green-active);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green-active);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .system-status-card {
+            background: #081126;
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .sys-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sys-sub {
+            font-size: 11px;
+            color: var(--green-active);
+        }
+        
+        .sys-vocal {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 8px;
+        }
+        /* MIDDLE CONTENT (SYLLABUS CORE) */
+        
+        .center-content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: var(--bg-main);
+        }
+        
+        .progress-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .progress-header {
             display: flex;
             justify-content: space-between;
-            background: rgba(255,255,255,0.02);
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
-        .nav-link:hover, .nav-link.active { background: var(--bg-hover); color: var(--primary); }
-
-        /* MAIN MONITOR WORKSPACE */
-        .workspace-view { flex: 1; padding: 35px; max-width: 1300px; margin: 0 auto; width: 100%; }
         
-        .meta-heading { margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .meta-heading h1 { font-size: 24px; letter-spacing: -0.5px; }
+        .progress-bar-bg {
+            background: #070d1a;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
         
-        .search-wrapper { margin-top: 15px; }
-        .search-box {
-            width: 100%; max-width: 450px; padding: 10px 16px;
-            border: 1px solid var(--border); border-radius: 8px;
-            background: var(--bg-nested); color: var(--text-main);
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #009688, #00bcd4);
+            width: 0%;
+            height: 100%;
+            transition: width 0.4s ease;
         }
-
-        /* PROGRESS TRACKER */
-        .progress-card {
-            background: var(--bg-nested); padding: 18px 22px; border-radius: 12px;
-            margin-bottom: 30px; border: 1px solid var(--border);
+        
+        .section-title-banner {
+            font-size: 16px;
+            color: #00bcd4;
+            font-weight: 800;
+            margin: 20px 0 10px 0;
+            border-left: 4px solid #00bcd4;
+            padding-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .bar-outer { height: 12px; background: #111; border-radius: 20px; margin-top: 10px; overflow: hidden; }
-        .bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #38bdf8, #10b981); transition: width 0.4s ease; }
-
-        /* SYLLABUS LAYOUT SYSTEM */
-        .section-block { margin-bottom: 35px; display: block; }
-        .block-header {
-            font-size: 16px; color: var(--primary); font-weight: bold;
-            margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid var(--border);
-            text-transform: uppercase; letter-spacing: 0.5px;
+        
+        .accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
         }
-
-        .unit-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
-        .unit-trigger {
-            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; background: rgba(255,255,255,0.01); user-select: none;
+        
+        .accordion-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
         }
-        .unit-trigger h3 { font-size: 15px; font-weight: 600; }
-        .unit-body { display: none; padding: 15px 20px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border); }
-
-        .topics-list { list-style: none; }
+        
+        .accordion-header:hover {
+            background: #111d3a;
+        }
+        
+        .accordion-title {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .accordion-content {
+            display: none;
+            padding: 10px 20px;
+            background: #091022;
+            border-top: 1px solid var(--border-blue);
+        }
+        
         .topic-row {
-            padding: 10px 14px; background: var(--bg-nested); margin-bottom: 6px;
-            border-radius: 6px; border-left: 4px solid var(--primary);
-            display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #142242;
         }
-        .topic-row.checked-node { border-left-color: var(--success); opacity: 0.65; }
-        .topic-row.checked-node .topic-text { text-decoration: line-through; color: var(--text-muted); }
-
-        .row-left { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-grow: 1; }
-        .cb-custom { width: 18px; height: 18px; cursor: pointer; accent-color: var(--success); }
-        .topic-text { font-size: 13.5px; line-height: 1.5; }
         
-        .arrow-viewer-btn { font-size: 16px; color: var(--primary); cursor: pointer; padding: 2px 8px; transition: transform 0.2s; }
-        .arrow-viewer-btn:hover { transform: scale(1.3); }
-
-        /* MODAL WINDOW FOR EXPERT SYLLABUS VIEWER */
-        .pdf-layer-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--modal-bg); backdrop-filter: blur(6px); z-index: 5000;
-            justify-content: center; align-items: center; padding: 20px;
+        .topic-row:last-child {
+            border-bottom: none;
         }
-        .pdf-viewport-container {
-            background: #1e1e1e; width: 100%; max-width: 950px; height: 85vh;
-            border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; overflow: hidden;
-        }
-        .pdf-topbar {
-            background: #2d2d2d; padding: 14px 24px; display: flex; justify-content: space-between;
-            align-items: center; border-bottom: 1px solid #444; color: #fff;
-        }
-        .pdf-close-action { font-weight: bold; cursor: pointer; color: var(--text-muted); }
-        .pdf-close-action:hover { color: var(--danger); }
         
-        .pdf-content-canvas { flex: 1; padding: 30px; overflow-y: auto; background: #525659; display: flex; justify-content: center; }
-        .pdf-page-sheet {
-            background: white; color: #111; width: 100%; max-width: 750px; min-height: 100%;
-            padding: 45px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); font-family: 'Times New Roman', Times, serif;
+        .topic-row input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-blue);
+            cursor: pointer;
+            margin-top: 2px;
         }
-        .pdf-page-sheet h2 { border-bottom: 2px solid #0284c7; padding-bottom: 6px; margin-bottom: 15px; color: #0284c7; font-size: 20px; }
-        .pdf-page-sheet p { font-size: 15px; line-height: 1.6; margin-bottom: 12px; text-align: justify; }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        
+        .topic-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+        
+        .view-btn {
+            background: rgba(0, 188, 212, 0.1);
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            color: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .view-btn:hover {
+            background: rgba(0, 188, 212, 0.2);
+        }
+        /* RIGHT SIDEBAR (REFERENCE VIEWER) WITH MAXIMIZE SUPPORT */
+        
+        .right-sidebar {
+            width: 380px;
+            background: #dcdcdc;
+            color: #111;
+            border-left: 2px solid var(--border-blue);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .right-sidebar.maximized {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100% !important;
+            height: 100%;
+            z-index: 9999;
+            border-left: none;
+        }
+        
+        .viewer-header {
+            background: #0c162d;
+            color: #00bcd4;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mx-btn {
+            background: rgba(0, 188, 212, 0.15);
+            border: 1px solid #00bcd4;
+            color: #00bcd4;
+            padding: 3px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        
+        .mx-btn:hover {
+            background: #00bcd4;
+            color: #0c162d;
+        }
+        
+        .viewer-body {
+            padding: 25px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #333;
+        }
+        
+        .viewer-body h3 {
+            color: #111;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        
+        .toast-bar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #00e676;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 999999;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: .35s;
+        }
+        
+        .toast-bar.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
+
 <body>
 
-<div class="top-timer-dashboard">
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <span style="font-size: 13px; font-weight: bold; color: var(--primary); letter-spacing: 0.5px;">⏱️ COUNTDOWN SESSION:</span>
-        <div class="timer-numeric" id="sessionTimerDisplay">03:00:00</div>
+    <div id="proctorWarningBanner">
+        ⚠️ SECURITY ALERT: NO REAL CANDIDATE DETECTED!<br>
+        <span style="font-size: 13px; font-weight: normal; opacity: 0.9;">The system detects either an empty background or blocked vision. Please maintain regular presence.</span>
     </div>
-    <div class="timer-actions">
-        <label style="font-size: 12px; color: var(--text-muted);">Set Target Hours:</label>
-        <select id="durationSelection" onchange="applyTimerPreset()">
-            <option value="60">1 Hour Study Target</option>
-            <option value="120">2 Hours Study Target</option>
-            <option value="180" selected>3 Hours Study Target</option>
-            <option value="240">4 Hours Study Target</option>
-        </select>
-        <button class="btn-play" id="triggerTimerBtn" onclick="toggleTimerState()">Start Session</button>
-        <button class="btn-pause" onclick="pauseTimerState()">Pause</button>
-        <button onclick="clearAndResetTimer()">Reset</button>
+    <div id="toastBar" class="toast-bar">
+        ⏰ Study Session Completed!
     </div>
-</div>
 
-<div class="app-shell">
-    <aside class="sidebar-panel">
-        <div class="brand-logo">
-            <h2>नेपाल टेलिकम (NTC)</h2>
-            <p>तह ७ कम्प्युटर इन्जिनियर खुला / आ.प्र. पाठ्यक्रम</p>
+    <header class="header">
+        <div class="header-left">
+            <span class="tracker-lbl">📚 NTC तयारी By ER Sundar</span>
+            <div class="timer-display" id="timerBox">03:00:00</div>
         </div>
-        <hr style="border: 0; border-top: 1px solid var(--border)">
-        <nav class="nav-menu">
-            <a href="#" class="nav-link active" onclick="switchSectionView('all')"><span>Complete Structure</span></a>
-            <a href="#" class="nav-link" onclick="switchSectionView('p1sA')"><span>P1: General Awareness</span></a>
-            <a href="#" class="nav-link" onclick="switchSectionView('p1sB')"><span>P1: Management & Laws</span></a>
-            <a href="#" class="nav-link" onclick="switchSectionView('p2sA')"><span>P2: Technical Sec A</span></a>
-            <a href="#" class="nav-link" onclick="switchSectionView('p2sB')"><span>P2: Technical Sec B</span></a>
-        </nav>
-    </aside>
-
-    <main class="workspace-view">
-        <div class="meta-heading">
-            <h1>Syllabus Tracking & Preparation Environment</h1>
-            <div class="search-wrapper">
-                <input type="text" class="search-box" id="keywordSearch" placeholder="Type to search syllabus subtopics instantly..." onkeyup="executeSyllabusFilter()">
-            </div>
+        <div class="header-controls">
+            <input type="number" class="time-input" id="hrIn" value="3"> <span style="font-size:12px; color:var(--text-muted)">hr</span>
+            <input type="number" class="time-input" id="minIn" value="0"> <span style="font-size:12px; color:var(--text-muted)">min</span>
+            <button class="btn btn-apply" onclick="applyCustomTime()">Apply</button>
+            <button class="btn btn-start" id="startBtn" onclick="startTimer()">Start Session</button>
+            <button class="btn btn-pause" onclick="pauseTimer()">Pause</button>
         </div>
+    </header>
 
-        <div class="progress-card">
-            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold;">
-                <span>OVERALL EXAM COMPLIANCE SCALE</span>
-                <span id="numericCompletionStatus">0% Achieved</span>
+    <div class="app-container">
+        <aside class="left-sidebar">
+            <div class="brand-title">
+                <h1>नेपाल टेलिकम (NTC)</h1>
+                <p>Syllabus Pro Enforcement System</p>
             </div>
-            <div class="bar-outer"><div class="bar-inner" id="metricFillIndicator"></div></div>
-        </div>
 
-        <div class="section-block" id="p1sA-block">
-            <div class="block-header">First Paper - Section (A): General Awareness & Math [50 Marks MCQ]</div>
-            
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>1. General Awareness and Contemporary Issues (30 Marks)</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-111" class="cb-custom"><span class="topic-text">1.1.1 Physical geography of Nepal and the world</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.1 Physical geography', 'Syllabus Context: Mountains, rivers, ecological zones, structural elevation parameters of Nepal, global geographical configurations.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-112" class="cb-custom"><span class="topic-text">1.1.2 Socio-cultural and economic geography and demography of Nepal</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.2 Socio-cultural Geography', 'Population distribution, census trends, density metrics, and economic resource hubs across provinces.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-113" class="cb-custom"><span class="topic-text">1.1.3 Major natural resources of Nepal</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.3 Natural Resources', 'Water resources, forest distribution, minerals, and clean energy potential fields.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-114" class="cb-custom"><span class="topic-text">1.1.4 Geographical diversity, climatic conditions, livelihood and lifestyle of people</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.4 Diversity & Livelihood', 'Climatic variation (tropical to alpine), agricultural dependencies, and traditional lifestyle vectors.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-115" class="cb-custom"><span class="topic-text">1.1.5 Major Historical Events of Nepal and the World</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.5 Major Historical Events', 'Unification of Nepal, democratic milestones, WWI, WWII, and major global revolutions.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-116" class="cb-custom"><span class="topic-text">1.1.6 Notable Events, Personalities and Socio-Cultural Aspects of History</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.6 Ancient & Medieval Nepal', 'Lichchhavi and Malla dynasties, architecture, cultural contributions, and key historical figures.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-117" class="cb-custom"><span class="topic-text">1.1.7 Customs, Traditions, Religions, Ethnicity, Languages, Arts and Heritage</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1.7 Heritage & Arts', 'Intangible cultural expressions, language profiles, architectural monuments, UNESCO heritage sites of Nepal.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-121" class="cb-custom"><span class="topic-text">1.2.1 Economic Indicators (Economic Growth, GDP, GNP, PCI, Remittance, Foreign Aid)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.1 Economic Indicators', 'Current fiscal stats, GDP composition by sectors, per capita milestones, contribution of remittance.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-122" class="cb-custom"><span class="topic-text">1.2.2 Infrastructures of Development (Agriculture, Industry, Trade, Communication, Electricity)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.2 Infrastructure Status', 'Hydro projects, digital telecom access, cross-border trade routes, industrial bottlenecks.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-123" class="cb-custom"><span class="topic-text">1.2.3 Government Planning and Budgeting</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.3 Budgeting Mechanics', 'Formulation workflow, allocation of resources, capital vs current expenditure dynamics.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-124" class="cb-custom"><span class="topic-text">1.2.4 Current periodical plan of Nepal</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2.4 National Periodical Plan', 'Long term visions, quantitative objectives, targets for growth, development goals.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-131" class="cb-custom"><span class="topic-text">1.3.1 The Constitution of Nepal; Federal, Provincial and local Governments</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3.1 Constitutional Framework', 'Fundamental Rights, state organs, distribution of power between Three Tiers of governance.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-132" class="cb-custom"><span class="topic-text">1.3.2 General Information on UNO, WTO, ITU, WB, ADB, AIIB, SAARC & BIMSTEC</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3.2 International Bodies', 'ITU specialized standards, SAARC charters, financial instruments of World Bank/ADB.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-133" class="cb-custom"><span class="topic-text">1.3.3 Public Service Charter and scope of public services</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3.3 Public Service Charter', 'Citizen charters, delivery speed, optimization metrics, transparency accountability.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-141" class="cb-custom"><span class="topic-text">1.4.1 Sustainable Development, Climate Change, Biodiversity, Science & Tech</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.1 Sustainability & Environment', 'SDG timelines (17 goals), Paris agreement commitments, electronic waste, smart transformations.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-142" class="cb-custom"><span class="topic-text">1.4.2 Recent Advance and Major Achievements in Telecommunication Sectors</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.2 Telecom Advancements', '5G deployments, fiberization targets, satellite communication pipelines, VoLTE optimizations.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-143" class="cb-custom"><span class="topic-text">1.4.3 Major Events and Current Affairs of National and International Importance</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.3 Current Affairs', 'Global summits, regional treatise, national policy updates.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-144" class="cb-custom"><span class="topic-text">1.4.4 Concept of Good Governance</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4.4 Good Governance', 'Rule of law, responsiveness, consensus orientation, equity, effectiveness, accountability.')">➔</span></li>
-                    </ul>
+            <div class="cam-box">
+                <video id="webcam" autoplay playsinline muted></video>
+                <div class="cam-status-tag">
+                    <span class="dot"></span> Active Proctor Surveillance
                 </div>
             </div>
 
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>2. Mathematics and Statistics (20 Marks)</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-211" class="cb-custom"><span class="topic-text">2.1.1 Arithmetical Reasoning, Percentage, Ratio, Average, Profit & Loss, Work, Data Interpretation</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1.1 Arithmetic & Data', 'Mathematical reasoning, calculation tricks, interpretation of tables, bar graphs, and charts.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-212" class="cb-custom"><span class="topic-text">2.1.2 Function & Limit, Calculus, Analytical Geometry (Lines, Cones, Cylinders)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1.2 Calculus & Geometry', 'Maxima and minima determination, integration bounds, straight lines, 3D structures equations.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-213" class="cb-custom"><span class="topic-text">2.1.3 Linear Differential Equations, Fourier Series/Transforms, Laplace, Z-Transforms</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1.3 Advanced Transforms', 'Signal representation math, Laplace initial values, Z-transform regions of convergence (ROC).')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-221" class="cb-custom"><span class="topic-text">2.2.1 Mean, Median, Mode, Dispersion, Variance, Correlation & Regression</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.2.1 Statistical Parameters', 'Standard deviation calculations, linear correlation coefficients, least squares regression fits.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-222" class="cb-custom"><span class="topic-text">2.2.2 Probability, Random Variables, Distributions, Sampling</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.2.2 Probability Systems', 'Binomial, Normal distributions, central limit theorem, sampling strategies.')">➔</span></li>
-                    </ul>
-                </div>
+            <div class="system-status-card">
+                <div class="sys-title">🎙️ JARVIS CORE SYSTEM</div>
+                <div class="sys-sub" id="sysProctorStatus">● Calibrating Sensors...</div>
+                <div class="sys-vocal" id="sysMotionScore">Motion Score: 0</div>
             </div>
-        </div>
+        </aside>
 
-        <div class="section-block" id="p1sB-block">
-            <div class="block-header">First Paper - Section (B): Management & Institutional Awareness [50 Marks Subjective]</div>
-            
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>3. General Management and Marketing</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-31" class="cb-custom"><span class="topic-text">3.1 Management: Concept and Modern Approaches</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.1 Management Approaches', 'Scientific management, human relations approach, contingency and systems theory frameworks.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-32" class="cb-custom"><span class="topic-text">3.2 Motivation, Leadership, Control, Coordination, Teamwork and Group Dynamics</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.2 Group Dynamics', 'Maslow/Herzberg motivation models, situational leadership styles, organizational control loops.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-33" class="cb-custom"><span class="topic-text">3.3 Management Information System</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.3 MIS Foundations', 'Data pipelines, decision support systems, reporting architecture for optimization.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-34" class="cb-custom"><span class="topic-text">3.4 Corporate and Strategic Planning and Management</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.4 Strategic Planning', 'SWOT metrics, vision/mission formulation, execution alignment models.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-35" class="cb-custom"><span class="topic-text">3.5 Corporate Social Responsibility</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.5 CSR Concepts', 'Triple bottom line approach, ethical investments, community welfare strategies.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-36" class="cb-custom"><span class="topic-text">3.6 Ethics, Integrity and Responsibility in Business /Service Institutions</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.6 Ethics & Integrity', 'Codes of conduct, conflicts of interest resolution, anti-corruption systems.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-37" class="cb-custom"><span class="topic-text">3.7 Business Strategic Planning, Marketing Process, Product Planning</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.7 Marketing Programs', 'Product life cycle marketing, market segmentation strategies, promotional mix models.')">➔</span></li>
-                    </ul>
+        <main class="center-content" id="syllabusContainer">
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span>Syllabus Target Achieved</span>
+                    <span id="progPct">0% Achieved</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progBar"></div>
                 </div>
             </div>
+        </main>
 
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>4. Project Management & Financial Management</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-41" class="cb-custom"><span class="topic-text">4.1 Project Life Cycle</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.1 Project Life Cycle', 'Initiation, planning, execution, tracking control, and closing phases.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-42" class="cb-custom"><span class="topic-text">4.2 Network Models: CPM & PERT, Gantt Chart</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.2 Scheduling Models', 'Critical path discovery, variance calculations, early/late start metrics.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-43" class="cb-custom"><span class="topic-text">4.3 Project Scheduling, Resource Leveling, Quality, Cost Control, Budgeting</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.3 Project Control', 'Resource smoothing algorithms, budget preparations, monitoring and evaluations framework.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-44" class="cb-custom"><span class="topic-text">4.4 Quality Management & TQM Techniques</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.4 TQM Frameworks', 'Six Sigma, Kaizen principles, ISO quality control loops.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-45" class="cb-custom"><span class="topic-text">4.5 Accounting Terminology, Engineering Economics, Cost Benefit, EIRR, FIRR</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.5 Engineering Economics', 'Net Present Value (NPV), internal rate of returns calculations, cash flow analyses.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-46" class="cb-custom"><span class="topic-text">4.6 Trial Balance, Balance Sheet, Procurement (FOB, CIF, L/C, Bidding)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.6 Procurement Loops', 'Income statements, Liquidated damages parameters, Bank guarantees, Bid secure execution.')">➔</span></li>
-                    </ul>
-                </div>
+        <aside class="right-sidebar" id="pdfViewerSidebar">
+            <div class="viewer-header">
+                <span>Syllabus Reference Engine Viewer</span>
+                <button class="mx-btn" id="toggleMaximizeBtn" onclick="toggleViewerMaximize()">Maximize 🗖</button>
             </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>5. संस्थागत ज्ञान र सम्वद्द कानुनहरू (Institutional Knowledge & Laws)</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-51" class="cb-custom"><span class="topic-text">5.1 - 5.3 नेपाल दूरसञ्चार कम्पनी लिमिटेड: उद्देश्य, संरचना, प्रविधि र महशुल निर्धारण</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.1-5.3 NTC Overview', 'Organizational workflow, telecommunication infrastructure deployment, tariff policy setting.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-54" class="cb-custom"><span class="topic-text">5.4 - 5.6 नेपाल दूरसञ्चार प्राधिकरण, सरकारी योजना र सरोकारवाला निकाय</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.4-5.6 Regulatory Relations', 'NTA role, frequency allocation models, rural telecommunication development fund (RTDF).')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-57" class="cb-custom"><span class="topic-text">5.7 दूरसञ्चार ऐन, २०५३ तथा दूरसञ्चार नियमावली, २०५४</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.7 Telecom Act 2053', 'Licensing provisions, penalty setups, arbitration pathways.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-58" class="cb-custom"><span class="topic-text">5.8 नेपाल दूरसञ्चार कम्पनी लिमिटेडको प्रबन्धपत्र र नियमावली</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.8 Articles of Association', 'Share capital definitions, board configuration parameters.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-59" class="cb-custom"><span class="topic-text">5.9 कर्मचारी विनियमावली, २०७८ (बिदा, आचरण, अनुशासन, अवकाश, उपदान)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.9 Staff Regulation 2078', 'Leave categories, code of conduct structures, disciplinary appeal levels.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-510" class="cb-custom"><span class="topic-text">5.10 आर्थिक विनियमावली, २०७१ (खरिद कार्यविधि, योजना तर्जुमा, सम्पत्ति बरबुझारथ)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.10 Financial Regulation 2071', 'Annual budgeting lines, asset write-off procedures, valuation systems.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-511" class="cb-custom"><span class="topic-text">5.11 कम्पनी ऐन, २०६३ (संस्थापना, प्रबन्धपत्र, साधारण सभा)</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.11 Company Act 2063', 'Shareholder voting conditions, documentation protocols, AGM specifications.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="m-512" class="cb-custom"><span class="topic-text">5.12 - 5.15 राष्ट्रिय नीतिहरू: दूरसञ्चार, डिजिटल नेपाल फ्रेमवर्क, साइबर सुरक्षा</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.12-5.15 National ICT Policies', 'Digital Nepal Framework 2076 (Foundations 1-19), Cyber Security Policy 2080 architectures.')">➔</span></li>
-                    </ul>
-                </div>
+            <div class="viewer-body" id="viewerContent">
+                <svg width="64" height="64" fill="currentColor" viewBox="0 0 16 16" style="color:#aaa; margin-bottom:15px;">
+                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+            </svg>
+                <h3>No Document Loaded</h3>
+                <p style="font-size:12px;">Click the "View" button next to any syllabus subtopic to inject critical blueprints into this workspace.</p>
             </div>
-        </div>
-
-        <div class="section-block" id="p2sA-block">
-            <div class="block-header">Second Paper - Section (A): Core Technical [50 Marks Subjective]</div>
-            
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>1. Digital Signal Processing</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-11" class="cb-custom"><span class="topic-text">1.1 Theory of Discrete-time linear Systems</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.1 DSP Linear Systems', 'LTI systems representation, convolution sums, stability/causality conditions.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-12" class="cb-custom"><span class="topic-text">1.2 Digital Filtering</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.2 Digital Filtering', 'IIR design via Bilinear Transformation; FIR windowing techniques.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-13" class="cb-custom"><span class="topic-text">1.3 Discrete Fourier Analysis</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.3 Fourier Analysis', 'DFT traits, Radix-2 FFT computational acceleration maps (DIT/DIF).')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-14" class="cb-custom"><span class="topic-text">1.4 Application to Voice and Image Processing, Communications</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.4 DSP Applications', 'Quantization systems, LPC speech compression, convolution filter masks.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-15" class="cb-custom"><span class="topic-text">1.5 Hardware for DSP, Including Digital Signal Processors</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('1.5 DSP Chips', 'Harvard bus layout, pipelined MAC networks, bit-reversed addressing structures.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>2. Digital Systems Design</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-21" class="cb-custom"><span class="topic-text">2.1 - 2.3 Combinatorial/Sequential Logic, PLDs, IC Families</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.1-2.3 Digital Design', 'Mealy/Moore machine synthesis, TTL vs CMOS parameters, FPGA blocks layout.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-24" class="cb-custom"><span class="topic-text">2.4 - 2.6 Microprocessors, Controllers, Small System Design</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.4-2.6 Processors & Systems', 'Timing state charts, data flows optimization, memory address mapping nets.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-27" class="cb-custom"><span class="topic-text">2.7 - 2.8 Computer Interfacing (Parallel/Serial I/O, Interrupts, DMA), Buses</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('2.7-2.8 Interfaces & Buses', 'Cycle-stealing DMA, interrupt cascading controllers, PCIe/AMBA bus protocols.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>3. Computer Architectures</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-31" class="cb-custom"><span class="topic-text">3.1 - 3.4 Processor Structure, CPU/Memory Organization, Control Units</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.1-3.4 CPU Architectures', 'Cache mapping logic, hardwired vs microprogrammed sequencer designs.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-35" class="cb-custom"><span class="topic-text">3.5 - 3.8 Instruction Sets, Assembly, RISC Systems, Pipelined Machines</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.5-3.8 Instruction & Pipelines', 'Data/Structural pipeline hazards mitigation, speculative execution paths.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-39" class="cb-custom"><span class="topic-text">3.9 - 3.12 Parallel Machines, Systolic Arrays, RTOS, Virtual Machines</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('3.9-3.12 Advanced Computing', 'Flynn Taxonomy grids, rate monotonic scheduling in RTOS, Hypervisor models.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>4. Principles of VLSI</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-41" class="cb-custom"><span class="topic-text">4.1 - 4.4 Static/Dynamic Logic, Lambda Design Rules, Memory Elements</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.1-4.4 VLSI Structures', '6T SRAM cells geometry, Domino logic configurations, fabrication scaling laws.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-45" class="cb-custom"><span class="topic-text">4.5 - 4.7 Standard Cells, Placement/Routing, PLDs, I/O Pads</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('4.5-4.7 VLSI CAD Layout', 'Channel routing setups, ESD protection pads, floorplanning cell placements.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>5. Computer Communications</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-51" class="cb-custom"><span class="topic-text">5.1 - 5.3 Modulation (QAM, FSK), Error Correction (Hamming, CRC), Multiplexing</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.1-5.3 Physical Communications', 'Shannon limit math, CDMA orthogonal Walsh codes, CRC polynomial shifts.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-54" class="cb-custom"><span class="topic-text">5.4 - 5.7 OSI vs TCP/IP, Routing Protocols, Internet Addressing, LANs</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('5.4-5.7 Network Architectures', 'OSPF/BGP state tracking, IPv6 address formatting, backoff curves in CSMA/CD.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>6. Artificial Intelligence and Expert Systems</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-61" class="cb-custom"><span class="topic-text">6.1 - 6.3 AI Concepts, Search Trees, Expert Systems, Logic Programming</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('6.1-6.3 AI Foundries', 'A* heuristic formulations, forward vs backward chaining inference flows.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-64" class="cb-custom"><span class="topic-text">6.4 - 6.6 Languages (LISP, Prolog), Knowledge Representation, Rules Systems</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('6.4-6.6 Representation & Rules', 'Prolog unification loops, semantic network links, conflict resolution matrices.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>7. Distributed Systems & Cloud Computing</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-71" class="cb-custom"><span class="topic-text">7.1 - 7.5 Synchronization, Lamport Clocks, RPC Mechanics, Client-Server</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('7.1-7.5 Distributed Logic', 'Vector timestamps, stateless network loops, remote procedure serialization.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-76" class="cb-custom"><span class="topic-text">7.6 - 7.9 Fault Tolerance, 2PC/3PC Transactions, Distributed File Systems</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('7.6-7.9 Consensus & DFS', 'Byzantine agreements, write-ahead logs, HDFS block replication strategies.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-710" class="cb-custom"><span class="topic-text">7.10 - 7.12 Cloud Service Models (IaaS, PaaS, SaaS), Deployments, Virtualization</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('7.10-7.12 Cloud Engineering', 'Type-1 hypervisor structures, tenant namespace isolation algorithms.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-block" id="p2sB-block">
-            <div class="block-header">Second Paper - Section (B): Software & Network Systems [50 Marks Subjective]</div>
-            
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>8. Program Design and Data Structures</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-81" class="cb-custom"><span class="topic-text">8.1 - 8.3 Language Syntax, Modular Code (C/C++), OOP Concepts</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('8.1-8.3 Programming & OOP', 'BNF grammar parsers, polymorph method tables, memory leak mitigations.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-84" class="cb-custom"><span class="topic-text">8.4 - 8.5 Non-Numerical Processing, Linked Lists, Stacks, Queues, Trees</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('8.4-8.5 Structural Data', 'BST balancing operations, multiway graph traversals, stack usage models.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>9. Operating Systems</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-91" class="cb-custom"><span class="topic-text">9.1 - 9.3 OS Principles, Semaphores Synchronization, Banker Deadlock Prevention, Scheduling</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('9.1-9.3 OS Internals', 'Context switching steps, thread synchronization barriers, priority inversion mitigation.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-94" class="cb-custom"><span class="topic-text">9.4 - 9.7 Linkers/Loaders, Multiprocessing, Real-time OS, UNIX vs Windows</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('9.4-9.7 Advanced OS Tasks', 'Dynamic linking architectures, deterministic task constraints inside kernels.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>10. Software Engineering</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-101" class="cb-custom"><span class="topic-text">10.1 - 10.4 Lifecycles (Agile, Spiral), SRS, Validation/Verification, UML Tools</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('10.1-10.4 Software Quality', 'White-box test matrices, DFD transformation mapping, software architecture tracks.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-105" class="cb-custom"><span class="topic-text">10.5 - 10.8 Project Management (COCOMO), Configuration, Re-engineering/Reverse Engineering</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('10.5-10.8 PM & Re-engineering', 'Risk matrices calculation, Git code branching logic, abstract models extraction.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>11. Databases and File Systems</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-111" class="cb-custom"><span class="topic-text">11.1 - 11.4 Normalization (1NF-BCNF), Query Algebras, SQL Design</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('11.1-11.4 DB Normalization', 'Functional dependency reductions, tuple relational calculus logic states.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-115" class="cb-custom"><span class="topic-text">11.5 - 11.8 Transaction (ACID), Concurrency Control (2PL), Hashing, Compaction</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('11.5-11.8 Concurrency & Files', 'Deadlock cycles graphs, bucket overflow chaining, file compaction systems.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-119" class="cb-custom"><span class="topic-text">11.9 - 11.12 File I/O Control, B-Trees Index Organization</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('11.9-11.12 Index Structures', 'B+ tree node splitting equations, external multiway merge-sort tracks.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>12. Internet Programming</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-121" class="cb-custom"><span class="topic-text">12.1 - 12.5 CGI Environments, Input Variables parsing, Server Execution</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('12.1-12.5 CGI Mechanisms', 'QUERY_STRING extraction streams, process environment daemon fork lifecycles.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-126" class="cb-custom"><span class="topic-text">12.6 - 12.7 Dynamic Pages (PHP), Java Architecture, JVM Memory Pools</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('12.6-12.7 Java & JVM', 'Bytecode execution stacks, classloader validation loops frameworks.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>13. Client Server Computing</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-131" class="cb-custom"><span class="topic-text">13.1 - 13.4 Server Blocks, PL/SQL Routines (Procedures, Triggers), Middleware API, Data Warehouses</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('13.1-13.4 Middleware & OLAP', 'Star/Snowflake schemas layout, database driver pipeline types, execution hooks.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-135" class="cb-custom"><span class="topic-text">13.5 - 13.7 Transaction Monitors, Cache Servers Architecture</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('13.5-13.7 TP Monitors & Cache', 'Resource management proxies, LRU/LFU cache eviction metrics.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>14. Cryptography and Network Security</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-141" class="cb-custom"><span class="topic-text">14.1 - 14.4 Block Ciphers (DES), Asymmetric Key (RSA, Diffie-Hellman), Hashes (HMAC), Signatures</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('14.1-14.4 Core Cryptography', 'Euler totient modular math, discrete log traps, Feistel function networks.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-145" class="cb-custom"><span class="topic-text">14.5 - 14.10 Kerberos Handshake, TLS/SSL Protocol Layering, Firewalls, Blockchain consensus</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('14.5-14.10 Network Defense', 'Ticket-granting server loops, symmetric master key derivation steps, Merkle trees.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="unit-card">
-                <div class="unit-trigger" onclick="toggleAccordion(this)"><h3>15. Basic Electricity and Electronics</h3><span>+</span></div>
-                <div class="unit-body">
-                    <ul class="topics-list">
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-151" class="cb-custom"><span class="topic-text">15.1 - 15.4 Ohm\'s/Kirchhoff\'s Laws, AC/DC Networks, Transformers, Grounding/Shielding for Telecom</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('15.1-15.4 Electrical Fundamentals', 'Phasor mesh loops equations, surge divert layouts, low resistance earth paths.')">➔</span></li>
-                        <li class="topic-row"><div class="row-left"><input type="checkbox" id="t-155" class="cb-custom"><span class="topic-text">15.5 - 15.10 Semiconductors (Diodes, Op-Amps, MOSFETs), Amplifiers, Rectifiers, Logic Gates</span></div><span class="arrow-viewer-btn" onclick="openDocPreview('15.5-15.10 Semiconductor Circuits', 'Virtual ground operational loops, load-line stability curves, ripple filter maths.')">➔</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<div class="pdf-layer-modal" id="systemDocViewer">
-    <div class="pdf-viewport-container">
-        <div class="pdf-topbar">
-            <span id="targetDocumentMetadata" style="font-family: monospace; font-size: 13px;">Document_Ref.pdf</span>
-            <span class="pdf-close-action" onclick="closeDocPreview()">&times; Close Study Guide</span>
-        </div>
-        <div class="pdf-content-canvas">
-            <div class="pdf-page-sheet">
-                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #666; border-bottom: 1px dashed #ccc; padding-bottom: 5px; margin-bottom: 20px;">
-                    <span>NEPAL TELECOM BOARD EXAMINATION REFS</span>
-                    <span>LEVEL 7 COMPUTER ENGINEER</span>
-                </div>
-                <h2 id="modalPageTitle">Syllabus Context Module</h2>
-                <p style="font-weight: bold; color: #444;">Core Conceptual Parameters & Objective/Subjective Breakdown:</p>
-                <p id="modalMainContentBody" style="color: #333;">Syllabus notes instantiation stream...</p>
-                <div style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 15px; border-radius: 4px; margin-top: 25px;">
-                    <strong style="color: #15803d; font-size: 13px;">🎯 Critical Marks Target Matrix:</strong>
-                    <ul style="color: #166534; font-size: 13px; margin-left: 20px; margin-top: 6px;">
-                        <li>Review old questions pattern mapping to this specific directive.</li>
-                        <li>Maintain diagram architectures for subjective questions (5 and 10 marks splits).</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        </aside>
     </div>
-</div>
 
-<script>
-    let clockTickerInstance = null;
-    let balanceSecondsCount = 10800; // Default 3 hours
-    let audioDeviceCtx = null;
-    let alarmOsciNode = null;
+    <script>
+        // --- INTEGRATED SYLLABUS DATA ARRAY (MATCHED PERFECTLY TO REQUESTED ARCHITECTURE) ---
+        const ntcSyllabus = [{
+            section_id: 1,
+            section_title: "General Awareness, Management & Institutional Awareness",
+            topics: [{
+                id: "1.1",
+                title: "Geography, History & Culture",
+                subtopics: [{
+                    id: "1.1.1",
+                    title: "Physical geography of Nepal and the world"
+                }, {
+                    id: "1.1.2",
+                    title: "Socio-cultural and economic geography of Nepal"
+                }, {
+                    id: "1.1.3",
+                    title: "Major natural resources of Nepal"
+                }, {
+                    id: "1.1.4",
+                    title: "Geographical diversity, climatic conditions and lifestyle"
+                }, {
+                    id: "1.1.5",
+                    title: "Major historical events of Nepal and the world"
+                }, {
+                    id: "1.1.6",
+                    title: "Ancient, medieval and modern history (events & personalities)"
+                }, {
+                    id: "1.1.7",
+                    title: "Customs, traditions, religion, language, arts, literature, music and heritage"
+                }]
+            }, {
+                id: "1.2",
+                title: "Economic Aspects of Nepal",
+                subtopics: [{
+                    id: "1.2.1",
+                    title: "Economic indicators (GDP, GNP, per capita income, remittance, aid, investment)"
+                }, {
+                    id: "1.2.2",
+                    title: "Infrastructure of development (agriculture, industry, trade, tourism, transport, communication, health, electricity)"
+                }, {
+                    id: "1.2.3",
+                    title: "Government planning and budgeting"
+                }, {
+                    id: "1.2.4",
+                    title: "Current periodic plan of Nepal"
+                }]
+            }, {
+                id: "1.3",
+                title: "Governance & Organizations",
+                subtopics: [{
+                    id: "1.3.1",
+                    title: "Constitution of Nepal; federal, provincial and local governments"
+                }, {
+                    id: "1.3.2",
+                    title: "General information on UNO, WTO, ITU, World Bank, ADB, AIIB, SAARC, BIMSTEC"
+                }, {
+                    id: "1.3.3",
+                    title: "Public service charter and scope of public services"
+                }]
+            }, {
+                id: "1.4",
+                title: "Contemporary Issues",
+                subtopics: [{
+                    id: "1.4.1",
+                    title: "Sustainable development, environment, pollution, climate change, biodiversity, urbanization, science and technology"
+                }, {
+                    id: "1.4.2",
+                    title: "Recent advances and achievements in telecommunication sector"
+                }, {
+                    id: "1.4.3",
+                    title: "Major national and international current affairs"
+                }, {
+                    id: "1.4.4",
+                    title: "Concept of good governance"
+                }]
+            }, {
+                id: "1.5",
+                title: "Mathematics",
+                subtopics: [{
+                    id: "1.5.1",
+                    title: "Arithmetic reasoning, percentage, ratio, average, profit & loss, time & work, data interpretation & verification"
+                }, {
+                    id: "1.5.2",
+                    title: "Functions, limits, maxima & minima, differentiation & integration, coordinate geometry (line, circle, parabola, hyperbola, sphere, cylinder, cone)"
+                }, {
+                    id: "1.5.3",
+                    title: "Differential equations, Fourier series, Fourier transforms, Fourier integral, odd & even functions, Laplace transform, Taylor series, Z-transform"
+                }]
+            }, {
+                id: "1.6",
+                title: "Statistics",
+                subtopics: [{
+                    id: "1.6.1",
+                    title: "Mean, median, mode"
+                }, {
+                    id: "1.6.2",
+                    title: "Dispersion, variance, correlation and regression"
+                }, {
+                    id: "1.6.3",
+                    title: "Probability, random variables, probability distributions, sampling"
+                }]
+            }, {
+                id: "1.7",
+                title: "Management & Marketing",
+                subtopics: [{
+                    id: "1.7.1",
+                    title: "Management concepts and modern approaches"
+                }, {
+                    id: "1.7.2",
+                    title: "Motivation, leadership, control, coordination, teamwork and group dynamics"
+                }, {
+                    id: "1.7.3",
+                    title: "Management Information System (MIS)"
+                }, {
+                    id: "1.7.4",
+                    title: "Corporate and strategic planning"
+                }, {
+                    id: "1.7.5",
+                    title: "Corporate Social Responsibility (CSR)"
+                }, {
+                    id: "1.7.6",
+                    title: "Ethics, integrity and responsibility in business/service"
+                }, {
+                    id: "1.7.7",
+                    title: "Business strategic planning and marketing process"
+                }, {
+                    id: "1.7.8",
+                    title: "Product planning and marketing program development"
+                }]
+            }, {
+                id: "1.8",
+                title: "Project & Financial Management",
+                subtopics: [{
+                    id: "1.8.1",
+                    title: "Project life cycle"
+                }, {
+                    id: "1.8.2",
+                    title: "Network models (CPM & PERT), Gantt chart"
+                }, {
+                    id: "1.8.3",
+                    title: "Project scheduling, resource leveling, cost control"
+                }, {
+                    id: "1.8.4",
+                    title: "Project monitoring, evaluation and quality management (TQM)"
+                }, {
+                    id: "1.8.5",
+                    title: "Engineering economics, cost-benefit analysis, risk analysis"
+                }, {
+                    id: "1.8.6",
+                    title: "Investment decision making, EIRR and FIRR"
+                }, {
+                    id: "1.8.7",
+                    title: "Accounting basics (trial balance, balance sheet, income statement)"
+                }, {
+                    id: "1.8.8",
+                    title: "Revenue and capital expenditure, depreciation and subsidy"
+                }, {
+                    id: "1.8.9",
+                    title: "Procurement procedures (FOB, CIF, L/C, bidding, insurance, etc.)"
+                }]
+            }, {
+                id: "1.9",
+                title: "Institutional Knowledge (Nepal Telecom)",
+                subtopics: [{
+                    id: "1.9.1",
+                    title: "Nepal Telecom: objectives, structure and functions"
+                }, {
+                    id: "1.9.2",
+                    title: "Service delivery technologies used by Nepal Telecom"
+                }, {
+                    id: "1.9.3",
+                    title: "Tariff (service charge) system"
+                }, {
+                    id: "1.9.4",
+                    title: "Nepal Telecommunications Authority (NTA): role and functions"
+                }, {
+                    id: "1.9.5",
+                    title: "Telecom Act 2053 and Regulations 2054 (Focus: Sections 23, 24 & Rule 12)"
+                }, {
+                    id: "1.9.6",
+                    title: "Company Act 2063 provisions related to telecom company"
+                }, {
+                    id: "1.9.7",
+                    title: "Employee service rules (leave, discipline, punishment, retirement, benefits)"
+                }, {
+                    id: "1.9.8",
+                    title: "Procurement and financial regulations of Nepal Telecom"
+                }, {
+                    id: "1.9.9",
+                    title: "Digital Nepal Framework 2076"
+                }, {
+                    id: "1.9.10",
+                    title: "ICT Policy 2072"
+                }, {
+                    id: "1.9.11",
+                    title: "National Cyber Security Policy 2080"
+                }]
+            }]
+        }, {
+            section_id: 2,
+            section_title: "Technical Subject (Telecom Engineering)",
+            topics: [{
+                id: "2.1",
+                title: "Digital Signal Processing",
+                subtopics: [{
+                    id: "2.1.1",
+                    title: "Discrete-time linear systems"
+                }, {
+                    id: "2.1.2",
+                    title: "Digital filtering"
+                }, {
+                    id: "2.1.3",
+                    title: "Discrete Fourier analysis"
+                }, {
+                    id: "2.1.4",
+                    title: "Voice and image processing applications"
+                }, {
+                    id: "2.1.5",
+                    title: "DSP hardware and processors"
+                }]
+            }, {
+                id: "2.2",
+                title: "Digital Systems Design",
+                subtopics: [{
+                    id: "2.2.1",
+                    title: "Combinational and sequential logic design"
+                }, {
+                    id: "2.2.2",
+                    title: "Programmable logic devices and gate arrays"
+                }, {
+                    id: "2.2.3",
+                    title: "Digital integrated circuit families"
+                }, {
+                    id: "2.2.4",
+                    title: "Microprocessors and components"
+                }, {
+                    id: "2.2.5",
+                    title: "Memory systems"
+                }, {
+                    id: "2.2.6",
+                    title: "I/O systems (parallel, serial, DMA, interrupts)"
+                }, {
+                    id: "2.2.7",
+                    title: "Bus structures and system interconnection"
+                }]
+            }, {
+                id: "2.3",
+                title: "Computer Architecture",
+                subtopics: [{
+                    id: "2.3.1",
+                    title: "CPU architecture and design"
+                }, {
+                    id: "2.3.2",
+                    title: "Memory organization and buses"
+                }, {
+                    id: "2.3.3",
+                    title: "Instruction sets and addressing modes"
+                }, {
+                    id: "2.3.4",
+                    title: "Assembly language programming"
+                }, {
+                    id: "2.3.5",
+                    title: "RISC architecture"
+                }, {
+                    id: "2.3.6",
+                    title: "Pipelining and parallel processing"
+                }, {
+                    id: "2.3.7",
+                    title: "Multiprocessor systems"
+                }, {
+                    id: "2.3.8",
+                    title: "Neural networks and real-time systems"
+                }, {
+                    id: "2.3.9",
+                    title: "Virtual machines"
+                }]
+            }, {
+                id: "2.4",
+                title: "VLSI Design",
+                subtopics: [{
+                    id: "2.4.1",
+                    title: "VLSI concepts"
+                }, {
+                    id: "2.4.2",
+                    title: "Design rules"
+                }, {
+                    id: "2.4.3",
+                    title: "Static and dynamic logic"
+                }, {
+                    id: "2.4.4",
+                    title: "Memory elements and structures"
+                }, {
+                    id: "2.4.5",
+                    title: "Gate arrays and standard cell technology"
+                }, {
+                    id: "2.4.6",
+                    title: "Placement and routing"
+                }, {
+                    id: "2.4.7",
+                    title: "Programmable logic devices"
+                }, {
+                    id: "2.4.8",
+                    title: "I/O devices"
+                }]
+            }, {
+                id: "2.5",
+                title: "Computer Communications",
+                subtopics: [{
+                    id: "2.5.1",
+                    title: "Data communication principles (signals, modulation, reception)"
+                }, {
+                    id: "2.5.2",
+                    title: "Error detection and correction codes"
+                }, {
+                    id: "2.5.3",
+                    title: "Multiplexing techniques (TDM, FDM, CDM)"
+                }, {
+                    id: "2.5.4",
+                    title: "OSI reference model and X.25"
+                }, {
+                    id: "2.5.5",
+                    title: "TCP/IP protocols, routing and flow control"
+                }, {
+                    id: "2.5.6",
+                    title: "Internet addressing and domain names"
+                }, {
+                    id: "2.5.7",
+                    title: "LAN technologies, CSMA/CD, Token Ring"
+                }, {
+                    id: "2.5.8",
+                    title: "Network topologies and access schemes"
+                }]
+            }, {
+                id: "2.6",
+                title: "Artificial Intelligence",
+                subtopics: [{
+                    id: "2.6.1",
+                    title: "AI concepts"
+                }, {
+                    id: "2.6.2",
+                    title: "Knowledge-based and expert systems"
+                }, {
+                    id: "2.6.3",
+                    title: "Logic programming"
+                }, {
+                    id: "2.6.4",
+                    title: "LISP and Prolog"
+                }, {
+                    id: "2.6.5",
+                    title: "Knowledge representation"
+                }, {
+                    id: "2.6.6",
+                    title: "Rule-based and object-based systems"
+                }]
+            }, {
+                id: "2.7",
+                title: "Distributed Systems & Cloud Computing",
+                subtopics: [{
+                    id: "2.7.1",
+                    title: "Distributed system characteristics"
+                }, {
+                    id: "2.7.2",
+                    title: "Client-server vs centralized systems"
+                }, {
+                    id: "2.7.3",
+                    title: "Process synchronization and IPC"
+                }, {
+                    id: "2.7.4",
+                    title: "Fault tolerance principles"
+                }, {
+                    id: "2.7.5",
+                    title: "Distributed file systems"
+                }, {
+                    id: "2.7.6",
+                    title: "Transaction processing"
+                }, {
+                    id: "2.7.7",
+                    title: "Cloud service models"
+                }, {
+                    id: "2.7.8",
+                    title: "Cloud deployment models"
+                }, {
+                    id: "2.7.9",
+                    title: "Virtualization concepts"
+                }]
+            }, {
+                id: "2.8",
+                title: "Programming & Data Structures",
+                subtopics: [{
+                    id: "2.8.1",
+                    title: "Programming syntax and semantics"
+                }, {
+                    id: "2.8.2",
+                    title: "C and C++ structured programming"
+                }, {
+                    id: "2.8.3",
+                    title: "Object-oriented programming basics"
+                }, {
+                    id: "2.8.4",
+                    title: "Arrays, stacks, queues"
+                }, {
+                    id: "2.8.5",
+                    title: "Linked lists, trees and records"
+                }, {
+                    id: "2.8.6",
+                    title: "Non-numerical processing"
+                }]
+            }, {
+                id: "2.9",
+                title: "Operating Systems",
+                subtopics: [{
+                    id: "2.9.1",
+                    title: "OS principles and components"
+                }, {
+                    id: "2.9.2",
+                    title: "Process scheduling and resource allocation"
+                }, {
+                    id: "2.9.3",
+                    title: "Concurrency control"
+                }, {
+                    id: "2.9.4",
+                    title: "Memory management"
+                }, {
+                    id: "2.9.5",
+                    title: "Multitasking and multiprocessing"
+                }, {
+                    id: "2.9.6",
+                    title: "Real-time systems"
+                }, {
+                    id: "2.9.7",
+                    title: "UNIX and Windows OS basics"
+                }]
+            }, {
+                id: "2.10",
+                title: "Software Engineering",
+                subtopics: [{
+                    id: "2.10.1",
+                    title: "SDLC models"
+                }, {
+                    id: "2.10.2",
+                    title: "Requirement analysis and specification"
+                }, {
+                    id: "2.10.3",
+                    title: "Design, implementation, testing and validation"
+                }, {
+                    id: "2.10.4",
+                    title: "Software quality assurance"
+                }, {
+                    id: "2.10.5",
+                    title: "Software maintenance and documentation"
+                }, {
+                    id: "2.10.6",
+                    title: "Configuration management"
+                }, {
+                    id: "2.10.7",
+                    title: "Software project management"
+                }, {
+                    id: "2.10.8",
+                    title: "Re-engineering and reverse engineering"
+                }]
+            }, {
+                id: "2.11",
+                title: "Databases & File Systems",
+                subtopics: [{
+                    id: "2.11.1",
+                    title: "Data models and normalization"
+                }, {
+                    id: "2.11.2",
+                    title: "SQL and query processing"
+                }, {
+                    id: "2.11.3",
+                    title: "Relational algebra and calculus"
+                }, {
+                    id: "2.11.4",
+                    title: "Transaction management"
+                }, {
+                    id: "2.11.5",
+                    title: "Concurrency control"
+                }, {
+                    id: "2.11.6",
+                    title: "File organization (sequential, indexed, direct access)"
+                }, {
+                    id: "2.11.7",
+                    title: "Hashing and indexing"
+                }, {
+                    id: "2.11.8",
+                    title: "File processing and record management"
+                }]
+            }, {
+                id: "2.12",
+                title: "Internet Programming",
+                subtopics: [{
+                    id: "2.12.1",
+                    title: "CGI programming basics"
+                }, {
+                    id: "2.12.2",
+                    title: "HTML forms and server interaction"
+                }, {
+                    id: "2.12.3",
+                    title: "PHP basics"
+                }, {
+                    id: "2.12.4",
+                    title: "Java fundamentals"
+                }, {
+                    id: "2.12.5",
+                    title: "JVM architecture"
+                }]
+            }, {
+                id: "2.13",
+                title: "Client-Server Computing",
+                subtopics: [{
+                    id: "2.13.1",
+                    title: "Client-server architecture"
+                }, {
+                    id: "2.13.2",
+                    title: "Database server concepts"
+                }, {
+                    id: "2.13.3",
+                    title: "SQL procedures, functions and triggers"
+                }, {
+                    id: "2.13.4",
+                    title: "Middleware and APIs"
+                }, {
+                    id: "2.13.5",
+                    title: "Data warehousing"
+                }, {
+                    id: "2.13.6",
+                    title: "Transaction processing models"
+                }, {
+                    id: "2.13.7",
+                    title: "Caching systems"
+                }]
+            }, {
+                id: "2.14",
+                title: "Cryptography & Network Security",
+                subtopics: [{
+                    id: "2.14.1",
+                    title: "Encryption models and attacks"
+                }, {
+                    id: "2.14.2",
+                    title: "RSA and Diffie-Hellman algorithms"
+                }, {
+                    id: "2.14.3",
+                    title: "Hash functions and message authentication"
+                }, {
+                    id: "2.14.4",
+                    title: "Digital signatures"
+                }, {
+                    id: "2.14.5",
+                    title: "SSL/TLS and secure communication"
+                }, {
+                    id: "2.14.6",
+                    title: "Kerberos authentication"
+                }, {
+                    id: "2.14.7",
+                    title: "Firewalls and intrusion detection"
+                }, {
+                    id: "2.14.8",
+                    title: "Virus and malware threats"
+                }, {
+                    id: "2.14.9",
+                    title: "Blockchain basics"
+                }]
+            }, {
+                id: "2.15",
+                title: "Basic Electricity & Electronics",
+                subtopics: [{
+                    id: "2.15.1",
+                    title: "Ohm’s law and Kirchhoff laws"
+                }, {
+                    id: "2.15.2",
+                    title: "AC/DC circuit analysis"
+                }, {
+                    id: "2.15.3",
+                    title: "Transformers, motors and generators"
+                }, {
+                    id: "2.15.4",
+                    title: "Electrical safety and earthing"
+                }, {
+                    id: "2.15.5",
+                    title: "Diodes, transistors, MOSFET, FET"
+                }, {
+                    id: "2.15.6",
+                    title: "Op-amps and integrated circuits"
+                }, {
+                    id: "2.15.7",
+                    title: "Rectifiers and power supplies"
+                }, {
+                    id: "2.15.8",
+                    title: "Number systems"
+                }, {
+                    id: "2.15.9",
+                    title: "Logic gates and digital basics"
+                }]
+            }]
+        }];
 
-    // ACCORDION MECHANISM
-    function toggleAccordion(element) {
-        const body = element.nextElementSibling;
-        const icon = element.querySelector('span');
-        if (body.style.display === "block") {
-            body.style.display = "none";
-            icon.innerText = "+";
-        } else {
-            body.style.display = "block";
-            icon.innerText = "−";
+        function showToast(message) {
+
+            const toast =
+                document.getElementById("toastBar");
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 5000);
+
         }
-    }
+        let completionBeepInterval = null;
 
-    // INTERACTIVE SIDEBAR NAVIGATION
-    function switchSectionView(viewId) {
-        document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        function startCompletionAlarm() {
 
-        const structuralBlocks = ['p1sA-block', 'p1sB-block', 'p2sA-block', 'p2sB-block'];
-        if(viewId === 'all') {
-            structuralBlocks.forEach(b => document.getElementById(b).style.display = 'block');
-        } else {
-            structuralBlocks.forEach(b => document.getElementById(b).style.display = 'none');
-            document.getElementById(viewId + '-block').style.display = 'block';
-        }
-    }
+            if (completionBeepInterval) return;
 
-    // EMBEDDED DYNAMIC STUDY GUIDE (PDF MOCK)
-    function openDocPreview(titleText, summaryContext) {
-        document.getElementById('targetDocumentMetadata').innerText = `NTC_Syllabus_Ref_${titleText.replace(/ /g, '_')}.pdf`;
-        document.getElementById('modalPageTitle').innerText = titleText;
-        document.getElementById('modalMainContentBody').innerText = summaryContext + " Ensure deep technical competence in this subdomain. For mathematical segments, solve boundary conditions. For legislative parts, reference accurate section titles from Telecommunications Act 2053 and corporate regulations.";
-        document.getElementById('systemDocViewer').style.display = 'flex';
-    }
+            completionBeepInterval = setInterval(() => {
 
-    function closeDocPreview() {
-        document.getElementById('systemDocViewer').style.display = 'none';
-    }
+                try {
 
-    // COUNTDOWN ENGINE
-    function applyTimerPreset() {
-        const selectedMins = parseInt(document.getElementById('durationSelection').value);
-        balanceSecondsCount = selectedMins * 60;
-        refreshTimerUI();
-        silenceAlarmBeep();
-    }
+                    const audioCtx =
+                        new(window.AudioContext ||
+                            window.webkitAudioContext)();
 
-    function refreshTimerUI() {
-        const h = Math.floor(balanceSecondsCount / 3600);
-        const m = Math.floor((balanceSecondsCount % 3600) / 60);
-        const s = balanceSecondsCount % 60;
-        document.getElementById('sessionTimerDisplay').innerText = 
-            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
+                    const osc =
+                        audioCtx.createOscillator();
 
-    function toggleTimerState() {
-        if (clockTickerInstance) return;
-        silenceAlarmBeep();
-        document.getElementById('triggerTimerBtn').innerText = "Running...";
-        clockTickerInstance = setInterval(() => {
-            if (balanceSecondsCount > 0) {
-                balanceSecondsCount--;
-                refreshTimerUI();
-            } else {
-                clearInterval(clockTickerInstance);
-                clockTickerInstance = null;
-                document.getElementById('triggerTimerBtn').innerText = "Done!";
-                fireContinuousAlarm();
-            }
-        }, 1000);
-    }
+                    const gain =
+                        audioCtx.createGain();
 
-    function pauseTimerState() {
-        clearInterval(clockTickerInstance);
-        clockTickerInstance = null;
-        document.getElementById('triggerTimerBtn').innerText = "Resume Session";
-        silenceAlarmBeep();
-    }
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
 
-    function clearAndResetTimer() {
-        pauseTimerState();
-        applyTimerPreset();
-    }
+                    osc.frequency.value = 1000;
 
-    // WEB AUDIO BEEP ALARM SYSTEM
-    function fireContinuousAlarm() {
-        if (!audioDeviceCtx) {
-            audioDeviceCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        alarmOsciNode = audioDeviceCtx.createOscillator();
-        const gainNode = audioDeviceCtx.createGain();
-        
-        alarmOsciNode.type = 'sawtooth';
-        alarmOsciNode.frequency.setValueAtTime(950, audioDeviceCtx.currentTime); 
-        gainNode.gain.setValueAtTime(0.4, audioDeviceCtx.currentTime);
-        
-        alarmOsciNode.connect(gainNode);
-        gainNode.connect(audioDeviceCtx.destination);
-        alarmOsciNode.start();
+                    gain.gain.value = 0.15;
 
-        document.getElementById('sessionTimerDisplay').style.color = 'var(--danger)';
-        document.getElementById('sessionTimerDisplay').style.animation = 'blink 0.4s infinite';
-    }
+                    osc.start();
 
-    function silenceAlarmBeep() {
-        if (alarmOsciNode) {
-            try { alarmOsciNode.stop(); alarmOsciNode.disconnect(); } catch(err) {}
-            alarmOsciNode = null;
-        }
-        document.getElementById('sessionTimerDisplay').style.color = 'var(--warning)';
-        document.getElementById('sessionTimerDisplay').style.animation = 'none';
-    }
+                    osc.stop(
+                        audioCtx.currentTime + 0.3
+                    );
 
-    // LOCAL STORAGE STATE CONTROL
-    function syncAndStoreProgressMetrics() {
-        const nodes = document.querySelectorAll('.cb-custom');
-        let stateMatrix = {};
-        let activeChecks = 0;
-
-        nodes.forEach(node => {
-            stateMatrix[node.id] = node.checked;
-            const containerRow = node.closest('.topic-row');
-            if(node.checked) {
-                activeChecks++;
-                containerRow.classList.add('checked-node');
-            } else {
-                containerRow.classList.remove('checked-node');
-            }
-        });
-
-        localStorage.setItem('ntc_l7_portal_matrix', JSON.stringify(stateMatrix));
-
-        const grandTotal = nodes.length;
-        const netPercentage = grandTotal > 0 ? Math.round((activeChecks / grandTotal) * 100) : 0;
-        document.getElementById('metricFillIndicator').style.width = `${netPercentage}%`;
-        document.getElementById('numericCompletionStatus').innerText = `${netPercentage}% Achieved`;
-    }
-
-    function loadCachedProgressMetrics() {
-        const storedCache = localStorage.getItem('ntc_l7_portal_matrix');
-        if (storedCache) {
-            const parsedMatrix = JSON.parse(storedCache);
-            Object.keys(parsedMatrix).forEach(id => {
-                const node = document.getElementById(id);
-                if (node) node.checked = parsedMatrix[id];
-            });
-        }
-        syncAndStoreProgressMetrics();
-    }
-
-    // SEARCH SEARCH ENGINE LOOKUP
-    function executeSyllabusFilter() {
-        let textQuery = document.getElementById('keywordSearch').value.toLowerCase();
-        document.querySelectorAll('.topic-row').forEach(row => {
-            let rowText = row.querySelector('.topic-text').innerText.toLowerCase();
-            row.style.display = rowText.includes(textQuery) ? 'flex' : 'none';
-        });
-    }
-
-    // ATTACH EVENT LISTENERS ON PORTAL LOAD
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.cb-custom').forEach(box => {
-            box.addEventListener('change', syncAndStoreProgressMetrics);
-        });
-
-        document.querySelectorAll('.row-left').forEach(clickableArea => {
-            clickableArea.addEventListener('click', (e) => {
-                if (e.target.className !== 'cb-custom') {
-                    const targetBox = clickableArea.querySelector('.cb-custom');
-                    targetBox.checked = !targetBox.checked;
-                    syncAndStoreProgressMetrics();
+                } catch (e) {
+                    console.log(e);
                 }
-            });
+
+            }, 1000);
+
+        }
+
+        function stopCompletionAlarm() {
+
+            clearInterval(
+                completionBeepInterval
+            );
+
+            completionBeepInterval = null;
+        }
+        document.addEventListener("click", () => {
+
+            stopCompletionAlarm();
+
         });
 
-        loadCachedProgressMetrics();
-        refreshTimerUI();
-    });
-</script>
+        // DYNAMIC INTERFACE RENDERING ENGINE
+        function renderSyllabusSystem() {
+            const parentContainer = document.getElementById('syllabusContainer');
+
+            ntcSyllabus.forEach(section => {
+                // Inject Section Header Title Banner
+                const sectionBanner = document.createElement('div');
+                sectionBanner.className = 'section-title-banner';
+                sectionBanner.innerText = section.section_title;
+                parentContainer.appendChild(sectionBanner);
+
+                // Inject Parent Accordion Blocks
+                section.topics.forEach(topic => {
+                    const accordionItem = document.createElement('div');
+                    accordionItem.className = 'accordion-item';
+
+                    let subtopicsHTML = '';
+                    topic.subtopics.forEach(sub => {
+                        subtopicsHTML += `
+                        <div class="topic-row">
+                            <input type="checkbox" class="cb-item" id="cb_${sub.id.replace(/\./g, '_')}" onchange="calcProgress()">
+                            <span class="topic-text"><strong>${sub.id}</strong> ${sub.title}</span>
+                            <button class="view-btn" onclick="viewTopic('${sub.id} — ${sub.title.replace(/'/g, "\\'")}')">View</button>
+                        </div>
+                    `;
+                    });
+
+                    accordionItem.innerHTML = `
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span class="accordion-title">${topic.id} ${topic.title}</span>
+                        <span>+</span>
+                    </div>
+                    <div class="accordion-content">
+                        ${subtopicsHTML}
+                    </div>
+                `;
+                    parentContainer.appendChild(accordionItem);
+                });
+            });
+        }
+
+        // Instantiate Syllabus Configuration on DOM Ready State
+        window.onload = function() {
+            function restoreProgress() {
+                let saved = JSON.parse(localStorage.getItem("ntc_progress_checked") || "[]");
+
+                saved.forEach(id => {
+                    let el = document.getElementById(id);
+                    if (el) el.checked = true;
+                });
+
+                calcProgress(); // refresh UI
+            }
+            renderSyllabusSystem();
+            setTimeout(() => {
+                restoreProgress();
+                restoreTimer();
+            }, 300);
+        };
+        // =========================
+        // TIMER ENGINE v2
+        // =========================
+
+        let totalSeconds = 10800;
+        let timerId = null;
+        let endTimestamp = null;
+
+        function applyCustomTime() {
+
+            let hrs =
+                parseInt(document.getElementById('hrIn').value) || 0;
+
+            let mins =
+                parseInt(document.getElementById('minIn').value) || 0;
+
+            totalSeconds = (hrs * 3600) + (mins * 60);
+
+            clearInterval(timerId);
+            timerId = null;
+
+            endTimestamp = null;
+
+            localStorage.setItem(
+                "ntc_timer_remaining",
+                totalSeconds
+            );
+
+            localStorage.removeItem(
+                "ntc_timer_end"
+            );
+
+            document.getElementById(
+                "startBtn"
+            ).innerText = "Start Session";
+
+            refreshTimerUI();
+        }
+
+        function startTimer() {
+
+            if (timerId) return;
+
+            if (totalSeconds <= 0) return;
+
+            endTimestamp =
+                Date.now() + (totalSeconds * 1000);
+
+            localStorage.setItem(
+                "ntc_timer_end",
+                endTimestamp
+            );
+
+            localStorage.removeItem(
+                "ntc_timer_remaining"
+            );
+
+            document.getElementById(
+                'startBtn'
+            ).innerText = "Session Running";
+
+            timerId = setInterval(() => {
+
+                totalSeconds =
+                    Math.max(
+                        0,
+                        Math.floor(
+                            (endTimestamp - Date.now()) / 1000
+                        )
+                    );
+
+                refreshTimerUI();
+
+                if (totalSeconds <= 0) {
+
+                    clearInterval(timerId);
+
+                    timerId = null;
+
+                    endTimestamp = null;
+
+                    localStorage.removeItem(
+                        "ntc_timer_end"
+                    );
+
+                    localStorage.removeItem(
+                        "ntc_timer_remaining"
+                    );
+
+                    document.getElementById(
+                        'startBtn'
+                    ).innerText = "Completed";
+
+                    showToast(
+                        "⏰ Study Session Completed!"
+                    );
+
+                    startCompletionAlarm();
+                }
+
+            }, 1000);
+        }
+
+        function pauseTimer() {
+
+            if (!timerId) return;
+
+            clearInterval(timerId);
+
+            timerId = null;
+
+            totalSeconds =
+                Math.max(
+                    0,
+                    Math.floor(
+                        (endTimestamp - Date.now()) / 1000
+                    )
+                );
+
+            endTimestamp = null;
+
+            localStorage.removeItem(
+                "ntc_timer_end"
+            );
+
+            localStorage.setItem(
+                "ntc_timer_remaining",
+                totalSeconds
+            );
+
+            document.getElementById(
+                'startBtn'
+            ).innerText = "Resume Session";
+
+            refreshTimerUI();
+        }
+
+        function restoreTimer() {
+
+            const savedEnd =
+                localStorage.getItem(
+                    "ntc_timer_end"
+                );
+
+            const savedRemaining =
+                localStorage.getItem(
+                    "ntc_timer_remaining"
+                );
+
+            if (savedEnd) {
+
+                endTimestamp = parseInt(savedEnd);
+
+                totalSeconds =
+                    Math.max(
+                        0,
+                        Math.floor(
+                            (endTimestamp - Date.now()) / 1000
+                        )
+                    );
+
+                if (totalSeconds > 0) {
+
+                    refreshTimerUI();
+                    startTimer();
+
+                } else {
+
+                    localStorage.removeItem(
+                        "ntc_timer_end"
+                    );
+
+                    totalSeconds = 0;
+
+                    refreshTimerUI();
+                }
+
+            } else if (savedRemaining) {
+
+                totalSeconds =
+                    parseInt(savedRemaining);
+
+                refreshTimerUI();
+
+                document.getElementById(
+                    'startBtn'
+                ).innerText = "Resume Session";
+
+            } else {
+
+                refreshTimerUI();
+            }
+        }
+
+        function refreshTimerUI() {
+
+            let h =
+                Math.floor(totalSeconds / 3600);
+
+            let m =
+                Math.floor(
+                    (totalSeconds % 3600) / 60
+                );
+
+            let s =
+                totalSeconds % 60;
+
+            document.getElementById(
+                    'timerBox'
+                ).innerText =
+                `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+
+        function toggleAccordion(header) {
+            let content = header.nextElementSibling;
+            let sign = header.querySelector('span:last-child');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                sign.innerText = "+";
+            } else {
+                content.style.display = "block";
+                sign.innerText = "-";
+            }
+        }
+
+        function toggleViewerMaximize() {
+            const sidebar = document.getElementById('pdfViewerSidebar');
+            const btn = document.getElementById('toggleMaximizeBtn');
+            if (sidebar.classList.contains('maximized')) {
+                sidebar.classList.remove('maximized');
+                btn.innerText = "Maximize 🗖";
+            } else {
+                sidebar.classList.add('maximized');
+                btn.innerText = "Restore 🗗";
+            }
+        }
+
+        window.addEventListener('keydown', function(e) {
+            if (e.key === "Escape") {
+                const sidebar = document.getElementById('pdfViewerSidebar');
+                if (sidebar.classList.contains('maximized')) {
+                    sidebar.classList.remove('maximized');
+                    document.getElementById('toggleMaximizeBtn').innerText = "Maximize 🗖";
+                }
+            }
+        });
+
+        function calcProgress() {
+            let boxes = document.querySelectorAll('.cb-item');
+            let checked = document.querySelectorAll('.cb-item:checked');
+
+            let percentage = Math.round((checked.length / boxes.length) * 100);
+
+            document.getElementById('progPct').innerText = percentage + "% Achieved";
+            document.getElementById('progBar').style.width = percentage + "%";
+
+            // ✅ SAVE TO LOCALSTORAGE
+            let checkedIds = [];
+            document.querySelectorAll('.cb-item:checked').forEach(cb => {
+                checkedIds.push(cb.id);
+            });
+
+            localStorage.setItem("ntc_progress_checked", JSON.stringify(checkedIds));
+        }
+
+        function viewTopic(title) {
+            let dest = document.getElementById('viewerContent');
+            dest.style.justifyContent = "flex-start";
+            dest.style.textAlign = "left";
+            dest.innerHTML = `
+            <div style="width:100%">
+                <span style="font-size:10px; font-weight:bold; text-transform:uppercase; color:#00bcd4; background:#0c162d; padding:3px 8px; border-radius:3px;">NTC Blueprint Engine</span>
+                <h2 style="margin-top:15px; font-size:18px; color:#111;">${title}</h2>
+                <hr style="border:none; border-top:1px solid #bbb; margin:15px 0;">
+                <p style="font-size:13.5px; line-height:1.6; color:#2d3748;">Syllabus core matrix loaded successfully. Ready for full textbook content inject or exam-oriented preparation analysis details.</p>
+                <div style="background:#e2e8f0; border-left:4px solid #00bcd4; padding:12px; margin-top:20px; border-radius:4px;">
+                    <strong style="font-size:11.5px; color:#1a202c; display:block; margin-bottom:4px;">🎯 Loksewa Strategy Note:</strong>
+                    <span style="font-size:12px; color:#4a5568;">Focus on deep architectural blueprints, legal provisions of Acts, and fundamental conceptual equations from this sub-domain.</span>
+                </div>
+            </div>
+        `;
+        }
+
+        // --- ADVANCED LUMINANCE & INTER-FRAME COMPUTER VISION ENGINE ---
+        const videoElement = document.getElementById('webcam');
+        let canvasEl = document.createElement('canvas');
+        let ctxRef = canvasEl.getContext('2d');
+
+        let prevFrameData = null;
+        let stagnantStreak = 0;
+        let darkAlertStreak = 0;
+
+        const FRAME_WIDTH = 40;
+        const FRAME_HEIGHT = 30;
+        const MOVEMENT_THRESHOLD = 35;
+        const REQ_CHANGES_RATIO = 0.04;
+
+        navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: 320,
+                    height: 240
+                }
+            })
+            .then(stream => {
+                videoElement.srcObject = stream;
+                document.getElementById('sysProctorStatus').innerText = "● Guards Armed (Proctor Core Active)";
+                setInterval(analyzeProctorFrameNightMode, 700);
+            })
+            .catch(err => {
+                document.getElementById('sysProctorStatus').innerText = "● Camera Blocked ❌";
+                document.getElementById('proctorWarningBanner').style.display = 'block';
+            });
+
+        function analyzeProctorFrameNightMode() {
+            if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+                canvasEl.width = FRAME_WIDTH;
+                canvasEl.height = FRAME_HEIGHT;
+                ctxRef.drawImage(videoElement, 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+
+                let frame = ctxRef.getImageData(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+                let data = frame.data;
+
+                let totalLuma = 0;
+                let changedPixels = 0;
+                let totalPixels = FRAME_WIDTH * FRAME_HEIGHT;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    let r = data[i],
+                        g = data[i + 1],
+                        b = data[i + 2];
+                    let luma = 0.299 * r + 0.587 * g + 0.114 * b;
+                    totalLuma += luma;
+
+                    if (prevFrameData) {
+                        let oldR = prevFrameData[i];
+                        let oldG = prevFrameData[i + 1];
+                        let oldB = prevFrameData[i + 2];
+
+                        let delta = Math.abs(r - oldR) + Math.abs(g - oldG) + Math.abs(b - oldB);
+                        if (delta > MOVEMENT_THRESHOLD) {
+                            changedPixels++;
+                        }
+                    }
+                }
+
+                let avgLuma = totalLuma / totalPixels;
+                let motionScore = Math.round((changedPixels / totalPixels) * 100);
+
+                document.getElementById('sysMotionScore').innerText = `Motion Score: ${motionScore} | Luma: ${Math.round(avgLuma)}`;
+
+                if (avgLuma < 20 || avgLuma > 245) {
+                    darkAlertStreak++;
+                    if (darkAlertStreak >= 3) {
+                        triggerProctorAlert("⚠️ SECURITY WARNING: CAMERA VIEWPORT BLOCKED OR PITCH BLACK!");
+                        return;
+                    }
+                } else {
+                    darkAlertStreak = 0;
+                }
+
+                if (prevFrameData) {
+                    if (changedPixels < (totalPixels * REQ_CHANGES_RATIO)) {
+                        stagnantStreak++;
+                        if (stagnantStreak >= 5) {
+                            triggerProctorAlert("⚠️ PROCTOR ALERT: NO LIVE CANDIDATE ACTIVITY DETECTED!");
+                        }
+                    } else {
+                        stagnantStreak = 0;
+                        document.getElementById('proctorWarningBanner').style.display = 'none';
+                    }
+                }
+
+                prevFrameData = new Uint8ClampedArray(data);
+            }
+        }
+
+        function triggerProctorAlert(message) {
+            let banner = document.getElementById('proctorWarningBanner');
+            banner.innerHTML = message + `<br><span style="font-size: 13px; font-weight: normal; opacity: 0.9;">System is running advanced low-light analytics. Please maintain human presence.</span>`;
+            banner.style.display = 'block';
+            triggerBeepNotification();
+        }
+
+        function triggerBeepNotification() {
+            try {
+                let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.setValueAtTime(820, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.12);
+            } catch (e) {
+                console.log("Audio contexts blocked by vendor autoplay policies.");
+            }
+        }
+    </script>
 </body>
+
 </html>
