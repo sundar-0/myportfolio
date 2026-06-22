@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NTC Pro Enforcement System — Dynamic Syllabus Suite</title>
     <style>
-         :root {
+             :root {
             --bg-main: #040914;
             --bg-side: #0a1124;
             --bg-card: #0d1730;
@@ -149,7 +149,7 @@
             overflow: hidden;
             position: relative;
         }
-        /* LEFT SIDEBAR (PROCTOR PANEL) */
+        /* LEFT SIDEBAR */
         
         .left-sidebar {
             width: 320px;
@@ -240,7 +240,7 @@
             font-style: italic;
             margin-top: 8px;
         }
-        /* MIDDLE CONTENT (SYLLABUS CORE) */
+        /* MIDDLE CONTENT */
         
         .center-content {
             flex: 1;
@@ -365,7 +365,7 @@
         .view-btn:hover {
             background: rgba(0, 188, 212, 0.2);
         }
-        /* RIGHT SIDEBAR (REFERENCE VIEWER) WITH MAXIMIZE SUPPORT */
+        /* RIGHT SIDEBAR */
         
         .right-sidebar {
             width: 380px;
@@ -456,8 +456,230 @@
             opacity: 1;
             transform: translateY(0);
         }
+        /* ========================================================
+           MOBILE & TABLET RESPONSIVE CSS (ADDED FOR RESPONSIVENESS)
+           ======================================================== */
+        
+        @media (max-width: 992px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-controls {
+                flex-wrap: wrap;
+                width: 100%;
+                gap: 8px;
+            }
+            .header-controls .btn,
+            .header-controls .time-input {
+                flex: 1;
+                min-width: 70px;
+                text-align: center;
+            }
+            .app-container {
+                flex-direction: column;
+                overflow: visible;
+                height: auto;
+            }
+            .left-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid var(--border-blue);
+            }
+            .center-content {
+                width: 100%;
+                overflow-y: visible;
+                padding: 15px;
+            }
+            .right-sidebar {
+                width: 100%;
+                min-height: 300px;
+                border-left: none;
+                border-top: 2px solid var(--border-blue);
+            }
+            #proctorWarningBanner {
+                width: 90%;
+                padding: 20px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+            .header,
+            .app-container {
+                flex-direction: column;
+            }
+            .left-sidebar,
+            .center-content {
+                width: 100%;
+            }
+            /* मोबाइलमा PDF Viewer लाई Floating Modal बनाउने */
+            .right-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 99999;
+                border-left: none;
+                /* सुरुमा यो अदृश्य र सानो भएर बस्छ */
+                opacity: 0;
+                pointer-events: none;
+                transform: scale(0);
+                /* जाभास्क्रिप्टले दिने क्लिक गरेको पोइन्ट (X, Y) लाई Origin मान्ने */
+                transform-origin: var(--click-x, 50%) var(--click-y, 50%);
+                /* एकदमै स्मुथ एनिमेसन ट्रान्सिसन */
+                transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            }
+            /* जब View बटन थिचिन्छ, यो क्लास एक्टिभ हुन्छ */
+            .right-sidebar.active-mobile {
+                opacity: 1;
+                pointer-events: auto;
+                transform: scale(1);
+            }
+            /* मोबाइलमा क्लोज बटन देखाउने */
+            #closeMobileBtn {
+                display: inline-block !important;
+            }
+            /* मोबाइलमा म्याक्सिमाइज बटन लुकाइदिने */
+            #toggleMaximizeBtn {
+                display: none !important;
+            }
+            /* PDF Wrapper स्टाइल */
+            .pdf-iframe-wrapper {
+                width: 100%;
+                /* हेडरको ६० पिक्सेल घटाएर बाँकी पुरै स्क्रिन भरिने बनाउँछ */
+                height: calc(100vh - 60px);
+                overflow: hidden;
+            }
+            .pdf-iframe-wrapper iframe {
+                width: 100%;
+                height: 100%;
+            }
+            /* १. पिडिएफ बस्ने मुख्य र्‍यापर - जसले फुर्सदमा पुरै ठाउँ ओगट्छ */
+            .pdf-container-wrapper,
+            .pdf-fallback-wrapper {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                background: #ffffff !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            /* २. प्रिमियम र ठूलो मोबाइल क्लोज बटन (स्क्रिनसटको कुरुप बटन हटाउन) */
+            .mobile-close-btn {
+                background: #ff4d4d !important;
+                color: white !important;
+                border: none !important;
+                padding: 14px 20px !important;
+                font-size: 1rem !important;
+                font-weight: bold !important;
+                cursor: pointer !important;
+                width: 100% !important;
+                display: block !important;
+                text-align: center !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+                box-sizing: border-box !important;
+                transition: background 0.2s ease;
+            }
+            .mobile-close-btn:hover {
+                background: #e04343 !important;
+            }
+            /* ३. Iframe गुड्ने बक्स - जसले बाँकी रहेको १००% हाइट लिन्छ */
+            .pdf-iframe-wrapper {
+                flex-grow: 1 !important;
+                width: 100% !important;
+                height: calc(100% - 48px) !important;
+                /* बटनको हाइट कटाएर बाँकी सबै */
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .pdf-iframe-wrapper iframe {
+                width: 100% !important;
+                height: 100% !important;
+                display: block !important;
+            }
+            /* ४. डाटा नहुँदा देखिने म्यासेज स्टाइल */
+            .fallback-message {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex-grow: 1;
+                color: #718096;
+                font-family: sans-serif;
+                gap: 10px;
+            }
+            /* साइडबारको देब्रे किनारामा बस्ने तान्ने ह्यान्डल */
+            .sidebar-resizer-handle {
+                position: absolute;
+                top: 0;
+                left: 0;
+                /* साइडबारको देब्रे छेउमा */
+                width: 6px;
+                /* समात्न मिल्ने थिकनेस */
+                height: 100%;
+                cursor: ew-resize;
+                /* माउस लैजाँदा ↔ यस्तो बाण देखाउँछ */
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 999999 !important;
+                transition: background 0.2s;
+            }
+            /* माउस लैजाँदा वा तानिरहेको बेला प्रिमियम लुक्स दिन निलो धर्को बस्ने */
+            .sidebar-resizer-handle:hover,
+            .sidebar-resizer-handle.dragging-active {
+                background: #3182ce !important;
+                box-shadow: -2px 0 10px rgba(49, 130, 206, 0.4);
+                width: 6px;
+            }
+            /* बीचमा देखिने साना डटहरू (Grip Icon) */
+            .resizer-dots {
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                pointer-events: none;
+                user-select: none;
+                opacity: 0;
+            }
+            .sidebar-resizer-handle:hover .resizer-dots {
+                opacity: 1;
+            }
+            /* तान्दा खेरि iframe ले माउस इभेन्ट अड्काउन नदिन ब्याकग्राउन्ड पर्दा */
+            .resizer-drag-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 999998 !important;
+                cursor: ew-resize;
+                background: transparent;
+            }
     </style>
 </head>
+
 
 <body>
 
@@ -517,23 +739,26 @@
         </main>
 
         <aside class="right-sidebar" id="pdfViewerSidebar">
+            <div class="sidebar-resizer-handle" id="sidebarResizer">
+                <div class="resizer-dots">⋮</div>
+            </div>
+
             <div class="viewer-header">
                 <span>Syllabus Reference Engine Viewer</span>
-                <button class="mx-btn" id="toggleMaximizeBtn" onclick="toggleViewerMaximize()">Maximize 🗖</button>
+                <div>
+                    <button class="mx-btn" id="toggleMaximizeBtn" onclick="toggleViewerMaximize()">Maximize 🗖</button>
+                    <button class="mx-btn" id="closeMobileBtn" onclick="closeMobileViewer()" style="display:none; background:#ff1744; color:white; border-color:#ff1744; margin-left:8px;">Close ✖</button>
+                </div>
             </div>
             <div class="viewer-body" id="viewerContent">
-                <svg width="64" height="64" fill="currentColor" viewBox="0 0 16 16" style="color:#aaa; margin-bottom:15px;">
-                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-            </svg>
-                <h3>No Document Loaded</h3>
-                <p style="font-size:12px;">Click the "View" button next to any syllabus subtopic to inject critical blueprints into this workspace.</p>
             </div>
         </aside>
     </div>
 
     <script>
         // --- INTEGRATED SYLLABUS DATA ARRAY (MATCHED PERFECTLY TO REQUESTED ARCHITECTURE) ---
-        const ntcSyllabus = [{
+
+        window.ntcSyllabus = [{
             section_id: 1,
             section_title: "General Awareness, Management & Institutional Awareness",
             topics: [{
@@ -1128,6 +1353,183 @@
             }]
         }];
 
+        window.syllabusDetails = {
+            // === SECTION 1: GENERAL AWARENESS & MANAGEMENT ===
+            "1.1.1": {
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+            },
+            "1.1.2": {
+                pdfUrl: "https://www.africau.edu/images/default/sample.pdf"
+            },
+
+            // === SECTION 2: TECHNICAL SUBJECTS ===
+            "2.1.1": {
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+            },
+            "2.1.2": {
+                pdfUrl: "https://www.africau.edu/images/default/sample.pdf"
+            },
+
+            // === SECTION 2.6: ADVANCED TECH ===
+            "2.6.1": {
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+            },
+            "2.6.2": {
+                pdfUrl: "https://www.africau.edu/images/default/sample.pdf"
+            }
+        };
+
+        // पेज लोड हुने बित्तिकै तान्ने लोजिक एक्टिभ गराउने
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebar = document.getElementById('pdfViewerSidebar');
+            const resizer = document.getElementById('sidebarResizer');
+
+            if (!resizer || !sidebar) return;
+
+            resizer.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+
+                // तान्ने बेला iframe ले डिस्टर्ब नगरोस् भनेर अदृश्य स्क्रिन थप्ने
+                const overlay = document.createElement('div');
+                overlay.className = 'resizer-drag-overlay';
+                document.body.appendChild(overlay);
+
+                resizer.classList.add('dragging-active');
+
+                document.addEventListener('mousemove', startResizing);
+                document.addEventListener('mouseup', stopResizing);
+
+                function startResizing(e) {
+                    // दायाँ पट्टी फिक्स भएकोले विन्डोको टोटल चौडाइबाट माउसको X-axis घटाउने
+                    let targetWidth = window.innerWidth - e.clientX;
+
+                    // स्क्रिन अनुसार साइज लिमिट (कम्तिमा ३०० पिक्सेल, बढीमा ८५% स्क्रिन)
+                    const minWidth = 300;
+                    const maxWidth = window.innerWidth * 0.85;
+
+                    if (targetWidth < minWidth) targetWidth = minWidth;
+                    if (targetWidth > maxWidth) targetWidth = maxWidth;
+
+                    sidebar.style.width = targetWidth + 'px';
+                }
+
+                function stopResizing() {
+                    overlay.remove();
+                    resizer.classList.remove('dragging-active');
+                    document.removeEventListener('mousemove', startResizing);
+                    document.removeEventListener('mouseup', stopResizing);
+                }
+            });
+        });
+
+        function openSyllabusViewer(event, topicInfo) {
+            const sidebar = document.getElementById('pdfViewerSidebar');
+
+            if (event) {
+                const clickX = event.clientX + 'px';
+                const clickY = event.clientY + 'px';
+                sidebar.style.setProperty('--click-x', clickX);
+                sidebar.style.setProperty('--click-y', clickY);
+            }
+
+            const parts = topicInfo.split(' - ');
+            const topicId = parts[0].trim();
+            const topicTitle = parts[1] ? parts[1].trim() : topicInfo;
+
+            const detailsSource = window.syllabusDetails || syllabusDetails;
+            const content = detailsSource[topicId];
+
+            const viewerCanvas = document.getElementById('viewerContent');
+
+            // १. प्यारेन्ट बक्सको लेआउटलाई जबर्जस्ती रिसेट गर्ने (Inline Style)
+            viewerCanvas.style.position = 'relative';
+            viewerCanvas.style.display = 'block';
+            viewerCanvas.style.width = '100%';
+            viewerCanvas.style.height = 'calc(100vh - 70px)'; // हेडर काटेर बाँकी पूरै स्क्रिन ओगट्ने
+            viewerCanvas.style.padding = '0';
+            viewerCanvas.style.margin = '0';
+            viewerCanvas.style.overflow = 'hidden';
+
+            if (content && content.pdfUrl) {
+                // २. सिधै HTML भित्रै <style> ट्याग इन्जेक्ट गर्ने (100% ग्यारेन्टीका साथ एप्लाई हुन्छ)
+                viewerCanvas.innerHTML = `
+            <style>
+                .forced-pdf-wrapper {
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    background: #ffffff !important;
+                    box-sizing: border-box !important;
+                    z-index: 99999 !important;
+                }
+                .forced-close-btn {
+                    background: #ff4d4d !important;
+                    color: white !important;
+                    border: none !important;
+                    padding: 14px !important;
+                    font-size: 15px !important;
+                    font-weight: bold !important;
+                    cursor: pointer !important;
+                    width: 100% !important;
+                    display: block !important;
+                    text-align: center !important;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+                    text-transform: uppercase;
+                }
+                .forced-close-btn:hover { 
+                    background: #cc3333 !important; 
+                }
+                .forced-iframe-container {
+                    flex-grow: 1 !important;
+                    width: 100% !important;
+                    height: calc(100% - 48px) !important;
+                }
+                .forced-iframe-container iframe {
+                    width: 100% !important;
+                    height: 100% !important;
+                    border: none !important;
+                    display: block !important;
+                }
+            </style>
+            
+            <div class="forced-pdf-wrapper">
+                <button class="forced-close-btn" onclick="closeSyllabusViewer()">✕ Close Viewer</button>
+                <div class="forced-iframe-container">
+                    <iframe src="${content.pdfUrl}"></iframe>
+                </div>
+            </div>
+        `;
+            } else {
+                // PDF नभएको बेला देखिने फलब्याक स्क्रिन
+                viewerCanvas.innerHTML = `
+            <div style="padding: 40px; text-align: center; font-family: sans-serif;">
+                <button class="forced-close-btn" onclick="closeSyllabusViewer()" style="margin-bottom: 20px;">✕ Close Viewer</button>
+                <h3 style="color:#4a5568;">PDF Not Available</h3>
+                <p style="color:#718096;">Topic ${topicId} ko PDF बन्दैछ।</p>
+            </div>
+        `;
+            }
+
+            // साइडबार देखाउने
+            sidebar.classList.add('active-mobile');
+        }
+
+        // === ३. क्लोज फङ्सन जसले अब काम नगर्ने कुरै हुँदैन ===
+        function closeSyllabusViewer() {
+            const sidebar = document.getElementById('pdfViewerSidebar');
+            const viewerCanvas = document.getElementById('viewerContent');
+
+            // क) साइडबारको एक्टिभ क्लास हटाउने
+            sidebar.classList.remove('active-mobile');
+
+            // ख) क्लोज थिच्ने बित्तिकै भित्रको कन्टेन्टलाई पूरै सफा (Clear) गरिदिने ताकि खुम्चिएको बक्स तुरुन्तै हराओस्
+            viewerCanvas.innerHTML = '';
+        }
+
         function showToast(message) {
 
             const toast =
@@ -1197,6 +1599,28 @@
 
         });
 
+        const syllabusDetails = {
+            "2.6.1": {
+                // यहाँ आफ्नो वास्तविक PDF को path वा URL राख (जस्तै: "/pdfs/ai-notes.pdf")
+                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+
+                introduction: "Artificial Intelligence (AI) refers to...",
+                imageUrl: "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSbqRjMX4GbrkZ4iF4bhna7KG7fIUEQkN7pb6ZLlMluRzHys8086z3we8irLQVt-l1SIkCcGkauyr0fVKc",
+                applications: ["Automated customer support"],
+                limitations: ["High initial cost"],
+                types: ["Narrow AI", "General AI"]
+            },
+            "2.6.2": {
+                // यसमा PDF छैन भने यसले पुरानै टेक्स्ट कार्डहरू देखाउँछ
+                introduction: "Machine Learning is...",
+                applications: ["Churn prediction"],
+                limitations: ["Data dependency"],
+                types: ["Supervised", "Unsupervised"]
+            }
+        };
+
+
+
         // DYNAMIC INTERFACE RENDERING ENGINE
         function renderSyllabusSystem() {
             const parentContainer = document.getElementById('syllabusContainer');
@@ -1215,24 +1639,28 @@
 
                     let subtopicsHTML = '';
                     topic.subtopics.forEach(sub => {
+                        // टाइटल भित्र सिंगल कोट (') छ भने कोड नबिग्रियोस् भनेर स्केप (Escape) गरेको
+                        const safeTitle = sub.title.replace(/'/g, "\\'");
+
                         subtopicsHTML += `
-                        <div class="topic-row">
-                            <input type="checkbox" class="cb-item" id="cb_${sub.id.replace(/\./g, '_')}" onchange="calcProgress()">
-                            <span class="topic-text"><strong>${sub.id}</strong> ${sub.title}</span>
-                            <button class="view-btn" onclick="viewTopic('${sub.id} — ${sub.title.replace(/'/g, "\\'")}')">View</button>
-                        </div>
-                    `;
+                <div class="topic-row">
+                    <input type="checkbox" class="cb-item" id="cb_${sub.id.replace(/\./g, '_')}" onchange="calcProgress()">
+                    <span class="topic-text"><strong>${sub.id}</strong> ${sub.title}</span>
+                    
+                    <button class="view-btn" onclick="openSyllabusViewer(event, '${sub.id} - ${safeTitle}')">View</button>
+                </div>
+            `;
                     });
 
                     accordionItem.innerHTML = `
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-title">${topic.id} ${topic.title}</span>
-                        <span>+</span>
-                    </div>
-                    <div class="accordion-content">
-                        ${subtopicsHTML}
-                    </div>
-                `;
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-title">${topic.id} ${topic.title}</span>
+                <span>+</span>
+            </div>
+            <div class="accordion-content">
+                ${subtopicsHTML}
+            </div>
+        `;
                     parentContainer.appendChild(accordionItem);
                 });
             });
