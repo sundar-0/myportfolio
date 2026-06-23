@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NTC Pro Enforcement System — Dynamic Syllabus Suite</title>
     <style>
-             :root {
+         :root {
             --bg-main: #040914;
             --bg-side: #0a1124;
             --bg-card: #0d1730;
@@ -513,170 +513,172 @@
                 font-size: 16px;
             }
         }
+        /* =========================================
+   MOBILE RESPONSIVE + STICKY CAMERA + PDF
+   ========================================= */
         
         @media (max-width: 992px) {
             body {
                 height: auto;
                 overflow: auto;
             }
-            .header,
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .header-controls {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .header-controls .btn,
+            .header-controls .time-input {
+                flex: 1;
+                min-width: 70px;
+            }
             .app-container {
                 flex-direction: column;
+                height: auto;
+                overflow: visible;
             }
-            .left-sidebar,
+            /* ======================
+       STICKY CAMERA SECTION
+       ====================== */
+            .left-sidebar {
+                width: 100%;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                background: var(--bg-side);
+                border-right: none;
+                border-bottom: 2px solid var(--border-blue);
+                padding: 15px;
+            }
+            .cam-box {
+                position: sticky;
+                top: 10px;
+                z-index: 1001;
+                background: #000;
+            }
             .center-content {
                 width: 100%;
+                padding: 15px;
+                overflow: visible;
             }
-            /* मोबाइलमा PDF Viewer लाई Floating Modal बनाउने */
+            /* ======================
+       MOBILE PDF MODAL
+       ====================== */
             .right-sidebar {
                 position: fixed;
-                top: 0;
-                left: 0;
+                inset: 0;
                 width: 100vw;
                 height: 100vh;
                 z-index: 99999;
-                border-left: none;
-                /* सुरुमा यो अदृश्य र सानो भएर बस्छ */
                 opacity: 0;
                 pointer-events: none;
                 transform: scale(0);
-                /* जाभास्क्रिप्टले दिने क्लिक गरेको पोइन्ट (X, Y) लाई Origin मान्ने */
                 transform-origin: var(--click-x, 50%) var(--click-y, 50%);
-                /* एकदमै स्मुथ एनिमेसन ट्रान्सिसन */
-                transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+                transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), opacity .25s ease;
+                border: none;
+                background: #fff;
             }
-            /* जब View बटन थिचिन्छ, यो क्लास एक्टिभ हुन्छ */
             .right-sidebar.active-mobile {
                 opacity: 1;
                 pointer-events: auto;
                 transform: scale(1);
             }
-            /* मोबाइलमा क्लोज बटन देखाउने */
             #closeMobileBtn {
                 display: inline-block !important;
             }
-            /* मोबाइलमा म्याक्सिमाइज बटन लुकाइदिने */
             #toggleMaximizeBtn {
                 display: none !important;
             }
-            /* PDF Wrapper स्टाइल */
-            .pdf-iframe-wrapper {
-                width: 100%;
-                /* हेडरको ६० पिक्सेल घटाएर बाँकी पुरै स्क्रिन भरिने बनाउँछ */
-                height: calc(100vh - 60px);
-                overflow: hidden;
+            /* ======================
+       VIEWER HEADER
+       ====================== */
+            .viewer-header {
+                position: sticky;
+                top: 0;
+                z-index: 9999;
+                flex-shrink: 0;
             }
-            .pdf-iframe-wrapper iframe {
-                width: 100%;
+            .viewer-body {
+                padding: 0 !important;
+                overflow: auto !important;
                 height: 100%;
             }
-            /* १. पिडिएफ बस्ने मुख्य र्‍यापर - जसले फुर्सदमा पुरै ठाउँ ओगट्छ */
+            /* ======================
+       PDF WRAPPER
+       ====================== */
             .pdf-container-wrapper,
             .pdf-fallback-wrapper {
                 position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
+                inset: 0 !important;
                 display: flex !important;
                 flex-direction: column !important;
-                background: #ffffff !important;
-                box-sizing: border-box !important;
+                width: 100% !important;
+                height: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                background: #fff !important;
             }
-            /* २. प्रिमियम र ठूलो मोबाइल क्लोज बटन (स्क्रिनसटको कुरुप बटन हटाउन) */
             .mobile-close-btn {
                 background: #ff4d4d !important;
-                color: white !important;
+                color: #fff !important;
                 border: none !important;
                 padding: 14px 20px !important;
-                font-size: 1rem !important;
+                width: 100% !important;
+                font-size: 16px !important;
                 font-weight: bold !important;
-                cursor: pointer !important;
-                width: 100% !important;
-                display: block !important;
-                text-align: center !important;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-                box-sizing: border-box !important;
-                transition: background 0.2s ease;
+                flex-shrink: 0;
             }
-            .mobile-close-btn:hover {
-                background: #e04343 !important;
-            }
-            /* ३. Iframe गुड्ने बक्स - जसले बाँकी रहेको १००% हाइट लिन्छ */
+            /* ======================
+       SCROLLABLE PDF
+       ====================== */
             .pdf-iframe-wrapper {
-                flex-grow: 1 !important;
+                flex: 1 !important;
                 width: 100% !important;
-                height: calc(100% - 48px) !important;
-                /* बटनको हाइट कटाएर बाँकी सबै */
-                margin: 0 !important;
-                padding: 0 !important;
+                height: auto !important;
+                overflow: auto !important;
+                overflow-x: auto !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                touch-action: pan-x pan-y;
             }
             .pdf-iframe-wrapper iframe {
                 width: 100% !important;
                 height: 100% !important;
+                min-height: 100vh !important;
+                border: none !important;
                 display: block !important;
             }
-            /* ४. डाटा नहुँदा देखिने म्यासेज स्टाइल */
             .fallback-message {
+                flex: 1;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                flex-grow: 1;
-                color: #718096;
-                font-family: sans-serif;
                 gap: 10px;
             }
-            /* साइडबारको देब्रे किनारामा बस्ने तान्ने ह्यान्डल */
-            .sidebar-resizer-handle {
-                position: absolute;
-                top: 0;
-                left: 0;
-                /* साइडबारको देब्रे छेउमा */
-                width: 6px;
-                /* समात्न मिल्ने थिकनेस */
-                height: 100%;
-                cursor: ew-resize;
-                /* माउस लैजाँदा ↔ यस्तो बाण देखाउँछ */
-                background: transparent;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 999999 !important;
-                transition: background 0.2s;
-            }
-            /* माउस लैजाँदा वा तानिरहेको बेला प्रिमियम लुक्स दिन निलो धर्को बस्ने */
-            .sidebar-resizer-handle:hover,
-            .sidebar-resizer-handle.dragging-active {
-                background: #3182ce !important;
-                box-shadow: -2px 0 10px rgba(49, 130, 206, 0.4);
-                width: 6px;
-            }
-            /* बीचमा देखिने साना डटहरू (Grip Icon) */
-            .resizer-dots {
-                color: white;
-                font-size: 16px;
-                font-weight: bold;
-                pointer-events: none;
-                user-select: none;
-                opacity: 0;
-            }
-            .sidebar-resizer-handle:hover .resizer-dots {
-                opacity: 1;
-            }
-            /* तान्दा खेरि iframe ले माउस इभेन्ट अड्काउन नदिन ब्याकग्राउन्ड पर्दा */
+            /* ======================
+       RESIZER
+       ====================== */
+            .sidebar-resizer-handle,
             .resizer-drag-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                z-index: 999998 !important;
-                cursor: ew-resize;
-                background: transparent;
+                display: none !important;
             }
+            #proctorWarningBanner {
+                width: 90%;
+                font-size: 16px;
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 
