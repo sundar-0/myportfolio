@@ -1498,12 +1498,18 @@
                 }
             </style>
             
-            <div class="forced-pdf-wrapper">
-                <button class="forced-close-btn" onclick="closeSyllabusViewer()">✕ Close Viewer</button>
-                <div class="forced-iframe-container">
-                    <iframe src="${content.pdfUrl}"></iframe>
-                </div>
-            </div>
+       <div class="forced-pdf-wrapper">
+    <button class="forced-close-btn" onclick="closeSyllabusViewer()">
+        ✕ Close Viewer
+    </button>
+
+    <div class="forced-iframe-container">
+        <iframe
+            src="https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(content.pdfUrl)}"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
         `;
             } else {
                 // PDF नभएको बेला देखिने फलब्याक स्क्रिन
