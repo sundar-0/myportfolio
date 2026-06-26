@@ -535,27 +535,45 @@ function initTimer() {
 }
 
 // Generate Beep sound using Web Audio API (No external file needed)
+// function playBeepSound() {
+//   try {
+//     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+//     const oscillator = audioCtx.createOscillator();
+//     const gainNode = audioCtx.createGain();
+
+//     oscillator.connect(gainNode);
+//     gainNode.connect(audioCtx.destination);
+
+//     oscillator.type = "sine";
+//     oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // Frequency in Hz
+//     gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime); // Volume
+
+//     oscillator.start();
+//     // Beep for 1 second
+//     oscillator.stop(audioCtx.currentTime + 1.0);
+//   } catch (e) {
+//     console.log("Audio contexts context error or blocked by browser restriction:", e);
+//   }
+// }
+
+  // Create audio object once
+const beepSound = new Audio("Audio/beep.m4a"); // Your .m4a file
+
+beepSound.preload = "auto";
+beepSound.volume = 1.0;
+
 function playBeepSound() {
-  try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
+    try {
+        beepSound.pause();          // Stop if already playing
+        beepSound.currentTime = 0;  // Restart from beginning
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // Frequency in Hz
-    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime); // Volume
-
-    oscillator.start();
-    // Beep for 1 second
-    oscillator.stop(audioCtx.currentTime + 1.0);
-  } catch (e) {
-    console.log("Audio contexts context error or blocked by browser restriction:", e);
-  }
+        beepSound.play().catch(err => {
+            console.log("Audio play failed:", err);
+        });
+    } catch (e) {
+        console.log("Audio error:", e);
+    }
 }
-
 window.onload=function(){
   loadTopics();
   if(localStorage.getItem("theme")==="light"){
