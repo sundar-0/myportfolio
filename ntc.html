@@ -2078,21 +2078,44 @@
             triggerBeepNotification();
         }
 
-        function triggerBeepNotification() {
-            try {
-                let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.frequency.setValueAtTime(820, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.12);
-            } catch (e) {
-                console.log("Audio contexts blocked by vendor autoplay policies.");
-            }
-        }
+        // Create the audio object once
+const notificationSound = new Audio(
+    "https://www.sundardumre.com.np/Audio/kabi.m4a"
+);
+
+// Optional settings
+notificationSound.preload = "auto";
+notificationSound.volume = 1.0;
+
+function triggerBeepNotification() {
+    try {
+        // Restart the sound if it's already playing
+        notificationSound.pause();
+        notificationSound.currentTime = 0;
+
+        notificationSound.play().catch(err => {
+            console.log("Unable to play notification sound:", err);
+        });
+    } catch (e) {
+        console.log("Audio error:", e);
+    }
+}
+
+        // function triggerBeepNotification() {
+        //     try {
+        //         let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+        //         let osc = audioCtx.createOscillator();
+        //         let gain = audioCtx.createGain();
+        //         osc.connect(gain);
+        //         gain.connect(audioCtx.destination);
+        //         osc.frequency.setValueAtTime(820, audioCtx.currentTime);
+        //         gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        //         osc.start();
+        //         osc.stop(audioCtx.currentTime + 0.12);
+        //     } catch (e) {
+        //         console.log("Audio contexts blocked by vendor autoplay policies.");
+        //     }
+        // }
     </script>
 </body>
 
