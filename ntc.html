@@ -2079,27 +2079,27 @@
         }
 
         // Create the audio object once
-const notificationSound = new Audio(
-    "https://www.sundardumre.com.np/Audio/kabi.m4a"
-);
+// const notificationSound = new Audio(
+//     "https://www.sundardumre.com.np/Audio/kabi.m4a"
+// );
 
-// Optional settings
-notificationSound.preload = "auto";
-notificationSound.volume = 1.0;
+// // Optional settings
+// notificationSound.preload = "auto";
+// notificationSound.volume = 1.0;
 
-function triggerBeepNotification() {
-    try {
-        // Restart the sound if it's already playing
-        notificationSound.pause();
-        notificationSound.currentTime = 0;
+// function triggerBeepNotification() {
+//     try {
+//         // Restart the sound if it's already playing
+//         notificationSound.pause();
+//         notificationSound.currentTime = 0;
 
-        notificationSound.play().catch(err => {
-            console.log("Unable to play notification sound:", err);
-        });
-    } catch (e) {
-        console.log("Audio error:", e);
-    }
-}
+//         notificationSound.play().catch(err => {
+//             console.log("Unable to play notification sound:", err);
+//         });
+//     } catch (e) {
+//         console.log("Audio error:", e);
+//     }
+// }
 
         // function triggerBeepNotification() {
         //     try {
