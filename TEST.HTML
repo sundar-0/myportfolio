@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>OCR Image To Text</title>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f4f4;
+    margin:30px;
+}
+
+.container{
+
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+
+}
+
+h2{
+
+    text-align:center;
+
+}
+
+input{
+
+    margin:15px 0;
+
+}
+
+button{
+
+    padding:10px 20px;
+    margin:10px 5px;
+    cursor:pointer;
+    border:none;
+    background:#2196F3;
+    color:white;
+    border-radius:5px;
+
+}
+
+button:hover{
+
+    background:#1976D2;
+
+}
+
+img{
+
+    max-width:100%;
+    margin-top:15px;
+    border:1px solid #ddd;
+
+}
+
+pre{
+
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    background:#eee;
+    padding:15px;
+    border-radius:5px;
+    min-height:200px;
+
+}
+
+.progress{
+
+    width:100%;
+    background:#ddd;
+    height:20px;
+    border-radius:5px;
+    overflow:hidden;
+    margin-top:10px;
+
+}
+
+.bar{
+
+    width:0%;
+    height:100%;
+    background:#4CAF50;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>OCR Image To Text</h2>
+
+<input type="file" id="imageInput" accept="image/*">
+
+<br>
+
+<img id="preview">
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<p id="status"></p>
+
+<button onclick="startOCR()">Extract Text</button>
+
+<button onclick="copyText()">Copy Text</button>
+
+<button onclick="downloadText()">Download TXT</button>
+
+<h3>Confidence:
+<span id="confidence">0</span>%
+</h3>
+
+<pre id="output"></pre>
+
+</div>
+
+<script>
+
+const input=document.getElementById("imageInput");
+const preview=document.getElementById("preview");
+const output=document.getElementById("output");
+const confidence=document.getElementById("confidence");
+const status=document.getElementById("status");
+const bar=document.getElementById("bar");
+
+let file=null;
+
+input.onchange=function(e){
+
+file=e.target.files[0];
+
+if(!file) return;
+
+preview.src=URL.createObjectURL(file);
+
+}
+
+async function startOCR(){
+
+if(!file){
+
+alert("Choose image");
+
+return;
+
+}
+
+status.innerHTML="Preparing image...";
+
+const img=new Image();
+
+img.src=URL.createObjectURL(file);
+
+await img.decode();
+
+const canvas=document.createElement("canvas");
+
+canvas.width=img.width;
+
+canvas.height=img.height;
+
+const ctx=canvas.getContext("2d");
+
+ctx.drawImage(img,0,0);
+
+const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+
+const d=imageData.data;
+
+for(let i=0;i<d.length;i+=4){
+
+let gray=(d[i]+d[i+1]+d[i+2])/3;
+
+gray=gray>150?255:0;
+
+d[i]=gray;
+d[i+1]=gray;
+d[i+2]=gray;
+
+}
+
+ctx.putImageData(imageData,0,0);
+
+output.textContent="";
+
+const result=await Tesseract.recognize(
+
+canvas,
+
+'eng',
+
+{
+
+logger:m=>{
+
+if(m.status){
+
+status.innerHTML=m.status;
+
+}
+
+if(m.progress){
+
+bar.style.width=(m.progress*100).toFixed(0)+"%";
+
+}
+
+}
+
+}
+
+);
+
+output.textContent=result.data.text;
+
+confidence.innerHTML=result.data.confidence.toFixed(2);
+
+status.innerHTML="Finished";
+
+bar.style.width="100%";
+
+}
+
+function copyText(){
+
+navigator.clipboard.writeText(output.textContent);
+
+alert("Copied");
+
+}
+
+function downloadText(){
+
+const blob=new Blob([output.textContent],{
+
+type:"text/plain"
+
+});
+
+const a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+
+a.download="OCR_Text.txt";
+
+a.click();
+
+}
+
+</script>
+
+</body>
+</html>
