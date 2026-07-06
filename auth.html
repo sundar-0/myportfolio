@@ -286,9 +286,9 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
 </div>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhOnzomtoc6OLh-meZYRIK4eKQptXD77HF1CafQTniQ3QxkeCEST7Jw1lxEZnOVn3B/exec";
-const NODE_BACKEND_NOTES_URL = "https://www.kundali-ai.sundardumre.com.np/api/generate-pdf"; 
-const NODE_BACKEND_QUIZ_URL = "https://www.kundali-ai.sundardumre.com.np/api/generate-quiz";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGy9fd-fWeq_fxeNlub47esx5Cpth695c1y2oPNNuEpKs5-ChG1fWJMb1-DOZVuKGG/exec";
+const NODE_BACKEND_NOTES_URL = "https://www.kundali-ai.sundardumre.com.np/api/studentNotes/generate-pdf"; 
+const NODE_BACKEND_QUIZ_URL = "https://www.kundali-ai.sundardumre.com.np/api/studentNotes/generate-quiz";
 
 const syllabus = {
   u1: ["1.1 Introduction to data, database, DBMS", "1.2 Field, Record, Primary Key, Candidate Key", "1.3 Advantages of DBMS", "1.4 Database Models", "1.5 Normalization: 1NF, 2NF, 3NF"],
@@ -341,33 +341,36 @@ async function handleAuthentication(event, type) {
 
         if (type === "login") {
 
+            // Send plain password to server
             payload.email = document.getElementById("authEmail").value.trim();
             payload.password = document.getElementById("authPassword").value;
 
+            if (!payload.email || !payload.password) {
+                throw new Error("Please enter your email and password.");
+            }
+
         } else {
 
+            // ==========================
+            // REGISTER
+            // ==========================
             const plainPassword = document.getElementById("regPassword").value;
 
-            // Basic validation
             if (plainPassword.length < 6) {
                 throw new Error("Password must be at least 6 characters.");
             }
 
-            // Get bcrypt instance (supports both global names)
             const bcryptLib = window.dcodeIO?.bcrypt || window.bcrypt;
 
             if (!bcryptLib) {
                 throw new Error("bcrypt library failed to load.");
             }
 
-            // Check secure random generator
             if (!window.crypto || !window.crypto.getRandomValues) {
-                throw new Error(
-                    "Secure random generator unavailable. Please run this page through http://localhost instead of opening it directly."
-                );
+                throw new Error("Secure random generator unavailable.");
             }
 
-            // Generate password hash
+            // Hash password
             const salt = bcryptLib.genSaltSync(10);
             const hashedPassword = bcryptLib.hashSync(plainPassword, salt);
 
@@ -383,7 +386,9 @@ async function handleAuthentication(event, type) {
             }
         }
 
-        // Show loader
+        // ==========================
+        // Loader
+        // ==========================
         document.getElementById("aiLoader").style.display = "flex";
         document.getElementById("loaderText").innerText =
             "Syncing with secure cloud matrix...";
@@ -415,7 +420,7 @@ async function handleAuthentication(event, type) {
             localStorage.setItem("userToken", finalUsername);
 
             showToast(
-                `Welcome Back, ${finalUsername}! Login Successful.`,
+                `Welcome Back, ${finalUsername}!`,
                 "success"
             );
 
@@ -426,7 +431,7 @@ async function handleAuthentication(event, type) {
         } else {
 
             showToast(
-                "Account created successfully! Redirecting to login...",
+                "Account created successfully!",
                 "success"
             );
 
