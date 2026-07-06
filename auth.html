@@ -286,7 +286,7 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
 </div>
 
 <script>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGy9fd-fWeq_fxeNlub47esx5Cpth695c1y2oPNNuEpKs5-ChG1fWJMb1-DOZVuKGG/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMCV5gKnLPdDFKEnEFa-dcO-IhoRHqY29d6D3tCXnFsAvtbXaC6TZx18HArCSsfxFm/exec";
 const NODE_BACKEND_NOTES_URL = "https://www.kundali-ai.sundardumre.com.np/api/studentNotes/generate-pdf"; 
 const NODE_BACKEND_QUIZ_URL = "https://www.kundali-ai.sundardumre.com.np/api/studentNotes/generate-quiz";
 
@@ -327,7 +327,7 @@ function toggleAuthView(showRegister) {
         document.getElementById('loginSection').classList.remove('hidden');
     }
 }
-// 🔏 ACCESS & AUTH LAYER
+// 🔏 ACCESS & AUTH LAYER (UPDATED & FIXED)
 async function handleAuthentication(event, type) {
     event.preventDefault();
 
@@ -336,23 +336,29 @@ async function handleAuthentication(event, type) {
     msgBox.innerText = "";
 
     const payload = { action: type };
+    
+    // Bcrypt लाइब्रेरी लोड भएको छ कि छैन सुरुमै चेक गर्ने (लगइन र रजिष्टर दुबैलाई चाहिन्छ)
+    const bcryptLib = window.dcodeIO?.bcrypt || window.bcrypt;
+    if (!bcryptLib) {
+        showToast("Bcrypt library failed to load.", "error");
+        return;
+    }
 
     try {
-
         if (type === "login") {
-
-            // Send plain password to server
+            // ==========================
+            // LOGIN SECTION
+            // ==========================
             payload.email = document.getElementById("authEmail").value.trim();
-            payload.password = document.getElementById("authPassword").value;
+            payload.password = document.getElementById("authPassword").value; // Plain password for validation later
 
             if (!payload.email || !payload.password) {
                 throw new Error("Please enter your email and password.");
             }
 
         } else {
-
             // ==========================
-            // REGISTER
+            // REGISTER SECTION
             // ==========================
             const plainPassword = document.getElementById("regPassword").value;
 
@@ -360,17 +366,11 @@ async function handleAuthentication(event, type) {
                 throw new Error("Password must be at least 6 characters.");
             }
 
-            const bcryptLib = window.dcodeIO?.bcrypt || window.bcrypt;
-
-            if (!bcryptLib) {
-                throw new Error("bcrypt library failed to load.");
-            }
-
             if (!window.crypto || !window.crypto.getRandomValues) {
                 throw new Error("Secure random generator unavailable.");
             }
 
-            // Hash password
+            // Securely hash password before sending to Google Sheets
             const salt = bcryptLib.genSaltSync(10);
             const hashedPassword = bcryptLib.hashSync(plainPassword, salt);
 
@@ -379,19 +379,33 @@ async function handleAuthentication(event, type) {
             payload.email = document.getElementById("regEmail").value.trim();
             payload.password = hashedPassword;
 
+            // 📷 IMAGE HANDLING: Base64 मा कन्भर्ट गर्ने मुख्य फिक्स
             const fileInput = document.getElementById("regPP");
 
             if (fileInput.files.length > 0) {
-                payload.profilePictureName = fileInput.files[0].name;
+                const file = fileInput.files[0];
+                payload.profilePictureName = file.name;
+                
+                // FileReader प्रमिस प्रयोग गरेर फाइल लोड गर्ने
+                const getBase64 = (f) => new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(f);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = e => reject(e);
+                });
+                
+                // वास्तविक इमेज डेटा पेलोडमा थपिन्छ ताकि Google Drive मा सेभ हुन सकोस्
+                payload.profilePictureData = await getBase64(file);
+            } else {
+                throw new Error("Please upload a profile picture.");
             }
         }
 
         // ==========================
-        // Loader
+        // Loader Matrix Control
         // ==========================
         document.getElementById("aiLoader").style.display = "flex";
-        document.getElementById("loaderText").innerText =
-            "Syncing with secure cloud matrix...";
+        document.getElementById("loaderText").innerText = "Syncing with secure cloud matrix...";
 
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
@@ -412,36 +426,36 @@ async function handleAuthentication(event, type) {
             throw new Error(res.message || "Authentication failed.");
         }
 
+        // ==========================
+        // RESPONSE LAYER
+        // ==========================
         if (type === "login") {
+            // 🔐 फ्रन्टइन्ड Bcrypt म्याचिङ भेरिफ़िकेशन (फिक्स)
+            // ब्याकइन्डबाट आएको res.dbHash सँग युजरले हानेको plain password दाँज्ने
+            const inputPassword = document.getElementById("authPassword").value;
+            const isPasswordValid = bcryptLib.compareSync(inputPassword, res.dbHash);
 
-            const finalUsername =
-                res.username || payload.email.split("@")[0];
+            if (!isPasswordValid) {
+                throw new Error("Invalid Email or Password!");
+            }
 
+            const finalUsername = res.username || payload.email.split("@")[0];
             localStorage.setItem("userToken", finalUsername);
 
-            showToast(
-                `Welcome Back, ${finalUsername}!`,
-                "success"
-            );
+            showToast(`Welcome Back, ${finalUsername}!`, "success");
 
             setTimeout(() => {
                 launchDashboard(finalUsername);
             }, 1200);
 
         } else {
-
-            showToast(
-                "Account created successfully!",
-                "success"
-            );
-
+            showToast("Account created successfully with profile photo!", "success");
             setTimeout(() => {
-                toggleAuthView(false);
+                toggleAuthView(false); // लगइन स्क्रिनमा फिर्ता लैजाने
             }, 1200);
         }
 
     } catch (err) {
-
         console.error(err);
 
         msgBox.className = "msg-box error";
@@ -451,11 +465,9 @@ async function handleAuthentication(event, type) {
         showToast(err.message, "error");
 
     } finally {
-
         document.getElementById("aiLoader").style.display = "none";
     }
 }
-
 function launchDashboard(username) {
     document.getElementById('authBlock').classList.add('hidden');
     document.getElementById('dashboardBlock').classList.remove('hidden');
