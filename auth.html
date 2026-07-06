@@ -17,6 +17,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-d
 
 <!-- Official bcrypt library -->
 <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <script>
+if (!window.bcrypt && window.dcodeIO?.bcrypt) {
+    window.bcrypt = window.dcodeIO.bcrypt;
+}
+</script>
 
 <style>
 :root{  
@@ -322,15 +327,15 @@ function toggleAuthView(showRegister) {
         document.getElementById('loginSection').classList.remove('hidden');
     }
 }
-
 // 🔏 ACCESS & AUTH LAYER
 async function handleAuthentication(event, type) {
     event.preventDefault();
 
     const msgBox = document.getElementById("authMsg");
     msgBox.style.display = "none";
+    msgBox.innerText = "";
 
-    let payload = { action: type };
+    const payload = { action: type };
 
     try {
 
@@ -348,21 +353,23 @@ async function handleAuthentication(event, type) {
                 throw new Error("Password must be at least 6 characters.");
             }
 
-            // Make sure bcrypt is loaded
-            if (typeof bcrypt === "undefined") {
+            // Get bcrypt instance (supports both global names)
+            const bcryptLib = window.dcodeIO?.bcrypt || window.bcrypt;
+
+            if (!bcryptLib) {
                 throw new Error("bcrypt library failed to load.");
             }
 
-            // Browser must support secure random generator
+            // Check secure random generator
             if (!window.crypto || !window.crypto.getRandomValues) {
                 throw new Error(
-                    "Secure random generator unavailable. Please run this page from a web server (http://localhost) instead of opening it directly."
+                    "Secure random generator unavailable. Please run this page through http://localhost instead of opening it directly."
                 );
             }
 
-            // Generate bcrypt hash
-            const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(plainPassword, salt);
+            // Generate password hash
+            const salt = bcryptLib.genSaltSync(10);
+            const hashedPassword = bcryptLib.hashSync(plainPassword, salt);
 
             payload.firstName = document.getElementById("regFirstName").value.trim();
             payload.lastName = document.getElementById("regLastName").value.trim();
@@ -376,7 +383,7 @@ async function handleAuthentication(event, type) {
             }
         }
 
-        // Loader
+        // Show loader
         document.getElementById("aiLoader").style.display = "flex";
         document.getElementById("loaderText").innerText =
             "Syncing with secure cloud matrix...";
@@ -396,45 +403,36 @@ async function handleAuthentication(event, type) {
 
         const res = await response.json();
 
-        if (res.success) {
+        if (!res.success) {
+            throw new Error(res.message || "Authentication failed.");
+        }
 
-            if (type === "login") {
+        if (type === "login") {
 
-                const finalUsername =
-                    res.username || payload.email.split("@")[0];
+            const finalUsername =
+                res.username || payload.email.split("@")[0];
 
-                showToast(
-                    `Welcome Back, ${finalUsername}! Login Successful.`,
-                    "success"
-                );
+            localStorage.setItem("userToken", finalUsername);
 
-                setTimeout(() => {
+            showToast(
+                `Welcome Back, ${finalUsername}! Login Successful.`,
+                "success"
+            );
 
-                    localStorage.setItem("userToken", finalUsername);
-
-                    launchDashboard(finalUsername);
-
-                }, 1200);
-
-            } else {
-
-                showToast(
-                    "Account created successfully! Redirecting to login...",
-                    "success"
-                );
-
-                setTimeout(() => {
-
-                    toggleAuthView(false);
-
-                }, 1200);
-
-            }
+            setTimeout(() => {
+                launchDashboard(finalUsername);
+            }, 1200);
 
         } else {
 
-            throw new Error(res.message || "Authentication failed.");
+            showToast(
+                "Account created successfully! Redirecting to login...",
+                "success"
+            );
 
+            setTimeout(() => {
+                toggleAuthView(false);
+            }, 1200);
         }
 
     } catch (err) {
@@ -450,7 +448,6 @@ async function handleAuthentication(event, type) {
     } finally {
 
         document.getElementById("aiLoader").style.display = "none";
-
     }
 }
 
