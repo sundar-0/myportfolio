@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class 12 CS Full Syllabus Notes</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <style>
 :root{  
   --bg:#0f172a;  
@@ -16,6 +18,7 @@
   --btn-green-hover: #059669;
   --btn-orange: #f97316;
   --btn-orange-hover: #ea580c;
+  --md-bg: #1e293b;
 }
 body.light{  
   --bg:#f8fafc;  
@@ -26,6 +29,7 @@ body.light{
   --btn-green-hover: #047857;
   --btn-orange: #ea580c;
   --btn-orange-hover: #c2410c;
+  --md-bg: #ffffff;
 }
 *{box-sizing:border-box}
 body{  
@@ -106,7 +110,6 @@ h3{
   font-size:28px;
 }
 
-/* NO HOVER EFFECT: Layout built for dual actions */
 .topic{  
   padding:14px 18px;  
   margin:12px 0;  
@@ -131,7 +134,6 @@ body.light .topic {
   gap: 8px;
 }
 
-/* Action Buttons Grid */
 .view-notes-btn {
   background: var(--btn-green);
   color: #fff;
@@ -158,7 +160,6 @@ body.light .topic {
 }
 .take-quiz-btn:hover { background: var(--btn-orange-hover); }
 
-/* Timer styling */
 .timer-box {  
   background: rgba(56,189,248,0.15);  
   padding: 6px 14px;  
@@ -169,7 +170,6 @@ body.light .topic {
   font-size: 16px;
 }
 
-/* --- Loader element over the layout --- */
 .ai-overlay-loader {
   display: none;
   position: fixed;
@@ -195,23 +195,22 @@ body.light .topic {
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* --- Modals Setup (PDF and Quiz) --- */
 .custom-modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.8);
   z-index: 2000;
-  padding: 10px;
+  padding: 20px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .modal-header {
   width: 100%;
-  max-width: 850px;
+  max-width: 900px;
   background: var(--card);
-  padding: 12px 20px;
+  padding: 14px 20px;
   border-radius: 12px 12px 0 0;
   display: flex;
   justify-content: space-between;
@@ -221,7 +220,7 @@ body.light .topic {
 .modal-title {
   font-weight: bold;
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -238,25 +237,63 @@ body.light .topic {
 }
 .close-btn:hover { background: #dc2626; }
 
-.pdf-viewer-body {
+/* 🌟 Ultra Clean Educational Markdown Reader UI */
+.note-viewer-body {
   width: 100%;
-  max-width: 850px;
+  max-width: 900px;
   height: 80vh;
-  background: #334155;
+  background: var(--md-bg);
+  color: var(--text);
   overflow-y: auto;
-  padding: 15px;
+  padding: 30px;
   border-radius: 0 0 12px 12px;
-  -webkit-overflow-scrolling: touch;
+  line-height: 1.7;
+  font-size: 16px;
 }
-.pdf-viewer-body canvas {
+.note-viewer-body h1, .note-viewer-body h2, .note-viewer-body h3 {
+  color: var(--accent);
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+.note-viewer-body p { margin-bottom: 16px; }
+.note-viewer-body ul, .note-viewer-body ol { margin-left: 20px; margin-bottom: 16px; }
+.note-viewer-body img {
   display: block;
-  width: 100% !important;
-  height: auto !important;
-  margin: 0 auto 15px auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  max-width: 100%;
+  height: auto;
+  margin: 25px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border: 1px solid var(--line);
+}
+/* Beautiful Markdown Table Styling */
+.note-viewer-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  overflow-x: auto;
+  display: block;
+}
+.note-viewer-body th, .note-viewer-body td {
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  text-align: left;
+}
+.note-viewer-body th {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent);
+}
+.note-viewer-body tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+body.light .note-viewer-body tr:nth-child(even) { background: #f8fafc; }
+
+/* Highlighted NEB Segment Box */
+.note-viewer-body h2[id*="neb"], .note-viewer-body h2:has(span),  h2:contains("NEB") {
+  border-left: 4px solid var(--btn-orange);
+  padding-left: 10px;
 }
 
-/* Quiz UI Dynamic Framework */
 .quiz-container {
   width: 100%;
   max-width: 850px;
@@ -329,7 +366,7 @@ body.light .option-label { background: #fff; border-color: #cbd5e1; }
   .topic{ padding:12px; flex-direction: column; align-items: flex-start; gap: 10px;}
   .topic-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .view-notes-btn, .take-quiz-btn { padding: 8px 10px; font-size: 12px; text-align: center;}
-  .pdf-viewer-body, .quiz-container { height: 82vh; padding: 12px; }
+  .note-viewer-body, .quiz-container { height: 82vh; padding: 15px; }
 }
 </style>
 </head>
@@ -337,13 +374,13 @@ body.light .option-label { background: #fff; border-color: #cbd5e1; }
 
 <div class="topbar">  
   <button onclick="toggleSidebar()">☰ Menu</button>  
-  <strong>📘 Class 12 CS</strong>  
-  <div class="timer-box" id="timer-display">⏱️ 1:00</div>  
+  <strong>📘 Class 12 CS Dashboard</strong>  
+  <div class="timer-box" id="timer-display">⏱️ 35:00</div>  
   <button onclick="toggleMode()">🌙/☀️</button>
 </div>
 
 <div class="sidebar" id="sidebar">  
-  <h2>📘 Class 12 CS</h2>  
+  <h2>📘 Chapters</h2>  
   <button class="active" onclick="show(1)">1. DBMS</button>  
   <button onclick="show(2)">2. Networking</button>  
   <button onclick="show(3)">3. Web Tech II</button>  
@@ -372,10 +409,10 @@ body.light .option-label { background: #fff; border-color: #cbd5e1; }
 
 <div id="pdfModal" class="custom-modal">
   <div class="modal-header">
-    <div class="modal-title" id="pdfModalTitle">AI Interactive Sheet</div>
-    <button class="close-btn" onclick="closePdfViewer()">Close</button>
+    <div class="modal-title" id="pdfModalTitle">AI Smart Study Sheet</div>
+    <button class="close-btn" onclick="closeNoteViewer()">Close</button>
   </div>
-  <div class="pdf-viewer-body" id="pdfRenderContainer"></div>
+  <div class="note-viewer-body" id="noteRenderContainer"></div>
 </div>
 
 <div id="quizModal" class="custom-modal">
@@ -390,7 +427,14 @@ body.light .option-label { background: #fff; border-color: #cbd5e1; }
 const BACKEND_URL = "http://localhost:5000/api/generate-pdf"; 
 const QUIZ_BACKEND_URL = "http://localhost:5000/api/generate-quiz";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+// Configure marked with highlight.js syntax support
+marked.setOptions({
+  highlight: function(code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+    return hljs.highlight(code, { language }).value;
+  },
+  breaks: true
+});
 
 const syllabus = {
   u1: [  
@@ -445,7 +489,7 @@ const syllabus = {
   ]
 };
 
-let currentQuizData = []; // Store active JSON quiz response arrays
+let currentQuizData = [];
 
 function loadTopics(){  
   for(let unit in syllabus){    
@@ -456,10 +500,10 @@ function loadTopics(){
         <div class="topic">          
           <div class="topic-title">${item[0]}</div>
           <div class="topic-actions">
-            <button class="view-notes-btn" onclick="fetchAIPdf(this, '${item[0]}')">📄 Notes</button>
+            <button class="view-notes-btn" onclick="fetchAINotes(this, '${item[0]}')">📄 Notes</button>
             <button class="take-quiz-btn" onclick="fetchAIQuiz('${item[0]}')">🎯 Quiz</button>
           </div>          
-        </div>`;      
+        </div>`;        
       });    
     }  
   }
@@ -486,13 +530,13 @@ function toggleMode(){
   localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 }
 
-// 📄 Pipeline 1: PDF Generation Context Call
-async function fetchAIPdf(button, topicTitle) {
+// 📄 Pipeline 1: Text & Markdown Rendering Pipeline
+async function fetchAINotes(button, topicTitle) {
   const loaderOverlay = document.getElementById('aiLoader');
-  document.getElementById('loaderText').innerText = "AI is synthesizing notes, images, NEB past questions and MCQs...";
+  document.getElementById('loaderText').innerText = "Generating comprehensive NEB Study Guide with visual diagrams...";
   loaderOverlay.style.display = "flex";
   
-  const compositePrompt = `Topic: ${topicTitle}. Instructions: include necessary images, text, past questions from neb, probable questions, and mcqs. Deliver structural PDF stream.`;
+  const compositePrompt = `Write comprehensive notes on "${topicTitle}" with subheadings, real educational diagrams/images and structural tables tailored perfectly for Class 12 Computer Science students. Include an absolute dedicated section at the bottom for "🇳🇵 NEB Past Board Exam Questions" mapping past exam questions with marks distributions.`;
 
   try {
     const response = await fetch(BACKEND_URL, {
@@ -501,18 +545,28 @@ async function fetchAIPdf(button, topicTitle) {
       body: JSON.stringify({ topic: topicTitle, prompt: compositePrompt })
     });
 
-    if(!response.ok) throw new Error("Server payload processing failure");
+    if(!response.ok) throw new Error("Notes orchestration pipeline failure");
 
-    const pdfBlob = await response.blob();
-    const pdfUrl = URL.createObjectURL(pdfBlob);
+    const data = await response.json();
     
-    document.getElementById('pdfModalTitle').innerText = `📑 AI Generated Sheet: ${topicTitle}`;
-    renderPDFInModal(pdfUrl);
+    if(data.success) {
+      document.getElementById('pdfModalTitle').innerText = `📑 Chapter Guide: ${data.topic}`;
+      const container = document.getElementById('noteRenderContainer');
+      
+      // Parse Markdown text natively into clean structured DOM HTML elements!
+      container.innerHTML = marked.parse(data.text);
+      
+      // Trigger Highlight.js formatting logic for any generated code contexts
+      container.querySelectorAll('pre code').forEach((el) => { hljs.highlightElement(el); });
+
+      document.getElementById('pdfModal').style.display = "flex";
+      document.body.classList.add('no-scroll');
+    }
   } catch (error) {
-     alert("⚠️ AI PDF Service Offline! Verify target local service on port 5000.");
-     console.error(error);
+       alert("⚠️ Notes engine server context failure! Ensure backend controller parses text responses successfully.");
+       console.error(error);
   } finally {
-     loaderOverlay.style.display = "none";
+       loaderOverlay.style.display = "none";
   }
 }
 
@@ -533,7 +587,6 @@ async function fetchAIQuiz(topicTitle) {
 
     if(!response.ok) throw new Error("Quiz compilation error structural crash");
 
-    // Expected schema format: Array of questions
     currentQuizData = await response.json();
     
     document.getElementById('quizModalTitle').innerText = `🎯 MCQ Practice Quiz: ${topicTitle}`;
@@ -542,17 +595,16 @@ async function fetchAIQuiz(topicTitle) {
     document.getElementById('quizModal').style.display = "flex";
     document.body.classList.add('no-scroll');
   } catch (error) {
-     alert("⚠️ Quiz Engine Offline! Ensure your backend setup parses JSON payload models on port 5000.");
-     console.error(error);
+       alert("⚠️ Quiz Engine Offline! Ensure your backend setup parses JSON payload models on port 5000.");
+       console.error(error);
   } finally {
-     loaderOverlay.style.display = "none";
+       loaderOverlay.style.display = "none";
   }
 }
 
-// Build and Inject Dynamic Interactive MCQ Content
 function buildQuizInterface() {
   const container = document.getElementById('quizRenderContainer');
-  container.innerHTML = ''; // Reset container state
+  container.innerHTML = ''; 
   
   currentQuizData.forEach((item, qIdx) => {
     let optionsHtml = '';
@@ -578,7 +630,6 @@ function buildQuizInterface() {
   container.innerHTML += `<button class="quiz-submit-btn" onclick="evaluateQuiz()">Submit Quiz answers</button>`;
 }
 
-// Validate Quiz Context Answers
 function evaluateQuiz() {
   let score = 0;
   
@@ -586,12 +637,10 @@ function evaluateQuiz() {
     const selected = document.querySelector(`input[name="question-${qIdx}"]:checked`);
     const correctIdx = item.a;
     
-    // Clear styles if re-submitting
     item.o.forEach((_, oIdx) => {
       document.getElementById(`label-q${qIdx}-o${oIdx}`).classList.remove('correct-ans', 'wrong-ans');
     });
 
-    // Mark absolute correct reference tracking index
     document.getElementById(`label-q${qIdx}-o${correctIdx}`).classList.add('correct-ans');
 
     if (selected) {
@@ -604,48 +653,21 @@ function evaluateQuiz() {
     }
   });
 
-  // Display result overlay box headers
   const container = document.getElementById('quizRenderContainer');
   const existingScore = document.getElementById('scoreDisplayBox');
   if(existingScore) existingScore.remove();
 
   const scoreDiv = document.createElement('div');
   scoreDiv.id = "scoreDisplayBox";
-  scoreDiv.class = "quiz-result-score";
+  scoreDiv.className = "quiz-result-score";
   scoreDiv.style.cssText = "font-size: 22px; color: #10b981; font-weight: bold; text-align: center; margin: 15px 0;";
   scoreDiv.innerText = `📊 Score: ${score} / ${currentQuizData.length}`;
   container.insertBefore(scoreDiv, container.firstChild);
   
-  container.scrollTop = 0; // Snap look context up to check correct flags
+  container.scrollTop = 0; 
 }
 
-// Canvas rendering system for structural mapping PDFs safely
-async function renderPDFInModal(url) {
-  const container = document.getElementById('pdfRenderContainer');
-  container.innerHTML = ''; 
-  document.getElementById('pdfModal').style.display = "flex";
-  document.body.classList.add('no-scroll');
-
-  try {
-    const pdf = await pdfjsLib.getDocument(url).promise;
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      const viewport = page.getViewport({ scale: 1.5 });
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-
-      const renderCtx = { canvasContext: context, viewport: viewport };
-      await page.render(renderCtx).promise;
-      container.appendChild(canvas);
-    }
-  } catch (err) {
-    console.error("PDF.js validation processing failure:", err);
-  }
-}
-
-function closePdfViewer() {
+function closeNoteViewer() {
   document.getElementById('pdfModal').style.display = "none";
   document.body.classList.remove('no-scroll');
 }
@@ -655,7 +677,6 @@ function closeQuizModal() {
   document.body.classList.remove('no-scroll');
 }
 
-// --- 35 Minutes Persistent Timer with Beep Sound ---
 function initTimer() {  
   const TIMER_DURATION = 35 * 60 * 1000; 
   let endTime = localStorage.getItem("timer_end_time");
