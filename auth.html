@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class 12 CS Premium Portal</title>
+<link rel="icon" href="data:,">
+<!-- Markdown, Code Highlighting & 🔐 Bcrypt.js for Hashing -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+
 <style>
 :root{  
   --bg:#0f172a;  
@@ -34,16 +38,45 @@ body.light{
 *{box-sizing:border-box; margin:0; padding:0;}
 body{ font-family:'Segoe UI', Arial, sans-serif; background:var(--bg); color:var(--text); min-height: 100vh;}
 
+/* 🍞 Toast Notification System */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.toast {
+  background: #1e293b;
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  border-left: 4px solid var(--accent);
+  font-weight: 500;
+  min-width: 250px;
+  transform: translateX(120%);
+  transition: transform 0.3s ease-in-out;
+}
+.toast.show { transform: translateX(0); }
+.toast.success { border-left-color: #10b981; }
+.toast.error { border-left-color: #ef4444; }
+
 /* 🔐 Authentication Layer */
 .auth-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-.auth-container { background: var(--card); border: 1px solid var(--line); padding: 35px; width: 100%; max-width: 400px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.auth-container { background: var(--card); border: 1px solid var(--line); padding: 35px; width: 100%; max-width: 450px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
 .auth-container h2 { color: var(--accent); margin-bottom: 8px; text-align: center; }
 .auth-container .subtitle { color: #94a3b8; font-size: 14px; text-align: center; margin-bottom: 20px; }
-.form-group { margin-bottom: 15px; }
+.form-row { display: flex; gap: 15px; }
+.form-group { margin-bottom: 15px; flex: 1; }
 .form-group label { display: block; font-size: 14px; margin-bottom: 6px; color: #cbd5e1; }
+.form-group label span { color: #ef4444; }
 .form-group input { width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--line); border-radius: 8px; color: #fff; font-size: 15px; }
 .form-group input:focus { border-color: var(--accent); outline: none; }
-.auth-btn { width: 100%; padding: 12px; background: var(--accent); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
+.form-group input[type="file"] { padding: 8px; background: transparent; }
+.auth-btn { width: 100%; padding: 12px; background: var(--accent); color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
 .toggle-link { text-align: center; margin-top: 15px; font-size: 14px; color: #94a3b8; }
 .toggle-link span { color: var(--accent); cursor: pointer; font-weight: 600; }
 .msg-box { padding: 10px; border-radius: 6px; font-size: 14px; text-align: center; margin-bottom: 15px; display: none; }
@@ -69,7 +102,7 @@ body.light .topic { background: #f1f5f9; }
 .view-notes-btn { background: var(--btn-green); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
 .take-quiz-btn { background: var(--btn-orange); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
 
-/* ✨ Premium OS-Style Windows (Minimize / Maximize Layout) */
+/* ✨ Premium OS-Style Windows */
 .custom-modal { 
   display: none; 
   position: fixed; 
@@ -111,17 +144,14 @@ body.light .topic { background: #f1f5f9; }
 .control-dot:hover { background: var(--accent); color: #000; }
 .dot-close:hover { background: #ef4444; color: #fff; }
 
-/* Window States toggled via JavaScript */
 .modal-window.maximized { max-width: 100% !important; height: 100vh !important; border-radius: 0px !important; }
 .modal-window.minimized { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 58px; border-radius: 12px; z-index: 2999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .modal-window.minimized .note-viewer-body, .modal-window.minimized .quiz-container { display: none !important; }
 
-/* Inside Containers Styling */
 .note-viewer-body, .quiz-container { flex: 1; background: var(--md-bg); color: var(--text); overflow-y: auto; padding: 35px; line-height: 1.8; }
 .note-viewer-body img { max-width: 100%; height: auto; border-radius: 12px; margin: 15px 0; border: 2px solid var(--line); display: block; }
 .note-viewer-body pre { background: #0f172a; padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; border: 1px solid var(--line); }
 
-/* Quiz Elements */
 .quiz-q-block { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; margin-bottom: 18px; border: 1px solid var(--line); }
 body.light .quiz-q-block { background: #f8fafc; }
 .quiz-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px;}
@@ -132,7 +162,6 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
 .correct-ans { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; color: #10b981; font-weight: bold; }
 .wrong-ans { background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #ef4444; }
 
-/* Loading Global Screen */
 .ai-overlay-loader { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); z-index: 2500; color: #fff; flex-direction: column; align-items: center; justify-content: center; font-size: 18px; }
 .spinner { border: 4px solid rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; border-left-color: var(--accent); animation: spin 1s linear infinite; margin-bottom: 15px; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -148,6 +177,9 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
 </head>
 <body>
 
+<!-- 🍞 Toast Target Container -->
+<div id="toast-container"></div>
+
 <div id="authBlock" class="auth-wrapper">
     <div class="auth-container">
         <div id="authMsg" class="msg-box"></div>
@@ -156,8 +188,8 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
             <h2>Welcome Back</h2>
             <p class="subtitle">Log in to entry cloud environment</p>
             <form onsubmit="handleAuthentication(event, 'login')">
-                <div class="form-group"><label>Email Address</label><input type="email" id="authEmail" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="authPassword" required></div>
+                <div class="form-group"><label>Email Address <span>*</span></label><input type="email" id="authEmail" required></div>
+                <div class="form-group"><label>Password <span>*</span></label><input type="password" id="authPassword" required></div>
                 <button type="submit" class="auth-btn">Log In</button>
             </form>
             <div class="toggle-link">New student? <span onclick="toggleAuthView(true)">Create Profile</span></div>
@@ -167,9 +199,13 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
             <h2>Create Profile</h2>
             <p class="subtitle">Setup credentials into Google DB Row</p>
             <form onsubmit="handleAuthentication(event, 'registration')">
-                <div class="form-group"><label>Username</label><input type="text" id="regUser" required></div>
-                <div class="form-group"><label>Email Address</label><input type="email" id="regEmail" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="regPassword" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>First Name <span>*</span></label><input type="text" id="regFirstName" required></div>
+                    <div class="form-group"><label>Last Name <span>*</span></label><input type="text" id="regLastName" required></div>
+                </div>
+                <div class="form-group"><label>Email Address <span>*</span></label><input type="email" id="regEmail" required></div>
+                <div class="form-group"><label>Password <span>*</span></label><input type="password" id="regPassword" required></div>
+                <div class="form-group"><label>Profile Picture (PP) <span>*</span></label><input type="file" id="regPP" accept="image/*" required></div>
                 <button type="submit" class="auth-btn">Register</button>
             </form>
             <div class="toggle-link">Have an account? <span onclick="toggleAuthView(false)">Log in</span></div>
@@ -239,7 +275,6 @@ body.light .option-label { background: rgba(0,0,0,0.03); }
 </div>
 
 <script>
-// 🔗 १. Google App Script API Link (आफ्नो भ्यालिड URL यहाँ हाल भाइ)
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhOnzomtoc6OLh-meZYRIK4eKQptXD77HF1CafQTniQ3QxkeCEST7Jw1lxEZnOVn3B/exec";
 const NODE_BACKEND_NOTES_URL = "https://www.kundali-ai.sundardumre.com.np/api/generate-pdf"; 
 const NODE_BACKEND_QUIZ_URL = "https://www.kundali-ai.sundardumre.com.np/api/generate-quiz";
@@ -257,7 +292,20 @@ const syllabus = {
 let currentQuizData = [];
 let activeTopicForQuiz = "";
 
-// 🔏 ACCESS AND SECURITY LAYER CONTROL
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerText = message;
+    container.appendChild(toast);
+    
+    setTimeout(() => { toast.classList.add('show'); }, 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.remove(); }, 300);
+    }, 4000);
+}
+
 function toggleAuthView(showRegister) {
     document.getElementById('authMsg').style.display = 'none';
     if(showRegister) {
@@ -269,23 +317,35 @@ function toggleAuthView(showRegister) {
     }
 }
 
+// 🔏 ACCESS & AUTH LAYER
 async function handleAuthentication(event, type) {
     event.preventDefault();
     const msgBox = document.getElementById('authMsg');
     msgBox.style.display = 'none';
     
     let payload = { action: type };
+    
     if(type === 'login') {
         payload.email = document.getElementById('authEmail').value.trim();
-        payload.password = document.getElementById('authPassword').value;
+        payload.password = document.getElementById('authPassword').value; 
     } else {
-        payload.username = document.getElementById('regUser').value.trim();
+        const plainPassword = document.getElementById('regPassword').value;
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(plainPassword, salt);
+        
+        payload.firstName = document.getElementById('regFirstName').value.trim();
+        payload.lastName = document.getElementById('regLastName').value.trim();
         payload.email = document.getElementById('regEmail').value.trim();
-        payload.password = document.getElementById('regPassword').value;
+        payload.password = hashedPassword;
+        
+        const fileInput = document.getElementById('regPP');
+        if(fileInput.files.length > 0) {
+            payload.profilePictureName = fileInput.files[0].name;
+        }
     }
 
     document.getElementById('aiLoader').style.display = 'flex';
-    document.getElementById('loaderText').innerText = "Syncing authentication protocols with cloud...";
+    document.getElementById('loaderText').innerText = "Syncing with secure cloud matrix...";
 
     try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
@@ -298,21 +358,34 @@ async function handleAuthentication(event, type) {
         
         if(res.success) {
             if(type === 'login') {
-                localStorage.setItem("userToken", res.username);
-                launchDashboard(res.username);
+                const finalUsername = res.username || payload.email.split('@')[0];
+                
+                // 📢 पहिले सफलताको टोस्ट देखाउने
+                showToast(`Welcome Back, ${finalUsername}! Login Successful.`, 'success');
+                
+                // ⏳ १.५ सेकेन्ड पर्खिएर मात्र ड्यासबोर्ड खोल्ने (Redirect Delay)
+                setTimeout(() => {
+                    localStorage.setItem("userToken", finalUsername);
+                    launchDashboard(finalUsername);
+                }, 1500);
+                
             } else {
-                msgBox.className = "msg-box success";
-                msgBox.innerText = "Registration verified! Please log in below.";
-                toggleAuthView(false);
+                showToast("Account Created successfully! Redirecting to login...", "success");
+                setTimeout(() => {
+                    toggleAuthView(false);
+                }, 1500);
             }
         } else {
             msgBox.className = "msg-box error";
             msgBox.innerText = res.message;
+            showToast(res.message, "error");
         }
     } catch (e) {
         msgBox.className = "msg-box error";
         msgBox.innerText = "🚨 Web App Handshake Failed! Verify Deployment access setting.";
+        showToast("Handshake Failed", "error");
     } finally {
+        // ड्यासबोर्डमा जानु अघि लोडर बन्द गर्ने
         document.getElementById('aiLoader').style.display = 'none';
     }
 }
@@ -329,7 +402,6 @@ function handleLogout() {
     location.reload();
 }
 
-// 🏢 OS WINDOW MANAGER SYSTEMS (MAXIMIZE / MINIMIZE INTERFACE)
 function maximizeWindow(windowId) {
     document.getElementById(windowId).classList.toggle('maximized');
 }
@@ -360,7 +432,6 @@ function closeModal(modalId, windowId) {
     modal.style.pointerEvents = "auto";
 }
 
-// 📖 CONTENT COMPILATION DOM MAPPING
 function loadTopics(){  
   for(let unit in syllabus){    
     let container = document.getElementById(unit);    
@@ -379,7 +450,6 @@ function loadTopics(){
   }
 }
 
-// 🧠 AI HIGH-FIDELITY NOTES ENGINE
 async function fetchAINotes(topicTitle) {
   const cacheKey = `note_${topicTitle.replace(/\s+/g, '_')}`;
   const cachedData = localStorage.getItem(cacheKey);
@@ -390,7 +460,7 @@ async function fetchAINotes(topicTitle) {
   }
 
   const loader = document.getElementById('aiLoader');
-  document.getElementById('loaderText').innerText = "AI Hub drafting core notes containing structured elements...";
+  document.getElementById('loaderText').innerText = "AI Hub drafting core notes...";
   loader.style.display = "flex";
   
   try {
@@ -404,7 +474,7 @@ async function fetchAINotes(topicTitle) {
       localStorage.setItem(cacheKey, JSON.stringify(data.text));
       renderNotesToModal(topicTitle, data.text);
     }
-  } catch (e) { alert("Notes Core Server Stream offline!"); }
+  } catch (e) { showToast("Notes server stream offline!", "error"); }
   finally { loader.style.display = "none"; }
 }
 
@@ -415,7 +485,6 @@ function renderNotesToModal(topic, markdownText) {
   document.getElementById('pdfModal').style.display = "flex";
 }
 
-// 🎯 MCQS DISPATCH SYSTEMS
 async function fetchAIQuiz(topicTitle) {
   activeTopicForQuiz = topicTitle;
   const cacheKey = `quiz_${topicTitle.replace(/\s+/g, '_')}`;
@@ -440,7 +509,7 @@ async function fetchAIQuiz(topicTitle) {
     currentQuizData = await response.json();
     localStorage.setItem(cacheKey, JSON.stringify(currentQuizData));
     displayQuiz();
-  } catch(e) { alert("Assessment compiler failed!"); }
+  } catch(e) { showToast("Assessment compiler failed!", "error"); }
   finally { loader.style.display = "none"; }
 }
 
@@ -472,7 +541,7 @@ async function evaluateQuiz() {
     }
   });
 
-  alert(`🎯 Matrix evaluated! Score: ${score}/${currentQuizData.length}. Syncing matrix to Cloud Sheets...`);
+  showToast(`Quiz Evaluated! Score: ${score}/${currentQuizData.length}`, "success");
   
   try {
       await fetch(GOOGLE_SCRIPT_URL, {
@@ -486,11 +555,10 @@ async function evaluateQuiz() {
              score: `${score}/${currentQuizData.length}`
          })
       });
-      console.log("📊 Cloud synchronization confirmed.");
+      showToast("Matrix synced to Cloud Sheets!", "success");
   } catch(e) { console.error("Cloud syncing failed:", e); }
 }
 
-// 🎨 GLOBAL STYLES ENGINE MANIPULATORS
 function showUnit(n){
   document.querySelectorAll(".unit").forEach(u=> { u.classList.add("hidden"); if(u.dataset.unit == n) u.classList.remove("hidden"); });
   document.querySelectorAll(".sidebar button").forEach((b, idx) => { b.classList.remove("active"); if(idx === n-1) b.classList.add("active"); });
