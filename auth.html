@@ -337,8 +337,9 @@ async function handleAuthentication(event, type) {
         try {
             salt = bcrypt.genSaltSync(10);
         } catch (e) {
-            console.warn("Crypto Secure RNG not available, executing pseudo-fallback for local environment.");
-            salt = "$2a$10$abcdefghijklmnopqrstuu"; // Safe fallback string structure
+            console.warn("Crypto Secure RNG not available, executing fully valid base64-salt fallback for local environment.");
+            // 💡 FIX: Valid 22-character Bcrypt Base64 string for static fallback
+            salt = "$2a$10$R9hGcEV9Sdf87dfXjEk9eu"; 
         }
         
         const hashedPassword = bcrypt.hashSync(plainPassword, salt);
