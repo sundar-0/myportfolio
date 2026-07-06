@@ -237,7 +237,6 @@ body.light .topic {
 }
 .close-btn:hover { background: #dc2626; }
 
-/* 🌟 Ultra Clean Educational Markdown Reader UI */
 .note-viewer-body {
   width: 100%;
   max-width: 900px;
@@ -266,7 +265,6 @@ body.light .topic {
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   border: 1px solid var(--line);
 }
-/* Beautiful Markdown Table Styling */
 .note-viewer-body table {
   width: 100%;
   border-collapse: collapse;
@@ -288,8 +286,8 @@ body.light .topic {
 }
 body.light .note-viewer-body tr:nth-child(even) { background: #f8fafc; }
 
-/* Highlighted NEB Segment Box */
-.note-viewer-body h2[id*="neb"], .note-viewer-body h2:has(span),  h2:contains("NEB") {
+/* Fixed valid CSS Selector */
+.note-viewer-body h2[id*="neb"], .note-viewer-body h2:has(span) {
   border-left: 4px solid var(--btn-orange);
   padding-left: 10px;
 }
@@ -424,10 +422,10 @@ body.light .option-label { background: #fff; border-color: #cbd5e1; }
 </div>
 
 <script>
+// 🛠️ FIXED: URLs updated to production backend
 const BACKEND_URL = "https://kundali-ai.sundardumre.com.np/api/generate-pdf"; 
-const QUIZ_BACKEND_URL = "http://kundali-ai.sundardumre.com.np/api/generate-quiz";
+const QUIZ_BACKEND_URL = "https://kundali-ai.sundardumre.com.np/api/generate-quiz";
 
-// Configure marked with highlight.js syntax support
 marked.setOptions({
   highlight: function(code, lang) {
     const language = hljs.getLanguage(lang) ? lang : 'plaintext';
@@ -546,9 +544,9 @@ const syllabus = {
   ]
 };
 
-
 let currentQuizData = [];
 
+// 🛠️ FIXED: Changed ${item[0]} to ${item} to parse standard string array entries correctly
 function loadTopics(){  
   for(let unit in syllabus){    
     let container = document.getElementById(unit);    
@@ -556,10 +554,10 @@ function loadTopics(){
       syllabus[unit].forEach(item=>{        
         container.innerHTML += `        
         <div class="topic">          
-          <div class="topic-title">${item[0]}</div>
+          <div class="topic-title">${item}</div>
           <div class="topic-actions">
-            <button class="view-notes-btn" onclick="fetchAINotes(this, '${item[0]}')">📄 Notes</button>
-            <button class="take-quiz-btn" onclick="fetchAIQuiz('${item[0]}')">🎯 Quiz</button>
+            <button class="view-notes-btn" onclick="fetchAINotes(this, '${item}')">📄 Notes</button>
+            <button class="take-quiz-btn" onclick="fetchAIQuiz('${item}')">🎯 Quiz</button>
           </div>          
         </div>`;        
       });    
@@ -588,25 +586,17 @@ function toggleMode(){
   localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 }
 
-
-// 📄 Pipeline 1: Text & Markdown Rendering with LocalStorage Caching
 async function fetchAINotes(button, topicTitle) {
-  // 🔑 LocalStorage को लागि एउटा युनिक की (Key) बनाउने (जस्तै: note_1.1 Introduction to data...)
   const cacheKey = `note_${topicTitle.trim()}`;
-  
-  // 1️⃣ पहिले चेक गर्ने: के यो टपिकको नोट पहिले नै LocalStorage मा सेभ छ?
   const cachedData = localStorage.getItem(cacheKey);
   
   if (cachedData) {
     console.log(`⚡ [Cache Hit] Loading notes from LocalStorage for: ${topicTitle}`);
     const parsedData = JSON.parse(cachedData);
-    
-    // यदि क्यासमा डेटा छ भने सिधै स्क्रिनमा रेन्डर गरिदिने (नो एपीआई कल!)
     renderNotesToModal(parsedData.topic, parsedData.text);
-    return; // फङ्सन यहीँबाट रोक्ने
+    return;
   }
 
-  // 2️⃣ यदि क्यासमा छैन भने मात्र एपीआई (API) कल गर्ने
   console.log(`🌐 [Cache Miss] Fetching from AI Server for: ${topicTitle}`);
   const loaderOverlay = document.getElementById('aiLoader');
   document.getElementById('loaderText').innerText = "Generating comprehensive NEB Study Guide with visual diagrams...";
@@ -626,14 +616,11 @@ async function fetchAINotes(button, topicTitle) {
     const data = await response.json();
     
     if(data.success) {
-      // 3️⃣ भविष्यको लागि डेटालाई LocalStorage मा सेभ गरेर राख्ने
       const dataToCache = {
         topic: data.topic,
         text: data.text
       };
       localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
-
-      // स्क्रिनमा देखाउने
       renderNotesToModal(data.topic, data.text);
     }
   } catch (error) {
@@ -644,67 +631,17 @@ async function fetchAINotes(button, topicTitle) {
   }
 }
 
-// 🎨 नोटलाई मोडल भित्र पसाएर देखाउने एउटा छुट्टै हेल्पर फङ्सन
 function renderNotesToModal(topic, markdownText) {
   document.getElementById('pdfModalTitle').innerText = `📑 Chapter Guide: ${topic}`;
   const container = document.getElementById('noteRenderContainer');
-  
-  // Markdown लाई HTML मा बदल्ने
   container.innerHTML = marked.parse(markdownText);
-  
-  // कोड हाइलाइटिङ ट्रिगर गर्ने
   container.querySelectorAll('pre code').forEach((el) => { 
     hljs.highlightElement(el); 
   });
-
-  // मोडल खोल्ने
   document.getElementById('pdfModal').style.display = "flex";
   document.body.classList.add('no-scroll');
 }
 
-
-
-// // 📄 Pipeline 1: Text & Markdown Rendering Pipeline
-// async function fetchAINotes(button, topicTitle) {
-//   const loaderOverlay = document.getElementById('aiLoader');
-//   document.getElementById('loaderText').innerText = "Generating comprehensive NEB Study Guide with visual diagrams...";
-//   loaderOverlay.style.display = "flex";
-  
-//   const compositePrompt = `Write comprehensive notes on "${topicTitle}" with subheadings, real educational diagrams/images and structural tables tailored perfectly for Class 12 Computer Science students. Include an absolute dedicated section at the bottom for "🇳🇵 NEB Past Board Exam Questions" mapping past exam questions with marks distributions.`;
-
-//   try {
-//     const response = await fetch(BACKEND_URL, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ topic: topicTitle, prompt: compositePrompt })
-//     });
-
-//     if(!response.ok) throw new Error("Notes orchestration pipeline failure");
-
-//     const data = await response.json();
-    
-//     if(data.success) {
-//       document.getElementById('pdfModalTitle').innerText = `📑 Chapter Guide: ${data.topic}`;
-//       const container = document.getElementById('noteRenderContainer');
-      
-//       // Parse Markdown text natively into clean structured DOM HTML elements!
-//       container.innerHTML = marked.parse(data.text);
-      
-//       // Trigger Highlight.js formatting logic for any generated code contexts
-//       container.querySelectorAll('pre code').forEach((el) => { hljs.highlightElement(el); });
-
-//       document.getElementById('pdfModal').style.display = "flex";
-//       document.body.classList.add('no-scroll');
-//     }
-//   } catch (error) {
-//        alert("⚠️ Notes engine server context failure! Ensure backend controller parses text responses successfully.");
-//        console.error(error);
-//   } finally {
-//        loaderOverlay.style.display = "none";
-//   }
-// }
-
-// 🎯 Pipeline 2: JSON MCQ Quiz Target Call
 async function fetchAIQuiz(topicTitle) {
   const loaderOverlay = document.getElementById('aiLoader');
   document.getElementById('loaderText').innerText = `Generating dynamic MCQ Quiz for: ${topicTitle}...`;
@@ -729,7 +666,7 @@ async function fetchAIQuiz(topicTitle) {
     document.getElementById('quizModal').style.display = "flex";
     document.body.classList.add('no-scroll');
   } catch (error) {
-       alert("⚠️ Quiz Engine Offline! Ensure your backend setup parses JSON payload models on port 5000.");
+       alert("⚠️ Quiz Engine Offline! Ensure your backend setup parses JSON payload models successfully.");
        console.error(error);
   } finally {
        loaderOverlay.style.display = "none";
@@ -766,7 +703,6 @@ function buildQuizInterface() {
 
 function evaluateQuiz() {
   let score = 0;
-  
   currentQuizData.forEach((item, qIdx) => {
     const selected = document.querySelector(`input[name="question-${qIdx}"]:checked`);
     const correctIdx = item.a;
