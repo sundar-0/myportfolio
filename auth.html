@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 12 CS - Auth Gateway</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #e2e8f0;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --line: rgba(148, 163, 184, 0.2);
+            --error: #ef4444;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        
+        .auth-container { background: var(--card); border: 1px solid var(--line); padding: 35px; width: 100%; max-width: 420px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        h2 { color: var(--accent); margin-bottom: 8px; font-size: 26px; text-align: center; }
+        p.subtitle { color: #94a3b8; font-size: 14px; text-align: center; margin-bottom: 24px; }
+        
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 14px; margin-bottom: 6px; font-weight: 500; color: #cbd5e1; }
+        input { width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--line); border-radius: 8px; color: #fff; font-size: 15px; transition: 0.3s; }
+        input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 8px rgba(56, 189, 248, 0.2); }
+        
+        button { width: 100%; padding: 12px; background: var(--accent); color: #0f172a; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: var(--accent-hover); color: #fff; }
+        button:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; }
+        
+        .toggle-link { text-align: center; margin-top: 20px; font-size: 14px; color: #94a3b8; }
+        .toggle-link span { color: var(--accent); cursor: pointer; font-weight: 600; }
+        .toggle-link span:hover { text-decoration: underline; }
+        
+        .message-box { padding: 10px; border-radius: 6px; font-size: 14px; font-weight: 500; margin-bottom: 15px; text-align: center; display: none; }
+        .message-box.error { display: block; background: rgba(239, 68, 68, 0.15); color: var(--error); border: 1px solid var(--error); }
+        .message-box.success { display: block; background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <!-- 🔔 सन्देश देखाउने बक्स -->
+    <div id="msgBox" class="message-box"></div>
+
+    <!-- 🔐 1. LOGIN FORM -->
+    <div id="loginFormContainer">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Log in to access your Class 12 CS Dashboard</p>
+        <form id="loginForm" onsubmit="handleAuth(event, 'login')">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="loginEmail" required placeholder="example@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" required placeholder="••••••••">
+            </div>
+            <button type="submit" id="loginBtn">Log In</button>
+        </form>
+        <div class="toggle-link">
+            Don't have an account? <span onclick="switchForm('register')">Register here</span>
+        </div>
+    </div>
+
+    <!-- 📝 2. REGISTRATION FORM -->
+    <div id="registerFormContainer" class="hidden">
+        <h2>Create Account</h2>
+        <p class="subtitle">Join the elite Class 12 Learning Portal</p>
+        <form id="registerForm" onsubmit="handleAuth(event, 'registration')">
+            <div class="form-group">
+                <label>Full Name (Username)</label>
+                <input type="text" id="regName" required placeholder="Ram Bahadur">
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="regEmail" required placeholder="ram@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="regPassword" required placeholder="••••••••">
+            </div>
+            <button type="submit" id="regBtn">Sign Up</button>
+        </form>
+        <div class="toggle-link">
+            Already have an account? <span onclick="switchForm('login')">Log in here</span>
+        </div>
+    </div>
+</div>
+
+<script>
+// 🔗 स्टेप १ को गुगल स्क्रिप्ट URL यहाँ पेस्ट गर भाइ
+const GOOGLE_SCRIPT_URL = "यहाँ_तिम्रो_DEPLOYED_WEB_APP_URL_राख";
+
+// फर्महरू साटासाट (Toggle) गर्ने फङ्सन
+function switchForm(formType) {
+    hideMessage();
+    if(formType === 'register') {
+        document.getElementById('loginFormContainer').classList.add('hidden');
+        document.getElementById('registerFormContainer').classList.remove('hidden');
+    } else {
+        document.getElementById('registerFormContainer').classList.add('hidden');
+        document.getElementById('loginFormContainer').classList.remove('remove');
+        document.getElementById('loginFormContainer').classList.remove('hidden');
+    }
+}
+
+// सन्देश देखाउने/लुकाउने हेल्परहरू
+function showMessage(text, type) {
+    const box = document.getElementById('msgBox');
+    box.innerText = text;
+    box.className = `message-box ${type}`;
+}
+function hideMessage() { document.getElementById('msgBox').style.display = 'none'; }
+
+// 🚀 मुख्य Authentication Handler (Login & Registration)
+async function handleAuth(event, actionType) {
+    event.preventDefault();
+    hideMessage();
+
+    // बटनहरूलाई लोड हुँदा डिसेबल गर्ने
+    const loginBtn = document.getElementById('loginBtn');
+    const regBtn = document.getElementById('regBtn');
+    loginBtn.disabled = true;
+    regBtn.disabled = true;
+    
+    let payload = { action: actionType };
+
+    if(actionType === 'login') {
+        payload.email = document.getElementById('loginEmail').value.trim();
+        payload.password = document.getElementById('loginPassword').value;
+        showMessage("Authenticating user data...", "success");
+    } else {
+        payload.username = document.getElementById('regName').value.trim();
+        payload.email = document.getElementById('regEmail').value.trim();
+        payload.password = document.getElementById('regPassword').value;
+        showMessage("Creating secure cloud profile...", "success");
+    }
+
+    try {
+        // सिधै POST रिक्वेस्ट गुगल सिटमा पठाउने
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "cors", // नयाँ गुगल स्क्रिप्टले मज्जाले CORS सपोर्ट गर्छ
+            headers: { "Content-Type": "text/plain" }, // CORS एरर रोक्न text/plain पठाउनु सुरक्षित हुन्छ
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if(result.success) {
+            showMessage(result.message, "success");
+            
+            if(actionType === 'login') {
+                // 💾 सेसन सेभ गर्ने र ड्यासबोर्डमा पठाउने
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("currentUser", result.username);
+                
+                setTimeout(() => {
+                    alert(`🎉 Welcome ${result.username}! Redirecting to Dashboard...`);
+                    // window.location.href = "dashboard.html"; // तिम्रो मुख्य ड्यासबोर्ड पेज यहाँ राख
+                }, 1000);
+            } else {
+                // दर्ता सफल भएपछि लगइन फर्ममा फर्काइदिने
+                setTimeout(() => {
+                    document.getElementById('registerForm').reset();
+                    switchForm('login');
+                    showMessage("Registration complete! Please log in.", "success");
+                }, 1500);
+            }
+        } else {
+            showMessage(result.message, "error");
+        }
+
+    } catch (error) {
+        console.error("Auth Pipeline Failure:", error);
+        showMessage("⚠️ Connection Timeout! Check Google Script Deployment.", "error");
+    } finally {
+        loginBtn.disabled = false;
+        regBtn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>
