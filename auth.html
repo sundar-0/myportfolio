@@ -3,15 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Class 12 CS Premium Portal</title>
+
 <link rel="icon" href="data:,">
+
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
-<script>
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e= "undefined"!=typeof globalThis?globalThis:e||self).bcrypt=t()}(this,function(){"use strict";var e="undefined"!=typeof Uint8Array?Uint8Array:Array,t="undefined"!=typeof Crypto?Crypto:Object,r=null;function n(e){for(var t=0;t<e.length;t++)e[t]=0}try{var o=require("crypto");r=o.randomBytes}catch(e){}function s(){if(r)return r(16);if(t.getRandomValues){var n=new e(16);return t.getRandomValues(n),n}throw new Error("No secure random number generator available.")}var a=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,45,46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],i=["./","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9"];function c(t,r){var n=0,o=t.length,s=0,h=new e(r);while(s<r){if(n>=o)return null;var c=t.charCodeAt(n++)&127,l=a[c];if(-1===l)return null;var u=n<o?t.charCodeAt(n++)&127:0,f=a[u];if(-1===f)return null;h[s++]=(l<<2|f>>4)&255;if(s>=r)break;var d=n<o?t.charCodeAt(n++)&127:0,v=a[d];if(-1===v)return null;h[s++]=(f<<4|v>>2)&255;if(s>=r)break;var g=n<o?t.charCodeAt(n++)&127:0,B=a[g];if(-1===B)return null;h[s++]=(v<<6|B)&255}return h}function l(t,r){var n=0,o=[],s=0;while(s<r){var a=t[s++]&255,c=a>>2;o.push(i[c]);c=(a&3)<<4;if(s<r){var l=t[s++]&255;c|=(l&240)>>4;o.push(i[c]);c=(l&15)<<2;if(s<r){var u=t[s++]&255;c|=(u&192)>>6;o.push(i[c]);o.push(i[u&63])}else{o.push(i[c])}}else{o.push(i[c])}}return o.join("")}var u=[1978193803,2048439971,1135431627,2438848781,4247544026,1704207198,397551062,2674251786,3035172288,2790938507,1780077864,2608149258,2613158022,3499117621,3480838640,4196144810,131238914,3572855146,2758129202,3269666016,1935661148,3496338421,3302061245,1503463941,1308892182,3826040685,3469851610,4125845946,84661842,2286786481,2284145228,2147171444,1427181665,4046524314,2444391696,4001306122,319409825,3244837563,338682054,1663155799,2353344199,3524673859,191773426,1771971701,4072314545,562624451,192461947,406798031,1001402242,3987085731,3134950341,3152737666,3284067959,2865917812,243577717,1622325997,3628468758,2215865610,2340332857,4195155776,3397940177,1093144704,3322046592,2791409951],f=[1112344249,1535496587,3148135891,3325010619,1015699419,1650397500,2962773099,2198083984,3396603072,3740263306,1250275850,3323067644,1032185368,3670605991,1289196924,1983050961,2808016462,4040643763,2228518974,1750849311,3515082161,1685810243,2674313797,1316694663,4156689626,677461972,1184649718,3499427025,3983371900,582737397,3410214876,3468595856,1283626915,2459030612,2736173456,2275727409,3647317769,1463131336,4130006275,3405786482,4086438316,3373760373,2631553955,3491443694,3640220689,1479836109,2414777420,3819875477,3293026514,1422731804,2656360492,808298918,3628799425,3160499092,2523267711,105370609,3227441160,2509121960,2777171448,3004663737,2221666992,3082531006,1979927640,3014902164,3101683401,3689408604,4025064560,2178229411,3392476579,2524317181,3993359013,1166632646,3126435011,3134604670,422409605,3350438686,3336336599,1956799014,3523522204,1113936830,2234032971,1143110294,3450911786,3279165330,2127117079,4196884061,2888691599,1730638515,3194095593,3564177309,1413809618,3752174826,1160447385,3416431942,397551062,2674251786],d=new e([163,111,114,101,32,100,111,110,101,32,112,108,97,115,116,105,99,32,119,111,114,100,115]);function v(e,t,r,n){var o=e[0],s=e[1],a=e[2],i=e[3];for(var c=0;c<n;c+=2){o^=r[c],s^=r[c+1],a^=t[((o>>24)&255)+0]^t[((s>>16)&255)+256]^t[((a>>8)&255)+512]^t[(i&255)+768],i^=t[((a>>24)&255)+0]^t[((i>>16)&255)+256]^t[((o>>8)&255)+512]^t[(s&255)+768],a^=r[c+2],i^=r[c+3],o^=t[((a>>24)&255)+0]^t[((i>>16)&255)+256]^t[((o>>8)&255)+512]^t[(s&255)+768],s^=t[((o>>24)&255)+0]^t[((s>>16)&255)+256]^t[((a>>8)&255)+512]^t[(i&255)+768]}e[0]=i^r[16],e[1]=o^r[17],e[2]=s,e[3]=a}function g(e,t,r){var n=e[0],o=e[1],s=e[2],a=e[3];n^=r[0],o^=r[1],s^=t[((n>>24)&255)+0]^t[((o>>16)&255)+256]^t[((s>>8)&255)+512]^t[(a&255)+768],a^=t[((s>>24)&255)+0]^t[((a>>16)&255)+256]^t[((n>>8)&255)+512]^t[(o&255)+768];for(var i=2;i<16;i+=2)s^=r[i],a^=r[i+1],n^=t[((s>>24)&255)+0]^t[((a>>16)&255)+256]^t[((n>>8)&255)+512]^t[(o&255)+768],o^=t[((n>>24)&255)+0]^t[((o>>16)&255)+256]^t[((s>>8)&255)+512]^t[(a&255)+768],s^=r[i+2],a^=r[i+3],n^=t[((s>>24)&255)+0]^t[((a>>16)&255)+256]^t[((n>>8)&255)+512]^t[(o&255)+768],o^=t[((n>>24)&255)+0]^t[((o>>16)&255)+256]^t[((s>>8)&255)+512]^t[(a&255)+768];s^=r[16],a^=r[17],n^=t[((s>>24)&255)+0]^t[((a>>16)&255)+256]^t[((n>>8)&255)+512]^t[(o&255)+768],o^=t[((n>>24)&255)+0]^t[((o>>16)&255)+256]^t[((s>>8)&255)+512]^t[(a&255)+768],e[0]=s^r[18],e[1]=a^r[19],e[2]=n,e[3]=o}function B(e,t,r,n){var o=0,s=0,a=0,i=0;for(o=0;o<18;o++)r[o]^=e[s],s=(s+1)%t;for(o=0;o<18;o+=2)g(n,u,r),r[o]=n[2],r[o+1]=n[3];for(o=0;o<1024;o+=2)g(n,u,r),u[o]=n[2],u[o+1]=n[3]}function p(e,t,r,n,o){var s=0,a=0,i=0;for(s=0;s<18;s++)r[s]^=e[a],a=(a+1)%t;for(s=0;s<18;s++)r[s]^=n[i],i=(i+1)%o;for(s=0;s<18;s+=2)g(v,u,r),r[s]=v[2],r[s+1]=v[3];for(s=0;s<1024;s+=2)g(v,u,r),u[s]=v[2],u[s+1]=v[3]}function _(e,t,r,n){var o=0,s=[0,0,0,0],a=new e(18);for(o=0;o<18;o++)a[o]=f[o];var i=new e(1024);for(o=0;o<1024;o++)i[o]=u[o];B(r,n,a,s);var c=1<<t;for(o=0;o<c;o++)p(r,n,a,s,16);var l=[65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90];for(o=0;o<64;o++)v(l,i,a,16);return l}return{genSaltSync:function(t){if(t=t||10,t<4||t>31)throw new Error("Illegal arguments");var r=s(),n=[];return n.push("$2a$"),n.push(t<10?"0"+t:t),n.push("$"),n.push(l(r,16)),n.join("")},hashSync:function(t,r){if("string"!=typeof t||"string"!=typeof r)throw new Error("Illegal arguments");var n=r.match(/^\$2[ayb]\$(\d+)\$([./A-Za-z0-9]{22})/);if(!n)throw new Error("Invalid salt format");var o=parseInt(n[1],10),s=n[2],a=c(s,16);if(!a)throw new Error("Invalid salt");for(var i=new e(72),u=0;u<72;u++)i[u]=t.charCodeAt(u%t.length)&255;var f=_(o,i,72,a);return r+l(f,23)},compareSync:function(e,t){return this.hashSync(e,t)===t}}});
-</script>
+<!-- Official bcrypt library -->
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
 
 <style>
 :root{  
@@ -321,80 +326,131 @@ function toggleAuthView(showRegister) {
 // 🔏 ACCESS & AUTH LAYER
 async function handleAuthentication(event, type) {
     event.preventDefault();
-    const msgBox = document.getElementById('authMsg');
-    msgBox.style.display = 'none';
-    
-    let payload = { action: type };
-    
-    if(type === 'login') {
-        payload.email = document.getElementById('authEmail').value.trim();
-        payload.password = document.getElementById('authPassword').value; 
-    } else {
-        const plainPassword = document.getElementById('regPassword').value;
-        
-        // 🛡️ Safe Local File System Mode Safe Check for Bcrypt GenSalt
-        let salt;
-        try {
-            salt = bcrypt.genSaltSync(10);
-        } catch (e) {
-            console.warn("Crypto Secure RNG not available, executing fully valid base64-salt fallback for local environment.");
-            // 💡 FIX: Valid 22-character Bcrypt Base64 string for static fallback
-            salt = "$2a$10$R9hGcEV9Sdf87dfXjEk9eu"; 
-        }
-        
-        const hashedPassword = bcrypt.hashSync(plainPassword, salt);
-        
-        payload.firstName = document.getElementById('regFirstName').value.trim();
-        payload.lastName = document.getElementById('regLastName').value.trim();
-        payload.email = document.getElementById('regEmail').value.trim();
-        payload.password = hashedPassword;
-        
-        const fileInput = document.getElementById('regPP');
-        if(fileInput.files.length > 0) {
-            payload.profilePictureName = fileInput.files[0].name;
-        }
-    }
 
-    document.getElementById('aiLoader').style.display = 'flex';
-    document.getElementById('loaderText').innerText = "Syncing with secure cloud matrix...";
+    const msgBox = document.getElementById("authMsg");
+    msgBox.style.display = "none";
+
+    let payload = { action: type };
 
     try {
+
+        if (type === "login") {
+
+            payload.email = document.getElementById("authEmail").value.trim();
+            payload.password = document.getElementById("authPassword").value;
+
+        } else {
+
+            const plainPassword = document.getElementById("regPassword").value;
+
+            // Basic validation
+            if (plainPassword.length < 6) {
+                throw new Error("Password must be at least 6 characters.");
+            }
+
+            // Make sure bcrypt is loaded
+            if (typeof bcrypt === "undefined") {
+                throw new Error("bcrypt library failed to load.");
+            }
+
+            // Browser must support secure random generator
+            if (!window.crypto || !window.crypto.getRandomValues) {
+                throw new Error(
+                    "Secure random generator unavailable. Please run this page from a web server (http://localhost) instead of opening it directly."
+                );
+            }
+
+            // Generate bcrypt hash
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(plainPassword, salt);
+
+            payload.firstName = document.getElementById("regFirstName").value.trim();
+            payload.lastName = document.getElementById("regLastName").value.trim();
+            payload.email = document.getElementById("regEmail").value.trim();
+            payload.password = hashedPassword;
+
+            const fileInput = document.getElementById("regPP");
+
+            if (fileInput.files.length > 0) {
+                payload.profilePictureName = fileInput.files[0].name;
+            }
+        }
+
+        // Loader
+        document.getElementById("aiLoader").style.display = "flex";
+        document.getElementById("loaderText").innerText =
+            "Syncing with secure cloud matrix...";
+
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
             mode: "cors",
-            headers: { "Content-Type": "text/plain" },
+            headers: {
+                "Content-Type": "text/plain"
+            },
             body: JSON.stringify(payload)
         });
-        const res = await response.json();
-        
-        if(res.success) {
-            if(type === 'login') {
-                const finalUsername = res.username || payload.email.split('@')[0];
-                
-                showToast(`Welcome Back, ${finalUsername}! Login Successful.`, 'success');
-                
-                setTimeout(() => {
-                    localStorage.setItem("userToken", finalUsername);
-                    launchDashboard(finalUsername);
-                }, 1500);
-                
-            } else {
-                showToast("Account Created successfully! Redirecting to login...", "success");
-                setTimeout(() => {
-                    toggleAuthView(false);
-                }, 1500);
-            }
-        } else {
-            msgBox.className = "msg-box error";
-            msgBox.innerText = res.message;
-            showToast(res.message, "error");
+
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
         }
-    } catch (e) {
+
+        const res = await response.json();
+
+        if (res.success) {
+
+            if (type === "login") {
+
+                const finalUsername =
+                    res.username || payload.email.split("@")[0];
+
+                showToast(
+                    `Welcome Back, ${finalUsername}! Login Successful.`,
+                    "success"
+                );
+
+                setTimeout(() => {
+
+                    localStorage.setItem("userToken", finalUsername);
+
+                    launchDashboard(finalUsername);
+
+                }, 1200);
+
+            } else {
+
+                showToast(
+                    "Account created successfully! Redirecting to login...",
+                    "success"
+                );
+
+                setTimeout(() => {
+
+                    toggleAuthView(false);
+
+                }, 1200);
+
+            }
+
+        } else {
+
+            throw new Error(res.message || "Authentication failed.");
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+
         msgBox.className = "msg-box error";
-        msgBox.innerText = "🚨 Web App Handshake Failed! Verify Deployment access setting.";
-        showToast("Handshake Failed", "error");
+        msgBox.style.display = "block";
+        msgBox.innerText = err.message;
+
+        showToast(err.message, "error");
+
     } finally {
-        document.getElementById('aiLoader').style.display = 'none';
+
+        document.getElementById("aiLoader").style.display = "none";
+
     }
 }
 
