@@ -1,14 +1,3 @@
-यता भाइ, तिम्रो आवश्यकता अनुसार पूर्ण रूपमा परिमार्जन गरिएको नयाँ कोड यहाँ छ।
-
-यसमा **"Ask AI" वा "Download PDF" को झन्झट पूर्ण रूपमा हटाइएको छ**। अब प्रयोगकर्ताले जुनसुकै सब-टपिकमा क्लिक गर्दा, ब्याकग्राउन्डमा स्वतः एउटा बिशेष प्रम्प्ट (`"include necessary images, text, past questions from NEB, probable questions, and MCQs"`) एआई सर्भर (`http://localhost:5000/api/generate-pdf`) मा जान्छ। सर्भरबाट रेस्पोन्स आउनासाथ एक **मजबुत, पूर्ण रूपमा मोबाइल-रेस्पोन्सिभ पिडिएफ भिउअर (Mobile-Responsive PDF Viewer Modal)** सिधै स्क्रिनमा खुल्नेछ, जहाँ प्रयोगकर्ताले पिडिएफ पढ्न सक्छन् तर सिधै डाउनलोड अप्सन देखिने छैन।
-
-यो फिचरलाई मोबाइल र डेस्कटप दुवैमा सहजै चलाउनका लागि **Mozilla PDF.js** र **Tailwind CSS** को आन्तरिक इन्टिग्रेसन गरिएको छ।
-
----
-
-### पूर्ण परिमार्जित कोड (`index.html`)
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,12 +12,16 @@
   --text:#e2e8f0;  
   --accent:#38bdf8;  
   --line:rgba(148,163,184,.25);
+  --btn-green: #10b981;
+  --btn-green-hover: #059669;
 }
 body.light{  
   --bg:#f8fafc;  
   --card:#ffffff;  
   --text:#0f172a;  
   --accent:#0284c7;
+  --btn-green: #059669;
+  --btn-green-hover: #047857;
 }
 *{box-sizing:border-box}
 body{  
@@ -108,41 +101,51 @@ h3{
   color:var(--accent);  
   font-size:28px;
 }
+
+/* NO HOVER EFFECT: Static non-hoverable rows with horizontal layout */
 .topic{  
-  padding:15px;  
+  padding:14px 18px;  
   margin:12px 0;  
   border-radius:14px;  
   border:1px solid var(--line);  
-  cursor:pointer;  
-  transition:.25s;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  background: rgba(30, 41, 59, 0.5);
 }
-.topic:hover{  
-  background:rgba(56,189,248,.12);  
-  transform:translateY(-2px);
+body.light .topic {
+  background: #f1f5f9;
 }
 .topic-title{  
-  font-size:18px;  
+  font-size:17px;  
   font-weight:600;
+  flex: 1;
 }
-.topic-detail{  
-  display:none;  
-  margin-top:12px;  
-  line-height:1.7;  
-  background:rgba(15,23,42,.25);  
-  padding:14px;  
-  border-radius:12px;  
-  white-space: pre-wrap; 
+
+/* View Notes Side Button Design */
+.view-notes-btn {
+  background: var(--btn-green);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: background 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-body.light .topic-detail{  
-  background:#f1f5f9;
+.view-notes-btn:hover { 
+  background: var(--btn-green-hover); 
 }
-.topic.open{  
-  border-color:var(--accent);  
-  background:rgba(56,189,248,.10);
+.view-notes-btn:disabled {
+  background: #64748b;
+  cursor: not-allowed;
 }
-.topic.open .topic-detail{  
-  display:block;
-}
+
+/* Timer styling */
 .timer-box {  
   background: rgba(56,189,248,0.15);  
   padding: 6px 14px;  
@@ -153,36 +156,38 @@ body.light .topic-detail{
   font-size: 16px;
 }
 
-/* --- Inline Action Components --- */
-.view-pdf-wrapper {
-  margin-top: 15px;
-  border-top: 1px dashed var(--line);
-  padding-top: 12px;
-}
-.view-pdf-btn {
-  background: #10b981;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-}
-.view-pdf-btn:hover { background: #059669; }
-.ai-status {
-  font-size: 13px;
-  color: var(--accent);
+/* --- Loader element over the layout --- */
+.ai-overlay-loader {
   display: none;
-  margin-top: 6px;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  z-index: 2500;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
 }
+.spinner {
+  border: 4px solid rgba(255,255,255,0.1);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border-left-color: var(--accent);
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* --- Responsive PDF Viewer Modal Styles --- */
 .pdf-modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.9);
   z-index: 2000;
   padding: 10px;
   flex-direction: column;
@@ -203,6 +208,11 @@ body.light .topic-detail{
 .pdf-modal-title {
   font-weight: bold;
   color: var(--text);
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70%;
 }
 .pdf-close-btn {
   background: #ef4444;
@@ -239,8 +249,10 @@ body.light .topic-detail{
   .main{ margin-left:0; padding:90px 14px 20px; }  
   .card{padding:18px}  
   h3{font-size:24px}  
-  .topic-title{font-size:17px}
-  .pdf-viewer-body { height: 85vh; padding: 8px; }
+  .topic{ padding:12px; flex-direction: row; align-items: center; }
+  .topic-title{font-size:15px}
+  .view-notes-btn { padding: 8px 12px; font-size: 12px; }
+  .pdf-viewer-body { height: 82vh; padding: 6px; }
 }
 </style>
 </head>
@@ -276,6 +288,11 @@ body.light .topic-detail{
   <div class="card unit hidden" data-unit="7"><h3>7. Recent Trends</h3><div id="u7"></div></div>
 </div>
 
+<div id="aiLoader" class="ai-overlay-loader">
+  <div class="spinner"></div>
+  <div id="loaderText">AI is synthesizing notes, images, NEB past questions and MCQs...</div>
+</div>
+
 <div id="pdfModal" class="pdf-modal">
   <div class="pdf-modal-header">
     <div class="pdf-modal-title" id="pdfModalTitle">AI Interactive Sheet</div>
@@ -286,84 +303,72 @@ body.light .topic-detail{
 </div>
 
 <script>
-// Configure your API backend engine endpoint 
 const BACKEND_URL = "http://localhost:5000/api/generate-pdf"; 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
 const syllabus = {
   u1: [  
-    [    
-      "1.1 Introduction to data, database, DBMS",    
-      `Data (डाटा)
-<img src="https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/DBMS/data%2Cdatabase%20and%20dbms.png">Data भनेको कुनै पनि व्यक्ति, वस्तु, वा घटनासम्बन्धी raw facts and figures (कच्चा तथ्य तथा अंकहरू) हो।
-उदाहरण:विद्यार्थीको नाम: रामउमेर: 20 वर्षरोल नं.: 15
-यी छुट्टाछुट्टै तथ्यहरूलाई Data भनिन्छ।`  
-    ],  
-    ["1.2 Field, Record, Object, Primary Key, Candidate Key, Alternate Key","Field means column, record means row. Object is a database item like table/query/form. Primary key uniquely identifies record. Candidate key can become primary key. Alternate key is candidate key not selected as primary key."],  
-    ["1.3 Advantages of DBMS","DBMS reduces data duplication, improves security, supports data sharing, backup, recovery and data consistency. यसले large amount of data व्यवस्थित तरिकाले manage गर्छ।"],  
-    ["1.4 DDL and DML","DDL defines structure of database. Example: CREATE, ALTER, DROP. DML manipulates data. Example: INSERT, UPDATE, DELETE, SELECT."],  
-    ["1.5 Database Models: Hierarchical, Network, Relational","Hierarchical model stores data in tree structure. Network model stores data with many-to-many relationship. Relational model stores data in tables with rows and columns."],  
-    ["1.6 Normalization: 1NF, 2NF, 3NF","Normalization is process of organizing data to reduce redundancy. 1NF removes repeating groups. 2NF removes partial dependency. 3NF removes transitive dependency."],  
-    ["1.7 Centralized vs Distributed Database","Centralized database is stored in one location. Distributed database is stored in multiple locations connected by network. Distributed database is faster and reliable but complex."],  
-    ["1.8 Database Security","Database security protects data from unauthorized access, misuse and damage. It includes password, user permission, encryption, backup and access control."]
+    ["1.1 Introduction to data, database, DBMS"],  
+    ["1.2 Field, Record, Object, Primary Key, Candidate Key, Alternate Key"],  
+    ["1.3 Advantages of DBMS"],  
+    ["1.4 DDL and DML"],  
+    ["1.5 Database Models: Hierarchical, Network, Relational"],  
+    ["1.6 Normalization: 1NF, 2NF, 3NF"],  
+    ["1.7 Centralized vs Distributed Database"],  
+    ["1.8 Database Security"]
   ],
   u2: [
-    ["2.1 Basic elements of Communication System", "<img src='https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/ComputerNetworks/2.1%20Basic%20elements%20of%20Communication%20System.png' alt='Basic elements of Communication System' style='max-width:100%;height:auto;display:block;'> Basic elements are sender, transmitter, channel, receiver and destination. Sender sends message, channel carries signal and receiver receives it."],
-    ["2.2 Concept of Communication System", "Communication system transfers information from one place to another using medium and protocol. Example: phone call, internet message, email."],
-    ["2.3 Block Diagram of Communication System", "Block diagram: Sender → Transmitter → Channel → Receiver → Destination. Noise may disturb signal during transmission."],
-    ["2.4 Elements of Data Communication", "Main elements are sender, receiver, message, medium and protocol. Protocol means rules used for data communication."],
-    ["2.5 Simplex, Half Duplex, Full Duplex", "<img src='https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/ComputerNetworks/E2D05DF0-01A5-4DED-909D-3FAEC8438DDA.png' alt='Simplex Half Duplex Full Duplex' style='max-width:100%;height:auto;display:block;'> Simplex: one-way communication like TV. Half duplex: both way but one at a time like walkie-talkie. Full duplex: both way at same time like telephone."],
-    ["2.6 LAN and WAN", "<img src='https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/ComputerNetworks/BC7E0318-E8A7-4D43-9F92-64AB4C2C61DC.png' alt='LAN WAN' style='max-width:100%;height:auto;display:block;'> LAN covers small area like school or office. WAN covers large area like city, country or world. Internet is example of WAN."],
-    ["2.7 Transmission Media Guided/Unguided", "<img src='  https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/ComputerNetworks/8D231BE6-481C-4904-9D9E-5908A5673B0F.png' alt='Transmission media' style='max-width:100%;height:auto;display:block;'> Guided media uses physical cables like twisted pair, coaxial and fiber optic. Unguided media uses wireless signals like radio wave, microwave, infrared and satellite."],
-    ["2.8 Noise, Echo, Crosstalk, Distortion, Bandwidth", "<img src='https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/ComputerNetworks/AF7E90ED-C738-4D1E-B153-EDC0BC9559F6.png' alt='Noise and Bandwidth' style='max-width:100%;height:auto;display:block;'> Noise is unwanted signal. Echo is signal reflection. Crosstalk is interference between wires. Distortion changes signal shape. Bandwidth is data carrying capacity."],
-    ["2.9 Client Server & Peer-to-Peer", "<img src='https://raw.githubusercontent.com/sundar-0/myportfolio/refs/heads/main/ComputerNetworks/E9952DBD-21DD-4916-B1BC-60A5B9D94B1B.png' alt='Network Architecture' style='max-width:100%;height:auto;display:block;'> Client-server has central server and many clients. Peer-to-peer has equal computers sharing resources directly without central server."],
-    ["2.10 IP Address, Subnet Mask, Gateway, MAC", "IP address identifies device in network. Subnet mask separates network and host part. Gateway connects different networks. MAC address is physical address of NIC."],
-    ["2.11 Packet Tracer, Remote Login", "Packet Tracer is simulation tool for network design. Remote login means accessing another computer/server from distance using tools like SSH or Telnet."],
-    ["2.12 NIC, Router, Switch, Modem", "NIC connects computer to network. Switch connects devices in LAN. Router connects different networks. Modem converts digital and analog signals for internet."],
-    ["2.13 Bus, Ring, Star Topology", "Bus uses single backbone cable. Ring connects devices in circular form. Star connects all devices to central switch/hub."],
-    ["2.14 OSI Model", "OSI model has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation and Application. It explains how data travels in network."],
-    ["2.15 Internet Protocol Addressing", "IP addressing gives unique address to devices. IPv4 uses 32-bit address like 192.168.1.1. IPv6 uses 128-bit address."]
+    ["2.1 Basic elements of Communication System"],
+    ["2.2 Concept of Communication System"],
+    ["2.3 Block Diagram of Communication System"],
+    ["2.4 Elements of Data Communication"],
+    ["2.5 Simplex, Half Duplex, Full Duplex"],
+    ["2.6 LAN and WAN"],
+    ["2.7 Transmission Media Guided/Unguided"],
+    ["2.8 Noise, Echo, Crosstalk, Distortion, Bandwidth"],
+    ["2.9 Client Server & Peer-to-Peer"],
+    ["2.10 IP Address, Subnet Mask, Gateway, MAC"],
+    ["2.11 Packet Tracer, Remote Login"],
+    ["2.12 NIC, Router, Switch, Modem"],
+    ["2.13 Bus, Ring, Star Topology"],
+    ["2.14 OSI Model"],
+    ["2.15 Internet Protocol Addressing"]
   ],
   u3:[
-    ["3.1 Introduction","Web Technology II means advanced web development. यसमा website dynamic, interactive र database connected कसरी बनाउने भन्ने पढिन्छ."],
-    ["3.2 Client Side & Server Side Scripting","Client-side scripting browser मा run हुन्छ, like JavaScript. Server-side scripting server मा run हुन्छ, like PHP. Client side UI interaction को लागि, server side database र processing को लागि."],
-    ["3.3 Internet Technology","Internet technology includes browser, server, URL, domain, hosting, HTTP/HTTPS and web communication."],
-    ["3.4 JavaScript in HTML","JavaScript HTML page मा interactive behavior add गर्न प्रयोग हुन्छ। It can be written inside script tag or linked externally."],
-    ["3.5 JavaScript Fundamentals","JavaScript fundamentals include variables, data types, operators, functions, loops, conditions and events."]
+    ["3.1 Introduction"],
+    ["3.2 Client Side & Server Side Scripting"],
+    ["3.3 Internet Technology"],
+    ["3.4 JavaScript in HTML"],
+    ["3.5 JavaScript Fundamentals"]
   ],
   u4:[
-    ["4.1 Review of C Programming","C is structured programming language. It uses variables, data types, operators, decision statements, loops, arrays and functions."],
-    ["4.2 Functions","Function is block of code used to perform specific task. It improves code reusability and reduces repetition."]
+    ["4.1 Review of C Programming"],
+    ["4.2 Functions"]
   ],
   u5:[
-    ["5.1 Programming Paradigms","Programming paradigm is style of programming. Examples: procedural, object-oriented, functional and event-driven programming."],
-    ["5.2 Class and Object","Class is blueprint and object is instance of class. Class defines properties and methods; object uses them."]
+    ["5.1 Programming Paradigms"],
+    ["5.2 Class and Object"]
   ],
   u6:[
-    ["6.1 Software Project Concept","Software project is planned work to develop software within time, cost and quality constraints."],
-    ["6.2 Software Development Process","Software development process includes planning, requirement analysis, design, coding, testing, deployment and maintenance."]
+    ["6.1 Software Project Concept"],
+    ["6.2 Software Development Process"]
   ],
   u7:[
-    ["7.1 Artificial Intelligence","AI makes machines capable of learning, reasoning and decision making. Examples: chatbot, voice assistant, recommendation system."],
-    ["7.2 Robotics","Robotics deals with design and use of robots. Robots can perform automatic tasks in industry, medicine and space."]
+    ["7.1 Artificial Intelligence"],
+    ["7.2 Robotics"]
   ]
 };
 
+// Generates structural topic rows with distinct button placement
 function loadTopics(){  
   for(let unit in syllabus){    
     let container = document.getElementById(unit);    
     if (container) {      
       syllabus[unit].forEach(item=>{        
         container.innerHTML += `        
-        <div class="topic" onclick="openTopic(this)">          
+        <div class="topic">          
           <div class="topic-title">${item[0]}</div>          
-          <div class="topic-detail">
-             <div>${item[1]}</div>
-             <div class="view-pdf-wrapper">
-                <button class="view-pdf-btn" onclick="fetchAIPdf(this, event, '${item[0]}')">✨ View AI Notes & NEB Questions (PDF)</button>
-                <div class="ai-status">⌛ Connecting to AI... Synthesizing notes, images, NEB past questions and MCQs...</div>
-             </div>
-          </div>        
+          <button class="view-notes-btn" onclick="fetchAIPdf(this, '${item[0]}')">📄 View Notes</button>
         </div>`;      
       });    
     }  
@@ -393,23 +398,12 @@ function toggleMode(){
   localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 }
 
-function openTopic(element){  
-  let topics = element.parentElement.querySelectorAll(".topic");  
-  topics.forEach(t=>{    
-    if(t !== element) t.classList.remove("open");  
-  });  
-  element.classList.toggle("open");
-}
-
-// Automatically pipeline custom prompt directly to AI model via Backend Route 
-async function fetchAIPdf(button, event, topicTitle) {
-  event.stopPropagation(); // Stop parent click tracking
+// Pipeline prompt payload directly to server upon clicking "View Notes" button
+async function fetchAIPdf(button, topicTitle) {
+  const loaderOverlay = document.getElementById('aiLoader');
+  loaderOverlay.style.display = "flex";
   
-  const statusEl = button.parentElement.querySelector('.ai-status');
-  button.disabled = true;
-  statusEl.style.display = "block";
-  
-  // Custom smart target context prompt as instructed
+  // Custom composite targeted prompt architecture
   const compositePrompt = `Topic: ${topicTitle}. Instructions: include necessary images, text, past questions from neb, probable questions, and mcqs. Deliver structural PDF stream.`;
 
   try {
@@ -422,7 +416,7 @@ async function fetchAIPdf(button, event, topicTitle) {
       })
     });
 
-    if(!response.ok) throw new Error("Server payload broken");
+    if(!response.ok) throw new Error("Server payload processing failure");
 
     const pdfBlob = await response.blob();
     const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -431,18 +425,17 @@ async function fetchAIPdf(button, event, topicTitle) {
     renderPDFInModal(pdfUrl);
 
   } catch (error) {
-     alert("⚠️ AI Service Offline! Please configure your backend endpoint.");
+     alert("⚠️ AI Service Offline! Please ensure your local API server is listening on port 5000.");
      console.error(error);
   } finally {
-     button.disabled = false;
-     statusEl.style.display = "none";
+     loaderOverlay.style.display = "none";
   }
 }
 
-// Render dynamic binary PDF safely using Canvas blocks on any mobile device viewport
+// Render binary blob content inside HTML5 Canvas mapping
 async function renderPDFInModal(url) {
   const container = document.getElementById('pdfRenderContainer');
-  container.innerHTML = ''; // Reset container context 
+  container.innerHTML = ''; 
   
   document.getElementById('pdfModal').style.display = "flex";
   document.body.classList.add('no-scroll');
@@ -455,7 +448,6 @@ async function renderPDFInModal(url) {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       
-      // Auto responsive pixel mapping tracking context scale 1.5
       const viewport = page.getViewport({ scale: 1.5 });
       canvas.height = viewport.height;
       canvas.width = viewport.width;
@@ -465,7 +457,7 @@ async function renderPDFInModal(url) {
       container.appendChild(canvas);
     }
   } catch (err) {
-    console.error("PDF.js error parsing pipeline:", err);
+    console.error("PDF.js processing error:", err);
   }
 }
 
@@ -540,5 +532,3 @@ window.onload=function(){
 </script>
 </body>
 </html>
-
-```
