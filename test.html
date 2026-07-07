@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Connected ID OCR Scanner</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased">
+
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-500">
+                <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Live Google Sheets ID OCR
+            </h1>
+            <p class="text-slate-400 mt-2 text-sm sm:text-base">Realtime spreadsheet updates powered by local Tesseract engine</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2 text-cyan-400">
+                        <i class="fa-solid fa-bolt"></i> Live Processing
+                    </h2>
+                    
+                    <label for="imageUpload" class="flex flex-col items-center justify-center w-full h-52 border-2 border-slate-700 border-dashed rounded-lg cursor-pointer bg-slate-950 hover:bg-slate-900/50 hover:border-cyan-500 transition-colors group relative">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                            <i class="fa-solid fa-id-card text-4xl text-slate-500 group-hover:text-cyan-400 mb-3 transition-colors"></i>
+                            <p class="mb-2 text-sm text-slate-300"><span class="font-semibold">Upload an ID card</span></p>
+                            <p class="text-xs text-slate-500">Saves automatically to Google Sheet</p>
+                        </div>
+                        <input id="imageUpload" type="file" accept="image/*" class="hidden" />
+                    </label>
+
+                    <div id="previewContainer" class="mt-5 hidden animate-fade-in">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Target Document View</p>
+                        <div class="relative rounded-lg overflow-hidden border border-slate-800 max-h-60 flex justify-center bg-black">
+                            <img id="imagePreview" src="" alt="ID Preview" class="object-contain max-h-60 w-full">
+                        </div>
+                    </div>
+
+                    <div id="statusContainer" class="mt-6 hidden">
+                        <div class="flex justify-between mb-2 text-xs font-medium text-slate-400">
+                            <span id="statusText" class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-notch animate-spin text-cyan-400"></i> Local OCR Working...
+                            </span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2">
+                            <div id="progressBar" class="bg-gradient-to-r from-cyan-500 to-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <h2 class="text-xl font-semibold flex items-center gap-2 text-emerald-400">
+                            <i class="fa-solid fa-table-list"></i> Google Sheet Records
+                        </h2>
+                        
+                        <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <div class="relative flex-1 sm:w-64">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
+                                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                                </span>
+                                <input type="text" id="searchInput" placeholder="Search records..." class="w-full pl-9 pr-4 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-cyan-500 transition-colors">
+                            </div>
+                            <button id="refreshBtn" class="flex items-center gap-2 px-4 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-lg text-sm font-medium transition-colors cursor-pointer">
+                                <i class="fa-solid fa-arrows-rotate"></i> Sync
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-800 rounded-lg bg-slate-950">
+                        <table class="w-full text-sm text-left text-slate-300">
+                            <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-800">
+                                <tr>
+                                    <th class="px-4 py-3">School/Institution</th>
+                                    <th class="px-4 py-3">Student Name</th>
+                                    <th class="px-4 py-3">Class/Roll/Sec</th>
+                                    <th class="px-4 py-3">Guardian & Contact</th>
+                                    <th class="px-4 py-3">Valid Until</th>
+                                    <th class="px-4 py-3 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" class="divide-y divide-slate-800/50">
+                                <tr id="emptyStateRow">
+                                    <td colspan="6" class="px-4 py-12 text-center text-slate-500">
+                                        <i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>
+                                        Fetching active dataset from Google Sheets Cloud ecosystem...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg p-6 shadow-2xl animate-fade-in">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-semibold text-cyan-400"><i class="fa-solid fa-pen-to-square mr-2"></i>Verify & Modify Sheet Profile</h3>
+                <button id="closeModalBtn" class="text-slate-400 hover:text-slate-200 text-xl cursor-pointer">&times;</button>
+            </div>
+            <form id="editForm" class="space-y-4">
+                <input type="hidden" id="editId">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">School / Institution</label>
+                    <input type="text" id="editSchool" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Student Name</label>
+                        <input type="text" id="editName" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Class Level</label>
+                        <input type="text" id="editClass" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Roll No</label>
+                        <input type="text" id="editRoll" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Section</label>
+                        <input type="text" id="editSection" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Valid Upto</label>
+                        <input type="text" id="editValid" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Guardian / Parent</label>
+                        <input type="text" id="editGuardian" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Contact No</label>
+                        <input type="text" id="editContact" class="w-full p-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500 text-sm">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" id="cancelModalBtn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-medium transition-colors cursor-pointer">Discard</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-medium transition-colors cursor-pointer shadow-md shadow-emerald-950/50">Save to Cloud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE THIS URL WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+        const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbycpsz4VgsjEg5jO4aB1erdOLu0HlqDIwUNQhLZDdqKE0h-8EMcChN6g_x-PTkysqQmvQ/exec";
+
+        let scannedRecords = [];
+
+        // App Element Selectors
+        const imageUpload = document.getElementById('imageUpload');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const statusContainer = document.getElementById('statusContainer');
+        const statusText = document.getElementById('statusText');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressBar = document.getElementById('progressBar');
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const refreshBtn = document.getElementById('refreshBtn');
+        
+        // Modal Element Selectors
+        const editModal = document.getElementById('editModal');
+        const editForm = document.getElementById('editForm');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCloudData();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            imageUpload.addEventListener('change', handleImageUpload);
+            refreshBtn.addEventListener('click', fetchCloudData);
+            
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const filtered = scannedRecords.filter(rec => 
+                    rec.school.toLowerCase().includes(query) ||
+                    rec.name.toLowerCase().includes(query) ||
+                    rec.classLevel.toLowerCase().includes(query) ||
+                    rec.roll.toLowerCase().includes(query) ||
+                    rec.guardian.toLowerCase().includes(query) ||
+                    rec.contact.toLowerCase().includes(query)
+                );
+                renderTable(filtered);
+            });
+
+            closeModalBtn.addEventListener('click', hideModal);
+            cancelModalBtn.addEventListener('click', hideModal);
+            editForm.addEventListener('submit', commitRecordEdits);
+        }
+
+        // Fetch Cloud Data directly via standard fetch strategy
+        async function fetchCloudData() {
+            if(SHEET_WEBAPP_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL") {
+                alert("Please paste your Apps Script URL into line 120 of the HTML file.");
+                return;
+            }
+            try {
+                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>Syncing with Google Spreadsheet...</td></tr>`;
+                const response = await fetch(SHEET_WEBAPP_URL);
+                const json = await response.json();
+                if(json.status === "success") {
+                    scannedRecords = json.data || [];
+                    renderTable(scannedRecords);
+                }
+            } catch (err) {
+                console.error("Fetch block caught: ", err);
+                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-rose-500"><i class="fa-solid fa-circle-exclamation text-4xl mb-3 block"></i>Failed to sync with cloud. Check endpoint setup.</td></tr>`;
+            }
+        }
+
+        // Direct write back down to spreadsheet
+        async function sendToCloud(payload) {
+            try {
+                await fetch(SHEET_WEBAPP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Standard CORS redirection layer bypass
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                // Since 'no-cors' mode won't return structural text responses, we update locally or refresh
+                setTimeout(fetchCloudData, 1500);
+            } catch (err) {
+                console.error("Cloud write failed: ", err);
+            }
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+                previewContainer.classList.remove('hidden');
+                executeOCRProcessing(file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function executeOCRProcessing(file) {
+            statusContainer.classList.remove('hidden');
+            updateProgress('Initializing OCR engine...', 10);
+
+            try {
+                const worker = await Tesseract.createWorker('eng');
+                await worker.setParameters({
+                    tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -/:,.()',
+                });
+
+                updateProgress('Analyzing Layout Patterns...', 35);
+                const response = await worker.recognize(file);
+                
+                updateProgress('Pushing data to Google Sheets...', 85);
+                const recognizedText = response.data.text;
+                const parsedResult = parseIDMetadata(recognizedText);
+                
+                parsedResult.action = "insert";
+                await sendToCloud(parsedResult);
+
+                await worker.terminate();
+                statusContainer.classList.add('hidden');
+                imageUpload.value = ''; 
+            } catch (error) {
+                console.error("OCR block failure: ", error);
+                alert("Error parsing document workspace layout.");
+                statusContainer.classList.add('hidden');
+            }
+        }
+
+        function updateProgress(message, percentage) {
+            statusText.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-cyan-400"></i> ${message}`;
+            progressPercent.innerText = `${percentage}%`;
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        function parseIDMetadata(rawText) {
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const data = {
+                id: 'rec_' + Date.now(),
+                school: 'Unknown Institution',
+                name: 'Not Found',
+                classLevel: 'N/A',
+                roll: 'N/A',
+                section: 'N/A',
+                guardian: 'Not Found',
+                contact: 'N/A',
+                validUpto: 'N/A'
+            };
+
+            if(lines.length > 0) {
+                const cleanHeader = lines[0].replace(/[^a-zA-Z0-9\s.,]/g, '').trim();
+                if(cleanHeader.length > 4 && !cleanHeader.toLowerCase().includes('id card')) {
+                    data.school = cleanHeader;
+                } else if (lines[1]) {
+                    data.school = lines[1].replace(/[^a-zA-Z0-9\s.,]/g, '').trim();
+                }
+            }
+
+            lines.forEach((line) => {
+                const text = line.toLowerCase();
+                if (text.includes('name') || text.includes('st. name') || text.includes('stud')) {
+                    data.name = extractCleanValue(line, /(?:name|student|stud\.?\s*name)[:\-\s]+(.*)/i);
+                }
+                if (text.includes('class') || text.includes('std')) {
+                    data.classLevel = extractCleanValue(line, /(?:class|std)[:\-\s]+([a-zA-Z0-9]+)/i);
+                }
+                if (text.includes('roll') || text.includes('no.')) {
+                    let parsedRoll = extractCleanValue(line, /(?:roll|no\.?|rn)[:\-\s]+([a-zA-Z0-9]+)/i);
+                    data.roll = parsedRoll.replace(/l|I/g, '1');
+                }
+                if (text.includes('sec') || text.includes('section')) {
+                    data.section = extractCleanValue(line, /(?:sec|section)[:\-\s]+([a-zA-Z0-9]+)/i);
+                }
+                if (text.includes('guardian') || text.includes('father') || text.includes('mother') || text.includes('g. name')) {
+                    data.guardian = extractCleanValue(line, /(?:guardian|father|mother|g\.?\s*name)[:\-\s]+(.*)/i);
+                }
+                if (text.includes('contact') || text.includes('phone') || text.includes('mob') || text.includes('tel')) {
+                    let parsedContact = extractCleanValue(line, /(?:contact|phone|mobile|mob|cell)[:\-\s]+([0-9\-+ ]+)/i);
+                    data.contact = parsedContact.replace(/[^0-9\-+]/g, '');
+                }
+                if (text.includes('valid') || text.includes('expiry') || text.includes('upto') || text.includes('thru')) {
+                    data.validUpto = extractCleanValue(line, /(?:valid|expiry|upto|thru)[:\-\s]+([a-zA-Z0-9\-\/. ]+)/i);
+                }
+            });
+
+            if (data.name === 'Not Found' && lines[2] && lines[2].length > 3 && !lines[2].includes(':') && lines[2].length < 25) {
+                data.name = lines[2];
+            }
+            return data;
+        }
+
+        function extractCleanValue(line, regex) {
+            const match = line.match(regex);
+            return match && match[1] ? match[1].replace(/[:\-–—]/g, '').trim() : 'N/A';
+        }
+
+        function renderTable(dataset) {
+            tableBody.innerHTML = '';
+            if (dataset.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-folder-open text-4xl mb-3 block text-slate-600"></i>No database indices returned from Cloud sheet.</td></tr>`;
+                return;
+            }
+
+            dataset.forEach(record => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-900/40 transition-colors animate-fade-in';
+                tr.innerHTML = `
+                    <td class="px-4 py-3.5 font-medium text-slate-200 max-w-[160px] truncate">${escapeHTML(record.school)}</td>
+                    <td class="px-4 py-3.5 text-cyan-400 font-semibold">${escapeHTML(record.name)}</td>
+                    <td class="px-4 py-3.5">
+                        <span class="inline-flex flex-col">
+                            <span>Cls: <strong class="text-slate-200">${escapeHTML(record.classLevel)}</strong></span>
+                            <span class="text-xs text-slate-500">Roll: ${escapeHTML(record.roll)} | Sec: ${escapeHTML(record.section)}</span>
+                        </span>
+                    </td>
+                    <td class="px-4 py-3.5 text-xs sm:text-sm">
+                        <div class="text-slate-300 font-medium">${escapeHTML(record.guardian)}</div>
+                        <div class="text-slate-500 flex items-center gap-1 mt-0.5"><i class="fa-solid fa-phone text-[10px]"></i> ${escapeHTML(record.contact)}</div>
+                    </td>
+                    <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-slate-800 text-slate-400 border border-slate-700 rounded text-xs">${escapeHTML(record.validUpto)}</span></td>
+                    <td class="px-4 py-3.5 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="displayEditModal('${record.id}')" class="p-1.5 bg-slate-800 hover:bg-cyan-900/40 text-slate-400 hover:text-cyan-400 rounded transition-colors cursor-pointer"><i class="fa-solid fa-user-pen text-xs"></i></button>
+                        <button onclick="purgeRecord('${record.id}')" class="p-1.5 bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 rounded transition-colors cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        window.displayEditModal = function(id) {
+            const target = scannedRecords.find(r => r.id === id);
+            if (!target) return;
+
+            document.getElementById('editId').value = target.id;
+            document.getElementById('editSchool').value = target.school;
+            document.getElementById('editName').value = target.name;
+            document.getElementById('editClass').value = target.classLevel;
+            document.getElementById('editRoll').value = target.roll;
+            document.getElementById('editSection').value = target.section;
+            document.getElementById('editGuardian').value = target.guardian;
+            document.getElementById('editContact').value = target.contact;
+            document.getElementById('editValid').value = target.validUpto;
+
+            editModal.classList.remove('hidden');
+        };
+
+        function hideModal() {
+            editModal.classList.add('hidden');
+            editForm.reset();
+        }
+
+        async function commitRecordEdits(e) {
+            e.preventDefault();
+            const id = document.getElementById('editId').value;
+            
+            const updatePayload = {
+                action: "update",
+                id: id,
+                school: document.getElementById('editSchool').value.trim(),
+                name: document.getElementById('editName').value.trim(),
+                classLevel: document.getElementById('editClass').value.trim(),
+                roll: document.getElementById('editRoll').value.trim(),
+                section: document.getElementById('editSection').value.trim(),
+                guardian: document.getElementById('editGuardian').value.trim(),
+                contact: document.getElementById('editContact').value.trim(),
+                validUpto: document.getElementById('editValid').value.trim()
+            };
+            
+            hideModal();
+            // Optimistic UI loading state update before network loop ends
+            tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>Updating Google Spreadsheet row data...</td></tr>`;
+            await sendToCloud(updatePayload);
+        }
+
+        window.purgeRecord = async function(id) {
+            if(confirm("Are you certain you want to remove this row from the Google Sheet?")) {
+                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>Deleting from Google Spreadsheet database...</td></tr>`;
+                await sendToCloud({ action: "delete", id: id });
+            }
+        };
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        }
+    </script>
+</body>
+</html>
