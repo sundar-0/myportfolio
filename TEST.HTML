@@ -248,8 +248,7 @@
             console.error("Cloud engine database route failed:", err);
         }
     }
-
-    function processAndScanImage(e) {
+function processAndScanImage(e) {
         const file = e.target.files ? e.target.files[0] : null;
         if (!file) return;
 
@@ -259,36 +258,54 @@
         const img = new Image();
         img.onload = function() {
             const ctx = filterCanvas.getContext('2d');
-            const scaleFactor = 1.5;
-            filterCanvas.width = img.width * scaleFactor;
-            filterCanvas.height = img.height * scaleFactor;
             
-            ctx.drawImage(img, 0, 0, filterCanvas.width, filterCanvas.height);
+            // OPTIMIZATION: Downscale high-res iPhone frames to prevent iOS browser memory dropping
+            let width = img.width;
+            let height = img.height;
+            const maxDimension = 1200; // Limits maximum frame allocation boundary
             
-            const imgData = ctx.getImageData(0, 0, filterCanvas.width, filterCanvas.height);
+            if (width > maxDimension || height > maxDimension) {
+                if (width > height) {
+                    height *= maxDimension / width;
+                    width = maxDimension;
+                } else {
+                    width *= maxDimension / height;
+                    height = maxDimension;
+                }
+            }
+
+            filterCanvas.width = width;
+            filterCanvas.height = height;
+            
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const imgData = ctx.getImageData(0, 0, width, height);
             const data = imgData.data;
             
+            // High contrast pipeline threshold logic
             for (let i = 0; i < data.length; i += 4) {
                 let r = data[i], g = data[i+1], b = data[i+2];
                 let grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
-                let v = (grayscale > 110) ? 255 : 0;
+                let v = (grayscale > 120) ? 255 : 0; // Slightly shifted threshold for sharper focus
                 data[i] = v; data[i+1] = v; data[i+2] = v;   
             }
             
             ctx.putImageData(imgData, 0, 0);
             if(previewContainer) previewContainer.classList.remove('hidden');
             
-            // iOS Blob parser failure fallback architecture
-            if (filterCanvas.toBlob) {
-                filterCanvas.toBlob(function(blob) {
-                    if(blob) executeOCRProcessing(blob);
-                }, 'image/jpeg', 0.95);
-            } else {
-                // Fallback architecture for strict legacy rendering engines
-                const dataURL = filterCanvas.toDataURL('image/jpeg', 0.95);
+            // Safe inline frame allocation for standard iOS runtimes
+            try {
+                const dataURL = filterCanvas.toDataURL('image/jpeg', 0.85); // Downsampled compression ratio
                 fetch(dataURL)
-                    .then(res => res.blob())
-                    .then(blob => executeOCRProcessing(blob));
+                    .then(function(res) { return res.blob(); })
+                    .then(function(blob) { executeOCRProcessing(blob); })
+                    .catch(function(err) {
+                        console.error(err);
+                        alert("Blob initialization mismatch.");
+                    });
+            } catch (canvasErr) {
+                console.error(canvasErr);
+                alert("Security canvas frame sandbox tracking error.");
             }
         };
         img.src = URL.createObjectURL(file);
@@ -297,7 +314,10 @@
     async function executeOCRProcessing(blobFile) {
         updateProgress('Booting Engine Node...', 30);
         try {
+            // SAFE INITIALIZATION LAYER WITH LEGACY WORKER FALLBACK
             const worker = await Tesseract.createWorker('eng', 1, {
+                workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@v5.0.0/dist/worker.min.js',
+                corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@v5.0.0/tesseract-core.wasm.js',
                 logger: function(m) {
                     if(m && m.status === 'recognizing text') {
                         updateProgress('Running character segment match...', Math.floor(40 + (m.progress * 40)));
@@ -306,7 +326,7 @@
             });
             
             await worker.setParameters({
-                tessedit_pageseg_mode: '4', 
+                tessedit_pageseg_mode: '4', // Assume single column variable text block structure
                 tessjs_create_hocr: '0',
                 tessjs_create_tsv: '0'
             });
@@ -315,6 +335,11 @@
             updateProgress('Syncing structural parameters...', 90);
             
             const recognizedText = (response && response.data) ? response.data.text : '';
+            
+            if(!recognizedText || recognizedText.trim().length === 0) {
+                throw new Error("Empty character match block detected.");
+            }
+
             const parsedResult = robustParser(recognizedText);
             parsedResult.action = "insert";
             
@@ -327,11 +352,94 @@
             if(statusContainer) statusContainer.classList.add('hidden');
             if(imageUpload) imageUpload.value = ''; 
         } catch (error) {
-            console.error(error);
-            alert("Parser execution drop. Ensure clear device lens capture.");
+            console.error("Worker catch state logic active:", error);
+            alert("Parser system dropped. Try capturing from a stable parallel angle under bright ambient lightning.");
             if(statusContainer) statusContainer.classList.add('hidden');
         }
     }
+    // function processAndScanImage(e) {
+    //     const file = e.target.files ? e.target.files[0] : null;
+    //     if (!file) return;
+
+    //     if(statusContainer) statusContainer.classList.remove('hidden');
+    //     updateProgress('Preprocessing camera frames...', 15);
+
+    //     const img = new Image();
+    //     img.onload = function() {
+    //         const ctx = filterCanvas.getContext('2d');
+    //         const scaleFactor = 1.5;
+    //         filterCanvas.width = img.width * scaleFactor;
+    //         filterCanvas.height = img.height * scaleFactor;
+            
+    //         ctx.drawImage(img, 0, 0, filterCanvas.width, filterCanvas.height);
+            
+    //         const imgData = ctx.getImageData(0, 0, filterCanvas.width, filterCanvas.height);
+    //         const data = imgData.data;
+            
+    //         for (let i = 0; i < data.length; i += 4) {
+    //             let r = data[i], g = data[i+1], b = data[i+2];
+    //             let grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
+    //             let v = (grayscale > 110) ? 255 : 0;
+    //             data[i] = v; data[i+1] = v; data[i+2] = v;   
+    //         }
+            
+    //         ctx.putImageData(imgData, 0, 0);
+    //         if(previewContainer) previewContainer.classList.remove('hidden');
+            
+    //         // iOS Blob parser failure fallback architecture
+    //         if (filterCanvas.toBlob) {
+    //             filterCanvas.toBlob(function(blob) {
+    //                 if(blob) executeOCRProcessing(blob);
+    //             }, 'image/jpeg', 0.95);
+    //         } else {
+    //             // Fallback architecture for strict legacy rendering engines
+    //             const dataURL = filterCanvas.toDataURL('image/jpeg', 0.95);
+    //             fetch(dataURL)
+    //                 .then(res => res.blob())
+    //                 .then(blob => executeOCRProcessing(blob));
+    //         }
+    //     };
+    //     img.src = URL.createObjectURL(file);
+    // }
+
+    // async function executeOCRProcessing(blobFile) {
+    //     updateProgress('Booting Engine Node...', 30);
+    //     try {
+    //         const worker = await Tesseract.createWorker('eng', 1, {
+    //             logger: function(m) {
+    //                 if(m && m.status === 'recognizing text') {
+    //                     updateProgress('Running character segment match...', Math.floor(40 + (m.progress * 40)));
+    //                 }
+    //             }
+    //         });
+            
+    //         await worker.setParameters({
+    //             tessedit_pageseg_mode: '4', 
+    //             tessjs_create_hocr: '0',
+    //             tessjs_create_tsv: '0'
+    //         });
+
+    //         const response = await worker.recognize(blobFile);
+    //         updateProgress('Syncing structural parameters...', 90);
+            
+    //         const recognizedText = (response && response.data) ? response.data.text : '';
+    //         const parsedResult = robustParser(recognizedText);
+    //         parsedResult.action = "insert";
+            
+    //         scannedRecords.unshift(parsedResult); 
+    //         if(tableBody) renderTable(scannedRecords);
+
+    //         await sendToCloud(parsedResult);
+    //         await worker.terminate();
+            
+    //         if(statusContainer) statusContainer.classList.add('hidden');
+    //         if(imageUpload) imageUpload.value = ''; 
+    //     } catch (error) {
+    //         console.error(error);
+    //         alert("Parser execution drop. Ensure clear device lens capture.");
+    //         if(statusContainer) statusContainer.classList.add('hidden');
+    //     }
+    // }
 
     function robustParser(rawText) {
         if(!rawText) rawText = '';
