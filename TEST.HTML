@@ -159,7 +159,353 @@
         </div>
     </div>
 
+
+
+
     <script>
+    const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbycpsz4VgsjEg5jO4aB1erdOLu0HlqDIwUNQhLZDdqKE0h-8EMcChN6g_x-PTkysqQmvQ/exec";
+
+    let scannedRecords = [];
+    let pollingInterval = null;
+
+    // Grab DOM elements
+    const imageUpload = document.getElementById('imageUpload');
+    const previewContainer = document.getElementById('previewContainer');
+    const filterCanvas = document.getElementById('filterCanvas');
+    const statusContainer = document.getElementById('statusContainer');
+    const statusText = document.getElementById('statusText');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressBar = document.getElementById('progressBar');
+    const tableBody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+
+    // Progress state logic
+    function updateProgress(message, percentage) {
+        if (!statusText || !progressPercent || !progressBar) return;
+        statusText.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin text-cyan-400"></i> ' + message;
+        progressPercent.innerText = percentage + '%';
+        progressBar.style.width = percentage + '%';
+    }
+
+    // Client deployment triggers
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchCloudData(true);
+        startRealtimePolling(); 
+
+        if(imageUpload) imageUpload.addEventListener('change', processAndScanImage);
+        if(refreshBtn) refreshBtn.addEventListener('click', function() { fetchCloudData(true); });
+        
+        const closeBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelModalBtn');
+        if(closeBtn) closeBtn.addEventListener('click', hideModal);
+        if(cancelBtn) cancelBtn.addEventListener('click', hideModal);
+        if(editForm) editForm.addEventListener('submit', commitRecordEdits);
+        if(searchInput) searchInput.addEventListener('input', handleSearch);
+    });
+
+    function startRealtimePolling() {
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(function() {
+            fetchCloudData(false);
+        }, 3000); 
+    }
+
+    async function fetchCloudData(showSpinner) {
+        if(!SHEET_WEBAPP_URL || SHEET_WEBAPP_URL.indexOf("YOUR_URL") !== -1) return;
+
+        try {
+            if (showSpinner && scannedRecords.length === 0 && tableBody) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>Syncing master cloud database...</td></tr>';
+            }
+            
+            const response = await fetch(SHEET_WEBAPP_URL + '?_ts=' + Date.now());
+            const json = await response.json();
+            
+            if(json && json.status === "success") {
+                scannedRecords = json.data || [];
+                const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
+                if(query === "" && tableBody) {
+                    renderTable(scannedRecords);
+                }
+            }
+        } catch (err) {
+            console.error("Realtime pull pipeline drop context:", err);
+        }
+    }
+
+    async function sendToCloud(payload) {
+        try {
+            await fetch(SHEET_WEBAPP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
+                body: JSON.stringify(payload)
+            });
+            await fetchCloudData(false);
+        } catch (err) {
+            console.error("Cloud engine database route failed:", err);
+        }
+    }
+
+    function processAndScanImage(e) {
+        const file = e.target.files ? e.target.files[0] : null;
+        if (!file) return;
+
+        if(statusContainer) statusContainer.classList.remove('hidden');
+        updateProgress('Preprocessing camera frames...', 15);
+
+        const img = new Image();
+        img.onload = function() {
+            const ctx = filterCanvas.getContext('2d');
+            const scaleFactor = 1.5;
+            filterCanvas.width = img.width * scaleFactor;
+            filterCanvas.height = img.height * scaleFactor;
+            
+            ctx.drawImage(img, 0, 0, filterCanvas.width, filterCanvas.height);
+            
+            const imgData = ctx.getImageData(0, 0, filterCanvas.width, filterCanvas.height);
+            const data = imgData.data;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                let r = data[i], g = data[i+1], b = data[i+2];
+                let grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
+                let v = (grayscale > 110) ? 255 : 0;
+                data[i] = v; data[i+1] = v; data[i+2] = v;   
+            }
+            
+            ctx.putImageData(imgData, 0, 0);
+            if(previewContainer) previewContainer.classList.remove('hidden');
+            
+            // iOS Blob parser failure fallback architecture
+            if (filterCanvas.toBlob) {
+                filterCanvas.toBlob(function(blob) {
+                    if(blob) executeOCRProcessing(blob);
+                }, 'image/jpeg', 0.95);
+            } else {
+                // Fallback architecture for strict legacy rendering engines
+                const dataURL = filterCanvas.toDataURL('image/jpeg', 0.95);
+                fetch(dataURL)
+                    .then(res => res.blob())
+                    .then(blob => executeOCRProcessing(blob));
+            }
+        };
+        img.src = URL.createObjectURL(file);
+    }
+
+    async function executeOCRProcessing(blobFile) {
+        updateProgress('Booting Engine Node...', 30);
+        try {
+            const worker = await Tesseract.createWorker('eng', 1, {
+                logger: function(m) {
+                    if(m && m.status === 'recognizing text') {
+                        updateProgress('Running character segment match...', Math.floor(40 + (m.progress * 40)));
+                    }
+                }
+            });
+            
+            await worker.setParameters({
+                tessedit_pageseg_mode: '4', 
+                tessjs_create_hocr: '0',
+                tessjs_create_tsv: '0'
+            });
+
+            const response = await worker.recognize(blobFile);
+            updateProgress('Syncing structural parameters...', 90);
+            
+            const recognizedText = (response && response.data) ? response.data.text : '';
+            const parsedResult = robustParser(recognizedText);
+            parsedResult.action = "insert";
+            
+            scannedRecords.unshift(parsedResult); 
+            if(tableBody) renderTable(scannedRecords);
+
+            await sendToCloud(parsedResult);
+            await worker.terminate();
+            
+            if(statusContainer) statusContainer.classList.add('hidden');
+            if(imageUpload) imageUpload.value = ''; 
+        } catch (error) {
+            console.error(error);
+            alert("Parser execution drop. Ensure clear device lens capture.");
+            if(statusContainer) statusContainer.classList.add('hidden');
+        }
+    }
+
+    function robustParser(rawText) {
+        if(!rawText) rawText = '';
+        const lines = rawText.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
+        const data = {
+            id: 'rec_' + Date.now(),
+            school: 'Unknown Institution',
+            name: 'Not Found',
+            classLevel: 'N/A',
+            roll: 'N/A',
+            section: 'N/A',
+            guardian: 'Not Found',
+            contact: 'N/A',
+            validUpto: 'N/A'
+        };
+
+        if (lines.length > 0) {
+            for(let i=0; i < Math.min(4, lines.length); i++) {
+                const lLower = lines[i].toLowerCase();
+                if (lines[i].length > 6 && !lLower.includes('identity') && !lLower.includes('card') && !lLower.includes('student')) {
+                    data.school = lines[i].replace(/[^a-zA-Z0-9\s.,]/g, '');
+                    break;
+                }
+            }
+        }
+
+        lines.forEach(function(line) {
+            const cleanLine = line.replace(/[:\-–—|]/g, ' ').replace(/\s+/g, ' ').trim();
+            const text = cleanLine.toLowerCase();
+
+            if (text.includes('name') || text.includes('student') || text.includes('s.n')) {
+                const matched = cleanLine.match(/(?:name|student|st|sn)\s+(.*)/i);
+                if(matched && matched[1]) data.name = matched[1].trim();
+            }
+            if (text.includes('class') || text.includes('std') || text.includes('level') || text.includes('grade')) {
+                const matched = cleanLine.match(/(?:class|std|level|grade)\s+([a-zA-Z0-9+–\-]+)/i);
+                if(matched && matched[1]) data.classLevel = matched[1].trim();
+            }
+            if (text.includes('roll') || text.includes('r.n') || text.includes('no')) {
+                const matched = cleanLine.match(/(?:roll|no|rn)\s+([a-zA-Z0-9]+)/i);
+                if(matched && matched[1]) data.roll = matched[1].trim().replace(/[lI|]/g, '1');
+            }
+            if (text.includes('sec') || text.includes('section')) {
+                const matched = cleanLine.match(/(?:sec|section)\s+([a-zA-Z0-9]+)/i);
+                if(matched && matched[1]) data.section = matched[1].trim();
+            }
+            if (text.includes('guardian') || text.includes('father') || text.includes('parent') || text.includes('c/o')) {
+                const matched = cleanLine.match(/(?:guardian|father|mother|parent)\s+(.*)/i);
+                if(matched && matched[1]) data.guardian = matched[1].trim();
+            }
+            const phoneMatch = cleanLine.match(/(?:98|97|96)\d{8}/);
+            if (phoneMatch) data.contact = phoneMatch[0];
+
+            if (text.includes('valid') || text.includes('upto') || text.includes('expiry') || text.includes('date') || text.includes('208')) {
+                const matched = cleanLine.match(/(?:valid|upto|expiry|date)\s+([a-zA-Z0-9\/\-. ]+)/i);
+                if(matched && matched[1]) data.validUpto = matched[1].trim();
+            }
+        });
+
+        if (data.name === 'Not Found' && lines.length > 1) {
+            const nameCandidate = lines.find(function(l) {
+                return l.length > 5 && /^[a-zA-Z\s.]+$/.test(l) && !l.toLowerCase().includes('card') && !l.toLowerCase().includes('identity') && !l.toLowerCase().includes('school');
+            });
+            if(nameCandidate) data.name = nameCandidate.trim();
+        }
+        return data;
+    }
+
+    // iOS WebKit compatible safe innerHTML assignment
+    function renderTable(dataset) {
+        if(!tableBody) return;
+        tableBody.innerHTML = '';
+        if (!dataset || dataset.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>No data records active.</td></tr>';
+            return;
+        }
+        
+        dataset.forEach(function(record) {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-900/40 transition-colors text-sm border-b border-slate-800/50';
+            
+            const sSchool = escapeHTML(record.school);
+            const sName = escapeHTML(record.name);
+            const sClass = escapeHTML(record.classLevel);
+            const sRoll = escapeHTML(record.roll);
+            const sSection = escapeHTML(record.section);
+            const sGuardian = escapeHTML(record.guardian);
+            const sContact = escapeHTML(record.contact);
+            const sValid = escapeHTML(record.validUpto || record.validWith || 'N/A');
+            const sId = escapeHTML(record.id);
+
+            tr.innerHTML = '<td class="px-4 py-3.5 font-medium max-w-[150px] truncate">' + sSchool + '</td>' +
+                '<td class="px-4 py-3.5 text-cyan-400 font-semibold">' + sName + '</td>' +
+                '<td class="px-4 py-3.5">Cls: <strong>' + sClass + '</strong> <span class="text-xs text-slate-500">| R: ' + sRoll + ' | S: ' + sSection + '</span></td>' +
+                '<td class="px-4 py-3.5 text-xs"><div>G: ' + sGuardian + '</div><div class="text-slate-500"><i class="fa-solid fa-phone text-[10px]"></i> ' + sContact + '</div></td>' +
+                '<td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-slate-800 text-slate-400 rounded text-xs">' + sValid + '</span></td>' +
+                '<td class="px-4 py-3.5 text-right space-x-1">' +
+                    '<button onclick="displayEditModal(\'' + sId + '\')" class="p-1.5 bg-slate-800 hover:bg-cyan-900/40 text-slate-400 hover:text-cyan-400 rounded transition-colors cursor-pointer"><i class="fa-solid fa-user-pen text-xs"></i></button>' +
+                '</td>';
+            tableBody.appendChild(tr);
+        });
+    }
+
+    function handleSearch() {
+        if(!searchInput) return;
+        const query = searchInput.value.toLowerCase().trim();
+        if (query === "") {
+            renderTable(scannedRecords);
+            return;
+        }
+        const filtered = scannedRecords.filter(function(r) {
+            return r.name.toLowerCase().includes(query) || 
+                   r.school.toLowerCase().includes(query) ||
+                   r.contact.toLowerCase().includes(query);
+        });
+        renderTable(filtered);
+    }
+
+    window.displayEditModal = function(id) {
+        const target = scannedRecords.find(function(r) { return r.id === id; });
+        if (!target) return;
+        document.getElementById('editId').value = target.id;
+        document.getElementById('editSchool').value = target.school;
+        document.getElementById('editName').value = target.name;
+        document.getElementById('editClass').value = target.classLevel;
+        document.getElementById('editRoll').value = target.roll;
+        document.getElementById('editSection').value = target.section;
+        document.getElementById('editGuardian').value = target.guardian;
+        document.getElementById('editContact').value = target.contact;
+        document.getElementById('editValid').value = target.validUpto || target.validWith || '';
+        if(editModal) editModal.classList.remove('hidden');
+    };
+
+    function hideModal() { 
+        if(editModal) editModal.classList.add('hidden'); 
+        if(editForm) editForm.reset(); 
+    }
+
+    async function commitRecordEdits(e) {
+        e.preventDefault();
+        const recordId = document.getElementById('editId').value;
+        
+        const updatePayload = {
+            action: "update",
+            id: recordId,
+            school: document.getElementById('editSchool').value.trim(),
+            name: document.getElementById('editName').value.trim(),
+            classLevel: document.getElementById('editClass').value.trim(),
+            roll: document.getElementById('editRoll').value.trim(),
+            section: document.getElementById('editSection').value.trim(),
+            guardian: document.getElementById('editGuardian').value.trim(),
+            contact: document.getElementById('editContact').value.trim(),
+            validUpto: document.getElementById('editValid').value.trim()
+        };
+        
+        hideModal();
+
+        const idx = scannedRecords.findIndex(function(r) { return r.id === recordId; });
+        if(idx !== -1) {
+            scannedRecords[idx] = Object.assign({}, scannedRecords[idx], updatePayload);
+            renderTable(scannedRecords);
+        }
+
+        await sendToCloud(updatePayload);
+    }
+
+    function escapeHTML(str) { 
+        return str ? str.replace(/[&<>'"]/g, function(t) { 
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t; 
+        }) : ''; 
+    }
+</script>
+
+    <!-- <script>
         const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbycpsz4VgsjEg5jO4aB1erdOLu0HlqDIwUNQhLZDdqKE0h-8EMcChN6g_x-PTkysqQmvQ/exec";
 
         let scannedRecords = [];
@@ -473,6 +819,6 @@
         }
 
         function escapeHTML(str) { return str ? str.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t)) : ''; }
-    </script>
+    </script> -->
 </body>
 </html>
