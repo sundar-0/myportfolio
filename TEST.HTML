@@ -163,6 +163,7 @@
         const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbycpsz4VgsjEg5jO4aB1erdOLu0HlqDIwUNQhLZDdqKE0h-8EMcChN6g_x-PTkysqQmvQ/exec";
 
         let scannedRecords = [];
+        let pollingInterval = null;
 
         const imageUpload = document.getElementById('imageUpload');
         const previewContainer = document.getElementById('previewContainer');
@@ -179,12 +180,30 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchCloudData();
+            startRealtimePolling(); // Start real-time background sync
+
             imageUpload.addEventListener('change', processAndScanImage);
-            refreshBtn.addEventListener('click', fetchCloudData);
+            refreshBtn.addEventListener('click', () => fetchCloudData(true));
             document.getElementById('closeModalBtn').addEventListener('click', hideModal);
             document.getElementById('cancelModalBtn').addEventListener('click', hideModal);
             editForm.addEventListener('submit', commitRecordEdits);
+            searchInput.addEventListener('input', handleSearch);
         });
+
+        // Helper function for rendering progress bar (Fixed Missing Function error)
+        function updateProgress(message, percentage) {
+            statusText.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-cyan-400"></i> ${message}`;
+            progressPercent.innerText = `${percentage}%`;
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        function startRealtimePolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            // Polling database every 5 seconds silently in the background
+            pollingInterval = setInterval(() => {
+                fetchCloudData(false); 
+            }, 5000);
+        }
 
         function processAndScanImage(e) {
             const file = e.target.files[0];
@@ -196,8 +215,6 @@
             const img = new Image();
             img.onload = function() {
                 const ctx = filterCanvas.getContext('2d');
-                
-                // Scale up image slightly to improve low-res font detection
                 const scaleFactor = 1.5;
                 filterCanvas.width = img.width * scaleFactor;
                 filterCanvas.height = img.height * scaleFactor;
@@ -207,14 +224,10 @@
                 const imgData = ctx.getImageData(0, 0, filterCanvas.width, filterCanvas.height);
                 const data = imgData.data;
                 
-                // Adaptive Thresholding logic simulation for shadow removal
                 for (let i = 0; i < data.length; i += 4) {
                     let r = data[i], g = data[i+1], b = data[i+2];
                     let grayscale = 0.299 * r + 0.587 * g + 0.114 * b;
-                    
-                    // High-pass text contrast conversion
                     let v = (grayscale > 110) ? 255 : 0;
-                    
                     data[i] = v;     
                     data[i+1] = v;   
                     data[i+2] = v;   
@@ -233,7 +246,6 @@
         async function executeOCRProcessing(blobFile) {
             updateProgress('Booting Engine Node...', 30);
             try {
-                // Configured with parameters to optimize sparse text & layout blocks
                 const worker = await Tesseract.createWorker('eng', 1, {
                     logger: m => {
                         if(m.status === 'recognizing text') {
@@ -242,9 +254,8 @@
                     }
                 });
                 
-                // Explicitly guide the layout processor for sparse/tabular text structures
                 await worker.setParameters({
-                    tessedit_pageseg_mode: '4', // Assume a single column of text of variable sizes
+                    tessedit_pageseg_mode: '4', 
                     tessjs_create_hocr: '0',
                     tessjs_create_tsv: '0'
                 });
@@ -253,11 +264,13 @@
                 updateProgress('Syncing structural parameters...', 90);
                 
                 const recognizedText = response.data.text;
-                console.log("Optimized Engine Log:\n", recognizedText);
-                
                 const parsedResult = robustParser(recognizedText);
                 parsedResult.action = "insert";
                 
+                // Optimistic UI Update: Directly append to buffer like FB post
+                scannedRecords.unshift(parsedResult); 
+                renderTable(scannedRecords);
+
                 await sendToCloud(parsedResult);
                 await worker.terminate();
                 
@@ -272,7 +285,6 @@
 
         function robustParser(rawText) {
             const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            
             const data = {
                 id: 'rec_' + Date.now(),
                 school: 'Unknown Institution',
@@ -299,38 +311,28 @@
                 const cleanLine = line.replace(/[:\-–—|]/g, ' ').replace(/\s+/g, ' ').trim();
                 const text = cleanLine.toLowerCase();
 
-                // Regex mappings with loose bounds for dirty characters
                 if (text.includes('name') || text.includes('student') || text.includes('s.n')) {
                     const matched = cleanLine.match(/(?:name|student|st|sn)\s+(.*)/i);
                     if(matched && matched[1]) data.name = matched[1].trim();
                 }
-
                 if (text.includes('class') || text.includes('std') || text.includes('level') || text.includes('grade')) {
                     const matched = cleanLine.match(/(?:class|std|level|grade)\s+([a-zA-Z0-9+–\-]+)/i);
                     if(matched && matched[1]) data.classLevel = matched[1].trim();
                 }
-
                 if (text.includes('roll') || text.includes('r.n') || text.includes('no')) {
                     const matched = cleanLine.match(/(?:roll|no|rn)\s+([a-zA-Z0-9]+)/i);
-                    if(matched && matched[1]) {
-                        data.roll = matched[1].trim().replace(/[lI|]/g, '1');
-                    }
+                    if(matched && matched[1]) data.roll = matched[1].trim().replace(/[lI|]/g, '1');
                 }
-
                 if (text.includes('sec') || text.includes('section')) {
                     const matched = cleanLine.match(/(?:sec|section)\s+([a-zA-Z0-9]+)/i);
                     if(matched && matched[1]) data.section = matched[1].trim();
                 }
-
                 if (text.includes('guardian') || text.includes('father') || text.includes('parent') || text.includes('c/o')) {
                     const matched = cleanLine.match(/(?:guardian|father|mother|parent)\s+(.*)/i);
                     if(matched && matched[1]) data.guardian = matched[1].trim();
                 }
-
                 const phoneMatch = cleanLine.match(/(?:98|97|96)\d{8}/);
-                if (phoneMatch) {
-                    data.contact = phoneMatch[0];
-                }
+                if (phoneMatch) data.contact = phoneMatch[0];
 
                 if (text.includes('valid') || text.includes('upto') || text.includes('expiry') || text.includes('date') || text.includes('208')) {
                     const matched = cleanLine.match(/(?:valid|upto|expiry|date)\s+([a-zA-Z0-9\/\-. ]+)/i);
@@ -338,29 +340,37 @@
                 }
             });
 
-            // Backoff logic for raw arrays
             if (data.name === 'Not Found' && lines.length > 1) {
                 const nameCandidate = lines.find(l => l.length > 5 && /^[a-zA-Z\s.]+$/.test(l) && !l.toLowerCase().includes('card') && !l.toLowerCase().includes('identity') && !l.toLowerCase().includes('school'));
                 if(nameCandidate) data.name = nameCandidate.trim();
             }
-
             return data;
         }
 
-        async function fetchCloudData() {
-            if(SHEET_WEBAPP_URL === "https://script.google.com/macros/s/AKfycbycpsz4VgsjEg5jO4aB1erdOLu0HlqDIwUNQhLZDdqKE0h-8EMcChN6g_x-PTkysqQmvQ/exec") {
-                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-amber-500"><i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>Missing Web App URL!</td></tr>`;
-                return;
+        async function fetchCloudData(showSpinner = false) {
+            if(SHEET_WEBAPP_URL === "" || SHEET_WEBAPP_URL.includes("macros/s/")) {
+                if(showSpinner && scannedRecords.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-amber-500"><i class="fa-solid fa-triangle-exclamation text-3xl mb-2 block"></i>Configured sheet destination is missing.</td></tr>`;
+                }
             }
             try {
+                if (showSpinner && scannedRecords.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>Syncing local client database...</td></tr>`;
+                }
                 const response = await fetch(SHEET_WEBAPP_URL);
                 const json = await response.json();
                 if(json.status === "success") {
+                    // Update engine dataset container buffer array
                     scannedRecords = json.data || [];
-                    renderTable(scannedRecords);
+                    
+                    // Filter matching query check
+                    const query = searchInput.value.toLowerCase().trim();
+                    if(query === "") {
+                        renderTable(scannedRecords);
+                    }
                 }
             } catch (err) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-rose-500">Connection error syncing database.</td></tr>`;
+                console.error("Background sync failed silently.", err);
             }
         }
 
@@ -372,7 +382,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                setTimeout(fetchCloudData, 1500);
+                // Dynamic delayed pull to sync internal parameters
+                setTimeout(() => fetchCloudData(false), 2000);
             } catch (err) {
                 console.error(err);
             }
@@ -381,7 +392,7 @@
         function renderTable(dataset) {
             tableBody.innerHTML = '';
             if (dataset.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>No cloud indices found.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>No data records active.</td></tr>`;
                 return;
             }
             dataset.forEach(record => {
@@ -392,13 +403,27 @@
                     <td class="px-4 py-3.5 text-cyan-400 font-semibold">${escapeHTML(record.name)}</td>
                     <td class="px-4 py-3.5">Cls: <strong>${escapeHTML(record.classLevel)}</strong> <span class="text-xs text-slate-500">| R: ${escapeHTML(record.roll)} | S: ${escapeHTML(record.section)}</span></td>
                     <td class="px-4 py-3.5 text-xs"><div>G: ${escapeHTML(record.guardian)}</div><div class="text-slate-500"><i class="fa-solid fa-phone text-[10px]"></i> ${escapeHTML(record.contact)}</div></td>
-                    <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-slate-800 text-slate-400 rounded text-xs">${escapeHTML(record.validUpto)}</span></td>
+                    <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-slate-800 text-slate-400 rounded text-xs">${escapeHTML(record.validUpto || record.validWith)}</span></td>
                     <td class="px-4 py-3.5 text-right space-x-1">
                         <button onclick="displayEditModal('${record.id}')" class="p-1.5 bg-slate-800 hover:bg-cyan-900/40 text-slate-400 hover:text-cyan-400 rounded transition-colors cursor-pointer"><i class="fa-solid fa-user-pen text-xs"></i></button>
                     </td>
                 `;
                 tableBody.appendChild(tr);
             });
+        }
+
+        function handleSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            if (query === "") {
+                renderTable(scannedRecords);
+                return;
+            }
+            const filtered = scannedRecords.filter(r => 
+                r.name.toLowerCase().includes(query) || 
+                r.school.toLowerCase().includes(query) ||
+                r.contact.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
         }
 
         window.displayEditModal = function(id) {
@@ -412,7 +437,7 @@
             document.getElementById('editSection').value = target.section;
             document.getElementById('editGuardian').value = target.guardian;
             document.getElementById('editContact').value = target.contact;
-            document.getElementById('editValid').value = target.validUpto;
+            document.getElementById('editValid').value = target.validUpto || target.validWith || '';
             editModal.classList.remove('hidden');
         };
 
@@ -420,9 +445,11 @@
 
         async function commitRecordEdits(e) {
             e.preventDefault();
+            const recordId = document.getElementById('editId').value;
+            
             const updatePayload = {
                 action: "update",
-                id: document.getElementById('editId').value,
+                id: recordId,
                 school: document.getElementById('editSchool').value.trim(),
                 name: document.getElementById('editName').value.trim(),
                 classLevel: document.getElementById('editClass').value.trim(),
@@ -432,8 +459,16 @@
                 contact: document.getElementById('editContact').value.trim(),
                 validUpto: document.getElementById('editValid').value.trim()
             };
+            
             hideModal();
-            tableBody.innerHTML = `<tr><td colspan="6" class="px-4 py-12 text-center text-slate-500"><i class="fa-solid fa-arrows-spin text-4xl mb-3 block text-slate-600 animate-spin"></i>Writing verification edits back to Google Sheets...</td></tr>`;
+
+            // Optimistic UI Update: Instantly mutate matching record in local engine array buffer 
+            const idx = scannedRecords.findIndex(r => r.id === recordId);
+            if(idx !== -1) {
+                scannedRecords[idx] = { ...scannedRecords[idx], ...updatePayload };
+                renderTable(scannedRecords); // Instantly updates UI like Facebook edit
+            }
+
             await sendToCloud(updatePayload);
         }
 
