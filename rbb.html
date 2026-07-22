@@ -1,186 +1,289 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RBB Level 5 IT - Syllabus, Notes & AI Quiz Portal</title>
-    
-    <!-- Google Fonts & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>RBB Level 5 IT — Smart Exam Preparation Dashboard</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-dark: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-purple: #8b5cf6;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-main: #040914;
+            --bg-side: #0a1124;
+            --bg-card: #0d1730;
+            --border-blue: #1b3564;
+            --accent-blue: #00bcd4;
+            --text-main: #e2e8f0;
+            --text-muted: #718096;
+            --green-active: #00e676;
+            --red-alert: #ff1744;
+            --purple-accent: #7c4dff;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background: var(--bg-main);
             color: var(--text-main);
-            padding-bottom: 60px;
-        }
-
-        /* HEADER & STATS */
-        header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            padding: 24px 20px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        header p {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 15px;
-        }
-
-        .header-dashboard {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .dash-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(8px);
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .dash-card .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #cbd5e1;
-            letter-spacing: 0.5px;
-        }
-
-        .dash-card .value {
-            font-size: 16px;
-            font-weight: 700;
-            color: #38bdf8;
-            margin-top: 2px;
-        }
-
-        .progress-bar-bg {
-            height: 8px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
+            height: 100vh;
             overflow: hidden;
-            margin-top: 6px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-green);
-            transition: width 0.4s ease-out;
-            border-radius: 20px;
-        }
-
-        /* CONTAINER & ACCORDIONS */
-        .container {
-            max-width: 950px;
-            margin: 25px auto;
-            padding: 0 15px;
-        }
-
-        .section-title-banner {
-            background: #1e293b;
-            color: #ffffff;
-            padding: 14px 18px;
-            font-size: 16px;
-            font-weight: 700;
-            margin: 30px 0 12px 0;
-            border-radius: 8px;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
         }
 
-        .accordion-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            margin-bottom: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-        }
-
-        .accordion-header {
-            padding: 16px 20px;
-            cursor: pointer;
+        /* HEADER BAR */
+        .header {
+            background: #060d1f;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
+            border-bottom: 2px solid var(--border-blue);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tracker-lbl {
+            color: var(--accent-blue);
+            font-weight: 800;
             font-size: 15px;
-            color: var(--text-main);
-            background: #ffffff;
-            user-select: none;
-            transition: background 0.2s ease;
+            letter-spacing: 0.5px;
         }
 
-        .accordion-header:hover {
-            background-color: #f1f5f9;
+        .timer-display {
+            background: #000;
+            color: #ffb300;
+            font-family: monospace;
+            font-size: 24px;
+            padding: 4px 14px;
+            border-radius: 6px;
+            border: 1px solid #ffb300;
+            font-weight: bold;
         }
 
-        .accordion-header .icon {
-            font-size: 14px;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time-input {
+            background: #121e36;
+            border: 1px solid var(--border-blue);
+            color: white;
+            padding: 6px 8px;
+            border-radius: 4px;
+            width: 48px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+
+        .btn-apply { background: #121e36; color: white; border: 1px solid var(--border-blue); }
+        .btn-start { background: #005a43; color: #00e676; border: 1px solid #00e676; }
+        .btn-pause { background: #6a1b1b; color: #ff1744; border: 1px solid #ff1744; }
+
+        /* MAIN LAYOUT */
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* LEFT SIDEBAR */
+        .left-sidebar {
+            width: 320px;
+            background: var(--bg-side);
+            border-right: 2px solid var(--border-blue);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            overflow-y: auto;
+        }
+
+        .brand-title h1 {
+            color: var(--accent-blue);
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .brand-title p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        /* GEMINI API CONFIG CARD */
+        .api-config-card {
+            background: #081126;
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .api-config-card h3 {
+            font-size: 13px;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .api-input {
+            width: 100%;
+            background: #0d1730;
+            border: 1px solid var(--border-blue);
+            color: #fff;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .api-input:focus {
+            outline: 1px solid var(--accent-blue);
+        }
+
+        .api-status {
+            font-size: 11px;
             color: var(--text-muted);
         }
 
-        .accordion-item.active .accordion-header .icon {
-            transform: rotate(180deg);
+        .save-api-btn {
+            background: var(--purple-accent);
+            color: #fff;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .save-api-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* CENTER MAIN CONTENT */
+        .center-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: var(--bg-main);
+            scroll-behavior: smooth;
+        }
+
+        .progress-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            background: #070d1a;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #009688, var(--accent-blue));
+            width: 0%;
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .section-title-banner {
+            font-size: 15px;
+            color: var(--accent-blue);
+            font-weight: 800;
+            margin: 22px 0 12px 0;
+            border-left: 4px solid var(--accent-blue);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ACCORDION ANIMATED STYLES */
+        .accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .accordion-item:hover {
+            border-color: rgba(0, 188, 212, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.05);
+        }
+
+        .accordion-header {
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(255,255,255,0.01);
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: #111d3a;
+        }
+
+        .accordion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
         }
 
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-            background: #fafafa;
+            transition: max-height 0.35s ease-out, padding 0.35s ease-out;
+            background: #080f21;
+            padding: 0 18px;
         }
 
-        .accordion-item.active .accordion-content {
-            max-height: 5000px;
-            border-top: 1px solid var(--border-color);
+        .accordion-content.open {
+            padding: 10px 18px 15px 18px;
+            border-top: 1px solid var(--border-blue);
         }
 
         .topic-row {
@@ -188,705 +291,1146 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            padding: 12px 18px;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background 0.2s ease;
+            padding: 10px 0;
+            border-bottom: 1px solid #142242;
         }
 
-        .topic-row:hover { background: #ffffff; }
-
-        .topic-main-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
+        .topic-row:last-child {
+            border-bottom: none;
         }
 
-        .cb-item {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent-green);
+        .topic-row input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-blue);
             cursor: pointer;
         }
 
         .topic-text {
-            font-size: 14px;
-            color: #334155;
+            flex: 1;
+            font-size: 13px;
             line-height: 1.4;
+            color: var(--text-main);
         }
 
         .action-btns {
             display: flex;
-            gap: 8px;
-            flex-shrink: 0;
+            gap: 6px;
         }
 
-        .btn-action {
-            border: none;
-            padding: 7px 12px;
-            border-radius: 6px;
+        .view-btn, .quiz-btn {
+            border: 1px solid var(--border-blue);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
             cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
             font-weight: 600;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: var(--transition);
         }
 
-        .btn-view { background-color: var(--primary-color); color: white; }
-        .btn-view:hover { background-color: var(--primary-dark); }
-        .btn-quiz { background-color: var(--accent-purple); color: white; }
-        .btn-quiz:hover { background-color: #7c3aed; }
-
-        /* VIEWER & QUIZ MODAL */
-        .viewer-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(6px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.2s ease-out;
+        .view-btn {
+            background: rgba(0, 188, 212, 0.1);
+            color: var(--accent-blue);
+            border-color: rgba(0, 188, 212, 0.3);
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .view-btn:hover {
+            background: rgba(0, 188, 212, 0.25);
+        }
 
-        .modal-box {
-            background: #ffffff;
-            width: 90%;
-            max-width: 900px;
-            height: 85vh;
-            border-radius: 12px;
+        .quiz-btn {
+            background: rgba(124, 77, 255, 0.15);
+            color: var(--purple-accent);
+            border-color: rgba(124, 77, 255, 0.4);
+        }
+
+        .quiz-btn:hover {
+            background: rgba(124, 77, 255, 0.3);
+        }
+
+        /* RIGHT SIDEBAR - NOTES & QUIZ ENGINE */
+        .right-sidebar {
+            width: 400px;
+            background: #eef2f6;
+            color: #111;
+            border-left: 2px solid var(--border-blue);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transition: var(--transition);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
         }
 
-        .modal-box.maximized {
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            border-radius: 0 !important;
+        .right-sidebar.maximized {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100% !important;
+            height: 100%;
+            z-index: 9999;
         }
 
         .viewer-header {
-            background: #0f172a;
-            color: #fff;
-            padding: 12px 20px;
+            background: #0c162d;
+            color: var(--accent-blue);
+            padding: 14px 18px;
+            font-weight: bold;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-blue);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .viewer-header h3 {
-            font-size: 15px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 70%;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .control-icon {
-            font-size: 16px;
+        .mx-btn {
+            background: rgba(0, 188, 212, 0.15);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
             cursor: pointer;
-            color: #94a3b8;
-            transition: color 0.2s;
+            transition: 0.2s;
+            font-weight: bold;
         }
 
-        .control-icon:hover { color: #ffffff; }
-
-        /* TOOLBAR FOR MARKUP */
-        .markup-toolbar {
-            background: #f1f5f9;
-            padding: 8px 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 13px;
-        }
-
-        .color-picker-btn {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-            cursor: pointer;
-            display: inline-block;
-            box-shadow: var(--shadow-sm);
+        .mx-btn:hover {
+            background: var(--accent-blue);
+            color: #0c162d;
         }
 
         .viewer-body {
-            flex: 1;
-            position: relative;
-            overflow-y: auto;
             padding: 20px;
-            background: #ffffff;
+            flex: 1;
+            overflow-y: auto;
+            color: #1a202c;
+            line-height: 1.5;
         }
 
-        /* GEMINI QUIZ CONTAINER */
-        .quiz-container {
-            max-width: 650px;
-            margin: 0 auto;
+        .viewer-body h3 {
+            color: #0f172a;
+            font-size: 16px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 6px;
         }
 
+        .viewer-body ul {
+            padding-left: 18px;
+            margin-top: 8px;
+        }
+
+        .viewer-body li {
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        /* QUIZ UI INSIDE SIDEBAR */
         .quiz-card {
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            padding: 18px;
-            border-radius: 10px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             margin-bottom: 15px;
         }
 
-        .quiz-card p { font-weight: 600; margin-bottom: 10px; font-size: 14px; }
+        .quiz-q {
+            font-weight: 700;
+            font-size: 13.5px;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
 
-        .quiz-option {
+        .quiz-opt {
             display: block;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 10px 14px;
+            background: #f1f5f9;
+            padding: 9px 12px;
             border-radius: 6px;
             margin-bottom: 8px;
             cursor: pointer;
-            font-size: 13px;
-            transition: var(--transition);
+            font-size: 12.5px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
         }
 
-        .quiz-option:hover { background: #eff6ff; border-color: var(--primary-color); }
-
-        .quiz-option.correct { background: #d1fae5 !important; border-color: var(--accent-green) !important; color: #065f46; }
-        .quiz-option.wrong { background: #fee2e2 !important; border-color: var(--accent-red) !important; color: #991b1b; }
-
-        .api-input-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
+        .quiz-opt:hover {
+            background: #e2e8f0;
         }
 
-        .api-input-group input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
+        .quiz-opt.correct {
+            background: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46;
+            font-weight: bold;
+        }
+
+        .quiz-opt.wrong {
+            background: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+
+        .ai-gen-btn {
+            background: linear-gradient(135deg, #7c4dff, #00bcd4);
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(124, 77, 255, 0.3);
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 640px) {
-            .topic-row { flex-direction: column; align-items: flex-start; }
-            .action-btns { width: 100%; }
-            .btn-action { flex: 1; justify-content: center; }
-            .modal-box { width: 100%; height: 100vh; border-radius: 0; }
+        .ai-gen-btn:hover {
+            opacity: 0.95;
+        }
+
+        .loader-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+
+        /* ================= PREMIUM UI/UX REFRESH ================= */
+        :root {
+            --bg-main: #f5f7fb;
+            --bg-side: #ffffff;
+            --bg-card: #ffffff;
+            --border-blue: #e5e7eb;
+            --accent-blue: #2563eb;
+            --accent-indigo: #4f46e5;
+            --text-main: #172033;
+            --text-muted: #64748b;
+            --green-active: #16a34a;
+            --red-alert: #dc2626;
+            --purple-accent: #7c3aed;
+            --soft-blue: #eff6ff;
+            --soft-purple: #f5f3ff;
+            --shadow-sm: 0 4px 18px rgba(15, 23, 42, .06);
+            --shadow-md: 0 12px 32px rgba(15, 23, 42, .10);
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 10% 0%, rgba(79,70,229,.08), transparent 28%),
+                radial-gradient(circle at 90% 0%, rgba(37,99,235,.07), transparent 25%),
+                var(--bg-main);
+            color: var(--text-main);
+        }
+
+        .header {
+            background: rgba(255,255,255,.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-blue);
+            box-shadow: 0 2px 16px rgba(15,23,42,.05);
+        }
+
+        .tracker-lbl {
+            color: #1e3a8a;
+            font-size: 16px;
+        }
+
+        .tracker-lbl small {
+            display: block;
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .3px;
+            margin-top: 2px;
+        }
+
+        .timer-display {
+            background: #111827;
+            color: #fbbf24;
+            border: 0;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(15,23,42,.15);
+        }
+
+        .time-input {
+            background: #fff;
+            color: var(--text-main);
+            border: 1px solid #dbe2ea;
+            border-radius: 8px;
+        }
+
+        .btn {
+            border-radius: 9px;
+            padding: 9px 14px;
+        }
+
+        .btn-apply {
+            background: #fff;
+            color: #334155;
+            border: 1px solid #dbe2ea;
+        }
+
+        .btn-start {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .btn-pause {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .left-sidebar {
+            width: 300px;
+            background: rgba(255,255,255,.88);
+            border-right: 1px solid var(--border-blue);
+            padding: 22px;
+        }
+
+        .brand-title {
+            padding: 18px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #eef2ff, #eff6ff);
+            border: 1px solid #dbeafe;
+        }
+
+        .brand-title h1 {
+            color: #1e3a8a;
+            line-height: 1.5;
+        }
+
+        .brand-title p {
+            color: #64748b;
+        }
+
+        .api-config-card {
+            background: #fff !important;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .api-config-card h3 {
+            color: #1e40af !important;
+        }
+
+        .center-content {
+            background: transparent;
+            padding: 26px;
+        }
+
+        .progress-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .progress-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .eyebrow {
+            display: block;
+            color: #6366f1;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            margin-bottom: 5px;
+        }
+
+        .progress-topline h2 {
+            font-size: 22px;
+            color: #172033;
+        }
+
+        .progress-badge {
+            background: #eef2ff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .progress-bar-bg {
+            background: #eef2f7;
+            height: 12px;
+            border-radius: 999px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 999px;
+        }
+
+        .section-title-banner {
+            color: #1e3a8a;
+            border-left: 0;
+            padding: 14px 18px;
+            margin: 28px 0 14px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #eef2ff, rgba(239,246,255,.45));
+            border: 1px solid #dbeafe;
+            font-size: 14px;
+        }
+
+        .accordion-item {
+            background: rgba(255,255,255,.92);
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .accordion-item:hover {
+            border-color: #c7d2fe;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .accordion-header {
+            padding: 18px 20px;
+            background: transparent;
+        }
+
+        .accordion-header:hover {
+            background: #f8fafc;
+        }
+
+        .accordion-title {
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        .accordion-content {
+            background: #fbfdff;
+            padding: 0 20px;
+        }
+
+        .accordion-content.open {
+            padding: 12px 20px 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .topic-row {
+            padding: 13px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .topic-text {
+            color: #334155;
+        }
+
+        .view-btn, .quiz-btn {
+            border-radius: 8px;
+            padding: 7px 11px;
+        }
+
+        .view-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .quiz-btn {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border-color: #ddd6fe;
+        }
+
+        .right-sidebar {
+            width: 410px;
+            background: #f8fafc;
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .viewer-header {
+            background: #111827;
+            color: #fff;
+            padding: 16px 18px;
+            border-bottom: 0;
+        }
+
+        .viewer-body {
+            padding: 22px;
+        }
+
+        .quiz-card {
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: var(--shadow-sm);
+            padding: 18px;
+        }
+
+        .quiz-opt {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 11px 13px;
+        }
+
+        .quiz-opt:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+        }
+
+        .ai-gen-btn {
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+
+        @media (max-width: 992px) {
+            .center-content { padding: 16px; }
+            .progress-topline { align-items: flex-start; flex-direction: column; }
+            .progress-badge { align-self: flex-start; }
+        }
+
+
+        .secure-ai-message {
+            background: linear-gradient(135deg, #eef2ff, #eff6ff);
+            border: 1px solid #c7d2fe;
+            border-radius: 18px;
+            padding: 26px;
+            text-align: center;
+            color: #334155;
+        }
+
+        .secure-ai-icon {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .secure-ai-message h3 {
+            border: 0;
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        .secure-ai-message small {
+            display: block;
+            margin-top: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* MOBILE RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+            body { height: auto; overflow: auto; }
+            .header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .header-left, .header-controls { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+            .app-container { flex-direction: column; height: auto; overflow: visible; }
+            .left-sidebar { width: 100%; position: relative; border-right: none; border-bottom: 2px solid var(--border-blue); }
+            .center-content { width: 100%; padding: 15px; }
+            
+            .right-sidebar {
+                position: fixed;
+                inset: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 99999;
+                opacity: 0;
+                pointer-events: none;
+                transform: scale(0.9);
+                transition: transform .3s ease, opacity .25s ease;
+                background: #fff;
+            }
+            
+            .right-sidebar.active-mobile {
+                opacity: 1;
+                pointer-events: auto;
+                transform: scale(1);
+            }
+            
+            #closeMobileBtn { display: inline-block !important; }
+            #toggleMaximizeBtn { display: none !important; }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Header & Tracker -->
-    <header>
-        <h1><i class="fa-solid fa-graduation-cap"></i> RBB Level 5 IT Smart Portal</h1>
-        <p>राष्ट्रिय वाणिज्य बैंक - वरिष्ठ सहायक (सूचना प्रविधि)</p>
-        
-        <div class="header-dashboard">
-            <div class="dash-card">
-                <div class="label">Course Progress</div>
-                <div class="value" id="progressText">0% Completed</div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progressBar"></div>
-                </div>
-            </div>
-            <div class="dash-card">
-                <div class="label">Session Timer</div>
-                <div class="value" id="sessionTimer">00:00:00</div>
-            </div>
+    <header class="header">
+        <div class="header-left">
+            <span class="tracker-lbl">🏦 RBB LEVEL 5 IT <small>Smart Exam Preparation Dashboard</small></span>
+            <div class="timer-display" id="timerBox">03:00:00</div>
+        </div>
+        <div class="header-controls">
+            <input type="number" class="time-input" id="hrIn" value="3" min="0"> <span style="font-size:11px; color:var(--text-muted)">hr</span>
+            <input type="number" class="time-input" id="minIn" value="0" min="0" max="59"> <span style="font-size:11px; color:var(--text-muted)">min</span>
+            <button class="btn btn-apply" onclick="applyCustomTime()">Apply</button>
+            <button class="btn btn-start" onclick="startTimer()">Start</button>
+            <button class="btn btn-pause" onclick="pauseTimer()">Pause</button>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <div class="container">
-        <div id="syllabusContainer"></div>
-    </div>
+    <div class="app-container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-sidebar">
+            <div class="brand-title">
+                <h1>राष्ट्रिय वाणिज्य बैंक लिमिटेड</h1>
+                <p>तह ५ - वरिष्ठ सहायक (सूचना प्रविधि)</p>
+            </div>
+<div class="api-config-card" style="background:#050d1e;">
+                <h3 style="color:#00e676;">📊 Study Tracker</h3>
+                <p style="font-size: 11.5px; color: var(--text-main);" id="trackerSummary">Loading syllabus stats...</p>
+            </div>
+        </aside>
 
-    <!-- Viewer & Quiz Modal -->
-    <div id="portalModal" class="viewer-modal">
-        <div id="modalBox" class="modal-box">
-            <div class="viewer-header">
-                <h3 id="modalTitle">Notes & Viewer</h3>
-                <div class="header-controls">
-                    <i class="fa-solid fa-expand control-icon" id="maxBtn" onclick="toggleMaximize()" title="Maximize/Minimize"></i>
-                    <i class="fa-solid fa-xmark control-icon" onclick="closeModal()" title="Close"></i>
+        <!-- CENTER SYLLABUS -->
+        <main class="center-content" id="syllabusContainer">
+            <div class="progress-container">
+                <div class="progress-topline">
+                    <div>
+                        <span class="eyebrow">YOUR PREPARATION JOURNEY</span>
+                        <h2>Syllabus Progress</h2>
+                    </div>
+                    <span id="progPct" class="progress-badge">0% Completed</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progBar"></div>
                 </div>
             </div>
+        </main>
 
-            <!-- Markup Toolbar for Notes -->
-            <div class="markup-toolbar" id="markupToolbar" style="display: none;">
-                <span><i class="fa-solid fa-highlighter"></i> Highlight Text Color:</span>
-                <span class="color-picker-btn" style="background: #fef08a;" onclick="setHighlightColor('#fef08a')"></span>
-                <span class="color-picker-btn" style="background: #bbf7d0;" onclick="setHighlightColor('#bbf7d0')"></span>
-                <span class="color-picker-btn" style="background: #bfdbfe;" onclick="setHighlightColor('#bfdbfe')"></span>
-                <span class="color-picker-btn" style="background: #fbcfe8;" onclick="setHighlightColor('#fbcfe8')"></span>
-                <button onclick="clearHighlights()" style="margin-left: auto; padding: 3px 8px; font-size: 11px; cursor: pointer;">Clear Selection</button>
+        <!-- RIGHT SIDEBAR (NOTES & QUIZ PANEL) -->
+        <aside class="right-sidebar" id="pdfViewerSidebar">
+            <div class="viewer-header">
+                <span id="panelTitle">Study Reference Engine</span>
+                <div>
+                    <button class="mx-btn" id="toggleMaximizeBtn" onclick="toggleViewerMaximize()">Maximize 🗖</button>
+                    <button class="mx-btn" id="closeMobileBtn" onclick="closeMobileViewer()" style="display:none; background:#ff1744; color:white; border-color:#ff1744; margin-left:6px;">Close ✖</button>
+                </div>
             </div>
-
-            <div id="modalBody" class="viewer-body"></div>
-        </div>
+            <div class="viewer-body" id="viewerContent">
+                <h3>Welcome to Interactive AI Engine</h3>
+                <p style="font-size: 13px; color: #475569;">
+                    पाठ्यक्रमको कुनै पनि उप-शीर्षकको <strong>View Note</strong> थिचेर द्रुत नोट्स हेर्नुहोस् वा <strong>Quiz</strong> थिचेर अभ्यास प्रश्नहरू हल गर्नुहोस्। AI features लाई secure backend मार्फत integrate गर्न सकिन्छ।
+                </p>
+            </div>
+        </aside>
     </div>
 
     <script>
-        /* 1. SYLLABUS DATA (COMPLETE SYLLABUS INTEGRATION) */
-        window.rbblSyllabusUpdated = [
-          {
-            section_title: "Paper I: Banking and Organizational Management (Section A - 50 Marks)",
-            topics: [
-              {
-                title: "Unit 1: Financial Institutions in Nepal: Role, Contribution and Status",
-                subtopics: [
-                  "Banking Institutions: Commercial Banks",
-                  "Banking Institutions: Development Banks",
-                  "Banking Institutions: Finance Companies",
-                  "Banking Institutions: Microfinance Institutions",
-                  "Banking Institutions: Infrastructure Development Bank",
-                  "Non-bank Financial Institution: Insurance Companies",
-                  "Non-bank Financial Institution: कर्मचारी सञ्चय कोष (Karmachari Sanchaya Kosh)",
-                  "Non-bank Financial Institution: नागरिक लगानी कोष (Citizen Investment Trust)",
-                  "Non-bank Financial Institution: सामाजिक सुरक्षा कोष (Social Security Fund)"
+        // --- COMPLETE RBB LEVEL 5 IT SYLLABUS DATA ARRAY ---
+        window.rbbSyllabus = [
+            {
+                section_id: 1,
+                section_title: "प्रथम पत्र: Banking, Organizational Management & MCQs (Section A & B)",
+                topics: [
+                    {
+                        id: "1.1",
+                        title: "1. Financial Institutions in Nepal: Role, Contribution & Status",
+                        subtopics: [
+                            { id: "1.1.1.1", title: "Commercial Banks (Class A): Core banking services, deposit mobilization and credit creation" },
+                            { id: "1.1.1.2", title: "Development Banks (Class B): Sector-focused financing and banking services" },
+                            { id: "1.1.1.3", title: "Finance Companies (Class C): Financial products and credit services" },
+                            { id: "1.1.1.4", title: "Microfinance Financial Institutions (Class D): Micro-credit and financial inclusion" },
+                            { id: "1.1.1.5", title: "Infrastructure Development Banks: Large-scale infrastructure and project financing" },
+                            { id: "1.1.2.1", title: "Insurance Companies: Life and non-life insurance services" },
+                            { id: "1.1.2.2", title: "Employees Provident Fund (EPF / कर्मचारी सञ्चय कोष)" },
+                            { id: "1.1.2.3", title: "Citizen Investment Trust (CIT / नागरिक लगानी कोष)" },
+                            { id: "1.1.2.4", title: "Social Security Fund (SSF)" }
+                        ]
+                    },
+                    {
+                        id: "1.2",
+                        title: "2. Key Basic Banking Terminology",
+                        subtopics: [
+                            { id: "1.2.1.1", title: "Capital Fund" },
+                            { id: "1.2.1.2", title: "Loan Loss Provisioning" },
+                            { id: "1.2.2.1", title: "Credit-Deposit (CD) Ratio" },
+                            { id: "1.2.2.2", title: "Cash Reserve Ratio (CRR)" },
+                            { id: "1.2.3.1", title: "Refinancing" },
+                            { id: "1.2.3.2", title: "Rescheduling" },
+                            { id: "1.2.3.3", title: "Restructuring" },
+                            { id: "1.2.3.4", title: "Base Rate" },
+                            { id: "1.2.4.1", title: "Credit Information" },
+                            { id: "1.2.4.2", title: "Blacklisting" },
+                            { id: "1.2.4.3", title: "Credit Ratings" },
+                            { id: "1.2.5.1", title: "Know Your Customer (KYC)" },
+                            { id: "1.2.5.2", title: "Audit" },
+                            { id: "1.2.5.3", title: "Internal Control" }
+                        ]
+                    },
+                    {
+                        id: "1.3",
+                        title: "3. Banking Related Laws",
+                        subtopics: [
+                            { id: "1.3.1", title: "Nepal Rastra Bank Act, 2058 & Bank and Financial Institution Act (BAFIA), 2073" },
+                            { id: "1.3.2", title: "Payment and Settlement Act, 2075 & Money Laundering Prevention Act, 2064" },
+                            { id: "1.3.3", title: "Banking Offence and Punishment Act, 2064 & Negotiable Instruments Act, 2034" },
+                            { id: "1.3.4", title: "Electronic Transaction Act, 2063" }
+                        ]
+                    },
+                    {
+                        id: "1.4",
+                        title: "4. Organizational Behavior",
+                        subtopics: [
+                            { id: "1.4.1", title: "Job Description, Terms of Reference (TOR) and Responsibilities" },
+                            { id: "1.4.2", title: "Job Motivation, Performance, Communication Skills & Workmanship" },
+                            { id: "1.4.3", title: "Customer Satisfaction, Delivery & Grievance Handling" }
+                        ]
+                    },
+                    {
+                        id: "1.5",
+                        title: "5. Other Related Laws & NRB Directives",
+                        subtopics: [
+                            { id: "1.5.1", title: "Companies Act, 2063 & Labour Act, 2074" },
+                            { id: "1.5.2", title: "Public Procurement Act, 2063 & Right to Information Act, 2064" },
+                            { id: "1.5.3", title: "राष्ट्रिय वाणिज्य बैंक कर्मचारी सेवा विनियमावली, २०७०" },
+                            { id: "1.5.4", title: "Unified Directives / Circulars issued by Nepal Rastra Bank for Commercial Banks" }
+                        ]
+                    },
+                    {
+                        id: "1.6",
+                        title: "6. Digital/Electronic Payment Systems",
+                        subtopics: [
+                            { id: "1.6.1.1", title: "Electronic Cheque Clearing (ECC)" },
+                            { id: "1.6.1.2", title: "IPS" },
+                            { id: "1.6.1.3", title: "ConnectIPS" },
+                            { id: "1.6.1.4", title: "Real-Time Gross Settlement (RTGS)" },
+                            { id: "1.6.2.1", title: "SWIFT" },
+                            { id: "1.6.2.2", title: "Mobile Banking" },
+                            { id: "1.6.2.3", title: "Internet Banking" },
+                            { id: "1.6.2.4", title: "QR Code Payments" },
+                            { id: "1.6.2.5", title: "NFC Payments" },
+                            { id: "1.6.2.6", title: "Digital Cards" },
+                            { id: "1.6.3.1", title: "Digital Wallets" },
+                            { id: "1.6.3.2", title: "Central Bank Digital Currency (CBDC)" }
+                        ]
+                    }
                 ]
-              },
-              {
-                title: "Unit 2: Some of the Key Basic Banking Terminology",
-                subtopics: [
-                  "Capital Fund",
-                  "Loan Loss Provisioning",
-                  "Credit-Deposit (CD) Ratio",
-                  "Cash Reserve Ratio (CRR)",
-                  "Refinancing",
-                  "Rescheduling",
-                  "Restructuring",
-                  "Base Rate",
-                  "Credit Information",
-                  "Blacklisting",
-                  "Credit Ratings",
-                  "Know Your Customer (KYC)",
-                  "Audit",
-                  "Internal Control"
+            },
+            {
+                section_id: 2,
+                section_title: "द्वितीय पत्र: Information Technology & Management (Written & MCQs)",
+                topics: [
+                    {
+                        id: "2.1",
+                        title: "1. Introduction of Computer & Emerging Tech",
+                        subtopics: [
+                            { id: "2.1.1.1", title: "Analog Computers" },
+                            { id: "2.1.1.2", title: "Digital Computers" },
+                            { id: "2.1.1.3", title: "Hybrid Computers" },
+                            { id: "2.1.1.4", title: "Mainframe Computers" },
+                            { id: "2.1.1.5", title: "Supercomputers" },
+                            { id: "2.1.2.1", title: "Internet Systems" },
+                            { id: "2.1.2.2", title: "Email Systems" },
+                            { id: "2.1.2.3", title: "Web Design" },
+                            { id: "2.1.2.4", title: "Physical Security of IT Infrastructure" },
+                            { id: "2.1.3.1", title: "Artificial Intelligence (AI)" },
+                            { id: "2.1.3.2", title: "Machine Learning (ML)" },
+                            { id: "2.1.3.3", title: "Blockchain Technology" }
+                        ]
+                    },
+                    {
+                        id: "2.2",
+                        title: "2. Computer Architecture & Hardware",
+                        subtopics: [
+                            { id: "2.2.1.1", title: "CPU Registers" },
+                            { id: "2.2.1.2", title: "Memory Management" },
+                            { id: "2.2.1.3", title: "CPU Architecture" },
+                            { id: "2.2.2.1", title: "Hard Disk Organization" },
+                            { id: "2.2.2.2", title: "I/O Management" },
+                            { id: "2.2.2.3", title: "I/O Interfaces" }
+                        ]
+                    },
+                    {
+                        id: "2.3",
+                        title: "3. Communication & Computer Network Technologies",
+                        subtopics: [
+                            { id: "2.3.1.1", title: "Repeater" },
+                            { id: "2.3.1.2", title: "Hub" },
+                            { id: "2.3.1.3", title: "Switch" },
+                            { id: "2.3.1.4", title: "Router" },
+                            { id: "2.3.2.1", title: "Switching Technologies" },
+                            { id: "2.3.2.2", title: "Modems" },
+                            { id: "2.3.2.3", title: "Remote Network Access" },
+                            { id: "2.3.2.4", title: "Error Detection" },
+                            { id: "2.3.3.1", title: "IPv4 Addressing" },
+                            { id: "2.3.3.2", title: "IPv6 Addressing" },
+                            { id: "2.3.3.3", title: "Network Security" },
+                            { id: "2.3.3.4", title: "Cryptography" }
+                        ]
+                    },
+                    {
+                        id: "2.4",
+                        title: "4. Operating Systems & Information Systems",
+                        subtopics: [
+                            { id: "2.4.1.1", title: "Operating System Concepts" },
+                            { id: "2.4.1.2", title: "Process Management" },
+                            { id: "2.4.1.3", title: "Scheduling Algorithms" },
+                            { id: "2.4.2.1", title: "DOS" },
+                            { id: "2.4.2.2", title: "UNIX" },
+                            { id: "2.4.2.3", title: "Windows Operating System" },
+                            { id: "2.4.2.4", title: "Operating System Security Threats" }
+                        ]
+                    },
+                    {
+                        id: "2.5",
+                        title: "5. DBMS, Data Mining & Web Technology",
+                        subtopics: [
+                            { id: "2.5.1.1", title: "DBMS Concepts" },
+                            { id: "2.5.1.2", title: "Tables" },
+                            { id: "2.5.1.3", title: "Records" },
+                            { id: "2.5.1.4", title: "Relationships" },
+                            { id: "2.5.1.5", title: "Indexing" },
+                            { id: "2.5.2.1", title: "Data Warehousing" },
+                            { id: "2.5.2.2", title: "HTML" },
+                            { id: "2.5.2.3", title: "Scripts" },
+                            { id: "2.5.2.4", title: "Stylesheets" },
+                            { id: "2.5.2.5", title: "XML" },
+                            { id: "2.5.2.6", title: "Proxy Servers" },
+                            { id: "2.5.3.1", title: "Disaster Recovery Planning (DRP)" }
+                        ]
+                    },
+                    {
+                        id: "2.6",
+                        title: "6. Cybersecurity, IT Policies & NRB Guidelines",
+                        subtopics: [
+                            { id: "2.6.1.1", title: "Cybersecurity Basics" },
+                            { id: "2.6.1.2", title: "Access Control" },
+                            { id: "2.6.1.3", title: "Authentication" },
+                            { id: "2.6.1.4", title: "Password Security" },
+                            { id: "2.6.2.1", title: "Social Engineering" },
+                            { id: "2.6.2.2", title: "Malware" },
+                            { id: "2.6.2.3", title: "Denial of Service (DoS)" },
+                            { id: "2.6.2.4", title: "Distributed Denial of Service (DDoS)" },
+                            { id: "2.6.2.5", title: "Phishing" },
+                            { id: "2.6.3.1", title: "ICT Policy of Nepal 2072" },
+                            { id: "2.6.3.2", title: "NRB IT Guidelines" },
+                            { id: "2.6.3.3", title: "Cyber Resilience Guidelines 2023" }
+                        ]
+                    }
                 ]
-              },
-              {
-                title: "Unit 3: Banking Related Law",
-                subtopics: [
-                  "Nepal Rastra Bank Act, 2058",
-                  "Bank and Financial Institution Act, 2073",
-                  "Payment and Settlement Act, 2075",
-                  "Money Laundering Prevention Act, 2064",
-                  "Banking Offence and Punishment Act, 2064",
-                  "Negotiable Instruments Act, 2034",
-                  "Electronic Transaction Act, 2063"
-                ]
-              },
-              {
-                title: "Unit 4: Organizational Behavior",
-                subtopics: [
-                  "Job Description",
-                  "Terms of Reference (TOR)",
-                  "Responsibilities",
-                  "Job Motivation",
-                  "Performance",
-                  "Communication: Skill",
-                  "Communication: Approach",
-                  "Team Building",
-                  "Workmanship",
-                  "Customer Satisfaction",
-                  "Delivery",
-                  "Grievance Handling"
-                ]
-              },
-              {
-                title: "Unit 5: Other Related Laws",
-                subtopics: [
-                  "Companies Act, 2063",
-                  "Labour Act, 2074",
-                  "Public Procurement Act, 2063",
-                  "Right to Information Act, 2064",
-                  "राष्ट्रिय वाणिज्य बैंक कर्मचारी सेवा विनियमावली, २०७०",
-                  "Unified Directives / Circulars issued by Nepal Rastra Bank for Commercial Banks"
-                ]
-              },
-              {
-                title: "Unit 6: Digital/Electronic Payment Systems",
-                subtopics: [
-                  "Electronic Cheque Clearing (ECC)",
-                  "InterBank Payment System (IPS)",
-                  "ConnectIPS",
-                  "Real Time Gross Settlement (RTGS)",
-                  "Society for Worldwide Interbank Financial Telecommunication (SWIFT)",
-                  "Internet Banking",
-                  "Mobile Banking",
-                  "Quick Response (QR) Code",
-                  "Near Field Communication (NFC)",
-                  "Digital Payment Cards",
-                  "Payment through Wallets",
-                  "Central Bank Digital Currency (CBDC)"
-                ]
-              }
-            ]
-          },
-          {
-            section_title: "Paper II: Information Technology & Management (100 Marks)",
-            topics: [
-              {
-                title: "Unit 1: Introduction of Computer",
-                subtopics: [
-                  "Types of Computers: Analog Computer",
-                  "Types of Computers: Digital Computer",
-                  "Types of Computers: Hybrid Computer",
-                  "Types of Computers: Mainframe Computer",
-                  "Types of Computers: Super Computer",
-                  "Comparison of Computers in terms of Speed, Storage Capacity and Memory",
-                  "Basic Knowledge of Internet/Email System",
-                  "Basic Knowledge of Web Design",
-                  "Basic Knowledge of Physical Security of IT Infrastructure",
-                  "Basic Knowledge of Artificial Intelligence (AI)",
-                  "Basic Knowledge of Machine Learning (ML)",
-                  "Basic Knowledge of Blockchain"
-                ]
-              },
-              {
-                title: "Unit 2: Computer Architecture",
-                subtopics: [
-                  "Basic Computer Architecture",
-                  "Registers",
-                  "Memory Management",
-                  "Organization of Hard Disk",
-                  "CPU Architecture",
-                  "I/O Management",
-                  "I/O Interface",
-                  "I/O Requests Handling",
-                  "I/O Devices"
-                ]
-              },
-              {
-                title: "Unit 3: Communication and Computer Network Technologies",
-                subtopics: [
-                  "Networking Devices: Repeater",
-                  "Networking Devices: Hub",
-                  "Networking Devices: Switch",
-                  "Networking Devices: Router",
-                  "Switching Technologies",
-                  "Modems and Remote Network Access",
-                  "Error Detection Techniques",
-                  "Error Correction Techniques",
-                  "Internet Services",
-                  "Internet Protocol / Addressing",
-                  "Network Security",
-                  "Cryptography"
-                ]
-              },
-              {
-                title: "Unit 4: Operating System and Information Systems",
-                subtopics: [
-                  "Basic Knowledge of Operating System",
-                  "Process Management",
-                  "Scheduling",
-                  "DOS Operating System",
-                  "UNIX Operating Systems",
-                  "Windows Operating System",
-                  "Identifying Security Threats in OS",
-                  "Managing Security Threats in OS"
-                ]
-              },
-              {
-                title: "Unit 5: Database Management System, Database Design, Data Mining/Warehousing and Web Technology",
-                subtopics: [
-                  "Basic Knowledge of Database Management System",
-                  "Basic Concept of Table",
-                  "Basic Concept of Record",
-                  "Basic Concept of Relationship",
-                  "Basic Concept of Indexing",
-                  "Data Warehousing",
-                  "Process in Data Warehousing",
-                  "Basics of HTML",
-                  "Basics of Script",
-                  "Basics of Stylesheet",
-                  "Basics of XML",
-                  "Web Server",
-                  "Proxy Server",
-                  "Disaster Recovery Planning"
-                ]
-              },
-              {
-                title: "Unit 6: Cybersecurity and IT Policies",
-                subtopics: [
-                  "Introduction to Cyber Security",
-                  "Access Control Mechanisms",
-                  "Threats and Vulnerabilities",
-                  "Security Attacks",
-                  "Authentication",
-                  "Authorization",
-                  "Password Management",
-                  "Common Security Threats: Social Engineering",
-                  "Common Security Threats: Malwares",
-                  "Common Security Threats: Distributed Denial of Service (DDoS)",
-                  "Common Security Threats: Denial of Service (DoS)",
-                  "Common Security Threats: Phishing and its types",
-                  "ICT Policy of Nepal, 2072",
-                  "IT Guidelines (Issued by Nepal Rastra Bank)",
-                  "Cyber Resilience Guidelines, 2023 (Issued by Nepal Rastra Bank)"
-                ]
-              }
-            ]
-          }
+            }
         ];
 
-        /* DETAILED CONTENT MAPPING EXAMPLE */
-        const syllabusDetails = {};
+        // --- FALLBACK MOCK NOTES & QUIZ DATABASE ---
+        const notesDb = {
+            "1.1.1": "<h4>Banking Institutions in Nepal</h4><ul><li><strong>Commercial Banks (Class A):</strong> Core operations like deposit collection, credit creation, foreign trade financing. Minimum capital requirement: NPR 8 Billion.</li><li><strong>Development Banks (Class B):</strong> Sector-specific project financing and localized banking services.</li><li><strong>Finance Companies (Class C) & Microfinance (Class D)</strong>: Tailored financial products and micro-credit services.</li></ul>",
+            "1.3.1": "<h4>NRB Act 2058 & BAFIA 2073</h4><ul><li><strong>NRB Act 2058:</strong> Grants central banking autonomy, monetary policy execution, regulator of BFIs.</li><li><strong>BAFIA 2073:</strong> Regulates licensing, corporate governance, loan recovery, and capital adequacy standards.</li></ul>",
+            "2.1.3": "<h4>AI, ML & Blockchain in Banking</h4><ul><li><strong>AI/ML:</strong> Advanced fraud detection, automated chatbots, automated credit scoring models.</li><li><strong>Blockchain:</strong> Immutable ledger, smart contracts, transparent cross-border remittances.</li></ul>",
+            "2.6.3": "<h4>NRB Cyber Resilience Guidelines 2023</h4><ul><li>Mandatory 24/7 SOC (Security Operations Center) monitoring.</li><li>Periodic Vulnerability Assessment and Penetration Testing (VAPT).</li><li>Mandatory Disaster Recovery (DR) drills and cyber incident reporting.</li></ul>"
+        };
 
-        let userApiKey = "";
-        let currentHighlightColor = "#fef08a";
+        const quizDb = {
+            "1.1.1": {
+                q: "What is the primary function of Class 'A' Commercial Banks in Nepal?",
+                opts: ["Deposit collection & Credit Creation", "Only Rural Micro-loans", "Stock Broking Only", "Insurance Policies"],
+                ans: 0,
+                exp: "Class A Commercial Banks are primary creators of credit and offer comprehensive retail and corporate banking services."
+            },
+            "2.1.3": {
+                q: "Which underlying technology enables decentralized and tamper-proof ledgers?",
+                opts: ["Cloud Computing", "Blockchain Technology", "Virtualization", "Relational Database"],
+                ans: 1,
+                exp: "Blockchain operates on a decentralized, cryptographically secured distributed ledger framework."
+            },
+            "2.6.3": {
+                q: "According to NRB IT Guidelines, how often should BFIs perform VAPT?",
+                opts: ["Once every 5 years", "At least annually", "Never", "Every month"],
+                ans: 1,
+                exp: "NRB mandates at least annual Vulnerability Assessment and Penetration Testing (VAPT) for all critical systems."
+            }
+        };
 
-        /* 2. CORE RENDER ENGINE */
+        // --- SECURE AI INTEGRATION ---
+        // API keys are intentionally not stored in the browser.
+        // For production AI features, connect a secure backend/serverless function.
+        async function fetchGeminiQuiz(subtopicId, title) {
+            showSecureAiMessage("AI quiz generation requires a secure backend endpoint. API keys should never be exposed in frontend code.");
+            return null;
+        }
+
+        async function fetchGeminiNotes(subtopicId, title) {
+            showSecureAiMessage("AI note generation requires a secure backend endpoint. API keys should never be exposed in frontend code.");
+            return null;
+        }
+
+        function showSecureAiMessage(message) {
+            const viewerContent = document.getElementById('viewerContent');
+            viewerContent.innerHTML = `
+                <div class="secure-ai-message">
+                    <div class="secure-ai-icon">🔒</div>
+                    <h3>Secure AI Integration</h3>
+                    <p>${message}</p>
+                    <small>Recommended architecture: Frontend → Secure Backend/API Route → Gemini API</small>
+                </div>
+            `;
+        }
+
+        // --- RENDER SYLLABUS ACCORDION WITH LOCALSTORAGE PERSISTENCE ---
         function renderSyllabus() {
             const container = document.getElementById('syllabusContainer');
-            container.innerHTML = '';
+            const savedProgress = JSON.parse(localStorage.getItem('rbb_completed_topics') || '{}');
 
-            window.rbblSyllabusUpdated.forEach((sec, sIdx) => {
-                const banner = document.createElement('div');
-                banner.className = 'section-title-banner';
-                banner.innerHTML = `<i class="fa-solid fa-book"></i> ${sec.section_title}`;
-                container.appendChild(banner);
+            window.rbbSyllabus.forEach(sec => {
+                const secTitle = document.createElement('div');
+                secTitle.className = 'section-title-banner';
+                secTitle.innerText = sec.section_title;
+                container.appendChild(secTitle);
 
-                sec.topics.forEach((top, tIdx) => {
-                    const acc = document.createElement('div');
-                    acc.className = 'accordion-item';
+                sec.topics.forEach(topic => {
+                    const item = document.createElement('div');
+                    item.className = 'accordion-item';
 
-                    let subHTML = '';
-                    top.subtopics.forEach((sub, subIdx) => {
-                        const subId = `${sIdx + 1}.${tIdx + 1}.${subIdx + 1}`;
-                        const safeTitle = sub.replace(/'/g, "\\'");
-
-                        subHTML += `
+                    let subtopicsHTML = topic.subtopics.map(sub => {
+                        const isChecked = savedProgress[sub.id] ? 'checked' : '';
+                        const escapedTitle = sub.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        return `
                             <div class="topic-row">
-                                <div class="topic-main-info">
-                                    <input type="checkbox" class="cb-item" onchange="calcProgress()">
-                                    <span class="topic-text"><strong>${subId}</strong> ${sub}</span>
-                                </div>
+                                <input type="checkbox" id="chk_${sub.id}" ${isChecked} onchange="updateProgress()">
+                                <span class="topic-text"><strong>[${sub.id}]</strong> ${sub.title}</span>
                                 <div class="action-btns">
-                                    <button class="btn-action btn-view" onclick="openNotesViewer('${subId}', '${safeTitle}')">
-                                        <i class="fa-regular fa-file-lines"></i> View Notes
-                                    </button>
-                                    <button class="btn-action btn-quiz" onclick="openQuizModal('${safeTitle}')">
-                                        <i class="fa-solid fa-brain"></i> Quiz
-                                    </button>
+                                    <button class="view-btn" onclick="openNotes('${sub.id}', '${escapedTitle}')">View Note</button>
+                                    <button class="quiz-btn" onclick="openQuiz('${sub.id}', '${escapedTitle}')">Quiz</button>
                                 </div>
                             </div>
                         `;
-                    });
+                    }).join('');
 
-                    acc.innerHTML = `
-                        <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">
-                            <span>${top.title}</span>
-                            <i class="fa-solid fa-chevron-down icon"></i>
+                    item.innerHTML = `
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">${topic.id} - ${topic.title}</span>
+                            <span style="color:var(--accent-blue)" class="arrow">▼</span>
                         </div>
-                        <div class="accordion-content">${subHTML}</div>
+                        <div class="accordion-content">
+                            ${subtopicsHTML}
+                        </div>
                     `;
-                    container.appendChild(acc);
+                    container.appendChild(item);
                 });
             });
-            calcProgress();
+
+            updateProgress();
         }
 
-        /* 3. NOTES VIEWER & MARKUP */
-        function openNotesViewer(id, title) {
-            document.getElementById('modalTitle').innerText = `${id} - ${title}`;
-            document.getElementById('markupToolbar').style.display = 'flex';
-            const body = document.getElementById('modalBody');
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
             
-            const detail = syllabusDetails[id];
-            if (detail && detail.pdfUrl) {
-                const gDriveViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(detail.pdfUrl)}&embedded=true`;
-                body.innerHTML = `<iframe src="${gDriveViewerUrl}" style="width:100%; height:100%; border:none;"></iframe>`;
+            if (content.classList.contains('open')) {
+                content.style.maxHeight = '0px';
+                content.classList.remove('open');
+                arrow.innerText = '▼';
             } else {
-                body.innerHTML = `
-                    <div id="notesTextContainer" onmouseup="applyHighlight()" style="line-height: 1.8; font-size: 15px; color: #334155;">
-                        <h3 style="margin-bottom: 12px; color: var(--primary-dark);">${title}</h3>
-                        <h4>Overview & Study Material:</h4>
-                        <p>${detail ? detail.notes : 'This topic covers essential operational, technological, and regulatory aspects prescribed by Rastriya Banijya Bank (RBB) and Nepal Rastra Bank (NRB) for the Level 5 IT examination.'}</p>
-                        <br>
-                        <div style="background-color: #f8fafc; border-left: 4px solid var(--primary-color); padding: 12px; margin-top: 10px;">
-                            <strong>Key Highlights:</strong>
-                            <ul style="margin-left: 20px; margin-top: 5px;">
-                                <li>Understand theoretical foundations, procedures, and practical applications.</li>
-                                <li>Ensure compliance with Nepal Rastra Bank Guidelines & Acts.</li>
-                            </ul>
-                        </div>
-                        <br>
-                        <p><em>(Tip: Highlight any text above using your mouse cursor to mark key notes with color!)</em></p>
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + 30 + 'px';
+                arrow.innerText = '▲';
+            }
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.topic-row input[type="checkbox"]');
+            let checkedCount = 0;
+            const savedProgress = {};
+
+            checkboxes.forEach(chk => {
+                const subId = chk.id.replace('chk_', '');
+                if (chk.checked) {
+                    checkedCount++;
+                    savedProgress[subId] = true;
+                }
+            });
+
+            const pct = checkboxes.length ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
+            document.getElementById('progBar').style.width = pct + '%';
+            document.getElementById('progPct').innerText = pct + '% Completed';
+            
+            document.getElementById('trackerSummary').innerText = `Completed ${checkedCount} out of ${checkboxes.length} subtopics (${pct}%).`;
+
+            localStorage.setItem('rbb_completed_topics', JSON.stringify(savedProgress));
+        }
+
+        // --- NOTES & QUIZ DISPLAY FUNCTIONS ---
+        async function openNotes(id, title) {
+            document.getElementById('panelTitle').innerText = "Study Notes";
+            const viewerContent = document.getElementById('viewerContent');
+            showRightSidebar();
+
+            const noteText = notesDb[id] || `<h4>${title}</h4><p style="font-size:13px; margin-top:8px;">यहाँ <strong>${title}</strong> सम्बन्धी मुख्य पाठ्यक्रम बुँदाहरू, ऐनका दफाहरू र सम्भावित परीक्षाका उत्तरहरू उपलब्ध हुनेछन्।</p>`;
+            viewerContent.innerHTML = `<h3>[${id}] Notes</h3>${noteText}`;
+        }
+
+        async function openQuiz(id, title) {
+            document.getElementById('panelTitle').innerText = "Topic Practice Quiz";
+            const viewerContent = document.getElementById('viewerContent');
+            showRightSidebar();
+
+            const renderQuizObj = (qData, isAi = false) => {
+                const optionsHTML = qData.opts.map((opt, index) => `
+                    <div class="quiz-opt" onclick="checkAnswer(this, ${index}, ${qData.ans}, '${qData.exp.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        ${String.fromCharCode(65 + index)}. ${opt}
+                    </div>
+                `).join('');
+
+                viewerContent.innerHTML = `
+                    <h3>[${id}] Quiz Evaluation ${isAi ? '✨ (Gemini AI)' : ''}</h3>
+                    <button class="ai-gen-btn" onclick="generateAiQuiz('${id}', '${title.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        🔒 Generate AI MCQ Securely
+                    </button>
+                    <div class="quiz-card">
+                        <div class="quiz-q">${qData.q}</div>
+                        <div>${optionsHTML}</div>
+                        <div id="quizExplanation" style="display:none; margin-top:12px; font-size:12px; color:#334155; padding:8px; background:#f8fafc; border-radius:4px; border-left:3px solid #00bcd4;"></div>
                     </div>
                 `;
-            }
-            document.getElementById('portalModal').style.display = 'flex';
+            };
+
+            const defaultQ = quizDb[id] || {
+                q: `Select the option that best defines or represents: ${title}`,
+                opts: [
+                    "Standard Operational Procedure Requirement",
+                    "Core Statutory Framework Standard",
+                    "Technical Implementation Directive",
+                    "General Informational Practice"
+                ],
+                ans: 0,
+                exp: "This conceptual question checks core theoretical awareness regarding the chosen syllabus subtopic."
+            };
+
+            renderQuizObj(defaultQ, false);
         }
 
-        function setHighlightColor(color) { currentHighlightColor = color; }
+        async function generateAiQuiz(id, title) {
+            const viewerContent = document.getElementById('viewerContent');
+            const btn = viewerContent.querySelector('.ai-gen-btn');
+            if (btn) btn.innerHTML = `<span class="loader-spinner"></span> Generating AI Quiz...`;
 
-        function applyHighlight() {
-            const selection = window.getSelection();
-            if (!selection.rangeCount || selection.isCollapsed) return;
-            const range = selection.getRangeAt(0);
-            const span = document.createElement('span');
-            span.style.backgroundColor = currentHighlightColor;
-            span.style.borderRadius = '3px';
-            span.style.padding = '0 2px';
-            range.surroundContents(span);
-            selection.removeAllRanges();
-        }
-
-        function clearHighlights() {
-            const container = document.getElementById('notesTextContainer');
-            if (container) {
-                container.querySelectorAll('span[style*="background-color"]').forEach(el => {
-                    el.outerHTML = el.innerHTML;
-                });
-            }
-        }
-
-        /* 4. GEMINI API QUIZ GENERATOR */
-        function openQuizModal(topicTitle) {
-            document.getElementById('modalTitle').innerText = `AI Quiz: ${topicTitle}`;
-            document.getElementById('markupToolbar').style.display = 'none';
-            const body = document.getElementById('modalBody');
-
-            body.innerHTML = `
-                <div class="quiz-container">
-                    <div class="api-input-group">
-                        <input type="password" id="geminiApiKey" placeholder="Enter Gemini API Key (e.g., AIzaSy...)" value="${userApiKey}">
-                        <button class="btn-action btn-quiz" onclick="generateGeminiQuiz('${topicTitle}')">Generate Quiz</button>
+            const aiQ = await fetchGeminiQuiz(id, title);
+            if (aiQ) {
+                const optionsHTML = aiQ.opts.map((opt, index) => `
+                    <div class="quiz-opt" onclick="checkAnswer(this, ${index}, ${aiQ.ans}, '${aiQ.exp.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        ${String.fromCharCode(65 + index)}. ${opt}
                     </div>
-                    <div id="quizContent">
-                        <p style="text-align:center; color: #64748b; margin-top: 30px;">
-                            <i class="fa-solid fa-sparkles" style="font-size: 24px; color: var(--accent-purple);"></i><br><br>
-                            Enter your Gemini API key above to generate real-time practice questions for <strong>${topicTitle}</strong>.
-                        </p>
+                `).join('');
+
+                viewerContent.innerHTML = `
+                    <h3>[${id}] Quiz Evaluation ✨ (Gemini AI)</h3>
+                    <button class="ai-gen-btn" onclick="generateAiQuiz('${id}', '${title.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        🔒 Generate Another AI MCQ
+                    </button>
+                    <div class="quiz-card">
+                        <div class="quiz-q">${aiQ.q}</div>
+                        <div>${optionsHTML}</div>
+                        <div id="quizExplanation" style="display:none; margin-top:12px; font-size:12px; color:#334155; padding:8px; background:#f8fafc; border-radius:4px; border-left:3px solid #00bcd4;"></div>
                     </div>
-                </div>
-            `;
-            document.getElementById('portalModal').style.display = 'flex';
-        }
-
-        async function generateGeminiQuiz(topicTitle) {
-            const keyInput = document.getElementById('geminiApiKey').value.trim();
-            if (!keyInput) { alert("Please enter a valid Gemini API Key!"); return; }
-            userApiKey = keyInput;
-
-            const quizContent = document.getElementById('quizContent');
-            quizContent.innerHTML = `<p style="text-align:center; margin-top:20px;">Generating Quiz Questions via Gemini API...</p>`;
-
-            /* PROMPT FOR GEMINI API */
-            const promptText = `Generate a JSON array of 3 multiple-choice questions for the IT/Banking exam topic: "${topicTitle}". 
-            Output strictly valid JSON with no markdown formatting.
-            Structure:
-            [
-              {
-                "question": "Question string",
-                "options": ["Opt A", "Opt B", "Opt C", "Opt D"],
-                "answerIndex": 0
-              }
-            ]`;
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${userApiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }]
-                    })
-                });
-
-                const data = await response.json();
-                let rawText = data.candidates[0].content.parts[0].text;
-                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-                const questions = JSON.parse(rawText);
-
-                renderQuizQuestions(questions, quizContent);
-            } catch (err) {
-                quizContent.innerHTML = `<p style="color: red; text-align: center; margin-top:20px;">Error generating quiz. Please check your Gemini API key or network connection.</p>`;
+                `;
+            } else if (btn) {
+                btn.innerHTML = `🔒 Generate AI MCQ Securely`;
             }
         }
 
-        function renderQuizQuestions(questions, container) {
-            container.innerHTML = '';
-            questions.forEach((q, qIdx) => {
-                const card = document.createElement('div');
-                card.className = 'quiz-card';
-                
-                let optsHTML = '';
-                q.options.forEach((opt, oIdx) => {
-                    optsHTML += `<div class="quiz-option" onclick="checkAnswer(this, ${oIdx}, ${q.answerIndex})">${opt}</div>`;
-                });
-
-                card.innerHTML = `<p>Q${qIdx + 1}. ${q.question}</p>${optsHTML}`;
-                container.appendChild(card);
-            });
-        }
-
-        function checkAnswer(element, selected, correct) {
+        function checkAnswer(element, selected, correct, exp) {
             const parent = element.parentElement;
-            const options = parent.querySelectorAll('.quiz-option');
-            options.forEach(opt => opt.style.pointerEvents = 'none');
+            const options = parent.querySelectorAll('.quiz-opt');
+            options.forEach((opt, idx) => {
+                opt.onclick = null;
+                if (idx === correct) {
+                    opt.classList.add('correct');
+                } else if (idx === selected) {
+                    opt.classList.add('wrong');
+                }
+            });
 
-            if (selected === correct) {
-                element.classList.add('correct');
-            } else {
-                element.classList.add('wrong');
-                options[correct].classList.add('correct');
+            const expBox = document.getElementById('quizExplanation');
+            if (expBox) {
+                expBox.style.display = 'block';
+                expBox.innerHTML = `<strong>Explanation:</strong> ${exp}`;
             }
         }
 
-        /* 5. UTILITIES: MAXIMIZE, TIMER & PROGRESS */
-        function toggleMaximize() {
-            const modal = document.getElementById('modalBox');
-            const icon = document.getElementById('maxBtn');
-            modal.classList.toggle('maximized');
-            icon.classList.toggle('fa-compress');
+        function showRightSidebar() {
+            const sidebar = document.getElementById('pdfViewerSidebar');
+            if (window.innerWidth <= 992) {
+                sidebar.classList.add('active-mobile');
+            }
         }
 
-        function closeModal() {
-            document.getElementById('portalModal').style.display = 'none';
+        function closeMobileViewer() {
+            document.getElementById('pdfViewerSidebar').classList.remove('active-mobile');
         }
 
-        function calcProgress() {
-            const checkboxes = document.querySelectorAll('.cb-item');
-            const total = checkboxes.length;
-            let checked = 0;
-            checkboxes.forEach(cb => { if(cb.checked) checked++; });
-            const pct = Math.round((checked / total) * 100) || 0;
-            document.getElementById('progressBar').style.width = `${pct}%`;
-            document.getElementById('progressText').innerText = `${pct}% Completed (${checked}/${total})`;
+        function toggleViewerMaximize() {
+            const sidebar = document.getElementById('pdfViewerSidebar');
+            const btn = document.getElementById('toggleMaximizeBtn');
+            if (sidebar.classList.contains('maximized')) {
+                sidebar.classList.remove('maximized');
+                btn.innerText = "Maximize 🗖";
+            } else {
+                sidebar.classList.add('maximized');
+                btn.innerText = "Restore 🗗";
+            }
         }
 
-        /* SESSION TIMER */
-        let secondsSpent = 0;
-        setInterval(() => {
-            secondsSpent++;
-            const hrs = String(Math.floor(secondsSpent / 3600)).padStart(2, '0');
-            const mins = String(Math.floor((secondsSpent % 3600) / 60)).padStart(2, '0');
-            const secs = String(secondsSpent % 60).padStart(2, '0');
-            document.getElementById('sessionTimer').innerText = `${hrs}:${mins}:${secs}`;
-        }, 1000);
+        // --- COUNTDOWN TIMER SYSTEM ---
+        let timerInterval = null;
+        let totalSeconds = parseInt(localStorage.getItem('rbb_timer_seconds')) || (3 * 3600);
 
-        document.addEventListener('DOMContentLoaded', renderSyllabus);
+        function renderTimer() {
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+
+            const pad = num => String(num).padStart(2, '0');
+            document.getElementById('timerBox').innerText = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+            localStorage.setItem('rbb_timer_seconds', totalSeconds);
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                    renderTimer();
+                } else {
+                    pauseTimer();
+                    alert("⏱️ Study Time Elapsed!");
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function applyCustomTime() {
+            pauseTimer();
+            const h = parseInt(document.getElementById('hrIn').value) || 0;
+            const m = parseInt(document.getElementById('minIn').value) || 0;
+            totalSeconds = (h * 3600) + (m * 60);
+            renderTimer();
+        }
+
+        // --- INIT APP ---
+        window.onload = () => {
+            renderSyllabus();
+            renderTimer();
+        };
     </script>
 </body>
+
 </html>
