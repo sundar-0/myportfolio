@@ -14,31 +14,20 @@
         RBB Level 5 IT — Smart Exam Preparation Dashboard
     </title>
 
-
     <style>
 
         :root {
 
-            --bg-main: #f5f7fb;
-
-            --bg-card: #ffffff;
-
-            --border: #e2e8f0;
-
-            --primary: #2563eb;
-
-            --secondary: #7c3aed;
-
-            --text: #172033;
-
-            --muted: #64748b;
-
-            --success: #16a34a;
-
-            --danger: #dc2626;
-
-            --shadow:
-                0 8px 24px rgba(15, 23, 42, .08);
+            --bg-main: #040914;
+            --bg-side: #0a1124;
+            --bg-card: #0d1730;
+            --border-blue: #1b3564;
+            --accent-blue: #00bcd4;
+            --text-main: #e2e8f0;
+            --text-muted: #718096;
+            --green-active: #00e676;
+            --red-alert: #ff1744;
+            --purple-accent: #7c4dff;
 
         }
 
@@ -46,14 +35,13 @@
         * {
 
             margin: 0;
-
             padding: 0;
-
             box-sizing: border-box;
 
             font-family:
                 "Segoe UI",
                 system-ui,
+                -apple-system,
                 sans-serif;
 
         }
@@ -61,48 +49,37 @@
 
         body {
 
-            background:
-
-                radial-gradient(
-                    circle at 10% 0%,
-                    rgba(79, 70, 229, .08),
-                    transparent 28%
-                ),
-
-                var(--bg-main);
-
-            color: var(--text);
+            background: var(--bg-main);
+            color: var(--text-main);
 
             height: 100vh;
-
             overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
 
         }
 
 
+        /* HEADER */
+
         .header {
 
-            height: 72px;
+            background: #060d1f;
+
+            padding: 12px 24px;
 
             display: flex;
 
-            align-items: center;
-
             justify-content: space-between;
+
+            align-items: center;
 
             gap: 15px;
 
-            padding: 10px 22px;
+            border-bottom: 2px solid var(--border-blue);
 
-            background: rgba(255,255,255,.95);
-
-            border-bottom: 1px solid var(--border);
-
-            box-shadow: var(--shadow);
-
-            position: relative;
-
-            z-index: 20;
+            z-index: 100;
 
         }
 
@@ -113,18 +90,20 @@
 
             align-items: center;
 
-            gap: 18px;
+            gap: 15px;
 
         }
 
 
         .tracker-lbl {
 
-            color: #1e3a8a;
+            color: var(--accent-blue);
+
+            font-weight: 800;
 
             font-size: 15px;
 
-            font-weight: 800;
+            letter-spacing: .5px;
 
         }
 
@@ -133,7 +112,7 @@
 
             display: block;
 
-            color: var(--muted);
+            color: var(--text-muted);
 
             font-size: 10px;
 
@@ -144,19 +123,21 @@
 
         .timer-display {
 
-            background: #111827;
+            background: #000;
 
-            color: #fbbf24;
+            color: #ffb300;
 
             font-family: monospace;
 
-            font-size: 23px;
+            font-size: 24px;
+
+            padding: 4px 14px;
+
+            border-radius: 6px;
+
+            border: 1px solid #ffb300;
 
             font-weight: bold;
-
-            padding: 6px 14px;
-
-            border-radius: 10px;
 
         }
 
@@ -167,7 +148,7 @@
 
             align-items: center;
 
-            gap: 7px;
+            gap: 8px;
 
             flex-wrap: wrap;
 
@@ -176,13 +157,17 @@
 
         .time-input {
 
-            width: 55px;
+            background: #121e36;
 
-            padding: 8px;
+            border: 1px solid var(--border-blue);
 
-            border: 1px solid var(--border);
+            color: white;
 
-            border-radius: 8px;
+            padding: 6px 8px;
+
+            border-radius: 4px;
+
+            width: 48px;
 
             text-align: center;
 
@@ -191,68 +176,80 @@
 
         .btn {
 
+            padding: 8px 14px;
+
             border: none;
 
-            border-radius: 8px;
-
-            padding: 9px 13px;
-
-            font-size: 12px;
+            border-radius: 4px;
 
             font-weight: bold;
 
             cursor: pointer;
+
+            font-size: 12px;
 
         }
 
 
         .btn-apply {
 
-            background: #f8fafc;
+            background: #121e36;
 
-            border: 1px solid var(--border);
+            color: white;
+
+            border: 1px solid var(--border-blue);
 
         }
 
 
         .btn-start {
 
-            background: #dcfce7;
+            background: #005a43;
 
-            color: #15803d;
+            color: #00e676;
+
+            border: 1px solid #00e676;
 
         }
 
 
         .btn-pause {
 
-            background: #fee2e2;
+            background: #6a1b1b;
 
-            color: #b91c1c;
+            color: #ff1744;
+
+            border: 1px solid #ff1744;
 
         }
 
+
+        /* MAIN LAYOUT */
 
         .app-container {
 
             display: flex;
 
-            height: calc(100vh - 72px);
+            flex: 1;
 
             overflow: hidden;
+
+            position: relative;
 
         }
 
 
+        /* LEFT SIDEBAR */
+
         .left-sidebar {
 
-            width: 285px;
+            width: 280px;
+
+            background: var(--bg-side);
+
+            border-right: 2px solid var(--border-blue);
 
             padding: 20px;
-
-            background: rgba(255,255,255,.92);
-
-            border-right: 1px solid var(--border);
 
             overflow-y: auto;
 
@@ -261,19 +258,23 @@
 
         .brand-title {
 
-            padding: 18px;
-
-            border-radius: 16px;
-
             background:
 
                 linear-gradient(
+
                     135deg,
-                    #eef2ff,
-                    #eff6ff
+
+                    rgba(0,188,212,.12),
+
+                    rgba(124,77,255,.12)
+
                 );
 
-            border: 1px solid #dbeafe;
+            border: 1px solid var(--border-blue);
+
+            border-radius: 12px;
+
+            padding: 18px;
 
             margin-bottom: 18px;
 
@@ -282,7 +283,7 @@
 
         .brand-title h1 {
 
-            color: #1e3a8a;
+            color: var(--accent-blue);
 
             font-size: 17px;
 
@@ -293,51 +294,49 @@
 
         .brand-title p {
 
-            color: var(--muted);
+            color: var(--text-muted);
 
             font-size: 12px;
 
-            margin-top: 5px;
+            margin-top: 6px;
 
         }
 
 
         .api-config-card {
 
+            background: #050d1e;
+
+            border: 1px solid var(--border-blue);
+
+            border-radius: 12px;
+
             padding: 18px;
-
-            border-radius: 16px;
-
-            background: white;
-
-            border: 1px solid var(--border);
-
-            box-shadow: var(--shadow);
 
         }
 
 
         .api-config-card h3 {
 
-            color: #1e40af;
+            color: var(--green-active);
 
-            font-size: 14px;
-
-            margin-bottom: 8px;
+            margin-bottom: 10px;
 
         }
 
 
         .api-config-card p {
 
-            color: var(--muted);
+            font-size: 11.5px;
 
-            font-size: 12px;
+            color: var(--text-main);
 
-            line-height: 1.5;
+            line-height: 1.6;
 
         }
 
+
+        /* CENTER */
 
         .center-content {
 
@@ -354,15 +353,13 @@
 
             background: var(--bg-card);
 
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-blue);
 
-            border-radius: 18px;
+            border-radius: 12px;
 
             padding: 20px;
 
-            box-shadow: var(--shadow);
-
-            margin-bottom: 22px;
+            margin-bottom: 20px;
 
         }
 
@@ -375,6 +372,8 @@
 
             align-items: center;
 
+            gap: 15px;
+
             margin-bottom: 15px;
 
         }
@@ -384,15 +383,15 @@
 
             display: block;
 
-            color: #6366f1;
+            color: var(--accent-blue);
 
             font-size: 10px;
 
-            font-weight: 800;
+            font-weight: bold;
 
             letter-spacing: 1px;
 
-            margin-bottom: 4px;
+            margin-bottom: 5px;
 
         }
 
@@ -406,15 +405,15 @@
 
         .progress-badge {
 
+            background: rgba(0,188,212,.1);
+
+            color: var(--accent-blue);
+
+            border: 1px solid rgba(0,188,212,.4);
+
             padding: 8px 12px;
 
             border-radius: 999px;
-
-            color: #4338ca;
-
-            background: #eef2ff;
-
-            border: 1px solid #c7d2fe;
 
             font-size: 12px;
 
@@ -425,9 +424,9 @@
 
         .progress-bar-bg {
 
-            height: 11px;
+            background: #111d3a;
 
-            background: #eef2f7;
+            height: 12px;
 
             border-radius: 999px;
 
@@ -438,16 +437,20 @@
 
         .progress-bar-fill {
 
-            height: 100%;
-
             width: 0%;
+
+            height: 100%;
 
             background:
 
                 linear-gradient(
+
                     90deg,
-                    #2563eb,
-                    #7c3aed
+
+                    #00bcd4,
+
+                    #7c4dff
+
                 );
 
             transition: width .3s ease;
@@ -455,61 +458,51 @@
         }
 
 
+        /* SECTION */
+
         .section-title-banner {
 
-            margin: 28px 0 14px;
-
-            padding: 14px 18px;
-
-            border-radius: 14px;
-
-            background:
-
-                linear-gradient(
-                    90deg,
-                    #eef2ff,
-                    #eff6ff
-                );
-
-            border: 1px solid #dbeafe;
-
-            color: #1e3a8a;
+            color: var(--accent-blue);
 
             font-size: 14px;
 
             font-weight: 800;
 
+            margin: 22px 0 12px;
+
+            border-left: 4px solid var(--accent-blue);
+
+            padding-left: 10px;
+
         }
 
 
+        /* ACCORDION */
+
         .accordion-item {
 
-            background: white;
+            background: var(--bg-card);
 
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-blue);
 
-            border-radius: 16px;
+            border-radius: 8px;
 
-            margin-bottom: 14px;
+            margin-bottom: 12px;
 
             overflow: hidden;
-
-            box-shadow: var(--shadow);
 
         }
 
 
         .accordion-header {
 
-            display: flex;
+            padding: 14px 18px;
 
-            align-items: center;
+            display: flex;
 
             justify-content: space-between;
 
-            gap: 10px;
-
-            padding: 17px 20px;
+            align-items: center;
 
             cursor: pointer;
 
@@ -518,18 +511,18 @@
 
         .accordion-header:hover {
 
-            background: #f8fafc;
+            background: #111d3a;
 
         }
 
 
         .accordion-title {
 
-            color: #1e293b;
-
             font-size: 14px;
 
-            font-weight: 700;
+            font-weight: 600;
+
+            color: #fff;
 
         }
 
@@ -540,23 +533,29 @@
 
             overflow: hidden;
 
-            transition: max-height .35s ease;
+            transition:
 
-            background: #fbfdff;
+                max-height .35s ease-out,
 
-            padding: 0 20px;
+                padding .35s ease-out;
+
+            background: #080f21;
+
+            padding: 0 18px;
 
         }
 
 
         .accordion-content.open {
 
-            padding: 12px 20px 16px;
+            padding: 10px 18px 15px;
 
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-blue);
 
         }
 
+
+        /* TOPIC */
 
         .topic-row {
 
@@ -564,11 +563,13 @@
 
             align-items: center;
 
+            justify-content: space-between;
+
             gap: 12px;
 
-            padding: 13px 0;
+            padding: 10px 0;
 
-            border-bottom: 1px solid #eef2f7;
+            border-bottom: 1px solid #142242;
 
         }
 
@@ -586,7 +587,7 @@
 
             height: 16px;
 
-            accent-color: var(--primary);
+            accent-color: var(--accent-blue);
 
             cursor: pointer;
 
@@ -597,11 +598,11 @@
 
             flex: 1;
 
-            color: #334155;
-
             font-size: 13px;
 
             line-height: 1.5;
+
+            color: var(--text-main);
 
         }
 
@@ -619,50 +620,56 @@
 
         .quiz-btn {
 
-            border-radius: 8px;
+            border: 1px solid var(--border-blue);
 
-            padding: 7px 10px;
+            padding: 6px 10px;
+
+            border-radius: 5px;
 
             font-size: 11px;
-
-            font-weight: 700;
 
             cursor: pointer;
 
             white-space: nowrap;
+
+            font-weight: 600;
 
         }
 
 
         .view-btn {
 
-            background: #eff6ff;
+            background: rgba(0,188,212,.1);
 
-            color: #2563eb;
+            color: var(--accent-blue);
 
-            border: 1px solid #bfdbfe;
+            border-color: rgba(0,188,212,.3);
 
         }
 
 
         .quiz-btn {
 
-            background: #f5f3ff;
+            background: rgba(124,77,255,.15);
 
-            color: #7c3aed;
+            color: var(--purple-accent);
 
-            border: 1px solid #ddd6fe;
+            border-color: rgba(124,77,255,.4);
 
         }
 
 
+        /* RIGHT VIEWER */
+
         .right-sidebar {
 
-            width: 420px;
+            width: 410px;
 
-            background: #f8fafc;
+            background: #eef2f6;
 
-            border-left: 1px solid var(--border);
+            color: #111;
+
+            border-left: 2px solid var(--border-blue);
 
             display: flex;
 
@@ -681,7 +688,7 @@
 
             inset: 0;
 
-            width: 100%;
+            width: 100% !important;
 
             height: 100%;
 
@@ -692,64 +699,81 @@
 
         .viewer-header {
 
+            background: #0c162d;
+
+            color: var(--accent-blue);
+
+            padding: 14px 18px;
+
+            font-weight: bold;
+
+            font-size: 13px;
+
             display: flex;
 
             justify-content: space-between;
 
             align-items: center;
 
-            padding: 16px 18px;
+        }
 
-            background: #111827;
 
-            color: white;
+        .mx-btn {
 
-            font-size: 13px;
+            background: rgba(0,188,212,.15);
+
+            border: 1px solid var(--accent-blue);
+
+            color: var(--accent-blue);
+
+            padding: 5px 9px;
+
+            font-size: 11px;
+
+            border-radius: 4px;
+
+            cursor: pointer;
 
             font-weight: bold;
 
         }
 
 
-        .mx-btn {
-
-            border: 1px solid rgba(255,255,255,.35);
-
-            background: rgba(255,255,255,.1);
-
-            color: white;
-
-            border-radius: 7px;
-
-            padding: 6px 9px;
-
-            font-size: 11px;
-
-            cursor: pointer;
-
-        }
-
-
         .viewer-body {
-
-            flex: 1;
 
             padding: 20px;
 
+            flex: 1;
+
             overflow-y: auto;
+
+            color: #1a202c;
 
         }
 
 
+        .viewer-body h3 {
+
+            color: #0f172a;
+
+            font-size: 16px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        /* PDF */
+
         .pdf-container {
-
-            display: flex;
-
-            flex-direction: column;
 
             height: 100%;
 
             min-height: 600px;
+
+            display: flex;
+
+            flex-direction: column;
 
         }
 
@@ -760,11 +784,9 @@
 
             justify-content: space-between;
 
-            align-items: center;
+            align-items: flex-start;
 
             gap: 10px;
-
-            flex-wrap: wrap;
 
             margin-bottom: 12px;
 
@@ -773,43 +795,41 @@
 
         .pdf-toolbar h3 {
 
-            margin: 0;
-
             font-size: 15px;
+
+            margin-bottom: 5px;
 
         }
 
 
         .pdf-meta {
 
-            color: var(--muted);
+            color: #64748b;
 
             font-size: 11px;
 
-            line-height: 1.5;
-
-            margin-top: 5px;
+            line-height: 1.6;
 
         }
 
 
         .open-pdf-btn {
 
-            display: inline-block;
-
-            padding: 8px 12px;
-
-            border-radius: 8px;
-
-            background: var(--primary);
+            background: #2563eb;
 
             color: white;
 
             text-decoration: none;
 
+            padding: 8px 11px;
+
+            border-radius: 6px;
+
             font-size: 11px;
 
             font-weight: bold;
+
+            white-space: nowrap;
 
         }
 
@@ -824,54 +844,160 @@
 
             border: none;
 
-            border-radius: 12px;
+            border-radius: 8px;
 
             background: white;
 
         }
 
 
+        /* COMING SOON */
+
+        .coming-soon-box,
+
+        .loading-box {
+
+            min-height: 420px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding: 25px;
+
+        }
+
+
+        .coming-soon-icon {
+
+            font-size: 64px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .coming-soon-box h2 {
+
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .coming-soon-box p {
+
+            color: #475569;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .coming-soon-info {
+
+            margin-top: 20px;
+
+            padding: 14px 18px;
+
+            border-radius: 10px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            color: #1d4ed8;
+
+            font-size: 12px;
+
+        }
+
+
+        .topic-path {
+
+            margin-top: 15px;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+
+        }
+
+
+        .loading-spinner {
+
+            font-size: 42px;
+
+            animation: spin 1s linear infinite;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform: rotate(360deg);
+
+            }
+
+        }
+
+
+        /* QUIZ */
+
         .quiz-card {
 
             background: white;
 
-            padding: 18px;
+            padding: 16px;
 
-            border-radius: 15px;
+            border-radius: 10px;
 
-            border: 1px solid var(--border);
-
-            box-shadow: var(--shadow);
+            border: 1px solid #cbd5e1;
 
         }
 
 
         .quiz-q {
 
-            font-size: 14px;
-
             font-weight: 700;
 
-            margin-bottom: 14px;
+            font-size: 13.5px;
+
+            margin-bottom: 12px;
 
         }
 
 
         .quiz-opt {
 
+            background: #f1f5f9;
+
             padding: 10px 12px;
+
+            border-radius: 6px;
 
             margin-bottom: 8px;
 
-            border-radius: 9px;
-
-            background: #f8fafc;
-
-            border: 1px solid var(--border);
+            cursor: pointer;
 
             font-size: 12px;
 
-            cursor: pointer;
+            border: 1px solid #e2e8f0;
 
         }
 
@@ -898,7 +1024,10 @@
         }
 
 
+        /* MOBILE */
+
         @media(max-width: 992px) {
+
 
             body {
 
@@ -910,8 +1039,6 @@
 
 
             .header {
-
-                height: auto;
 
                 flex-direction: column;
 
@@ -933,9 +1060,9 @@
 
             .app-container {
 
-                height: auto;
-
                 flex-direction: column;
+
+                height: auto;
 
                 overflow: visible;
 
@@ -948,7 +1075,7 @@
 
                 border-right: none;
 
-                border-bottom: 1px solid var(--border);
+                border-bottom: 2px solid var(--border-blue);
 
             }
 
@@ -972,15 +1099,21 @@
 
                 height: 100vh;
 
+                z-index: 99999;
+
                 opacity: 0;
 
                 pointer-events: none;
 
                 transform: scale(.9);
 
-                transition: .3s ease;
+                transition:
 
-                z-index: 99999;
+                    transform .3s ease,
+
+                    opacity .25s ease;
+
+                background: #fff;
 
             }
 
@@ -1005,7 +1138,7 @@
 
             #toggleMaximizeBtn {
 
-                display: none;
+                display: none !important;
 
             }
 
@@ -1049,6 +1182,8 @@
 <body>
 
 
+    <!-- HEADER -->
+
     <header class="header">
 
 
@@ -1057,13 +1192,16 @@
 
             <span class="tracker-lbl">
 
+
                 🏦 RBB LEVEL 5 IT
+
 
                 <small>
 
                     Smart Exam Preparation Dashboard
 
                 </small>
+
 
             </span>
 
@@ -1170,13 +1308,18 @@
     </header>
 
 
+    <!-- MAIN -->
+
     <div class="app-container">
 
+
+        <!-- LEFT SIDEBAR -->
 
         <aside class="left-sidebar">
 
 
             <div class="brand-title">
+
 
                 <h1>
 
@@ -1191,10 +1334,12 @@
 
                 </p>
 
+
             </div>
 
 
             <div class="api-config-card">
+
 
                 <h3>
 
@@ -1213,11 +1358,14 @@
 
                 </p>
 
+
             </div>
 
 
         </aside>
 
+
+        <!-- CENTER -->
 
         <main
 
@@ -1236,6 +1384,7 @@
 
                     <div>
 
+
                         <span class="eyebrow">
 
                             YOUR PREPARATION JOURNEY
@@ -1248,6 +1397,7 @@
                             Syllabus Progress
 
                         </h2>
+
 
                     </div>
 
@@ -1279,6 +1429,7 @@
 
                     ></div>
 
+
                 </div>
 
 
@@ -1287,6 +1438,8 @@
 
         </main>
 
+
+        <!-- RIGHT VIEWER -->
 
         <aside
 
@@ -1345,6 +1498,7 @@
 
                     </button>
 
+
                 </div>
 
 
@@ -1358,6 +1512,7 @@
                 id="viewerContent"
 
             >
+
 
                 <h3>
 
@@ -1379,6 +1534,7 @@
                     थिचेर PDF notes हेर्नुहोस्।
 
                 </p>
+
 
             </div>
 
@@ -2300,7 +2456,7 @@
 
         /*
         ============================================================
-        DYNAMIC RBB SYLLABUS DETAILS
+        DYNAMIC PDF DETAILS
         ============================================================
         */
 
@@ -2336,20 +2492,16 @@
                             title: subtopic.title,
 
 
-                            sectionId:
-                                section.section_id,
+                            sectionId: section.section_id,
 
 
-                            sectionTitle:
-                                section.section_title,
+                            sectionTitle: section.section_title,
 
 
-                            topicId:
-                                topic.id,
+                            topicId: topic.id,
 
 
-                            topicTitle:
-                                topic.title,
+                            topicTitle: topic.title,
 
 
                             pdfUrl:
@@ -2384,25 +2536,18 @@
 
         /*
         ============================================================
-        LOCAL STORAGE KEYS
+        STORAGE
         ============================================================
         */
 
 
         const STORAGE_KEYS = {
 
+            progress: "rbb_completed_topics",
 
-            progress:
-                "rbb_completed_topics",
+            timer: "rbb_timer_seconds",
 
-
-            timer:
-                "rbb_timer_seconds",
-
-
-            lastNote:
-                "rbb_last_opened_note"
-
+            lastNote: "rbb_last_opened_note"
 
         };
 
@@ -2419,37 +2564,22 @@
 
             return String(value)
 
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
+                .replace(/&/g, "&amp;")
 
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
+                .replace(/</g, "&lt;")
 
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
+                .replace(/>/g, "&gt;")
 
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
+                .replace(/"/g, "&quot;")
 
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
+                .replace(/'/g, "&#039;");
 
         }
 
 
         /*
         ============================================================
-        RENDER COMPLETE SYLLABUS
+        RENDER SYLLABUS
         ============================================================
         */
 
@@ -2482,7 +2612,7 @@
             window.rbbSyllabus.forEach(section => {
 
 
-                const sectionBanner =
+                const sectionTitle =
 
                     document.createElement(
 
@@ -2491,19 +2621,19 @@
                     );
 
 
-                sectionBanner.className =
+                sectionTitle.className =
 
                     "section-title-banner";
 
 
-                sectionBanner.innerText =
+                sectionTitle.innerText =
 
                     section.section_title;
 
 
                 container.appendChild(
 
-                    sectionBanner
+                    sectionTitle
 
                 );
 
@@ -2527,7 +2657,6 @@
 
                     const subtopicsHTML =
 
-
                         topic.subtopics
 
                             .map(subtopic => {
@@ -2547,6 +2676,7 @@
 
 
                                 return `
+
 
                                     <div
 
@@ -2600,11 +2730,7 @@
 
                                                 class="view-btn"
 
-                                                onclick="openNotes(
-
-                                                    '${subtopic.id}'
-
-                                                )"
+                                                onclick="openNotes('${subtopic.id}')"
 
                                             >
 
@@ -2617,11 +2743,7 @@
 
                                                 class="quiz-btn"
 
-                                                onclick="openQuiz(
-
-                                                    '${subtopic.id}'
-
-                                                )"
+                                                onclick="openQuiz('${subtopic.id}')"
 
                                             >
 
@@ -2636,7 +2758,6 @@
                                     </div>
 
                                 `;
-
 
                             })
 
@@ -2701,11 +2822,13 @@
                     `;
 
 
-                    container.appendChild(item);
+                    container.appendChild(
 
+                        item
+
+                    );
 
                 });
-
 
             });
 
@@ -2781,7 +2904,7 @@
 
                     content.scrollHeight +
 
-                    40 +
+                    30 +
 
                     "px";
 
@@ -2789,7 +2912,6 @@
                 arrow.innerText =
 
                     "▲";
-
 
             }
 
@@ -2815,18 +2937,18 @@
                 );
 
 
-            const progress = {};
+            const savedProgress = {};
 
 
-            let completed = 0;
+            let checkedCount = 0;
 
 
-            checkboxes.forEach(checkbox => {
+            checkboxes.forEach(chk => {
 
 
                 const id =
 
-                    checkbox.id.replace(
+                    chk.id.replace(
 
                         "chk_",
 
@@ -2837,29 +2959,27 @@
 
                 if (
 
-                    checkbox.checked
+                    chk.checked
 
                 ) {
 
 
-                    completed++;
+                    checkedCount++;
 
-
-                    progress[id] = true;
+                    savedProgress[id] = true;
 
                 }
-
 
             });
 
 
-            const percentage =
+            const pct =
 
                 checkboxes.length
 
                     ? Math.round(
 
-                        completed /
+                        checkedCount /
 
                         checkboxes.length *
 
@@ -2876,7 +2996,7 @@
 
             ).style.width =
 
-                `${percentage}%`;
+                pct + "%";
 
 
             document.getElementById(
@@ -2885,7 +3005,7 @@
 
             ).innerText =
 
-                `${percentage}% Completed`;
+                pct + "% Completed";
 
 
             document.getElementById(
@@ -2894,7 +3014,7 @@
 
             ).innerText =
 
-                `Completed ${completed} out of ${checkboxes.length} subtopics (${percentage}%).`;
+                `Completed ${checkedCount} out of ${checkboxes.length} subtopics (${pct}%).`;
 
 
             localStorage.setItem(
@@ -2903,7 +3023,7 @@
 
                 JSON.stringify(
 
-                    progress
+                    savedProgress
 
                 )
 
@@ -2914,12 +3034,59 @@
 
         /*
         ============================================================
-        OPEN PDF NOTE
+        PDF CHECK
         ============================================================
         */
 
 
-        function openNotes(id) {
+        async function checkPdfExists(
+
+            pdfUrl
+
+        ) {
+
+
+            try {
+
+
+                const response =
+
+                    await fetch(
+
+                        pdfUrl,
+
+                        {
+
+                            method: "HEAD",
+
+                            cache: "no-store"
+
+                        }
+
+                    );
+
+
+                return response.ok;
+
+
+            } catch (error) {
+
+
+                return false;
+
+            }
+
+        }
+
+
+        /*
+        ============================================================
+        OPEN NOTES
+        ============================================================
+        */
+
+
+        async function openNotes(id) {
 
 
             const details =
@@ -2930,16 +3097,30 @@
             if (!details) {
 
 
-                alert(
+                return;
 
-                    "Syllabus details not found."
+            }
+
+
+            const viewer =
+
+                document.getElementById(
+
+                    "viewerContent"
 
                 );
 
 
-                return;
+            document.getElementById(
 
-            }
+                "panelTitle"
+
+            ).innerText =
+
+                "Study Notes";
+
+
+            showRightSidebar();
 
 
             localStorage.setItem(
@@ -2955,138 +3136,264 @@
             );
 
 
-            document.getElementById(
-
-                "panelTitle"
-
-            ).innerText =
-
-                "Study Notes";
-
-
-            const viewer =
-
-                document.getElementById(
-
-                    "viewerContent"
-
-                );
-
-
-            showRightSidebar();
-
-
             viewer.innerHTML = `
 
 
                 <div
 
-                    class="pdf-container"
+                    class="loading-box"
 
                 >
 
 
                     <div
 
-                        class="pdf-toolbar"
+                        class="loading-spinner"
 
                     >
 
-
-                        <div>
-
-
-                            <h3>
-
-                                📘
-
-                                ${escapeHTML(
-
-                                    details.title
-
-                                )}
-
-                            </h3>
-
-
-                            <div
-
-                                class="pdf-meta"
-
-                            >
-
-                                Section:
-
-                                ${escapeHTML(
-
-                                    details.sectionTitle
-
-                                )}
-
-                                <br>
-
-
-                                Topic:
-
-                                ${escapeHTML(
-
-                                    details.topicTitle
-
-                                )}
-
-                                <br>
-
-
-                                ID:
-
-                                ${details.id}
-
-                            </div>
-
-
-                        </div>
-
-
-                        <a
-
-                            class="open-pdf-btn"
-
-                            href="${details.pdfUrl}"
-
-                            target="_blank"
-
-                            rel="noopener noreferrer"
-
-                        >
-
-                            ↗ Open PDF
-
-                        </a>
-
+                        ⏳
 
                     </div>
 
 
-                    <iframe
+                    <h3>
 
-                        class="pdf-frame"
+                        Checking Study Notes...
 
-                        src="${details.pdfUrl}"
+                    </h3>
 
-                        title="${escapeHTML(
+
+                    <p>
+
+                        ${escapeHTML(
 
                             details.title
 
-                        )}"
+                        )}
 
-                        loading="lazy"
-
-                    ></iframe>
+                    </p>
 
 
                 </div>
 
             `;
+
+
+            const exists =
+
+                await checkPdfExists(
+
+                    details.pdfUrl
+
+                );
+
+
+            if (exists) {
+
+
+                viewer.innerHTML = `
+
+
+                    <div
+
+                        class="pdf-container"
+
+                    >
+
+
+                        <div
+
+                            class="pdf-toolbar"
+
+                        >
+
+
+                            <div>
+
+
+                                <h3>
+
+                                    📘
+
+                                    ${escapeHTML(
+
+                                        details.title
+
+                                    )}
+
+                                </h3>
+
+
+                                <div
+
+                                    class="pdf-meta"
+
+                                >
+
+                                    Section:
+
+                                    ${escapeHTML(
+
+                                        details.sectionTitle
+
+                                    )}
+
+                                    <br>
+
+
+                                    Topic:
+
+                                    ${escapeHTML(
+
+                                        details.topicTitle
+
+                                    )}
+
+                                    <br>
+
+
+                                    ID:
+
+                                    ${details.id}
+
+                                </div>
+
+
+                            </div>
+
+
+                            <a
+
+                                class="open-pdf-btn"
+
+                                href="${details.pdfUrl}"
+
+                                target="_blank"
+
+                                rel="noopener noreferrer"
+
+                            >
+
+                                ↗ Open PDF
+
+                            </a>
+
+
+                        </div>
+
+
+                        <iframe
+
+                            class="pdf-frame"
+
+                            src="${details.pdfUrl}"
+
+                            title="${escapeHTML(
+
+                                details.title
+
+                            )}"
+
+                        ></iframe>
+
+
+                    </div>
+
+                `;
+
+
+            } else {
+
+
+                viewer.innerHTML = `
+
+
+                    <div
+
+                        class="coming-soon-box"
+
+                    >
+
+
+                        <div
+
+                            class="coming-soon-icon"
+
+                        >
+
+                            📚
+
+                        </div>
+
+
+                        <h2>
+
+                            PDF is Coming Soon
+
+                        </h2>
+
+
+                        <p>
+
+                            ${escapeHTML(
+
+                                details.title
+
+                            )}
+
+                        </p>
+
+
+                        <div
+
+                            class="coming-soon-info"
+
+                        >
+
+                            Study notes for this topic
+
+                            are currently being prepared.
+
+                        </div>
+
+
+                        <div
+
+                            class="topic-path"
+
+                        >
+
+                            ${escapeHTML(
+
+                                details.sectionTitle
+
+                            )}
+
+                            <br>
+
+
+                            ${escapeHTML(
+
+                                details.topicTitle
+
+                            )}
+
+                            <br>
+
+
+                            Topic ID:
+
+                            ${details.id}
+
+                        </div>
+
+
+                    </div>
+
+                `;
+
+            }
 
         }
 
@@ -3158,6 +3465,7 @@
                         Select the option that best represents:
 
                         <br><br>
+
 
                         ${escapeHTML(
 
@@ -3252,7 +3560,6 @@
 
                 );
 
-
             });
 
 
@@ -3267,7 +3574,7 @@
 
         /*
         ============================================================
-        RIGHT SIDEBAR
+        VIEWER
         ============================================================
         */
 
@@ -3383,18 +3690,15 @@
 
         /*
         ============================================================
-        TIMER PERSISTENCE
+        TIMER
         ============================================================
         */
 
 
-        let timerInterval =
-
-            null;
+        let timerInterval = null;
 
 
         let totalSeconds =
-
 
             parseInt(
 
@@ -3406,14 +3710,13 @@
 
             ) ||
 
-
-            3 * 60 * 60;
+            3 * 3600;
 
 
         function renderTimer() {
 
 
-            const hours =
+            const hrs =
 
                 Math.floor(
 
@@ -3424,7 +3727,7 @@
                 );
 
 
-            const minutes =
+            const mins =
 
                 Math.floor(
 
@@ -3439,7 +3742,7 @@
                 );
 
 
-            const seconds =
+            const secs =
 
                 totalSeconds %
 
@@ -3448,11 +3751,11 @@
 
             const pad =
 
-                value =>
+                num =>
 
                     String(
 
-                        value
+                        num
 
                     ).padStart(
 
@@ -3470,7 +3773,7 @@
             ).innerText =
 
 
-                `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+                `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
 
 
             localStorage.setItem(
@@ -3495,7 +3798,6 @@
 
 
             timerInterval =
-
 
                 setInterval(
 
@@ -3592,14 +3894,9 @@
 
             totalSeconds =
 
+                hours * 3600 +
 
-                hours *
-
-                3600 +
-
-                minutes *
-
-                60;
+                minutes * 60;
 
 
             renderTimer();
