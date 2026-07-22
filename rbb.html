@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBBL Level 5 IT — Complete Syllabus & AI Practice Suite</title>
+    <style>
+        :root {
+            --bg-main: #040914;
+            --bg-side: #0a1124;
+            --bg-card: #0d1730;
+            --border-blue: #1b3564;
+            --accent-blue: #00bcd4;
+            --text-main: #e2e8f0;
+            --text-muted: #718096;
+            --green-active: #00e676;
+            --red-alert: #ff1744;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER BAR */
+        .header {
+            background: #060d1f;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-blue);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tracker-lbl {
+            color: #00bcd4;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .timer-display {
+            background: #000;
+            color: #ffb300;
+            font-family: monospace;
+            font-size: 22px;
+            padding: 4px 14px;
+            border-radius: 6px;
+            border: 1px solid #ffb300;
+            font-weight: bold;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time-input, .api-input {
+            background: #121e36;
+            border: 1px solid var(--border-blue);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+
+        .time-input {
+            width: 55px;
+            text-align: center;
+        }
+
+        .api-input {
+            width: 220px;
+            font-size: 12px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        .btn-apply {
+            background: #121e36;
+            color: white;
+            border: 1px solid var(--border-blue);
+        }
+
+        .btn-start {
+            background: #005a43;
+            color: #00e676;
+            border: 1px solid #00e676;
+        }
+
+        .btn-pause {
+            background: #6a1b1b;
+            color: #ff1744;
+            border: 1px solid #ff1744;
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #00bcd4, #7c4dff);
+            color: #fff;
+        }
+
+        /* MAIN APP LAYOUT */
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* LEFT SIDEBAR */
+        .left-sidebar {
+            width: 280px;
+            background: var(--bg-side);
+            border-right: 2px solid var(--border-blue);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .brand-title h1 {
+            color: #00bcd4;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand-title p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .stat-card {
+            background: #081126;
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+
+        .stat-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #88a0c0;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--green-active);
+        }
+
+        /* MIDDLE CONTENT */
+        .center-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: var(--bg-main);
+        }
+
+        .progress-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            background: #070d1a;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #009688, #00bcd4);
+            width: 0%;
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .section-title-banner {
+            font-size: 14px;
+            color: #00bcd4;
+            font-weight: 800;
+            margin: 20px 0 10px 0;
+            border-left: 4px solid #00bcd4;
+            padding-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background: #111d3a;
+        }
+
+        .accordion-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 8px 16px;
+            background: #091022;
+            border-top: 1px solid var(--border-blue);
+        }
+
+        .topic-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #142242;
+        }
+
+        .topic-row:last-child {
+            border-bottom: none;
+        }
+
+        .topic-row input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--accent-blue);
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .topic-text {
+            flex: 1;
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        /* RIGHT SIDEBAR (AI QUIZ MODULE) */
+        .right-sidebar {
+            width: 420px;
+            background: #0a1329;
+            color: #fff;
+            border-left: 2px solid var(--border-blue);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            background: #060d1f;
+            color: #00bcd4;
+            padding: 14px 18px;
+            font-weight: bold;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quiz-body {
+            padding: 18px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .quiz-q-num {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .quiz-q-text {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .opt-btn {
+            background: #111d3a;
+            border: 1px solid var(--border-blue);
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .opt-btn:hover {
+            background: #1a2a52;
+            border-color: var(--accent-blue);
+        }
+
+        .opt-btn.correct {
+            background: #005a43 !important;
+            border-color: #00e676 !important;
+            color: #fff !important;
+        }
+
+        .opt-btn.wrong {
+            background: #6a1b1b !important;
+            border-color: #ff1744 !important;
+            color: #fff !important;
+        }
+
+        .quiz-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background: #08152e;
+            border: 1px solid var(--border-blue);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #80d8ff;
+            display: none;
+        }
+
+        .quiz-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .toast-bar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #00e676;
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 999999;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: .35s;
+        }
+
+        .toast-bar.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .app-container {
+                flex-direction: column;
+            }
+
+            .left-sidebar, .right-sidebar {
+                width: 100%;
+            }
+
+            .right-sidebar {
+                min-height: 500px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="toastBar" class="toast-bar">
+        ⏰ Study Session Completed!
+    </div>
+
+    <!-- HEADER BAR -->
+    <header class="header">
+        <div class="header-left">
+            <span class="tracker-lbl">🏦 RBBL IT Level-5 Master Prep</span>
+            <div class="timer-display" id="timerBox">03:00:00</div>
+        </div>
+        <div class="header-controls">
+            <input type="password" class="api-input" id="apiKeyIn" placeholder="Paste Gemini API Key Here...">
+            <input type="number" class="time-input" id="hrIn" value="3"> <span style="font-size:12px; color:var(--text-muted)">hr</span>
+            <input type="number" class="time-input" id="minIn" value="0"> <span style="font-size:12px; color:var(--text-muted)">min</span>
+            <button class="btn btn-apply" onclick="applyCustomTime()">Apply</button>
+            <button class="btn btn-start" onclick="startTimer()">Start</button>
+            <button class="btn btn-pause" onclick="pauseTimer()">Pause</button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-sidebar">
+            <div class="brand-title">
+                <h1>राष्ट्रिय वाणिज्य बैंक लिमिटेड</h1>
+                <p>वरिष्ठ सहायक (सूचना प्रविधि) - तह ५</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Total Syllabus Topics</div>
+                <div class="stat-value" id="totalTopicsCount">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Completed Topics</div>
+                <div class="stat-value" id="completedTopicsCount" style="color:#00bcd4;">0</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">AI Quiz Score</div>
+                <div class="stat-value" id="quizScoreDisplay" style="color:#ffb300;">0 / 0</div>
+            </div>
+        </aside>
+
+        <!-- CENTER CONTENT: FULL EXHAUSTIVE SYLLABUS -->
+        <main class="center-content" id="syllabusContainer">
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span>Syllabus Target Achieved</span>
+                    <span id="progPct">0% Achieved</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progBar"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR: GEMINI AI QUIZ SYSTEM -->
+        <aside class="right-sidebar">
+            <div class="quiz-header">
+                <span>✨ Gemini AI Practice Suite</span>
+                <span style="font-size:11px; color:var(--green-active)" id="aiStatus">Ready</span>
+            </div>
+            <div class="quiz-body">
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-ai" style="flex:1;" onclick="generateAIQuiz()">🎲 Generate New AI Question</button>
+                </div>
+                <div class="quiz-card">
+                    <div class="quiz-q-num" id="quizTopicTag">Topic: General Syllabus</div>
+                    <div class="quiz-q-text" id="quizQText">Click "Generate New AI Question" to start practicing with Gemini API!</div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-explanation" id="quizExp"></div>
+                </div>
+                <div class="quiz-controls">
+                    <button class="btn btn-apply" style="flex:1;" onclick="prevQuestion()">Previous</button>
+                    <button class="btn btn-apply" style="flex:1;" onclick="nextQuestion()">Next</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // --- 1. FULL & EXHAUSTIVE RBBL LEVEL 5 IT SYLLABUS ---
+        window.rbblSyllabus = [
+            {
+                section_title: "Paper I: Banking, Accounting, Management & Service Related (100 Marks)",
+                topics: [
+                    {
+                        title: "1. Banking & Financial System",
+                        subtopics: [
+                            "1.1 Banking Concept, Evolution, and Financial Development in Nepal",
+                            "1.2 Functions, Rights, and Duties of Nepal Rastra Bank (NRB) and Commercial Banks",
+                            "1.3 Role of Rastriya Banijya Bank (RBBL) in Nepal's Economic Development",
+                            "1.4 Structure, Types, and Functions of Bank and Financial Institutions (Class A, B, C, D & Infrastructure Bank)",
+                            "1.5 Non-Bank Financial Institutions (EPF, CIT, SSF, Insurance Companies)",
+                            "1.6 Key Banking Concepts: Capital Fund, CD Ratio, CRR, SLR, Base Rate, CAMELS rating, KYC, AML, Blacklisting",
+                            "1.7 Trade Finance: Letter of Credit (LC), Bank Guarantee, Remittance, Deposit & Lending Management"
+                        ]
+                    },
+                    {
+                        title: "2. Banking Related Laws & Directives",
+                        subtopics: [
+                            "2.1 Nepal Rastra Bank Act, 2058",
+                            "2.2 Bank and Financial Institution Act (BAFIA), 2073",
+                            "2.3 Banking Offence and Punishment Act, 2064",
+                            "2.4 Anti-Money Laundering Act, 2064",
+                            "2.5 Payment and Settlement Act, 2075",
+                            "2.6 Electronic Transaction Act (ETA), 2063",
+                            "2.7 Negotiable Instruments Act, 2034 & NRB Unified Directives for Commercial Banks"
+                        ]
+                    },
+                    {
+                        title: "3. Accounting & Financial Management",
+                        subtopics: [
+                            "3.1 Accounting Principles, Bookkeeping, Double Entry System, Journal, Ledger, Trial Balance",
+                            "3.2 Cash Book, Bank Reconciliation Statement (BRS), Profit and Loss Account, Balance Sheet",
+                            "3.3 Cash Flow Statement, Depreciation Methods & Fixed Asset Management",
+                            "3.4 Financial Statement Analysis & Key Ratios (Liquidity, Profitability, Solvency)",
+                            "3.5 Internal Control System, Internal Audit & External Audit in Banks"
+                        ]
+                    },
+                    {
+                        title: "4. Management & Organizational Behavior",
+                        subtopics: [
+                            "4.1 Principles of Management, Organizational Structure, Delegation of Authority, TOR, Job Description",
+                            "4.2 Human Resource Management (HRM): Recruitment, Selection, Performance Appraisal, Motivation & Leadership",
+                            "4.3 Communication, Teamwork, Customer Relationship Management (CRM) & Grievance Handling",
+                            "4.4 Companies Act 2063, Labour Act 2074, Public Procurement Act 2063, RTI Act 2064 & RBBL Employee Service Regulation"
+                        ]
+                    },
+                    {
+                        title: "5. Digital Payment Systems & Mathematics",
+                        subtopics: [
+                            "5.1 Digital Payment Systems: ECC, IPS, ConnectIPS, RTGS, SWIFT, Mobile Banking, QR, Cards, Wallets, CBDC",
+                            "5.2 Mathematics: Simple & Compound Interest, Percentage, Ratio & Proportion, Unitary Method, Profit & Loss, Average"
+                        ]
+                    }
+                ]
+            },
+            {
+                section_title: "Paper II: Computer & Information Technology (100 Marks)",
+                topics: [
+                    {
+                        title: "1. Computer Concepts & Architecture",
+                        subtopics: [
+                            "1.1 Computer Fundamentals, Hardware, Software, Storage Devices & CPU Architecture",
+                            "1.2 Digital Logic Design, Boolean Algebra, Logic Gates, Combinational & Sequential Circuits",
+                            "1.3 Low Level & High Level Programming Languages, Compilers, Interpreters, Data Structures (Arrays, Stacks, Queues, Linked Lists, Trees)",
+                            "1.4 Applied Electronics, Physical Security of IT Infrastructure, Computer Memory Hierarchy & Microprocessors",
+                            "1.5 Emerging Technologies: Artificial Intelligence (AI), Machine Learning (ML), Blockchain, Cloud Computing, Core Banking Software (CBS)"
+                        ]
+                    },
+                    {
+                        title: "2. Data Communication & Computer Networks",
+                        subtopics: [
+                            "2.1 Network Fundamentals, Topologies, Transmission Media (Guided/Unguided), Data Transmission Models",
+                            "2.2 Networking Devices: Repeaters, Hubs, Switches, Routers, Bridges, Gateways",
+                            "2.3 OSI Reference Model & TCP/IP Protocol Suite (Layers and Functions)",
+                            "2.4 IP Addressing (IPv4/IPv6), Subnetting, CIDR, Switching Technologies (Packet, Circuit)",
+                            "2.5 Error Detection & Correction Techniques, Modems, Data Compression, Internet Services & Remote Access"
+                        ]
+                    },
+                    {
+                        title: "3. Operating Systems & Information Systems",
+                        subtopics: [
+                            "3.1 OS Architecture, Functions, Types (Batch, Time-sharing, Distributed, Real-time)",
+                            "3.2 Process Management, Scheduling Algorithms, CPU Scheduling, Multithreading",
+                            "3.3 Deadlocks (Characterization, Prevention, Avoidance, Detection, Recovery)",
+                            "3.4 Memory Management, Paging, Segmentation, Virtual Memory, Parallelism & Pipelining",
+                            "3.5 Command Line & Shell Scripting in DOS, UNIX/Linux, and Windows Environment",
+                            "3.6 Information Systems: MIS, Enterprise Resource Planning (ERP), Decision Support Systems (DSS)"
+                        ]
+                    },
+                    {
+                        title: "4. Database Management Systems & Web Technologies",
+                        subtopics: [
+                            "4.1 DBMS Concepts, Architecture, Data Independence, Relational Data Model",
+                            "4.2 Entity-Relationship (ER) Diagrams, Normalization (1NF, 2NF, 3NF, BCNF), Keys & Constraints",
+                            "4.3 SQL Commands (DDL, DML, DCL, TCL), Joins, Queries, Views, Indexing & Transactions",
+                            "4.4 Data Warehousing Concepts, Data Mining Techniques, Big Data Basics",
+                            "4.5 Web Technologies: HTML, CSS, JavaScript, XML, Web Servers, Proxy Servers & Web Applications"
+                        ]
+                    },
+                    {
+                        title: "5. Cybersecurity, DRP & IT Regulations",
+                        subtopics: [
+                            "5.1 Information Security Fundamentals, CIA Triad, Risk Management & Vulnerability Assessment",
+                            "5.2 Threats & Cyber Attacks: Malware, Phishing, Social Engineering, DDoS, Man-in-the-Middle",
+                            "5.3 Cryptography: Symmetric/Asymmetric Encryption, Hash Functions, Digital Signatures, PKI, Firewalls, IDS/IPS",
+                            "5.4 Disaster Recovery Planning (DRP), Business Continuity Planning (BCP), Backup Strategies",
+                            "5.5 ICT Policy of Nepal 2072, NRB IT Guidelines & Cyber Resilience Guidelines 2023"
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // --- 2. RENDER FULL SYLLABUS ---
+        function renderSyllabus() {
+            const container = document.getElementById('syllabusContainer');
+            let totalTopics = 0;
+
+            window.rbblSyllabus.forEach(sec => {
+                const banner = document.createElement('div');
+                banner.className = 'section-title-banner';
+                banner.innerText = sec.section_title;
+                container.appendChild(banner);
+
+                sec.topics.forEach((t, tIdx) => {
+                    const accItem = document.createElement('div');
+                    accItem.className = 'accordion-item';
+
+                    let subHtml = t.subtopics.map((st, sIdx) => {
+                        totalTopics++;
+                        const id = `cb_${tIdx}_${sIdx}`;
+                        return `
+                            <div class="topic-row">
+                                <input type="checkbox" id="${id}" onchange="updateProgress()">
+                                <label for="${id}" class="topic-text">${st}</label>
+                            </div>
+                        `;
+                    }).join('');
+
+                    accItem.innerHTML = `
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="accordion-title">${t.title}</span>
+                            <span style="color:var(--accent-blue);">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            ${subHtml}
+                        </div>
+                    `;
+                    container.appendChild(accItem);
+                });
+            });
+
+            document.getElementById('totalTopicsCount').innerText = totalTopics;
+            loadProgressState();
+        }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isOpen = content.style.display === 'block';
+            content.style.display = isOpen ? 'none' : 'block';
+            header.querySelector('span:last-child').innerText = isOpen ? '▼' : '▲';
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.topic-row input[type="checkbox"]');
+            const total = checkboxes.length;
+            let checked = 0;
+            let state = {};
+
+            checkboxes.forEach(cb => {
+                state[cb.id] = cb.checked;
+                if (cb.checked) checked++;
+            });
+
+            const pct = Math.round((checked / total) * 100) || 0;
+            document.getElementById('progBar').style.width = pct + '%';
+            document.getElementById('progPct').innerText = pct + '% Achieved';
+            document.getElementById('completedTopicsCount').innerText = checked;
+
+            localStorage.setItem('rbbl_syllabus_progress_full', JSON.stringify(state));
+        }
+
+        function loadProgressState() {
+            const saved = localStorage.getItem('rbbl_syllabus_progress_full');
+            if (saved) {
+                const state = JSON.parse(saved);
+                Object.keys(state).forEach(id => {
+                    const cb = document.getElementById(id);
+                    if (cb) cb.checked = state[id];
+                });
+                updateProgress();
+            }
+        }
+
+        // --- 3. DYNAMIC GEMINI API QUIZ INTEGRATION ---
+        let quizHistory = [];
+        let currentQuizIndex = -1;
+        let totalScore = 0;
+        let totalAttempted = 0;
+
+        async function generateAIQuiz() {
+            const apiKey = document.getElementById('apiKeyIn').value.trim();
+            if (!apiKey) {
+                alert('Please paste your Gemini API Key in the top header input box first!');
+                return;
+            }
+
+            const statusLbl = document.getElementById('aiStatus');
+            statusLbl.innerText = 'Generating...';
+            statusLbl.style.color = '#ffb300';
+
+            // Pick random topic from syllabus
+            const randomSec = window.rbblSyllabus[Math.floor(Math.random() * window.rbblSyllabus.length)];
+            const randomTopicGroup = randomSec.topics[Math.floor(Math.random() * randomSec.topics.length)];
+            const randomSubtopic = randomTopicGroup.subtopics[Math.floor(Math.random() * randomTopicGroup.subtopics.length)];
+
+            const promptText = `
+You are an expert examiner for Rastriya Banijya Bank Limited (RBBL) Level 5 Senior Assistant (IT) recruitment exam in Nepal.
+Create 1 high-quality Multiple Choice Question (MCQ) strictly based on this syllabus topic: "${randomSubtopic}".
+
+Respond strictly with a valid JSON object only (no markdown, no code blocks, no backticks, no pure text wrapper). Use this JSON format:
+{
+  "topic": "${randomSubtopic}",
+  "question": "Question text here...",
+  "options": ["Option A", "Option B", "Option C", "Option D"],
+  "correctIndex": 0,
+  "explanation": "Brief explanation why option is correct in the context of RBBL/Lok Sewa exam."
+}`;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }]
+                    })
+                });
+
+                const data = await response.json();
+                let rawText = data.candidates[0].content.parts[0].text;
+                
+                // Clean markdown code blocks if present
+                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const qObj = JSON.parse(rawText);
+
+                quizHistory.push({
+                    ...qObj,
+                    userSelected: null
+                });
+                currentQuizIndex = quizHistory.length - 1;
+
+                renderAIQuestion();
+                statusLbl.innerText = 'Ready';
+                statusLbl.style.color = 'var(--green-active)';
+            } catch (err) {
+                console.error(err);
+                alert('Error generating quiz from Gemini API. Check API Key or Network Connection.');
+                statusLbl.innerText = 'Error';
+                statusLbl.style.color = 'var(--red-alert)';
+            }
+        }
+
+        function renderAIQuestion() {
+            if (currentQuizIndex < 0 || !quizHistory[currentQuizIndex]) return;
+
+            const q = quizHistory[currentQuizIndex];
+            document.getElementById('quizTopicTag').innerText = `Topic: ${q.topic}`;
+            document.getElementById('quizQText').innerText = q.question;
+
+            const optContainer = document.getElementById('quizOptions');
+            const expContainer = document.getElementById('quizExp');
+            optContainer.innerHTML = '';
+            expContainer.style.display = 'none';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = `${String.fromCharCode(65 + idx)}. ${opt}`;
+
+                if (q.userSelected !== null) {
+                    if (idx === q.correctIndex) btn.classList.add('correct');
+                    if (q.userSelected === idx && idx !== q.correctIndex) btn.classList.add('wrong');
+                } else {
+                    btn.onclick = () => selectAIOption(idx);
+                }
+                optContainer.appendChild(btn);
+            });
+
+            if (q.userSelected !== null) {
+                expContainer.innerText = `💡 Explanation: ${q.explanation}`;
+                expContainer.style.display = 'block';
+            }
+
+            document.getElementById('quizScoreDisplay').innerText = `${totalScore} / ${totalAttempted}`;
+        }
+
+        function selectAIOption(idx) {
+            const q = quizHistory[currentQuizIndex];
+            if (q.userSelected !== null) return;
+
+            q.userSelected = idx;
+            totalAttempted++;
+            if (idx === q.correctIndex) {
+                totalScore++;
+            }
+            renderAIQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuizIndex < quizHistory.length - 1) {
+                currentQuizIndex++;
+                renderAIQuestion();
+            } else {
+                generateAIQuiz();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuizIndex > 0) {
+                currentQuizIndex--;
+                renderAIQuestion();
+            }
+        }
+
+        // --- 4. TIMER MODULE ---
+        let timerSeconds = 10800; // 3 Hours default
+        let timerInterval = null;
+
+        function updateTimerDisplay() {
+            let h = Math.floor(timerSeconds / 3600);
+            let m = Math.floor((timerSeconds % 3600) / 60);
+            let s = timerSeconds % 60;
+            document.getElementById('timerBox').innerText = 
+                `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function applyCustomTime() {
+            let h = parseInt(document.getElementById('hrIn').value) || 0;
+            let m = parseInt(document.getElementById('minIn').value) || 0;
+            timerSeconds = (h * 3600) + (m * 60);
+            updateTimerDisplay();
+            pauseTimer();
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    pauseTimer();
+                    showToast();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toastBar');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // Initialize Application
+        window.onload = () => {
+            renderSyllabus();
+            updateTimerDisplay();
+        };
+    </script>
+</body>
+
+</html>
