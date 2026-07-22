@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RBB Level 5 IT - Syllabus & Interactive Viewer</title>
+    <title>RBB Level 5 IT - Syllabus, Notes & AI Quiz Portal</title>
     
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* ======================
-           CSS VARIABLES & RESET
-           ====================== */
         :root {
             --primary-color: #2563eb;
             --primary-dark: #1d4ed8;
@@ -23,6 +20,7 @@
             --border-color: #e2e8f0;
             --accent-green: #10b981;
             --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
@@ -42,13 +40,11 @@
             padding-bottom: 60px;
         }
 
-        /* ======================
-           HEADER & PROGRESS BAR
-           ====================== */
+        /* HEADER & STATS */
         header {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 24px 20px;
             text-align: center;
             box-shadow: var(--shadow-md);
             position: sticky;
@@ -57,40 +53,56 @@
         }
 
         header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        header p {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
-
-        .progress-wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px 18px;
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            font-weight: 600;
             margin-bottom: 6px;
         }
 
+        header p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .header-dashboard {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .dash-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .dash-card .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #cbd5e1;
+            letter-spacing: 0.5px;
+        }
+
+        .dash-card .value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-top: 2px;
+        }
+
         .progress-bar-bg {
-            height: 10px;
+            height: 8px;
             background: rgba(255,255,255,0.2);
             border-radius: 20px;
             overflow: hidden;
+            margin-top: 6px;
         }
 
         .progress-bar-fill {
@@ -101,24 +113,21 @@
             border-radius: 20px;
         }
 
-        /* ======================
-           CONTAINER & ACCORDIONS
-           ====================== */
+        /* CONTAINER & ACCORDIONS */
         .container {
-            max-width: 900px;
-            margin: 30px auto;
+            max-width: 950px;
+            margin: 25px auto;
             padding: 0 15px;
         }
 
         .section-title-banner {
             background: #1e293b;
             color: #ffffff;
-            padding: 16px 20px;
-            font-size: 18px;
+            padding: 14px 18px;
+            font-size: 16px;
             font-weight: 700;
-            margin: 35px 0 15px 0;
-            border-radius: 10px;
-            box-shadow: var(--shadow-sm);
+            margin: 30px 0 12px 0;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -127,16 +136,11 @@
         .accordion-item {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
-        }
-
-        .accordion-item:hover {
-            box-shadow: var(--shadow-md);
-            border-color: #cbd5e1;
         }
 
         .accordion-header {
@@ -159,7 +163,7 @@
 
         .accordion-header .icon {
             font-size: 14px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-muted);
         }
 
@@ -170,32 +174,32 @@
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
             background: #fafafa;
-            border-top: 1px solid transparent;
         }
 
         .accordion-item.active .accordion-content {
-            max-height: 2000px; /* High enough to accommodate list */
-            transition: max-height 0.5s ease-in-out;
-            border-top-color: var(--border-color);
+            max-height: 5000px;
+            border-top: 1px solid var(--border-color);
         }
 
         .topic-row {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 12px 20px;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 18px;
             border-bottom: 1px solid #f1f5f9;
             transition: background 0.2s ease;
         }
 
-        .topic-row:last-child {
-            border-bottom: none;
-        }
+        .topic-row:hover { background: #ffffff; }
 
-        .topic-row:hover {
-            background: #ffffff;
+        .topic-main-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
         }
 
         .cb-item {
@@ -206,502 +210,683 @@
         }
 
         .topic-text {
-            flex: 1;
             font-size: 14px;
             color: #334155;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
-        .view-btn {
-            background-color: var(--primary-color);
-            color: white;
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-action {
             border: none;
-            padding: 8px 16px;
+            padding: 7px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             font-size: 12px;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             transition: var(--transition);
         }
 
-        .view-btn:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-        }
+        .btn-view { background-color: var(--primary-color); color: white; }
+        .btn-view:hover { background-color: var(--primary-dark); }
+        .btn-quiz { background-color: var(--accent-purple); color: white; }
+        .btn-quiz:hover { background-color: #7c3aed; }
 
-        /* ======================
-           FULLSCREEN VIEWER MODAL
-           ====================== */
+        /* VIEWER & QUIZ MODAL */
         .viewer-modal {
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(6px);
             display: none;
-            flex-direction: column;
-            animation: fadeIn 0.2s ease-out forwards;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-box {
+            background: #ffffff;
+            width: 90%;
+            max-width: 900px;
+            height: 85vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .modal-box.maximized {
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            border-radius: 0 !important;
         }
 
         .viewer-header {
             background: #0f172a;
             color: #fff;
-            padding: 14px 20px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #334155;
         }
 
         .viewer-header h3 {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 80%;
+            max-width: 70%;
         }
 
-        .close-icon {
-            font-size: 20px;
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-icon {
+            font-size: 16px;
             cursor: pointer;
             color: #94a3b8;
             transition: color 0.2s;
         }
 
-        .close-icon:hover {
-            color: #ffffff;
+        .control-icon:hover { color: #ffffff; }
+
+        /* TOOLBAR FOR MARKUP */
+        .markup-toolbar {
+            background: #f1f5f9;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+
+        .color-picker-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            display: inline-block;
+            box-shadow: var(--shadow-sm);
         }
 
         .viewer-body {
+            flex: 1;
             position: relative;
-            flex: 1;
-            background: #fff;
-            overflow: hidden;
-        }
-
-        /* PDF & Fallback Wrappers */
-        .pdf-container-wrapper,
-        .pdf-fallback-wrapper {
-            position: absolute !important;
-            inset: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            width: 100% !important;
-            height: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: #fff !important;
-        }
-
-        .pdf-fallback-wrapper {
-            padding: 30px !important;
-            overflow-y: auto !important;
-        }
-
-        .pdf-fallback-wrapper h3 {
-            color: var(--text-main);
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .pdf-fallback-wrapper h4 {
-            color: var(--primary-color);
-            margin: 15px 0 8px 0;
-            font-size: 15px;
-        }
-
-        .pdf-fallback-wrapper ul {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-
-        .pdf-fallback-wrapper li {
-            margin-bottom: 6px;
-            font-size: 14px;
-            color: #475569;
-        }
-
-        .mobile-close-btn {
-            background: var(--accent-red) !important;
-            color: #fff !important;
-            border: none !important;
-            padding: 14px 20px !important;
-            width: 100% !important;
-            font-size: 15px !important;
-            font-weight: 700 !important;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .mobile-close-btn:hover {
-            background: #dc2626 !important;
-        }
-
-        .pdf-iframe-wrapper {
-            flex: 1 !important;
-            width: 100% !important;
-            height: auto !important;
-            overflow: auto !important;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-x pan-y;
-        }
-
-        .pdf-iframe-wrapper iframe {
-            width: 100% !important;
-            height: 100% !important;
-            min-height: 100% !important;
-            border: none !important;
-            display: block !important;
-        }
-
-        .fallback-message {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            color: var(--text-muted);
-            text-align: center;
+            overflow-y: auto;
             padding: 20px;
+            background: #ffffff;
         }
 
-        /* Utility Banners */
-        #proctorWarningBanner {
-            background: #fef2f2;
-            border: 1px solid #fca5a5;
-            color: #991b1b;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 600;
+        /* GEMINI QUIZ CONTAINER */
+        .quiz-container {
+            max-width: 650px;
+            margin: 0 auto;
         }
 
-        .toast-bar {
-            position: fixed;
-            bottom: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: var(--shadow-lg);
-            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10000;
+        .quiz-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
-        .toast-bar.show {
-            bottom: 30px;
+        .quiz-card p { font-weight: 600; margin-bottom: 10px; font-size: 14px; }
+
+        .quiz-option {
+            display: block;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
         }
 
-        /* Responsive Layouts */
+        .quiz-option:hover { background: #eff6ff; border-color: var(--primary-color); }
+
+        .quiz-option.correct { background: #d1fae5 !important; border-color: var(--accent-green) !important; color: #065f46; }
+        .quiz-option.wrong { background: #fee2e2 !important; border-color: var(--accent-red) !important; color: #991b1b; }
+
+        .api-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .api-input-group input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 640px) {
-            header h1 { font-size: 20px; }
-            .section-title-banner { font-size: 16px; padding: 12px 15px; }
-            .topic-row { flex-wrap: wrap; gap: 10px; }
-            .view-btn { width: 100%; justify-content: center; margin-top: 4px; }
+            .topic-row { flex-direction: column; align-items: flex-start; }
+            .action-btns { width: 100%; }
+            .btn-action { flex: 1; justify-content: center; }
+            .modal-box { width: 100%; height: 100vh; border-radius: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header & Progress Tracker -->
+    <!-- Header & Tracker -->
     <header>
-        <h1><i class="fa-solid fa-building-columns"></i> RBB Level 5 IT Syllabus Tracker</h1>
-        <p>राष्ट्रिय वाणिज्य बैंक लिमिटेड - वरिष्ठ सहायक (सूचना प्रविधि)</p>
+        <h1><i class="fa-solid fa-graduation-cap"></i> RBB Level 5 IT Smart Portal</h1>
+        <p>राष्ट्रिय वाणिज्य बैंक - वरिष्ठ सहायक (सूचना प्रविधि)</p>
         
-        <div class="progress-wrapper">
-            <div class="progress-info">
-                <span>Course Progress</span>
-                <span id="progressText">0% Completed</span>
+        <div class="header-dashboard">
+            <div class="dash-card">
+                <div class="label">Course Progress</div>
+                <div class="value" id="progressText">0% Completed</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
             </div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progressBar"></div>
+            <div class="dash-card">
+                <div class="label">Session Timer</div>
+                <div class="value" id="sessionTimer">00:00:00</div>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <div class="container">
-        
-        <div id="proctorWarningBanner">
-            ⚠️ <strong>SYSTEM NOTICE:</strong> Click "View" button to read notes or open PDF documents directly inside Google Viewer.
-        </div>
-
-        <!-- Syllabus Items dynamically injected here -->
         <div id="syllabusContainer"></div>
-
     </div>
 
-    <!-- Syllabus PDF / Content Viewer Modal -->
-    <div id="syllabusViewerModal" class="viewer-modal">
-        <div class="viewer-header">
-            <h3 id="viewerTitle">Topic Title</h3>
-            <span class="close-icon" onclick="closeSyllabusViewer()"><i class="fa-solid fa-xmark"></i></span>
-        </div>
-        <div id="viewerBody" class="viewer-body">
-            <!-- Dynamic Content or PDF iframe injected here -->
-        </div>
-    </div>
+    <!-- Viewer & Quiz Modal -->
+    <div id="portalModal" class="viewer-modal">
+        <div id="modalBox" class="modal-box">
+            <div class="viewer-header">
+                <h3 id="modalTitle">Notes & Viewer</h3>
+                <div class="header-controls">
+                    <i class="fa-solid fa-expand control-icon" id="maxBtn" onclick="toggleMaximize()" title="Maximize/Minimize"></i>
+                    <i class="fa-solid fa-xmark control-icon" onclick="closeModal()" title="Close"></i>
+                </div>
+            </div>
 
-    <!-- Notification Toast -->
-    <div id="toastBar" class="toast-bar">
-        ⏰ Progress Updated Successfully!
+            <!-- Markup Toolbar for Notes -->
+            <div class="markup-toolbar" id="markupToolbar" style="display: none;">
+                <span><i class="fa-solid fa-highlighter"></i> Highlight Text Color:</span>
+                <span class="color-picker-btn" style="background: #fef08a;" onclick="setHighlightColor('#fef08a')"></span>
+                <span class="color-picker-btn" style="background: #bbf7d0;" onclick="setHighlightColor('#bbf7d0')"></span>
+                <span class="color-picker-btn" style="background: #bfdbfe;" onclick="setHighlightColor('#bfdbfe')"></span>
+                <span class="color-picker-btn" style="background: #fbcfe8;" onclick="setHighlightColor('#fbcfe8')"></span>
+                <button onclick="clearHighlights()" style="margin-left: auto; padding: 3px 8px; font-size: 11px; cursor: pointer;">Clear Selection</button>
+            </div>
+
+            <div id="modalBody" class="viewer-body"></div>
+        </div>
     </div>
 
     <script>
-        /* ======================
-           1. SYLLABUS DATA STRUCTURE
-           ====================== */
+        /* 1. SYLLABUS DATA (COMPLETE SYLLABUS INTEGRATION) */
         window.rbblSyllabusUpdated = [
           {
-            section_title: "Paper I: Banking and Organizational Management",
+            section_title: "Paper I: Banking and Organizational Management (Section A - 50 Marks)",
             topics: [
               {
-                title: "Unit 1: Financial Institutions in Nepal",
-                subtopics: ["Commercial Banks", "Development Banks", "Finance Companies", "Microfinance Institutions", "Infrastructure Development Bank", "Insurance Companies", " कर्मचारी सञ्चय कोष", "नागरिक लगानी कोष", "सामाजिक सुरक्षा कोष"]
+                title: "Unit 1: Financial Institutions in Nepal: Role, Contribution and Status",
+                subtopics: [
+                  "Banking Institutions: Commercial Banks",
+                  "Banking Institutions: Development Banks",
+                  "Banking Institutions: Finance Companies",
+                  "Banking Institutions: Microfinance Institutions",
+                  "Banking Institutions: Infrastructure Development Bank",
+                  "Non-bank Financial Institution: Insurance Companies",
+                  "Non-bank Financial Institution: कर्मचारी सञ्चय कोष (Karmachari Sanchaya Kosh)",
+                  "Non-bank Financial Institution: नागरिक लगानी कोष (Citizen Investment Trust)",
+                  "Non-bank Financial Institution: सामाजिक सुरक्षा कोष (Social Security Fund)"
+                ]
               },
               {
-                title: "Unit 2: Key Basic Banking Terminology",
-                subtopics: ["Capital Fund", "Loan Loss Provisioning", "Credit-Deposit (CD) Ratio", "Cash Reserve Ratio (CRR)", "Refinancing", "Rescheduling", "Restructuring", "Base Rate", "Credit Information", "Blacklisting", "Credit Ratings", "Know Your Customer (KYC)", "Audit", "Internal Control"]
+                title: "Unit 2: Some of the Key Basic Banking Terminology",
+                subtopics: [
+                  "Capital Fund",
+                  "Loan Loss Provisioning",
+                  "Credit-Deposit (CD) Ratio",
+                  "Cash Reserve Ratio (CRR)",
+                  "Refinancing",
+                  "Rescheduling",
+                  "Restructuring",
+                  "Base Rate",
+                  "Credit Information",
+                  "Blacklisting",
+                  "Credit Ratings",
+                  "Know Your Customer (KYC)",
+                  "Audit",
+                  "Internal Control"
+                ]
               },
               {
                 title: "Unit 3: Banking Related Law",
-                subtopics: ["Nepal Rastra Bank Act, 2058", "Bank and Financial Institution Act, 2073", "Payment and Settlement Act, 2075", "Money Laundering Prevention Act, 2064", "Banking Offence and Punishment Act, 2064", "Negotiable Instruments Act, 2034", "Electronic Transaction Act, 2063"]
+                subtopics: [
+                  "Nepal Rastra Bank Act, 2058",
+                  "Bank and Financial Institution Act, 2073",
+                  "Payment and Settlement Act, 2075",
+                  "Money Laundering Prevention Act, 2064",
+                  "Banking Offence and Punishment Act, 2064",
+                  "Negotiable Instruments Act, 2034",
+                  "Electronic Transaction Act, 2063"
+                ]
               },
               {
                 title: "Unit 4: Organizational Behavior",
-                subtopics: ["Job Description", "Terms of Reference (TOR)", "Responsibilities", "Job Motivation", "Job Performance", "Communication Skill", "Communication Approach", "Team Building", "Workmanship", "Customer Satisfaction", "Customer Delivery", "Grievance Handling"]
+                subtopics: [
+                  "Job Description",
+                  "Terms of Reference (TOR)",
+                  "Responsibilities",
+                  "Job Motivation",
+                  "Performance",
+                  "Communication: Skill",
+                  "Communication: Approach",
+                  "Team Building",
+                  "Workmanship",
+                  "Customer Satisfaction",
+                  "Delivery",
+                  "Grievance Handling"
+                ]
               },
               {
                 title: "Unit 5: Other Related Laws",
-                subtopics: ["Companies Act, 2063", "Labour Act, 2074", "Public Procurement Act, 2063", "Right to Information Act, 2064", "राष्ट्रिय वाणिज्य बैंक कर्मचारी सेवा विनियमावली, २०७०", "NRB Unified Directives", "NRB Circulars"]
+                subtopics: [
+                  "Companies Act, 2063",
+                  "Labour Act, 2074",
+                  "Public Procurement Act, 2063",
+                  "Right to Information Act, 2064",
+                  "राष्ट्रिय वाणिज्य बैंक कर्मचारी सेवा विनियमावली, २०७०",
+                  "Unified Directives / Circulars issued by Nepal Rastra Bank for Commercial Banks"
+                ]
               },
               {
                 title: "Unit 6: Digital/Electronic Payment Systems",
-                subtopics: ["Electronic Cheque Clearing (ECC)", "InterBank Payment System (IPS)", "ConnectIPS", "Real Time Gross Settlement (RTGS)", "SWIFT", "Internet Banking", "Mobile Banking", "Quick Response (QR) Code", "Near Field Communication (NFC)", "Digital Payment Cards", "Payment through Wallets", "Central Bank Digital Currency (CBDC)"]
+                subtopics: [
+                  "Electronic Cheque Clearing (ECC)",
+                  "InterBank Payment System (IPS)",
+                  "ConnectIPS",
+                  "Real Time Gross Settlement (RTGS)",
+                  "Society for Worldwide Interbank Financial Telecommunication (SWIFT)",
+                  "Internet Banking",
+                  "Mobile Banking",
+                  "Quick Response (QR) Code",
+                  "Near Field Communication (NFC)",
+                  "Digital Payment Cards",
+                  "Payment through Wallets",
+                  "Central Bank Digital Currency (CBDC)"
+                ]
               }
             ]
           },
           {
-            section_title: "Paper II: Information Technology & Management",
+            section_title: "Paper II: Information Technology & Management (100 Marks)",
             topics: [
               {
                 title: "Unit 1: Introduction of Computer",
-                subtopics: ["Analog Computer", "Digital Computer", "Hybrid Computer", "Mainframe Computer", "Super Computer", "Computer Speed Comparison", "Storage Capacity Comparison", "Memory Comparison", "Internet System Basics", "Email System Basics", "Web Design Basics", "Physical Security of IT Infrastructure", "Artificial Intelligence (AI)", "Machine Learning (ML)", "Blockchain"]
+                subtopics: [
+                  "Types of Computers: Analog Computer",
+                  "Types of Computers: Digital Computer",
+                  "Types of Computers: Hybrid Computer",
+                  "Types of Computers: Mainframe Computer",
+                  "Types of Computers: Super Computer",
+                  "Comparison of Computers in terms of Speed, Storage Capacity and Memory",
+                  "Basic Knowledge of Internet/Email System",
+                  "Basic Knowledge of Web Design",
+                  "Basic Knowledge of Physical Security of IT Infrastructure",
+                  "Basic Knowledge of Artificial Intelligence (AI)",
+                  "Basic Knowledge of Machine Learning (ML)",
+                  "Basic Knowledge of Blockchain"
+                ]
               },
               {
                 title: "Unit 2: Computer Architecture",
-                subtopics: ["Basic Computer Architecture", "Registers", "Memory Management", "Hard Disk Organization", "CPU Architecture", "I/O Management", "I/O Interface", "I/O Requests Handling", "I/O Devices"]
+                subtopics: [
+                  "Basic Computer Architecture",
+                  "Registers",
+                  "Memory Management",
+                  "Organization of Hard Disk",
+                  "CPU Architecture",
+                  "I/O Management",
+                  "I/O Interface",
+                  "I/O Requests Handling",
+                  "I/O Devices"
+                ]
               },
               {
-                title: "Unit 3: Communication & Network Technologies",
-                subtopics: ["Repeater", "Hub", "Switch", "Router", "Switching Technologies", "Modems", "Remote Network Access", "Error Detection Techniques", "Error Correction Techniques", "Internet Services", "Internet Protocol (IP)", "IP Addressing", "Network Security", "Cryptography"]
+                title: "Unit 3: Communication and Computer Network Technologies",
+                subtopics: [
+                  "Networking Devices: Repeater",
+                  "Networking Devices: Hub",
+                  "Networking Devices: Switch",
+                  "Networking Devices: Router",
+                  "Switching Technologies",
+                  "Modems and Remote Network Access",
+                  "Error Detection Techniques",
+                  "Error Correction Techniques",
+                  "Internet Services",
+                  "Internet Protocol / Addressing",
+                  "Network Security",
+                  "Cryptography"
+                ]
               },
               {
                 title: "Unit 4: Operating System and Information Systems",
-                subtopics: ["Basic Knowledge of OS", "Process Management", "Process Scheduling", "DOS Operating System", "UNIX Operating System", "Windows Operating System", "Identifying Security Threats in OS", "Managing Security Threats in OS"]
+                subtopics: [
+                  "Basic Knowledge of Operating System",
+                  "Process Management",
+                  "Scheduling",
+                  "DOS Operating System",
+                  "UNIX Operating Systems",
+                  "Windows Operating System",
+                  "Identifying Security Threats in OS",
+                  "Managing Security Threats in OS"
+                ]
               },
               {
-                title: "Unit 5: DBMS, Data Warehousing & Web Technology",
-                subtopics: ["DBMS Basics", "Table Concept", "Record Concept", "Relationship Concept", "Indexing Concept", "Data Warehousing", "Process in Data Warehousing", "Data Mining", "Basics of HTML", "Basics of Script", "Basics of Stylesheet (CSS)", "Basics of XML", "Web Server", "Proxy Server", "Disaster Recovery Planning (DRP)"]
+                title: "Unit 5: Database Management System, Database Design, Data Mining/Warehousing and Web Technology",
+                subtopics: [
+                  "Basic Knowledge of Database Management System",
+                  "Basic Concept of Table",
+                  "Basic Concept of Record",
+                  "Basic Concept of Relationship",
+                  "Basic Concept of Indexing",
+                  "Data Warehousing",
+                  "Process in Data Warehousing",
+                  "Basics of HTML",
+                  "Basics of Script",
+                  "Basics of Stylesheet",
+                  "Basics of XML",
+                  "Web Server",
+                  "Proxy Server",
+                  "Disaster Recovery Planning"
+                ]
               },
               {
                 title: "Unit 6: Cybersecurity and IT Policies",
-                subtopics: ["Cyber Security Introduction", "Access Control Mechanisms", "Threats and Vulnerabilities", "Security Attacks", "Authentication", "Authorization", "Password Management", "Social Engineering", "Malwares", "Denial of Service (DoS)", "Distributed Denial of Service (DDoS)", "Phishing and its types", "ICT Policy of Nepal, 2072", "NRB IT Guidelines", "NRB Cyber Resilience Guidelines, 2023"]
+                subtopics: [
+                  "Introduction to Cyber Security",
+                  "Access Control Mechanisms",
+                  "Threats and Vulnerabilities",
+                  "Security Attacks",
+                  "Authentication",
+                  "Authorization",
+                  "Password Management",
+                  "Common Security Threats: Social Engineering",
+                  "Common Security Threats: Malwares",
+                  "Common Security Threats: Distributed Denial of Service (DDoS)",
+                  "Common Security Threats: Denial of Service (DoS)",
+                  "Common Security Threats: Phishing and its types",
+                  "ICT Policy of Nepal, 2072",
+                  "IT Guidelines (Issued by Nepal Rastra Bank)",
+                  "Cyber Resilience Guidelines, 2023 (Issued by Nepal Rastra Bank)"
+                ]
               }
             ]
           }
         ];
 
-        /* ======================
-           2. DETAILED TOPIC CONTENT / PDF MAPPING
-           ====================== */
-        const syllabusDetails = {
-            "2.1.13": {
-                pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                introduction: "Artificial Intelligence (AI) refers to machines designed to mimic human cognitive capabilities.",
-                applications: ["Automated Customer Support", "Fraud Detection in Banking", "Predictive Analytics"],
-                limitations: ["High Initial Implementation Cost", "Lack of Emotional Intelligence"],
-                types: ["Narrow AI", "General AI", "Superintelligent AI"]
-            },
-            "2.1.14": {
-                introduction: "Machine Learning is a domain of AI focused on building algorithms that learn patterns from data.",
-                applications: ["Credit Scoring", "Churn Prediction"],
-                limitations: ["Data Quality Dependence", "Algorithmic Bias"],
-                types: ["Supervised Learning", "Unsupervised Learning", "Reinforcement Learning"]
-            }
-        };
+        /* DETAILED CONTENT MAPPING EXAMPLE */
+        const syllabusDetails = {};
 
-        /* ======================
-           3. CORE RENDERING ENGINE
-           ====================== */
-        function renderSyllabusSystem() {
-            const parentContainer = document.getElementById('syllabusContainer');
-            if (!parentContainer) return;
+        let userApiKey = "";
+        let currentHighlightColor = "#fef08a";
 
-            parentContainer.innerHTML = ''; 
+        /* 2. CORE RENDER ENGINE */
+        function renderSyllabus() {
+            const container = document.getElementById('syllabusContainer');
+            container.innerHTML = '';
 
-            window.rbblSyllabusUpdated.forEach((section, sIndex) => {
-                // Section Title Banner
-                const sectionBanner = document.createElement('div');
-                sectionBanner.className = 'section-title-banner';
-                sectionBanner.innerHTML = `<i class="fa-solid fa-book-bookmark"></i> ${section.section_title}`;
-                parentContainer.appendChild(sectionBanner);
+            window.rbblSyllabusUpdated.forEach((sec, sIdx) => {
+                const banner = document.createElement('div');
+                banner.className = 'section-title-banner';
+                banner.innerHTML = `<i class="fa-solid fa-book"></i> ${sec.section_title}`;
+                container.appendChild(banner);
 
-                // Accordion Block
-                section.topics.forEach((topic, tIndex) => {
-                    const accordionItem = document.createElement('div');
-                    accordionItem.className = 'accordion-item';
+                sec.topics.forEach((top, tIdx) => {
+                    const acc = document.createElement('div');
+                    acc.className = 'accordion-item';
 
-                    let subtopicsHTML = '';
-                    topic.subtopics.forEach((subTitle, subIndex) => {
-                        const subId = `${sIndex + 1}.${tIndex + 1}.${subIndex + 1}`;
-                        const safeTitle = subTitle.replace(/'/g, "\\'");
+                    let subHTML = '';
+                    top.subtopics.forEach((sub, subIdx) => {
+                        const subId = `${sIdx + 1}.${tIdx + 1}.${subIdx + 1}`;
+                        const safeTitle = sub.replace(/'/g, "\\'");
 
-                        subtopicsHTML += `
+                        subHTML += `
                             <div class="topic-row">
-                                <input type="checkbox" class="cb-item" id="cb_${subId.replace(/\./g, '_')}" onchange="calcProgress()">
-                                <span class="topic-text"><strong>${subId}</strong> ${subTitle}</span>
-                                <button class="view-btn" onclick="openSyllabusViewer(event, '${subId}', '${safeTitle}')">
-                                    <i class="fa-regular fa-file-lines"></i> View
-                                </button>
+                                <div class="topic-main-info">
+                                    <input type="checkbox" class="cb-item" onchange="calcProgress()">
+                                    <span class="topic-text"><strong>${subId}</strong> ${sub}</span>
+                                </div>
+                                <div class="action-btns">
+                                    <button class="btn-action btn-view" onclick="openNotesViewer('${subId}', '${safeTitle}')">
+                                        <i class="fa-regular fa-file-lines"></i> View Notes
+                                    </button>
+                                    <button class="btn-action btn-quiz" onclick="openQuizModal('${safeTitle}')">
+                                        <i class="fa-solid fa-brain"></i> Quiz
+                                    </button>
+                                </div>
                             </div>
                         `;
                     });
 
-                    accordionItem.innerHTML = `
-                        <div class="accordion-header" onclick="toggleAccordion(this)">
-                            <span>${topic.title}</span>
+                    acc.innerHTML = `
+                        <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">
+                            <span>${top.title}</span>
                             <i class="fa-solid fa-chevron-down icon"></i>
                         </div>
-                        <div class="accordion-content">
-                            ${subtopicsHTML}
-                        </div>
+                        <div class="accordion-content">${subHTML}</div>
                     `;
-                    parentContainer.appendChild(accordionItem);
+                    container.appendChild(acc);
                 });
+            });
+            calcProgress();
+        }
+
+        /* 3. NOTES VIEWER & MARKUP */
+        function openNotesViewer(id, title) {
+            document.getElementById('modalTitle').innerText = `${id} - ${title}`;
+            document.getElementById('markupToolbar').style.display = 'flex';
+            const body = document.getElementById('modalBody');
+            
+            const detail = syllabusDetails[id];
+            if (detail && detail.pdfUrl) {
+                const gDriveViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(detail.pdfUrl)}&embedded=true`;
+                body.innerHTML = `<iframe src="${gDriveViewerUrl}" style="width:100%; height:100%; border:none;"></iframe>`;
+            } else {
+                body.innerHTML = `
+                    <div id="notesTextContainer" onmouseup="applyHighlight()" style="line-height: 1.8; font-size: 15px; color: #334155;">
+                        <h3 style="margin-bottom: 12px; color: var(--primary-dark);">${title}</h3>
+                        <h4>Overview & Study Material:</h4>
+                        <p>${detail ? detail.notes : 'This topic covers essential operational, technological, and regulatory aspects prescribed by Rastriya Banijya Bank (RBB) and Nepal Rastra Bank (NRB) for the Level 5 IT examination.'}</p>
+                        <br>
+                        <div style="background-color: #f8fafc; border-left: 4px solid var(--primary-color); padding: 12px; margin-top: 10px;">
+                            <strong>Key Highlights:</strong>
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                <li>Understand theoretical foundations, procedures, and practical applications.</li>
+                                <li>Ensure compliance with Nepal Rastra Bank Guidelines & Acts.</li>
+                            </ul>
+                        </div>
+                        <br>
+                        <p><em>(Tip: Highlight any text above using your mouse cursor to mark key notes with color!)</em></p>
+                    </div>
+                `;
+            }
+            document.getElementById('portalModal').style.display = 'flex';
+        }
+
+        function setHighlightColor(color) { currentHighlightColor = color; }
+
+        function applyHighlight() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) return;
+            const range = selection.getRangeAt(0);
+            const span = document.createElement('span');
+            span.style.backgroundColor = currentHighlightColor;
+            span.style.borderRadius = '3px';
+            span.style.padding = '0 2px';
+            range.surroundContents(span);
+            selection.removeAllRanges();
+        }
+
+        function clearHighlights() {
+            const container = document.getElementById('notesTextContainer');
+            if (container) {
+                container.querySelectorAll('span[style*="background-color"]').forEach(el => {
+                    el.outerHTML = el.innerHTML;
+                });
+            }
+        }
+
+        /* 4. GEMINI API QUIZ GENERATOR */
+        function openQuizModal(topicTitle) {
+            document.getElementById('modalTitle').innerText = `AI Quiz: ${topicTitle}`;
+            document.getElementById('markupToolbar').style.display = 'none';
+            const body = document.getElementById('modalBody');
+
+            body.innerHTML = `
+                <div class="quiz-container">
+                    <div class="api-input-group">
+                        <input type="password" id="geminiApiKey" placeholder="Enter Gemini API Key (e.g., AIzaSy...)" value="${userApiKey}">
+                        <button class="btn-action btn-quiz" onclick="generateGeminiQuiz('${topicTitle}')">Generate Quiz</button>
+                    </div>
+                    <div id="quizContent">
+                        <p style="text-align:center; color: #64748b; margin-top: 30px;">
+                            <i class="fa-solid fa-sparkles" style="font-size: 24px; color: var(--accent-purple);"></i><br><br>
+                            Enter your Gemini API key above to generate real-time practice questions for <strong>${topicTitle}</strong>.
+                        </p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('portalModal').style.display = 'flex';
+        }
+
+        async function generateGeminiQuiz(topicTitle) {
+            const keyInput = document.getElementById('geminiApiKey').value.trim();
+            if (!keyInput) { alert("Please enter a valid Gemini API Key!"); return; }
+            userApiKey = keyInput;
+
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `<p style="text-align:center; margin-top:20px;">Generating Quiz Questions via Gemini API...</p>`;
+
+            /* PROMPT FOR GEMINI API */
+            const promptText = `Generate a JSON array of 3 multiple-choice questions for the IT/Banking exam topic: "${topicTitle}". 
+            Output strictly valid JSON with no markdown formatting.
+            Structure:
+            [
+              {
+                "question": "Question string",
+                "options": ["Opt A", "Opt B", "Opt C", "Opt D"],
+                "answerIndex": 0
+              }
+            ]`;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${userApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }]
+                    })
+                });
+
+                const data = await response.json();
+                let rawText = data.candidates[0].content.parts[0].text;
+                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const questions = JSON.parse(rawText);
+
+                renderQuizQuestions(questions, quizContent);
+            } catch (err) {
+                quizContent.innerHTML = `<p style="color: red; text-align: center; margin-top:20px;">Error generating quiz. Please check your Gemini API key or network connection.</p>`;
+            }
+        }
+
+        function renderQuizQuestions(questions, container) {
+            container.innerHTML = '';
+            questions.forEach((q, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                
+                let optsHTML = '';
+                q.options.forEach((opt, oIdx) => {
+                    optsHTML += `<div class="quiz-option" onclick="checkAnswer(this, ${oIdx}, ${q.answerIndex})">${opt}</div>`;
+                });
+
+                card.innerHTML = `<p>Q${qIdx + 1}. ${q.question}</p>${optsHTML}`;
+                container.appendChild(card);
             });
         }
 
-        /* ======================
-           4. ACCORDION & PROGRESS LOGIC
-           ====================== */
-        function toggleAccordion(header) {
-            const item = header.parentElement;
-            item.classList.toggle('active');
+        function checkAnswer(element, selected, correct) {
+            const parent = element.parentElement;
+            const options = parent.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (selected === correct) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('wrong');
+                options[correct].classList.add('correct');
+            }
+        }
+
+        /* 5. UTILITIES: MAXIMIZE, TIMER & PROGRESS */
+        function toggleMaximize() {
+            const modal = document.getElementById('modalBox');
+            const icon = document.getElementById('maxBtn');
+            modal.classList.toggle('maximized');
+            icon.classList.toggle('fa-compress');
+        }
+
+        function closeModal() {
+            document.getElementById('portalModal').style.display = 'none';
         }
 
         function calcProgress() {
             const checkboxes = document.querySelectorAll('.cb-item');
             const total = checkboxes.length;
-            let checkedCount = 0;
-
-            checkboxes.forEach(cb => {
-                if (cb.checked) checkedCount++;
-            });
-
-            const percent = Math.round((checkedCount / total) * 100) || 0;
-            document.getElementById('progressBar').style.width = `${percent}%`;
-            document.getElementById('progressText').innerText = `${percent}% Completed (${checkedCount}/${total})`;
-            
-            showToast();
+            let checked = 0;
+            checkboxes.forEach(cb => { if(cb.checked) checked++; });
+            const pct = Math.round((checked / total) * 100) || 0;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+            document.getElementById('progressText').innerText = `${pct}% Completed (${checked}/${total})`;
         }
 
-        function showToast() {
-            const toast = document.getElementById('toastBar');
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
-        }
+        /* SESSION TIMER */
+        let secondsSpent = 0;
+        setInterval(() => {
+            secondsSpent++;
+            const hrs = String(Math.floor(secondsSpent / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((secondsSpent % 3600) / 60)).padStart(2, '0');
+            const secs = String(secondsSpent % 60).padStart(2, '0');
+            document.getElementById('sessionTimer').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
 
-        /* ======================
-           5. VIEWER MODAL CONTROLLER
-           ====================== */
-        function openSyllabusViewer(event, id, title) {
-            if (event) event.stopPropagation();
-
-            const viewerModal = document.getElementById('syllabusViewerModal');
-            const viewerTitle = document.getElementById('viewerTitle');
-            const viewerBody = document.getElementById('viewerBody');
-
-            viewerTitle.innerText = `${id} - ${title}`;
-            const detail = syllabusDetails[id];
-
-            if (detail && detail.pdfUrl) {
-                // Embedded Google Drive PDF Viewer
-                const gDriveViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(detail.pdfUrl)}&embedded=true`;
-                
-                viewerBody.innerHTML = `
-                    <div class="pdf-container-wrapper">
-                        <button class="mobile-close-btn" onclick="closeSyllabusViewer()"><i class="fa-solid fa-xmark"></i> Close Viewer</button>
-                        <div class="pdf-iframe-wrapper">
-                            <iframe src="${gDriveViewerUrl}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                `;
-            } else if (detail) {
-                // Fallback Structured Text
-                viewerBody.innerHTML = `
-                    <div class="pdf-fallback-wrapper">
-                        <h3>${title}</h3>
-                        <p><strong>Introduction:</strong> ${detail.introduction || 'N/A'}</p>
-                        
-                        ${detail.types ? `
-                            <h4>Types / Classification:</h4>
-                            <ul>${detail.types.map(t => `<li>${t}</li>`).join('')}</ul>
-                        ` : ''}
-
-                        ${detail.applications ? `
-                            <h4>Applications:</h4>
-                            <ul>${detail.applications.map(a => `<li>${a}</li>`).join('')}</ul>
-                        ` : ''}
-
-                        ${detail.limitations ? `
-                            <h4>Limitations:</h4>
-                            <ul>${detail.limitations.map(l => `<li>${l}</li>`).join('')}</ul>
-                        ` : ''}
-                        
-                        <button class="mobile-close-btn" onclick="closeSyllabusViewer()">Close</button>
-                    </div>
-                `;
-            } else {
-                // Empty State
-                viewerBody.innerHTML = `
-                    <div class="fallback-message">
-                        <i class="fa-solid fa-folder-open" style="font-size: 40px; color: #cbd5e1;"></i>
-                        <p>No study notes or PDF currently linked with this unit.</p>
-                        <button class="mobile-close-btn" onclick="closeSyllabusViewer()">Close</button>
-                    </div>
-                `;
-            }
-
-            viewerModal.style.display = 'flex';
-        }
-
-        function closeSyllabusViewer() {
-            document.getElementById('syllabusViewerModal').style.display = 'none';
-        }
-
-        // Initialize on DOM ready
-        document.addEventListener('DOMContentLoaded', () => {
-            renderSyllabusSystem();
-        });
+        document.addEventListener('DOMContentLoaded', renderSyllabus);
     </script>
 </body>
 </html>
