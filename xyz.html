@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RBB Level 5 IT — Pro Learning & Monitoring Engine</title>
+    <title>RBB Level 5 IT — Pro Learning & Gemini AI Quiz Engine</title>
     <style>
         :root {
             --bg-main: #040914;
@@ -33,32 +33,6 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-        }
-
-        /* CENTRAL FLOATING WARNING BANNER */
-        #proctorWarningBanner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 23, 68, 0.98);
-            color: white;
-            text-align: center;
-            padding: 25px 40px;
-            font-weight: bold;
-            font-size: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(255, 23, 68, 0.8);
-            z-index: 99999;
-            border: 2px solid #fff;
-            backdrop-filter: blur(10px);
-            animation: pulse 0.6s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { transform: translate(-50%, -50%) scale(1); }
-            to { transform: translate(-50%, -50%) scale(1.04); }
         }
 
         /* HEADER BAR */
@@ -136,7 +110,7 @@
 
         /* LEFT SIDEBAR */
         .left-sidebar {
-            width: 310px;
+            width: 320px;
             background: var(--bg-side);
             border-right: 2px solid var(--border-blue);
             padding: 20px;
@@ -158,75 +132,58 @@
             margin-top: 3px;
         }
 
-        .cam-box {
-            background: #000;
+        /* GEMINI API CONFIG CARD */
+        .api-config-card {
+            background: #081126;
             border: 1px solid var(--border-blue);
             border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-            height: 190px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        #webcam {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scaleX(-1);
-        }
-
-        .cam-status-tag {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            background: rgba(0, 0, 0, 0.75);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            color: var(--green-active);
+        .api-config-card h3 {
+            font-size: 13px;
+            color: var(--accent-blue);
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--green-active);
-            border-radius: 50%;
-            display: inline-block;
-            animation: blink 1.2s infinite;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0.3; }
-        }
-
-        .system-status-card {
-            background: #081126;
+        .api-input {
+            width: 100%;
+            background: #0d1730;
             border: 1px solid var(--border-blue);
-            border-radius: 8px;
-            padding: 14px;
-        }
-
-        .sys-title {
-            font-size: 12px;
-            font-weight: bold;
             color: #fff;
-            margin-bottom: 6px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 12px;
         }
 
-        .sys-sub {
-            font-size: 11px;
-            color: var(--green-active);
+        .api-input:focus {
+            outline: 1px solid var(--accent-blue);
         }
 
-        .sys-vocal {
+        .api-status {
             font-size: 11px;
             color: var(--text-muted);
-            font-style: italic;
-            margin-top: 6px;
+        }
+
+        .save-api-btn {
+            background: var(--purple-accent);
+            color: #fff;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .save-api-btn:hover {
+            opacity: 0.9;
         }
 
         /* CENTER MAIN CONTENT */
@@ -393,7 +350,7 @@
 
         /* RIGHT SIDEBAR - NOTES & QUIZ ENGINE */
         .right-sidebar {
-            width: 380px;
+            width: 400px;
             background: #eef2f6;
             color: #111;
             border-left: 2px solid var(--border-blue);
@@ -481,16 +438,16 @@
         .quiz-q {
             font-weight: 700;
             font-size: 13.5px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #0f172a;
         }
 
         .quiz-opt {
             display: block;
             background: #f1f5f9;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: 6px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             cursor: pointer;
             font-size: 12.5px;
             border: 1px solid #e2e8f0;
@@ -512,6 +469,40 @@
             background: #fee2e2 !important;
             border-color: #ef4444 !important;
             color: #991b1b;
+        }
+
+        .ai-gen-btn {
+            background: linear-gradient(135deg, #7c4dff, #00bcd4);
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(124, 77, 255, 0.3);
+        }
+
+        .ai-gen-btn:hover {
+            opacity: 0.95;
+        }
+
+        .loader-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* MOBILE RESPONSIVE DESIGN */
@@ -550,21 +541,14 @@
 
 <body>
 
-    <div id="proctorWarningBanner">
-        ⚠️ SECURITY ALERT: UNATTENDED / BLOCKED VISION DETECTED!
-        <div style="font-size: 13px; font-weight: normal; opacity: 0.9; margin-top: 5px;">
-            AI Monitoring engine failed to detect valid motion/candidate presence.
-        </div>
-    </div>
-
     <header class="header">
         <div class="header-left">
-            <span class="tracker-lbl">🏦 RBB Level 5 IT Study Engine</span>
+            <span class="tracker-lbl">🏦 RBB Level 5 IT — Interactive Gemini Engine</span>
             <div class="timer-display" id="timerBox">03:00:00</div>
         </div>
         <div class="header-controls">
-            <input type="number" class="time-input" id="hrIn" value="3"> <span style="font-size:11px; color:var(--text-muted)">hr</span>
-            <input type="number" class="time-input" id="minIn" value="0"> <span style="font-size:11px; color:var(--text-muted)">min</span>
+            <input type="number" class="time-input" id="hrIn" value="3" min="0"> <span style="font-size:11px; color:var(--text-muted)">hr</span>
+            <input type="number" class="time-input" id="minIn" value="0" min="0" max="59"> <span style="font-size:11px; color:var(--text-muted)">min</span>
             <button class="btn btn-apply" onclick="applyCustomTime()">Apply</button>
             <button class="btn btn-start" onclick="startTimer()">Start</button>
             <button class="btn btn-pause" onclick="pauseTimer()">Pause</button>
@@ -579,17 +563,18 @@
                 <p>तह ५ - वरिष्ठ सहायक (सूचना प्रविधि)</p>
             </div>
 
-            <div class="cam-box">
-                <video id="webcam" autoplay playsinline muted></video>
-                <div class="cam-status-tag">
-                    <span class="dot"></span> AI Proctor Monitoring
-                </div>
+            <!-- GEMINI API SETTINGS CARD -->
+            <div class="api-config-card">
+                <h3>✨ Gemini AI Integration</h3>
+                <p style="font-size: 11px; color: var(--text-muted);">Dynamically generate custom MCQs and detailed study notes using Gemini 2.5 Flash.</p>
+                <input type="password" id="geminiApiKey" class="api-input" placeholder="Paste Gemini API Key (AIzaSy...)" onchange="saveApiKey()">
+                <button class="save-api-btn" onclick="saveApiKey()">Save API Key</button>
+                <div class="api-status" id="apiStatusText">● API Key: Not Configured</div>
             </div>
 
-            <div class="system-status-card">
-                <div class="sys-title">🎙️ AI SURVEILLANCE SYSTEM</div>
-                <div class="sys-sub" id="sysProctorStatus">● Calibrating Stream...</div>
-                <div class="sys-vocal" id="sysMotionScore">Motion Activity: Normal</div>
+            <div class="api-config-card" style="background:#050d1e;">
+                <h3 style="color:#00e676;">📊 Study Tracker</h3>
+                <p style="font-size: 11.5px; color: var(--text-main);" id="trackerSummary">Loading syllabus stats...</p>
             </div>
         </aside>
 
@@ -616,9 +601,9 @@
                 </div>
             </div>
             <div class="viewer-body" id="viewerContent">
-                <h3>Welcome to Interactive Engine</h3>
+                <h3>Welcome to Interactive AI Engine</h3>
                 <p style="font-size: 13px; color: #475569;">
-                    पाठ्यक्रमको कुनै पनि उप-शीर्षकको <strong>View Note</strong> थिचेर द्रुत नोट्स हेर्नुहोस् वा <strong>Quiz</strong> थिचेर बहुवैकल्पिक प्रश्नहरूको अभ्यास गर्नुहोस्।
+                    पाठ्यक्रमको कुनै पनि उप-शीर्षकको <strong>View Note</strong> थिचेर द्रुत नोट्स हेर्नुहोस् वा <strong>Quiz</strong> थिचेर **Gemini AI Generator** बाट तुरुन्तै नयाँ MCQs को अभ्यास गर्नुहोस्।
                 </p>
             </div>
         </aside>
@@ -750,36 +735,141 @@
             }
         ];
 
-        // --- SAMPLE MOCK NOTES & QUIZ DATABASE ---
+        // --- FALLBACK MOCK NOTES & QUIZ DATABASE ---
         const notesDb = {
-            "1.1.1": "<h4>Banking Institutions in Nepal</h4><ul><li><strong>Commercial Banks (Class A):</strong> Core operations like deposit collection, credit creation, foreign trade financing.</li><li><strong>Development Banks (Class B):</strong> Sector-specific project financing.</li><li><strong>Finance Companies (Class C) & Microfinance (Class D)</strong>.</li></ul>",
-            "1.3.1": "<h4>NRB Act 2058 & BAFIA 2073</h4><ul><li><strong>NRB Act 2058:</strong> Autonomy, Monetary policy control, Regulator of BFIs.</li><li><strong>BAFIA 2073:</strong> Licensing, Corporate governance, Capital adequacy standards for BFIs.</li></ul>",
-            "2.1.3": "<h4>AI, ML & Blockchain in Banking</h4><ul><li><strong>AI/ML:</strong> Fraud detection, chatbots, credit scoring algorithms.</li><li><strong>Blockchain:</strong> Immutable ledger, smart contracts, secure cross-border remittances.</li></ul>",
-            "2.6.3": "<h4>NRB Cyber Resilience Guidelines 2023</h4><ul><li>Mandatory SOC (Security Operations Center) monitoring.</li><li>Periodic Vulnerability Assessment and Penetration Testing (VAPT).</li><li>Incident Response & Disaster Recovery readiness.</li></ul>"
+            "1.1.1": "<h4>Banking Institutions in Nepal</h4><ul><li><strong>Commercial Banks (Class A):</strong> Core operations like deposit collection, credit creation, foreign trade financing. Minimum capital requirement: NPR 8 Billion.</li><li><strong>Development Banks (Class B):</strong> Sector-specific project financing and localized banking services.</li><li><strong>Finance Companies (Class C) & Microfinance (Class D)</strong>: Tailored financial products and micro-credit services.</li></ul>",
+            "1.3.1": "<h4>NRB Act 2058 & BAFIA 2073</h4><ul><li><strong>NRB Act 2058:</strong> Grants central banking autonomy, monetary policy execution, regulator of BFIs.</li><li><strong>BAFIA 2073:</strong> Regulates licensing, corporate governance, loan recovery, and capital adequacy standards.</li></ul>",
+            "2.1.3": "<h4>AI, ML & Blockchain in Banking</h4><ul><li><strong>AI/ML:</strong> Advanced fraud detection, automated chatbots, automated credit scoring models.</li><li><strong>Blockchain:</strong> Immutable ledger, smart contracts, transparent cross-border remittances.</li></ul>",
+            "2.6.3": "<h4>NRB Cyber Resilience Guidelines 2023</h4><ul><li>Mandatory 24/7 SOC (Security Operations Center) monitoring.</li><li>Periodic Vulnerability Assessment and Penetration Testing (VAPT).</li><li>Mandatory Disaster Recovery (DR) drills and cyber incident reporting.</li></ul>"
         };
 
         const quizDb = {
             "1.1.1": {
                 q: "What is the primary function of Class 'A' Commercial Banks in Nepal?",
                 opts: ["Deposit collection & Credit Creation", "Only Rural Micro-loans", "Stock Broking Only", "Insurance Policies"],
-                ans: 0
+                ans: 0,
+                exp: "Class A Commercial Banks are primary creators of credit and offer comprehensive retail and corporate banking services."
             },
             "2.1.3": {
                 q: "Which underlying technology enables decentralized and tamper-proof ledgers?",
                 opts: ["Cloud Computing", "Blockchain Technology", "Virtualization", "Relational Database"],
-                ans: 1
+                ans: 1,
+                exp: "Blockchain operates on a decentralized, cryptographically secured distributed ledger framework."
             },
             "2.6.3": {
                 q: "According to NRB IT Guidelines, how often should BFIs perform VAPT?",
                 opts: ["Once every 5 years", "At least annually", "Never", "Every month"],
-                ans: 1
+                ans: 1,
+                exp: "NRB mandates at least annual Vulnerability Assessment and Penetration Testing (VAPT) for all critical systems."
             }
         };
 
-        // --- RENDER SYLLABUS ACCORDION ---
+        // --- GEMINI API INTEGRATION LOGIC ---
+        function saveApiKey() {
+            const key = document.getElementById('geminiApiKey').value.trim();
+            if (key) {
+                localStorage.setItem('gemini_api_key', key);
+                updateApiStatus(true);
+                alert("✅ Gemini API Key saved successfully!");
+            } else {
+                localStorage.removeItem('gemini_api_key');
+                updateApiStatus(false);
+            }
+        }
+
+        function loadApiKey() {
+            const key = localStorage.getItem('gemini_api_key') || '';
+            document.getElementById('geminiApiKey').value = key;
+            updateApiStatus(!!key);
+        }
+
+        function updateApiStatus(isConfigured) {
+            const status = document.getElementById('apiStatusText');
+            if (isConfigured) {
+                status.innerText = "● API Key: Active (gemini-2.5-flash)";
+                status.style.color = "var(--green-active)";
+            } else {
+                status.innerText = "● API Key: Not Configured (Using Local Database)";
+                status.style.color = "var(--text-muted)";
+            }
+        }
+
+        async function fetchGeminiQuiz(subtopicId, title) {
+            const apiKey = localStorage.getItem('gemini_api_key');
+            if (!apiKey) {
+                alert("⚠️ Please enter and save your Gemini API Key in the left panel to fetch dynamic AI quizzes!");
+                return null;
+            }
+
+            const prompt = `Generate 1 multiple choice question (MCQ) for Rastriya Banijya Bank Level 5 IT examination based on topic: "${title}".
+Format the output STRICTLY as raw JSON without markdown formatting, using this exact structure:
+{
+  "q": "Question text here",
+  "opts": ["Option A", "Option B", "Option C", "Option D"],
+  "ans": 0,
+  "exp": "Detailed explanation here"
+}
+Note: "ans" must be 0 for Option A, 1 for Option B, 2 for Option C, or 3 for Option D. Do not wrap in markdown \`\`\`json.`;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+
+                let rawText = data.candidates[0].content.parts[0].text;
+                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                return JSON.parse(rawText);
+            } catch (err) {
+                alert("Gemini API Error: " + err.message);
+                return null;
+            }
+        }
+
+        async function fetchGeminiNotes(subtopicId, title) {
+            const apiKey = localStorage.getItem('gemini_api_key');
+            if (!apiKey) {
+                alert("⚠️ Please enter and save your Gemini API Key in the left panel to generate dynamic AI notes!");
+                return null;
+            }
+
+            const prompt = `Provide concise, bulleted revision notes in HTML format (using <h4>, <ul>, <li>, <strong> tags) for Rastriya Banijya Bank (RBB) Level 5 IT examination topic: "${title}". Include relevant Nepalese banking regulations, NRB directives, or technical IT concepts. Output ONLY HTML body tags.`;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+
+                let rawText = data.candidates[0].content.parts[0].text;
+                return rawText.replace(/```html/g, '').replace(/```/g, '').trim();
+            } catch (err) {
+                alert("Gemini API Error: " + err.message);
+                return null;
+            }
+        }
+
+        // --- RENDER SYLLABUS ACCORDION WITH LOCALSTORAGE PERSISTENCE ---
         function renderSyllabus() {
             const container = document.getElementById('syllabusContainer');
-            
+            const savedProgress = JSON.parse(localStorage.getItem('rbb_completed_topics') || '{}');
+
             window.rbbSyllabus.forEach(sec => {
                 const secTitle = document.createElement('div');
                 secTitle.className = 'section-title-banner';
@@ -790,16 +880,20 @@
                     const item = document.createElement('div');
                     item.className = 'accordion-item';
 
-                    let subtopicsHTML = topic.subtopics.map(sub => `
-                        <div class="topic-row">
-                            <input type="checkbox" id="chk_${sub.id}" onchange="updateProgress()">
-                            <span class="topic-text"><strong>[${sub.id}]</strong> ${sub.title}</span>
-                            <div class="action-btns">
-                                <button class="view-btn" onclick="openNotes('${sub.id}', '${sub.title.replace(/'/g, "\\'")}')">View Note</button>
-                                <button class="quiz-btn" onclick="openQuiz('${sub.id}', '${sub.title.replace(/'/g, "\\'")}')">Quiz</button>
+                    let subtopicsHTML = topic.subtopics.map(sub => {
+                        const isChecked = savedProgress[sub.id] ? 'checked' : '';
+                        const escapedTitle = sub.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        return `
+                            <div class="topic-row">
+                                <input type="checkbox" id="chk_${sub.id}" ${isChecked} onchange="updateProgress()">
+                                <span class="topic-text"><strong>[${sub.id}]</strong> ${sub.title}</span>
+                                <div class="action-btns">
+                                    <button class="view-btn" onclick="openNotes('${sub.id}', '${escapedTitle}')">View Note</button>
+                                    <button class="quiz-btn" onclick="openQuiz('${sub.id}', '${escapedTitle}')">Quiz</button>
+                                </div>
                             </div>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
 
                     item.innerHTML = `
                         <div class="accordion-header" onclick="toggleAccordion(this)">
@@ -813,9 +907,10 @@
                     container.appendChild(item);
                 });
             });
+
+            updateProgress();
         }
 
-        // --- ANIMATED ACCORDION TOGGLE ---
         function toggleAccordion(header) {
             const content = header.nextElementSibling;
             const arrow = header.querySelector('.arrow');
@@ -834,64 +929,137 @@
         function updateProgress() {
             const checkboxes = document.querySelectorAll('.topic-row input[type="checkbox"]');
             let checkedCount = 0;
-            checkboxes.forEach(chk => { if (chk.checked) checkedCount++; });
-            const pct = Math.round((checkedCount / checkboxes.length) * 100);
-            
+            const savedProgress = {};
+
+            checkboxes.forEach(chk => {
+                const subId = chk.id.replace('chk_', '');
+                if (chk.checked) {
+                    checkedCount++;
+                    savedProgress[subId] = true;
+                }
+            });
+
+            const pct = checkboxes.length ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
             document.getElementById('progBar').style.width = pct + '%';
             document.getElementById('progPct').innerText = pct + '% Completed';
+            
+            document.getElementById('trackerSummary').innerText = `Completed ${checkedCount} out of ${checkboxes.length} subtopics (${pct}%).`;
+
+            localStorage.setItem('rbb_completed_topics', JSON.stringify(savedProgress));
         }
 
         // --- NOTES & QUIZ DISPLAY FUNCTIONS ---
-        function openNotes(id, title) {
+        async function openNotes(id, title) {
             document.getElementById('panelTitle').innerText = "Study Notes";
             const viewerContent = document.getElementById('viewerContent');
-            const noteText = notesDb[id] || `<h4>${title}</h4><p style="font-size:13px; margin-top:8px;">यहाँ <strong>${title}</strong> सम्बन्धी मुख्य पाठ्यक्रम बुँदाहरू, ऐनका दफाहरू र सम्भावित परीक्षाका उत्तरहरू उपलब्ध हुनेछन्।</p>`;
-
-            viewerContent.innerHTML = `
-                <h3>[${id}] Notes</h3>
-                ${noteText}
-            `;
             showRightSidebar();
+
+            const apiKey = localStorage.getItem('gemini_api_key');
+            if (apiKey) {
+                viewerContent.innerHTML = `<h3>[${id}] Notes</h3><p><span class="loader-spinner"></span> Generating AI Study Note via Gemini...</p>`;
+                const aiNote = await fetchGeminiNotes(id, title);
+                if (aiNote) {
+                    viewerContent.innerHTML = `<h3>[${id}] Notes (AI Generated)</h3>${aiNote}`;
+                    return;
+                }
+            }
+
+            const noteText = notesDb[id] || `<h4>${title}</h4><p style="font-size:13px; margin-top:8px;">यहाँ <strong>${title}</strong> सम्बन्धी मुख्य पाठ्यक्रम बुँदाहरू, ऐनका दफाहरू र सम्भावित परीक्षाका उत्तरहरू उपलब्ध हुनेछन्।</p>`;
+            viewerContent.innerHTML = `<h3>[${id}] Notes</h3>${noteText}`;
         }
 
-        function openQuiz(id, title) {
+        async function openQuiz(id, title) {
             document.getElementById('panelTitle').innerText = "Topic Practice Quiz";
             const viewerContent = document.getElementById('viewerContent');
-            const qData = quizDb[id] || {
-                q: `Sample Quiz Question related to: ${title}?`,
-                opts: ["Option A: Core Standard Concept", "Option B: Secondary Banking Policy", "Option C: General Framework", "Option D: None of the above"],
-                ans: 0
+            showRightSidebar();
+
+            const renderQuizObj = (qData, isAi = false) => {
+                const optionsHTML = qData.opts.map((opt, index) => `
+                    <div class="quiz-opt" onclick="checkAnswer(this, ${index}, ${qData.ans}, '${qData.exp.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        ${String.fromCharCode(65 + index)}. ${opt}
+                    </div>
+                `).join('');
+
+                viewerContent.innerHTML = `
+                    <h3>[${id}] Quiz Evaluation ${isAi ? '✨ (Gemini AI)' : ''}</h3>
+                    <button class="ai-gen-btn" onclick="generateAiQuiz('${id}', '${title.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        ✨ Generate New MCQ with Gemini
+                    </button>
+                    <div class="quiz-card">
+                        <div class="quiz-q">${qData.q}</div>
+                        <div>${optionsHTML}</div>
+                        <div id="quizExplanation" style="display:none; margin-top:12px; font-size:12px; color:#334155; padding:8px; background:#f8fafc; border-radius:4px; border-left:3px solid #00bcd4;"></div>
+                    </div>
+                `;
             };
 
-            let optsHtml = qData.opts.map((opt, idx) => `
-                <div class="quiz-opt" onclick="checkQuizAnswer(this, ${idx}, ${qData.ans})">${opt}</div>
-            `).join('');
+            const defaultQ = quizDb[id] || {
+                q: `Select the option that best defines or represents: ${title}`,
+                opts: [
+                    "Standard Operational Procedure Requirement",
+                    "Core Statutory Framework Standard",
+                    "Technical Implementation Directive",
+                    "General Informational Practice"
+                ],
+                ans: 0,
+                exp: "This conceptual question checks core theoretical awareness regarding the chosen syllabus subtopic."
+            };
 
-            viewerContent.innerHTML = `
-                <div class="quiz-card">
-                    <div class="quiz-q">${qData.q}</div>
-                    ${optsHtml}
-                </div>
-            `;
-            showRightSidebar();
+            renderQuizObj(defaultQ, false);
         }
 
-        function checkQuizAnswer(el, selected, correct) {
-            const parent = el.parentElement;
-            const options = parent.querySelectorAll('.quiz-opt');
-            options.forEach(opt => opt.style.pointerEvents = 'none');
+        async function generateAiQuiz(id, title) {
+            const viewerContent = document.getElementById('viewerContent');
+            const btn = viewerContent.querySelector('.ai-gen-btn');
+            if (btn) btn.innerHTML = `<span class="loader-spinner"></span> Generating AI Quiz...`;
 
-            if (selected === correct) {
-                el.classList.add('correct');
-            } else {
-                el.classList.add('wrong');
-                options[correct].classList.add('correct');
+            const aiQ = await fetchGeminiQuiz(id, title);
+            if (aiQ) {
+                const optionsHTML = aiQ.opts.map((opt, index) => `
+                    <div class="quiz-opt" onclick="checkAnswer(this, ${index}, ${aiQ.ans}, '${aiQ.exp.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        ${String.fromCharCode(65 + index)}. ${opt}
+                    </div>
+                `).join('');
+
+                viewerContent.innerHTML = `
+                    <h3>[${id}] Quiz Evaluation ✨ (Gemini AI)</h3>
+                    <button class="ai-gen-btn" onclick="generateAiQuiz('${id}', '${title.replace(/'/g, "\\'").replace(/"/g, '&quot;')}')">
+                        ✨ Generate Another MCQ with Gemini
+                    </button>
+                    <div class="quiz-card">
+                        <div class="quiz-q">${aiQ.q}</div>
+                        <div>${optionsHTML}</div>
+                        <div id="quizExplanation" style="display:none; margin-top:12px; font-size:12px; color:#334155; padding:8px; background:#f8fafc; border-radius:4px; border-left:3px solid #00bcd4;"></div>
+                    </div>
+                `;
+            } else if (btn) {
+                btn.innerHTML = `✨ Generate New MCQ with Gemini`;
+            }
+        }
+
+        function checkAnswer(element, selected, correct, exp) {
+            const parent = element.parentElement;
+            const options = parent.querySelectorAll('.quiz-opt');
+            options.forEach((opt, idx) => {
+                opt.onclick = null;
+                if (idx === correct) {
+                    opt.classList.add('correct');
+                } else if (idx === selected) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            const expBox = document.getElementById('quizExplanation');
+            if (expBox) {
+                expBox.style.display = 'block';
+                expBox.innerHTML = `<strong>Explanation:</strong> ${exp}`;
             }
         }
 
         function showRightSidebar() {
+            const sidebar = document.getElementById('pdfViewerSidebar');
             if (window.innerWidth <= 992) {
-                document.getElementById('pdfViewerSidebar').classList.add('active-mobile');
+                sidebar.classList.add('active-mobile');
             }
         }
 
@@ -901,32 +1069,39 @@
 
         function toggleViewerMaximize() {
             const sidebar = document.getElementById('pdfViewerSidebar');
-            sidebar.classList.toggle('maximized');
             const btn = document.getElementById('toggleMaximizeBtn');
-            btn.innerText = sidebar.classList.contains('maximized') ? 'Restore 🗗' : 'Maximize 🗖';
+            if (sidebar.classList.contains('maximized')) {
+                sidebar.classList.remove('maximized');
+                btn.innerText = "Maximize 🗖";
+            } else {
+                sidebar.classList.add('maximized');
+                btn.innerText = "Restore 🗗";
+            }
         }
 
-        // --- TIMER SYSTEM ---
-        let timerSeconds = 10800;
+        // --- COUNTDOWN TIMER SYSTEM ---
         let timerInterval = null;
+        let totalSeconds = parseInt(localStorage.getItem('rbb_timer_seconds')) || (3 * 3600);
 
-        function updateTimerDisplay() {
-            let h = Math.floor(timerSeconds / 3600);
-            let m = Math.floor((timerSeconds % 3600) / 60);
-            let s = timerSeconds % 60;
-            document.getElementById('timerBox').innerText = 
-                `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        function renderTimer() {
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+
+            const pad = num => String(num).padStart(2, '0');
+            document.getElementById('timerBox').innerText = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+            localStorage.setItem('rbb_timer_seconds', totalSeconds);
         }
 
         function startTimer() {
             if (timerInterval) return;
             timerInterval = setInterval(() => {
-                if (timerSeconds > 0) {
-                    timerSeconds--;
-                    updateTimerDisplay();
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                    renderTimer();
                 } else {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
+                    pauseTimer();
+                    alert("⏱️ Study Time Elapsed!");
                 }
             }, 1000);
         }
@@ -938,40 +1113,17 @@
 
         function applyCustomTime() {
             pauseTimer();
-            let h = parseInt(document.getElementById('hrIn').value) || 0;
-            let m = parseInt(document.getElementById('minIn').value) || 0;
-            timerSeconds = (h * 3600) + (m * 60);
-            updateTimerDisplay();
+            const h = parseInt(document.getElementById('hrIn').value) || 0;
+            const m = parseInt(document.getElementById('minIn').value) || 0;
+            totalSeconds = (h * 3600) + (m * 60);
+            renderTimer();
         }
 
-        // --- AI SURVEILLANCE / CAMERA SIMULATION ---
-        async function initWebcam() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                document.getElementById('webcam').srcObject = stream;
-                document.getElementById('sysProctorStatus').innerText = '● Surveillance Active';
-            } catch (err) {
-                document.getElementById('sysProctorStatus').innerText = '● Cam Blocked / Unavailable';
-            }
-
-            // Motion Score & Warning Simulation
-            setInterval(() => {
-                let score = Math.floor(Math.random() * 90) + 10;
-                document.getElementById('sysMotionScore').innerText = `Motion Score: ${score}`;
-                
-                // Show floating alert if motion score drops too low (simulating candidate missing)
-                if (score < 15) {
-                    document.getElementById('proctorWarningBanner').style.display = 'block';
-                } else {
-                    document.getElementById('proctorWarningBanner').style.display = 'none';
-                }
-            }, 4000);
-        }
-
+        // --- INIT APP ---
         window.onload = () => {
             renderSyllabus();
-            updateTimerDisplay();
-            initWebcam();
+            renderTimer();
+            loadApiKey();
         };
     </script>
 </body>
