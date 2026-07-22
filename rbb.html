@@ -4,18 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RBBL Level 5 IT — Complete Syllabus & AI Practice Suite</title>
+    <title>RBBL Level 5 IT — Modern Animated Study Suite</title>
     <style>
+        /* --- DYNAMIC CSS VARIABLES (DARK / LIGHT THEMES) --- */
         :root {
             --bg-main: #040914;
             --bg-side: #0a1124;
             --bg-card: #0d1730;
-            --border-blue: #1b3564;
+            --border-color: #1b3564;
             --accent-blue: #00bcd4;
             --text-main: #e2e8f0;
-            --text-muted: #718096;
+            --text-muted: #88a0c0;
             --green-active: #00e676;
             --red-alert: #ff1744;
+            --modal-bg: rgba(6, 13, 31, 0.85);
+            --shadow-glow: 0 10px 30px rgba(0, 188, 212, 0.2);
+            --transition-speed: 0.4s;
+        }
+
+        [data-theme="light"] {
+            --bg-main: #f4f7fc;
+            --bg-side: #ffffff;
+            --bg-card: #fdfdfd;
+            --border-color: #cbd5e1;
+            --accent-blue: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --green-active: #16a34a;
+            --red-alert: #dc2626;
+            --modal-bg: rgba(255, 255, 255, 0.85);
+            --shadow-glow: 0 10px 30px rgba(2, 132, 199, 0.15);
         }
 
         * {
@@ -23,6 +41,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', system-ui, sans-serif;
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
         body {
@@ -36,12 +55,13 @@
 
         /* HEADER BAR */
         .header {
-            background: #060d1f;
+            background: var(--bg-side);
             padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--border-blue);
+            border-bottom: 2px solid var(--border-color);
+            box-shadow: var(--shadow-glow);
         }
 
         .header-left {
@@ -51,7 +71,7 @@
         }
 
         .tracker-lbl {
-            color: #00bcd4;
+            color: var(--accent-blue);
             font-weight: 800;
             font-size: 16px;
             letter-spacing: 1px;
@@ -61,7 +81,7 @@
             background: #000;
             color: #ffb300;
             font-family: monospace;
-            font-size: 22px;
+            font-size: 20px;
             padding: 4px 14px;
             border-radius: 6px;
             border: 1px solid #ffb300;
@@ -75,9 +95,9 @@
         }
 
         .time-input, .api-input {
-            background: #121e36;
-            border: 1px solid var(--border-blue);
-            color: white;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             padding: 6px 10px;
             border-radius: 4px;
         }
@@ -95,17 +115,29 @@
         .btn {
             padding: 8px 14px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
-            font-size: 13px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn-apply {
-            background: #121e36;
-            color: white;
-            border: 1px solid var(--border-blue);
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
         }
 
         .btn-start {
@@ -125,7 +157,37 @@
             color: #fff;
         }
 
-        /* MAIN APP LAYOUT */
+        .btn-pdf {
+            background: #e11d48;
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        .btn-topic-quiz {
+            background: #0284c7;
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        /* ANIMATED THEME TOGGLE SWITCH */
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* MAIN LAYOUT */
         .app-container {
             display: flex;
             flex: 1;
@@ -137,7 +199,7 @@
         .left-sidebar {
             width: 280px;
             background: var(--bg-side);
-            border-right: 2px solid var(--border-blue);
+            border-right: 2px solid var(--border-color);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -145,7 +207,7 @@
         }
 
         .brand-title h1 {
-            color: #00bcd4;
+            color: var(--accent-blue);
             font-size: 17px;
             font-weight: 800;
         }
@@ -157,8 +219,8 @@
         }
 
         .stat-card {
-            background: #081126;
-            border: 1px solid var(--border-blue);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 12px 15px;
         }
@@ -166,7 +228,7 @@
         .stat-title {
             font-size: 11px;
             font-weight: bold;
-            color: #88a0c0;
+            color: var(--text-muted);
             margin-bottom: 6px;
             text-transform: uppercase;
         }
@@ -177,7 +239,7 @@
             color: var(--green-active);
         }
 
-        /* MIDDLE CONTENT */
+        /* MIDDLE CONTENT SYLLABUS */
         .center-content {
             flex: 1;
             padding: 20px;
@@ -187,7 +249,7 @@
 
         .progress-container {
             background: var(--bg-card);
-            border: 1px solid var(--border-blue);
+            border: 1px solid var(--border-color);
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -202,35 +264,36 @@
         }
 
         .progress-bar-bg {
-            background: #070d1a;
+            background: var(--bg-side);
             height: 10px;
             border-radius: 5px;
             overflow: hidden;
         }
 
         .progress-bar-fill {
-            background: linear-gradient(90deg, #009688, #00bcd4);
+            background: linear-gradient(90deg, #009688, var(--accent-blue));
             width: 0%;
             height: 100%;
-            transition: width 0.4s ease;
+            transition: width 0.5s ease-in-out;
         }
 
         .section-title-banner {
             font-size: 14px;
-            color: #00bcd4;
+            color: var(--accent-blue);
             font-weight: 800;
             margin: 20px 0 10px 0;
-            border-left: 4px solid #00bcd4;
+            border-left: 4px solid var(--accent-blue);
             padding-left: 10px;
             text-transform: uppercase;
         }
 
         .accordion-item {
             background: var(--bg-card);
-            border: 1px solid var(--border-blue);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             margin-bottom: 10px;
             overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .accordion-header {
@@ -243,66 +306,77 @@
         }
 
         .accordion-header:hover {
-            background: #111d3a;
+            opacity: 0.9;
         }
 
         .accordion-title {
             font-size: 13.5px;
             font-weight: 600;
-            color: #fff;
+            color: var(--text-main);
         }
 
         .accordion-content {
             display: none;
             padding: 8px 16px;
-            background: #091022;
-            border-top: 1px solid var(--border-blue);
+            background: var(--bg-side);
+            border-top: 1px solid var(--border-color);
         }
 
         .topic-row {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
             gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #142242;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .topic-row:last-child {
             border-bottom: none;
         }
 
+        .topic-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            flex: 1;
+        }
+
         .topic-row input[type="checkbox"] {
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             accent-color: var(--accent-blue);
             cursor: pointer;
             margin-top: 2px;
         }
 
         .topic-text {
-            flex: 1;
             font-size: 12.5px;
             line-height: 1.4;
             color: var(--text-main);
         }
 
+        .topic-actions {
+            display: flex;
+            gap: 6px;
+        }
+
         /* RIGHT SIDEBAR (AI QUIZ MODULE) */
         .right-sidebar {
             width: 420px;
-            background: #0a1329;
-            color: #fff;
-            border-left: 2px solid var(--border-blue);
+            background: var(--bg-side);
+            border-left: 2px solid var(--border-color);
             display: flex;
             flex-direction: column;
         }
 
         .quiz-header {
-            background: #060d1f;
-            color: #00bcd4;
+            background: var(--bg-card);
+            color: var(--accent-blue);
             padding: 14px 18px;
             font-weight: bold;
             font-size: 13px;
-            border-bottom: 1px solid var(--border-blue);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -319,7 +393,7 @@
 
         .quiz-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-blue);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 16px;
         }
@@ -335,7 +409,7 @@
         .quiz-q-text {
             font-size: 13.5px;
             font-weight: 600;
-            color: #fff;
+            color: var(--text-main);
             margin-bottom: 12px;
             line-height: 1.4;
         }
@@ -347,8 +421,8 @@
         }
 
         .opt-btn {
-            background: #111d3a;
-            border: 1px solid var(--border-blue);
+            background: var(--bg-side);
+            border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 10px 12px;
             border-radius: 6px;
@@ -359,7 +433,6 @@
         }
 
         .opt-btn:hover {
-            background: #1a2a52;
             border-color: var(--accent-blue);
         }
 
@@ -378,25 +451,97 @@
         .quiz-explanation {
             margin-top: 10px;
             padding: 10px;
-            background: #08152e;
-            border: 1px solid var(--border-blue);
+            background: var(--bg-side);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 12px;
-            color: #80d8ff;
+            color: var(--accent-blue);
             display: none;
         }
 
-        .quiz-controls {
+        /* --- MODAL ANIMATED UI (PDF & QUICK QUIZ) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--modal-bg);
+            backdrop-filter: blur(8px);
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: var(--bg-side);
+            border: 2px solid var(--border-color);
+            width: 80%;
+            max-width: 900px;
+            height: 80vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-glow);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            color: var(--accent-blue);
+            font-size: 14px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            flex: 1;
+            padding: 0;
+            position: relative;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .toast-bar {
             position: fixed;
             bottom: 25px;
             right: 25px;
-            background: #00e676;
+            background: var(--green-active);
             color: #000;
             padding: 12px 20px;
             border-radius: 8px;
@@ -414,36 +559,30 @@
         }
 
         @media (max-width: 1024px) {
-            body {
-                height: auto;
-                overflow: auto;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
-            }
-
-            .app-container {
-                flex-direction: column;
-            }
-
-            .left-sidebar, .right-sidebar {
-                width: 100%;
-            }
-
-            .right-sidebar {
-                min-height: 500px;
-            }
+            body { height: auto; overflow: auto; }
+            .header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .app-container { flex-direction: column; }
+            .left-sidebar, .right-sidebar { width: 100%; }
+            .modal-box { width: 95%; height: 90vh; }
         }
     </style>
 </head>
 
 <body>
 
-    <div id="toastBar" class="toast-bar">
-        ⏰ Study Session Completed!
+    <div id="toastBar" class="toast-bar">⏰ Study Session Time Completed!</div>
+
+    <!-- PDF VIEWER MODAL CONTAINER -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title" id="pdfModalTitle">📄 Topic Reference Document</span>
+                <button class="modal-close" onclick="closePdfModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfFrame" src="about:blank"></iframe>
+            </div>
+        </div>
     </div>
 
     <!-- HEADER BAR -->
@@ -453,6 +592,9 @@
             <div class="timer-display" id="timerBox">03:00:00</div>
         </div>
         <div class="header-controls">
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark</span>
+            </button>
             <input type="password" class="api-input" id="apiKeyIn" placeholder="Paste Gemini API Key Here...">
             <input type="number" class="time-input" id="hrIn" value="3"> <span style="font-size:12px; color:var(--text-muted)">hr</span>
             <input type="number" class="time-input" id="minIn" value="0"> <span style="font-size:12px; color:var(--text-muted)">min</span>
@@ -477,7 +619,7 @@
 
             <div class="stat-card">
                 <div class="stat-title">Completed Topics</div>
-                <div class="stat-value" id="completedTopicsCount" style="color:#00bcd4;">0</div>
+                <div class="stat-value" id="completedTopicsCount" style="color:var(--accent-blue);">0</div>
             </div>
 
             <div class="stat-card">
@@ -486,7 +628,7 @@
             </div>
         </aside>
 
-        <!-- CENTER CONTENT: FULL EXHAUSTIVE SYLLABUS -->
+        <!-- CENTER CONTENT: FULL SYLLABUS -->
         <main class="center-content" id="syllabusContainer">
             <div class="progress-container">
                 <div class="progress-header">
@@ -507,15 +649,15 @@
             </div>
             <div class="quiz-body">
                 <div style="display:flex; gap:8px;">
-                    <button class="btn btn-ai" style="flex:1;" onclick="generateAIQuiz()">🎲 Generate New AI Question</button>
+                    <button class="btn btn-ai" style="flex:1;" onclick="generateAIQuiz()">🎲 Generate Random Quiz</button>
                 </div>
                 <div class="quiz-card">
                     <div class="quiz-q-num" id="quizTopicTag">Topic: General Syllabus</div>
-                    <div class="quiz-q-text" id="quizQText">Click "Generate New AI Question" to start practicing with Gemini API!</div>
+                    <div class="quiz-q-text" id="quizQText">Click "Generate Random Quiz" or select "🎯 Quiz" beside any syllabus topic!</div>
                     <div class="quiz-options" id="quizOptions"></div>
                     <div class="quiz-explanation" id="quizExp"></div>
                 </div>
-                <div class="quiz-controls">
+                <div class="quiz-controls" style="display:flex; gap:10px; margin-top:10px;">
                     <button class="btn btn-apply" style="flex:1;" onclick="prevQuestion()">Previous</button>
                     <button class="btn btn-apply" style="flex:1;" onclick="nextQuestion()">Next</button>
                 </div>
@@ -524,7 +666,7 @@
     </div>
 
     <script>
-        // --- 1. FULL & EXHAUSTIVE RBBL LEVEL 5 IT SYLLABUS ---
+        // --- 1. FULL RBBL LEVEL 5 IT SYLLABUS ---
         window.rbblSyllabus = [
             {
                 section_title: "Paper I: Banking, Accounting, Management & Service Related (100 Marks)",
@@ -639,12 +781,12 @@
             }
         ];
 
-        // --- 2. RENDER FULL SYLLABUS ---
+        // --- 2. RENDER SYLLABUS WITH PDF & QUIZ BUTTONS ---
         function renderSyllabus() {
             const container = document.getElementById('syllabusContainer');
             let totalTopics = 0;
 
-            window.rbblSyllabus.forEach(sec => {
+            window.rbblSyllabus.forEach((sec) => {
                 const banner = document.createElement('div');
                 banner.className = 'section-title-banner';
                 banner.innerText = sec.section_title;
@@ -657,10 +799,17 @@
                     let subHtml = t.subtopics.map((st, sIdx) => {
                         totalTopics++;
                         const id = `cb_${tIdx}_${sIdx}`;
+                        const safeTitle = escapeQuotes(st);
                         return `
                             <div class="topic-row">
-                                <input type="checkbox" id="${id}" onchange="updateProgress()">
-                                <label for="${id}" class="topic-text">${st}</label>
+                                <div class="topic-left">
+                                    <input type="checkbox" id="${id}" onchange="updateProgress()">
+                                    <label for="${id}" class="topic-text">${st}</label>
+                                </div>
+                                <div class="topic-actions">
+                                    <button class="btn btn-pdf" onclick="openPdfModal('${safeTitle}')">📄 Notes</button>
+                                    <button class="btn btn-topic-quiz" onclick="generateAIQuizForTopic('${safeTitle}')">🎯 Quiz</button>
+                                </div>
                             </div>
                         `;
                     }).join('');
@@ -680,6 +829,10 @@
 
             document.getElementById('totalTopicsCount').innerText = totalTopics;
             loadProgressState();
+        }
+
+        function escapeQuotes(str) {
+            return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         }
 
         function toggleAccordion(header) {
@@ -720,13 +873,69 @@
             }
         }
 
-        // --- 3. DYNAMIC GEMINI API QUIZ INTEGRATION ---
+        // --- 3. PDF MODAL VIEWER SYSTEM ---
+        function openPdfModal(topicTitle) {
+            document.getElementById('pdfModalTitle').innerText = `📄 Reference Viewer — ${topicTitle}`;
+            
+            // Sample PDF Viewer fallback via Mozilla PDF Test or Google Docs Viewer
+            const dummyPdfUrl = "https://www.w3.org/W3C/DesignIssues/diagrams/overview.pdf";
+            const googleDocsViewer = `https://docs.google.com/viewer?url=${encodeURIComponent(dummyPdfUrl)}&embedded=true`;
+            
+            document.getElementById('pdfFrame').src = googleDocsViewer;
+            document.getElementById('pdfModal').classList.add('active');
+        }
+
+        function closePdfModal() {
+            document.getElementById('pdfModal').classList.remove('active');
+            document.getElementById('pdfFrame').src = "about:blank";
+        }
+
+        // --- 4. COLOR TOGGLE / LIGHT MODE FEATURE ---
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+
+            if (currentTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+                icon.innerText = '🌙';
+                text.innerText = 'Dark';
+                localStorage.setItem('rbbl_theme', 'dark');
+            } else {
+                document.body.setAttribute('data-theme', 'light');
+                icon.innerText = '☀️';
+                text.innerText = 'Light';
+                localStorage.setItem('rbbl_theme', 'light');
+            }
+        }
+
+        function loadSavedTheme() {
+            const saved = localStorage.getItem('rbbl_theme');
+            if (saved === 'light') {
+                document.body.setAttribute('data-theme', 'light');
+                document.getElementById('themeIcon').innerText = '☀️';
+                document.getElementById('themeText').innerText = 'Light';
+            }
+        }
+
+        // --- 5. GEMINI API QUIZ SYSTEM (RANDOM & TOPIC-SPECIFIC) ---
         let quizHistory = [];
         let currentQuizIndex = -1;
         let totalScore = 0;
         let totalAttempted = 0;
 
+        async function generateAIQuizForTopic(selectedSubtopic) {
+            await fetchAIQuestion(selectedSubtopic);
+        }
+
         async function generateAIQuiz() {
+            const randomSec = window.rbblSyllabus[Math.floor(Math.random() * window.rbblSyllabus.length)];
+            const randomTopicGroup = randomSec.topics[Math.floor(Math.random() * randomSec.topics.length)];
+            const randomSubtopic = randomTopicGroup.subtopics[Math.floor(Math.random() * randomTopicGroup.subtopics.length)];
+            await fetchAIQuestion(randomSubtopic);
+        }
+
+        async function fetchAIQuestion(targetTopic) {
             const apiKey = document.getElementById('apiKeyIn').value.trim();
             if (!apiKey) {
                 alert('Please paste your Gemini API Key in the top header input box first!');
@@ -737,22 +946,17 @@
             statusLbl.innerText = 'Generating...';
             statusLbl.style.color = '#ffb300';
 
-            // Pick random topic from syllabus
-            const randomSec = window.rbblSyllabus[Math.floor(Math.random() * window.rbblSyllabus.length)];
-            const randomTopicGroup = randomSec.topics[Math.floor(Math.random() * randomSec.topics.length)];
-            const randomSubtopic = randomTopicGroup.subtopics[Math.floor(Math.random() * randomTopicGroup.subtopics.length)];
-
             const promptText = `
 You are an expert examiner for Rastriya Banijya Bank Limited (RBBL) Level 5 Senior Assistant (IT) recruitment exam in Nepal.
-Create 1 high-quality Multiple Choice Question (MCQ) strictly based on this syllabus topic: "${randomSubtopic}".
+Create 1 high-quality Multiple Choice Question (MCQ) strictly based on this topic: "${targetTopic}".
 
-Respond strictly with a valid JSON object only (no markdown, no code blocks, no backticks, no pure text wrapper). Use this JSON format:
+Respond strictly with a valid JSON object only (no markdown, no code blocks, no backticks, no extra text). Format:
 {
-  "topic": "${randomSubtopic}",
+  "topic": "${targetTopic}",
   "question": "Question text here...",
   "options": ["Option A", "Option B", "Option C", "Option D"],
   "correctIndex": 0,
-  "explanation": "Brief explanation why option is correct in the context of RBBL/Lok Sewa exam."
+  "explanation": "Brief explanation in the context of RBBL/Lok Sewa exam."
 }`;
 
             try {
@@ -766,8 +970,6 @@ Respond strictly with a valid JSON object only (no markdown, no code blocks, no 
 
                 const data = await response.json();
                 let rawText = data.candidates[0].content.parts[0].text;
-                
-                // Clean markdown code blocks if present
                 rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
                 const qObj = JSON.parse(rawText);
 
@@ -850,8 +1052,8 @@ Respond strictly with a valid JSON object only (no markdown, no code blocks, no 
             }
         }
 
-        // --- 4. TIMER MODULE ---
-        let timerSeconds = 10800; // 3 Hours default
+        // --- 6. TIMER MODULE ---
+        let timerSeconds = 10800;
         let timerInterval = null;
 
         function updateTimerDisplay() {
@@ -894,8 +1096,8 @@ Respond strictly with a valid JSON object only (no markdown, no code blocks, no 
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        // Initialize Application
         window.onload = () => {
+            loadSavedTheme();
             renderSyllabus();
             updateTimerDisplay();
         };
