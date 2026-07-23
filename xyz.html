@@ -1,1214 +1,1255 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
-
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RBB Level 5 IT Smart Preparation</title>
+<title>RBB Level 5 Complete Study Hub</title>
 
 <style>
-
-:root[data-theme="dark"] {
-    --bg-main:#040914;
-    --bg-side:#0a1124;
-    --bg-card:#0d1730;
-    --bg-hover:#111d3a;
-    --border:#1b3564;
-    --blue:#00bcd4;
-    --text:#e2e8f0;
-    --muted:#718096;
-    --green:#00e676;
-    --red:#ff1744;
-    --purple:#7c4dff;
-    --yellow:#ffb300;
+:root{
+    --bg:#070b16;
+    --card:#10182b;
+    --card2:#151f36;
+    --border:#293957;
+    --text:#edf4ff;
+    --muted:#91a0bc;
+    --cyan:#22d3ee;
+    --purple:#a78bfa;
+    --pink:#f472b6;
+    --green:#34d399;
+    --orange:#fb923c;
+    --red:#fb7185;
 }
 
-:root[data-theme="light"] {
-    --bg-main:#f1f5f9;
-    --bg-side:#ffffff;
-    --bg-card:#ffffff;
-    --bg-hover:#f8fafc;
-    --border:#cbd5e1;
-    --blue:#0284c7;
-    --text:#0f172a;
-    --muted:#64748b;
-    --green:#16a34a;
-    --red:#dc2626;
-    --purple:#6d28d9;
-    --yellow:#d97706;
-}
-
-* {
+*{
     box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Segoe UI,system-ui,sans-serif;
 }
 
-body {
-    background:var(--bg-main);
+html,
+body{
+    margin:0;
+    min-height:100%;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:var(--bg);
     color:var(--text);
-    min-height:100vh;
 }
 
 button,
-input,
-select {
+input{
     font:inherit;
 }
 
-button {
+button{
     cursor:pointer;
 }
 
-.header {
-    min-height:72px;
-    background:var(--bg-side);
-    border-bottom:2px solid var(--border);
-    padding:10px 20px;
+body::before,
+body::after{
+    content:"";
+    position:fixed;
+    z-index:-1;
+    width:400px;
+    height:400px;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.18;
+}
+
+body::before{
+    background:var(--cyan);
+    left:-150px;
+    top:-150px;
+}
+
+body::after{
+    background:var(--purple);
+    right:-150px;
+    bottom:-150px;
+}
+
+.app{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:280px minmax(0,1fr) 430px;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    grid-column:1/-1;
+    height:74px;
+    padding:14px 20px;
     display:flex;
+    align-items:center;
     justify-content:space-between;
-    align-items:center;
     gap:15px;
+    background:rgba(10,15,29,.92);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:50;
+    backdrop-filter:blur(20px);
 }
 
-.header-left {
+.brand{
     display:flex;
     align-items:center;
-    gap:18px;
+    gap:12px;
 }
 
-.brand {
-    color:var(--blue);
-    font-weight:800;
+.logo{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    font-size:22px;
+    background:linear-gradient(135deg,var(--cyan),var(--purple));
+    box-shadow:0 0 30px rgba(34,211,238,.35);
 }
 
-.brand small {
-    display:block;
-    color:var(--muted);
+.brand h1{
+    margin:0;
+    font-size:14px;
+}
+
+.brand p{
+    margin:4px 0 0;
     font-size:10px;
-    margin-top:3px;
+    color:var(--muted);
 }
 
-.timer {
-    background:#000;
-    color:var(--yellow);
-    border:1px solid var(--yellow);
-    padding:6px 14px;
-    border-radius:6px;
-    font-family:monospace;
-    font-size:20px;
-    font-weight:bold;
-}
-
-.header-controls {
+.header-actions{
     display:flex;
     align-items:center;
     gap:7px;
     flex-wrap:wrap;
 }
 
-.time-input {
-    width:48px;
-    padding:6px;
-    background:var(--bg-card);
-    color:var(--text);
+.btn{
+    padding:9px 12px;
+    border-radius:9px;
     border:1px solid var(--border);
-    border-radius:5px;
-    text-align:center;
-}
-
-.btn {
-    padding:8px 12px;
-    border-radius:6px;
-    border:1px solid var(--border);
-    font-size:12px;
-    font-weight:bold;
-}
-
-.btn-start {
-    background:#005a43;
-    color:var(--green);
-}
-
-.btn-pause {
-    background:#6a1b1b;
-    color:var(--red);
-}
-
-.btn-normal {
-    background:var(--bg-card);
+    background:var(--card2);
     color:var(--text);
+    font-size:11px;
+    font-weight:700;
+    transition:.2s;
 }
 
-.btn-blue {
-    background:var(--blue);
+.btn:hover{
+    transform:translateY(-2px);
+    border-color:var(--cyan);
+}
+
+.btn-primary{
     color:white;
-    border:none;
+    border:0;
+    background:linear-gradient(135deg,var(--cyan),var(--purple));
 }
 
-.app {
-    display:flex;
-    min-height:calc(100vh - 72px);
-}
-
-.left-sidebar {
-    width:270px;
-    flex-shrink:0;
-    background:var(--bg-side);
-    border-right:2px solid var(--border);
-    padding:18px;
-}
-
-.brand-card,
-.config-card {
-    background:var(--bg-card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:16px;
-    margin-bottom:15px;
-}
-
-.brand-card h2 {
-    color:var(--blue);
-    font-size:16px;
-    line-height:1.5;
-}
-
-.brand-card p {
-    color:var(--muted);
-    font-size:12px;
-    margin-top:7px;
-}
-
-.config-card h3 {
+.btn-green{
     color:var(--green);
-    font-size:14px;
-    margin-bottom:10px;
 }
 
-.config-card label {
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-    margin-top:10px;
-    margin-bottom:5px;
+.btn-orange{
+    color:var(--orange);
 }
 
-.api-input {
-    width:100%;
-    padding:8px;
-    background:var(--bg-main);
-    color:var(--text);
-    border:1px solid var(--border);
-    border-radius:5px;
-    font-size:11px;
+.btn-pink{
+    color:var(--pink);
 }
 
-.center {
-    flex:1;
-    min-width:0;
-    padding:20px;
+.timer{
+    padding:8px 12px;
+    border-radius:9px;
+    color:var(--orange);
+    border:1px solid rgba(251,146,60,.5);
+    background:rgba(251,146,60,.08);
+    font-weight:900;
+    font-family:monospace;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    min-height:calc(100vh - 74px);
+    padding:18px;
+    background:var(--card);
+    border-right:1px solid var(--border);
+    position:sticky;
+    top:74px;
+    height:calc(100vh - 74px);
     overflow-y:auto;
 }
 
-.progress-card {
-    background:var(--bg-card);
+.card{
+    padding:16px;
+    margin-bottom:14px;
+    border-radius:17px;
+    background:linear-gradient(145deg,var(--card2),var(--card));
     border:1px solid var(--border);
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:20px;
 }
 
-.progress-top {
+.card h3{
+    margin:0 0 10px;
+    font-size:13px;
+}
+
+.card p{
+    margin:6px 0;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+}
+
+.side-stat{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom:14px;
+    padding:7px 0;
+    border-bottom:1px solid var(--border);
+    font-size:11px;
 }
 
-.progress-top h2 {
-    font-size:20px;
+.side-stat:last-child{
+    border:0;
 }
 
-.progress-top small {
-    color:var(--blue);
+.side-stat span{
+    color:var(--muted);
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    padding:24px;
+    min-width:0;
+}
+
+.hero{
+    padding:25px;
+    border-radius:22px;
+    border:1px solid var(--border);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(34,211,238,.12),
+            rgba(167,139,250,.13),
+            rgba(244,114,182,.08)
+        );
+}
+
+.hero-label{
+    color:var(--cyan);
     font-size:10px;
-    font-weight:bold;
-    letter-spacing:1px;
+    letter-spacing:2px;
+    font-weight:900;
 }
 
-.progress-badge {
-    color:var(--blue);
-    border:1px solid var(--blue);
-    border-radius:20px;
-    padding:6px 12px;
-    font-size:12px;
-    font-weight:bold;
+.hero h2{
+    margin:8px 0;
+    font-size:28px;
 }
 
-.progress-bg {
-    height:12px;
-    background:var(--bg-hover);
+.hero p{
+    max-width:800px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin:18px 0;
+}
+
+.stat{
+    padding:15px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+}
+
+.stat strong{
+    display:block;
+    font-size:24px;
+}
+
+.stat span{
+    display:block;
+    margin-top:5px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.progress-box{
+    padding:17px;
+    border-radius:17px;
+    background:var(--card);
+    border:1px solid var(--border);
+    margin-bottom:24px;
+}
+
+.progress-header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.progress-header h3{
+    margin:0;
+    font-size:14px;
+}
+
+.progress-label{
+    color:var(--cyan);
+    font-size:11px;
+    font-weight:900;
+}
+
+.progress{
+    height:10px;
+    background:var(--card2);
     border-radius:20px;
     overflow:hidden;
 }
 
-.progress-fill {
-    width:0%;
+.progress-bar{
+    width:0;
     height:100%;
+    border-radius:20px;
     background:linear-gradient(
         90deg,
-        var(--blue),
-        var(--purple)
+        var(--cyan),
+        var(--purple),
+        var(--pink)
     );
-    transition:.3s;
+    transition:.5s;
 }
 
-.section-banner {
-    margin:20px 0 12px;
-    padding:15px;
-    border-radius:10px;
-    background:linear-gradient(
-        135deg,
-        rgba(0,188,212,.12),
-        rgba(124,77,255,.12)
-    );
-    border:1px solid var(--border);
-}
+/* ================= SECTION ================= */
 
-.section-banner h3 {
-    color:var(--blue);
-    font-size:16px;
-}
-
-.section-banner p {
-    color:var(--muted);
-    font-size:12px;
-    margin-top:5px;
-}
-
-.accordion {
-    background:var(--bg-card);
-    border:1px solid var(--border);
-    border-radius:8px;
-    margin-bottom:12px;
-    overflow:hidden;
-}
-
-.accordion-header {
-    padding:15px 18px;
+.section-title{
     display:flex;
     justify-content:space-between;
+    align-items:end;
+    margin:26px 0 12px;
+}
+
+.section-title h2{
+    margin:0;
+    font-size:17px;
+}
+
+.section-title p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* ================= UNIT ================= */
+
+.unit{
+    margin-bottom:13px;
+    border:1px solid var(--border);
+    border-radius:17px;
+    overflow:hidden;
+    background:var(--card);
+}
+
+.unit-header{
+    display:flex;
     align-items:center;
+    gap:12px;
+    padding:16px;
     cursor:pointer;
 }
 
-.accordion-header:hover {
-    background:var(--bg-hover);
+.unit-header:hover{
+    background:var(--card2);
 }
 
-.accordion-title {
+.unit-number{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    color:var(--cyan);
+    font-size:13px;
+    font-weight:900;
+    background:rgba(34,211,238,.12);
+}
+
+.unit-title{
+    flex:1;
     font-size:14px;
-    font-weight:600;
+    font-weight:900;
 }
 
-.accordion-content {
-    max-height:0;
-    overflow:hidden;
-    padding:0 18px;
-    background:var(--bg-side);
-    transition:max-height .3s ease;
+.unit-count{
+    color:var(--muted);
+    font-size:10px;
 }
 
-.accordion-content.open {
-    padding:8px 18px 14px;
+.arrow{
+    color:var(--muted);
+    transition:.3s;
+}
+
+.unit.open .arrow{
+    transform:rotate(180deg);
+}
+
+.subtopics{
+    display:none;
+    padding:5px 16px 14px;
     border-top:1px solid var(--border);
 }
 
-.topic-row {
-    display:flex;
-    align-items:center;
+.unit.open .subtopics{
+    display:block;
+}
+
+.subtopic{
+    display:grid;
+    grid-template-columns:22px 1fr auto;
     gap:10px;
-    padding:10px 0;
-    border-bottom:1px solid var(--border);
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid rgba(41,57,87,.65);
 }
 
-.topic-row:last-child {
-    border-bottom:none;
+.subtopic:last-child{
+    border-bottom:0;
 }
 
-.topic-row input {
+.subtopic input{
     width:17px;
     height:17px;
-    accent-color:var(--blue);
+    accent-color:var(--cyan);
 }
 
-.topic-text {
-    flex:1;
-    font-size:13px;
-    line-height:1.5;
+.subtopic-text{
+    font-size:12px;
+    line-height:1.55;
 }
 
-.topic-code {
-    color:var(--blue);
-    font-weight:bold;
-    margin-right:5px;
+.code{
+    margin-right:6px;
+    color:var(--cyan);
+    font-weight:900;
 }
 
-.topic-actions {
+.subtopic-actions{
     display:flex;
     gap:6px;
 }
 
-.topic-btn {
-    padding:6px 9px;
-    border-radius:5px;
-    font-size:11px;
-    font-weight:bold;
+.small-btn{
+    padding:7px 9px;
+    border-radius:8px;
     border:1px solid var(--border);
+    background:var(--card2);
+    font-size:10px;
+    font-weight:800;
 }
 
-.note-btn {
-    color:var(--blue);
-    background:rgba(0,188,212,.1);
+.note-btn{
+    color:var(--cyan);
 }
 
-.quiz-btn {
+.quiz-btn{
     color:var(--purple);
-    background:rgba(124,77,255,.12);
 }
 
-.right {
-    width:480px;
-    flex-shrink:0;
-    background:var(--bg-main);
-    border-left:2px solid var(--border);
+/* ================= VIEWER ================= */
+
+.viewer{
+    min-height:calc(100vh - 74px);
+    height:calc(100vh - 74px);
+    position:sticky;
+    top:74px;
     display:flex;
     flex-direction:column;
+    background:var(--card);
+    border-left:1px solid var(--border);
 }
 
-.right.maximized {
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:9999;
-}
-
-.viewer-header {
-    min-height:55px;
-    padding:12px 16px;
-    background:var(--bg-side);
-    border-bottom:1px solid var(--border);
+.viewer-header{
+    padding:15px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    color:var(--blue);
-    font-size:13px;
-    font-weight:bold;
+    border-bottom:1px solid var(--border);
 }
 
-.viewer-body {
+.viewer-title{
+    color:var(--cyan);
+    font-size:12px;
+    font-weight:900;
+}
+
+.viewer-body{
     flex:1;
-    min-height:0;
-    padding:15px;
-    overflow:hidden;
+    overflow:auto;
+    padding:16px;
 }
 
-.welcome,
-.pdf-container,
-.quiz-container {
-    height:100%;
-}
-
-.welcome {
-    padding:20px;
-}
-
-.welcome h2 {
-    margin-bottom:10px;
-}
-
-.welcome p {
+.empty{
+    padding:70px 20px;
+    text-align:center;
     color:var(--muted);
+}
+
+.empty-icon{
+    font-size:50px;
+}
+
+.empty h3{
+    color:var(--text);
+}
+
+.empty p{
+    font-size:12px;
     line-height:1.7;
 }
 
-.pdf-container {
+.pdf-wrapper{
+    height:100%;
     display:flex;
     flex-direction:column;
-}
-
-.pdf-toolbar {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
     gap:10px;
-    margin-bottom:10px;
 }
 
-.pdf-toolbar h3 {
-    font-size:14px;
+.pdf-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.pdf-toolbar h3{
+    margin:0;
+    font-size:12px;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
 }
 
-.open-pdf {
-    background:var(--blue);
-    color:white;
-    padding:7px 10px;
-    border-radius:5px;
-    text-decoration:none;
-    font-size:11px;
-    white-space:nowrap;
-}
-
-.pdf-frame {
-    width:100%;
+.pdf-frame{
     flex:1;
-    min-height:0;
+    width:100%;
+    min-height:500px;
     border:1px solid var(--border);
-    border-radius:8px;
+    border-radius:12px;
     background:white;
 }
 
-.loading {
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:15px;
+.not-found{
+    text-align:center;
+    padding:70px 20px;
+}
+
+.not-found h2{
+    color:var(--orange);
+}
+
+.not-found p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.7;
+}
+
+/* ================= QUIZ ================= */
+
+.quiz-head{
+    padding:16px;
+    border-radius:15px;
+    border:1px solid var(--border);
+    background:linear-gradient(
+        135deg,
+        rgba(167,139,250,.15),
+        rgba(244,114,182,.1)
+    );
+    margin-bottom:14px;
+}
+
+.quiz-head h2{
+    margin:0;
+    color:var(--purple);
+    font-size:17px;
+}
+
+.quiz-head p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.question{
+    padding:13px;
+    margin-bottom:10px;
+    border-radius:13px;
+    background:var(--card2);
+    border:1px solid var(--border);
+}
+
+.question h4{
+    margin:0 0 9px;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.option{
+    display:block;
+    width:100%;
+    padding:9px;
+    margin:5px 0;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    text-align:left;
+    font-size:11px;
+}
+
+.option:hover{
+    border-color:var(--purple);
+}
+
+.option.correct{
+    border-color:var(--green);
+    background:rgba(52,211,153,.13);
+}
+
+.option.wrong{
+    border-color:var(--red);
+    background:rgba(251,113,133,.13);
+}
+
+.result{
+    padding:16px;
+    margin-bottom:12px;
+    text-align:center;
+    border-radius:13px;
+    border:1px solid var(--purple);
+}
+
+.result strong{
+    display:block;
+    color:var(--green);
+    font-size:26px;
+}
+
+/* ================= LOADER ================= */
+
+.loader{
+    display:grid;
+    place-items:center;
+    min-height:300px;
+    text-align:center;
     color:var(--muted);
 }
 
-.spinner {
-    width:40px;
-    height:40px;
+.spinner{
+    width:45px;
+    height:45px;
+    margin:auto auto 12px;
     border:4px solid var(--border);
-    border-top-color:var(--blue);
+    border-top-color:var(--cyan);
     border-radius:50%;
-    animation:spin 1s linear infinite;
+    animation:spin .8s linear infinite;
 }
 
-@keyframes spin {
-    to {
+@keyframes spin{
+    to{
         transform:rotate(360deg);
     }
 }
 
-.pdf-not-available {
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:25px;
-}
+/* ================= RESPONSIVE ================= */
 
-.pdf-error-icon {
-    font-size:48px;
-    margin-bottom:15px;
-}
+@media(max-width:1250px){
 
-.pdf-not-available h2 {
-    color:var(--red);
-    margin-bottom:10px;
-}
-
-.pdf-not-available p {
-    color:var(--muted);
-    font-size:13px;
-    margin-bottom:8px;
-}
-
-.pdf-title {
-    color:var(--blue);
-    font-size:13px;
-}
-
-.quiz-container {
-    overflow-y:auto;
-}
-
-.quiz-header {
-    padding-bottom:15px;
-    border-bottom:1px solid var(--border);
-    margin-bottom:15px;
-}
-
-.quiz-header h2 {
-    color:var(--purple);
-    font-size:18px;
-    margin-bottom:8px;
-}
-
-.quiz-header p {
-    color:var(--muted);
-    font-size:12px;
-}
-
-.quiz-question {
-    background:var(--bg-card);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:14px;
-    margin-bottom:12px;
-}
-
-.quiz-question h4 {
-    font-size:13px;
-    line-height:1.5;
-    margin-bottom:10px;
-}
-
-.quiz-option {
-    display:block;
-    width:100%;
-    text-align:left;
-    padding:9px;
-    margin:6px 0;
-    background:var(--bg-main);
-    color:var(--text);
-    border:1px solid var(--border);
-    border-radius:6px;
-    font-size:12px;
-}
-
-.quiz-option:hover {
-    border-color:var(--blue);
-}
-
-.quiz-option.correct {
-    background:rgba(0,230,118,.15);
-    border-color:var(--green);
-}
-
-.quiz-option.wrong {
-    background:rgba(255,23,68,.15);
-    border-color:var(--red);
-}
-
-.quiz-result {
-    background:var(--bg-card);
-    border:1px solid var(--blue);
-    border-radius:8px;
-    padding:15px;
-    margin-bottom:15px;
-    text-align:center;
-}
-
-.quiz-result h2 {
-    color:var(--green);
-}
-
-.quiz-actions {
-    display:flex;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.quiz-actions button {
-    flex:1;
-}
-
-@media(max-width:1100px) {
-    .right {
-        width:390px;
-    }
-}
-
-@media(max-width:992px) {
-
-    .header {
-        flex-direction:column;
-        align-items:flex-start;
+    .app{
+        grid-template-columns:250px minmax(0,1fr);
     }
 
-    .app {
-        flex-direction:column;
-    }
-
-    .left-sidebar {
-        width:100%;
-    }
-
-    .right {
+    .viewer{
+        display:none;
         position:fixed;
         inset:0;
-        width:100%;
-        height:100%;
-        display:none;
-        z-index:9999;
+        height:100vh;
+        z-index:100;
     }
 
-    .right.active-mobile {
+    .viewer.show{
         display:flex;
     }
 
+    .stats{
+        grid-template-columns:repeat(3,1fr);
+    }
 }
 
-@media(max-width:600px) {
+@media(max-width:760px){
 
-    .header-left {
-        width:100%;
-        justify-content:space-between;
+    .app{
+        display:block;
     }
 
-    .header-controls {
-        width:100%;
-    }
-
-    .progress-top {
+    .header{
+        height:auto;
+        align-items:flex-start;
         flex-direction:column;
-        align-items:flex-start;
     }
 
-    .topic-row {
-        flex-wrap:wrap;
-        align-items:flex-start;
-    }
-
-    .topic-text {
-        min-width:calc(100% - 35px);
-    }
-
-    .topic-actions {
+    .header-actions{
         width:100%;
-        margin-left:27px;
     }
 
-    .topic-btn {
-        flex:1;
+    .sidebar{
+        position:static;
+        height:auto;
+        min-height:0;
+        border-right:0;
+        border-bottom:1px solid var(--border);
     }
 
+    .main{
+        padding:14px;
+    }
+
+    .hero h2{
+        font-size:22px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .subtopic{
+        grid-template-columns:22px 1fr;
+    }
+
+    .subtopic-actions{
+        grid-column:2;
+    }
+
+    .unit-count{
+        display:none;
+    }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
+<div class="app">
+
+<!-- ================= HEADER ================= -->
 
 <header class="header">
 
-    <div class="header-left">
+<div class="brand">
 
-        <div class="brand">
+<div class="logo">🏦</div>
 
-            🏦 RBB LEVEL 5 IT
+<div>
+<h1>RBB LEVEL 5 — SENIOR ASSISTANT</h1>
+<p>Complete Paper I + Paper II Smart Study Hub</p>
+</div>
 
-            <small>
-                Smart Exam Preparation Dashboard
-            </small>
+</div>
 
-        </div>
+<div class="header-actions">
 
+<div class="timer" id="timer">
+03:00:00
+</div>
 
-        <div
-            class="timer"
-            id="timerBox"
-        >
-            03:00:00
-        </div>
+<button class="btn btn-green" onclick="startTimer()">
+▶ Start
+</button>
 
-    </div>
+<button class="btn btn-orange" onclick="pauseTimer()">
+⏸ Pause
+</button>
 
+<button class="btn" onclick="resetTimer()">
+↺ Reset
+</button>
 
-    <div class="header-controls">
+<button class="btn" onclick="toggleTheme()">
+◐ Theme
+</button>
 
-        <input
-            class="time-input"
-            id="hrIn"
-            type="number"
-            min="0"
-            value="3"
-        >
-
-        <span>hr</span>
-
-        <input
-            class="time-input"
-            id="minIn"
-            type="number"
-            min="0"
-            max="59"
-            value="0"
-        >
-
-        <span>min</span>
-
-        <button
-            class="btn btn-normal"
-            onclick="applyCustomTime()"
-        >
-            Apply
-        </button>
-
-        <button
-            class="btn btn-start"
-            onclick="startTimer()"
-        >
-            Start
-        </button>
-
-        <button
-            class="btn btn-pause"
-            onclick="pauseTimer()"
-        >
-            Pause
-        </button>
-
-        <button
-            class="btn btn-normal"
-            onclick="toggleTheme()"
-        >
-            <span id="themeIcon">🌙</span>
-            <span id="themeText">Dark</span>
-        </button>
-
-    </div>
+</div>
 
 </header>
 
 
-<div class="app">
+<!-- ================= SIDEBAR ================= -->
 
+<aside class="sidebar">
 
-    <aside class="left-sidebar">
+<div class="card">
 
+<h3>🏦 राष्ट्रिय वाणिज्य बैंक लिमिटेड</h3>
 
-        <div class="brand-card">
+<p>
+तह ५ — वरिष्ठ सहायक
+(सूचना प्रविधि)
+</p>
 
-            <h2>
-                राष्ट्रिय वाणिज्य बैंक लिमिटेड
-            </h2>
+<p>
+Complete preparation dashboard for
+<b>Paper I + Paper II</b>
+</p>
 
-            <p>
-                तह ५, वरिष्ठ सहायक
-                (सूचना प्रविधि)
-            </p>
+</div>
 
-        </div>
 
+<div class="card">
 
-        <div class="config-card">
+<h3>📋 Examination Structure</h3>
 
-            <h3>
-                🤖 Gemini Quiz API
-            </h3>
+<p>
+<b>Paper I:</b>
+Banking and Organizational Management
+</p>
 
-            <label>
-                Gemini API Key
-            </label>
+<p>
+<b>Paper II:</b>
+Information Technology & Management
+</p>
 
-            <input
-                type="password"
-                class="api-input"
-                id="geminiApiKey"
-                placeholder="Enter Gemini API Key"
-            >
+<p>
+Written Examination:
+<b>200 Marks</b>
+</p>
 
-            <button
-                class="btn btn-blue"
-                style="width:100%;margin-top:8px"
-                onclick="saveApiKey()"
-            >
-                Save API Key
-            </button>
+<p>
+Interview:
+<b>30 Marks</b>
+</p>
 
-            <p
-                style="
-                color:var(--muted);
-                font-size:10px;
-                line-height:1.5;
-                margin-top:10px
-                "
-            >
-                API key localStorage मा save हुन्छ।
-                Production मा frontend मा API key नराख्नुहोस्।
-            </p>
+</div>
 
-        </div>
 
+<div class="card">
 
-        <div class="config-card">
+<h3>📊 Study Progress</h3>
 
-            <h3>
-                📊 Study Progress
-            </h3>
+<div class="side-stat">
+<span>Total Topics</span>
+<strong id="sideTotal">0</strong>
+</div>
 
-            <p
-                id="trackerSummary"
-                style="
-                color:var(--muted);
-                font-size:12px;
-                line-height:1.6
-                "
-            >
-                Loading...
-            </p>
+<div class="side-stat">
+<span>Completed</span>
+<strong id="sideDone">0</strong>
+</div>
 
-        </div>
+<div class="side-stat">
+<span>Progress</span>
+<strong id="sidePercent">0%</strong>
+</div>
 
+</div>
 
-    </aside>
 
+<div class="card">
 
-    <main class="center">
+<h3>⚡ Quick Actions</h3>
 
+<button
+class="btn btn-primary"
+style="width:100%;margin-bottom:8px"
+onclick="expandAll()"
+>
+Expand All
+</button>
 
-        <div class="progress-card">
+<button
+class="btn"
+style="width:100%;margin-bottom:8px"
+onclick="collapseAll()"
+>
+Collapse All
+</button>
 
-            <div class="progress-top">
+<button
+class="btn btn-pink"
+style="width:100%"
+onclick="resetProgress()"
+>
+Reset Progress
+</button>
 
-                <div>
+</div>
 
-                    <small>
-                        YOUR PREPARATION JOURNEY
-                    </small>
 
-                    <h2>
-                        Syllabus Progress
-                    </h2>
+<div class="card">
 
-                </div>
+<h3>🤖 Gemini Quiz Integration</h3>
 
+<p>
+No API key input system is used.
+</p>
 
-                <span
-                    class="progress-badge"
-                    id="progPct"
-                >
-                    0% Completed
-                </span>
+<p>
+Replace only:
+</p>
 
-            </div>
+<p>
+<b>dummyQuizFetch()</b>
+</p>
 
+<p>
+with your own Gemini API request.
+</p>
 
-            <div class="progress-bg">
+</div>
 
-                <div
-                    class="progress-fill"
-                    id="progBar"
-                ></div>
+</aside>
 
-            </div>
 
-        </div>
+<!-- ================= MAIN ================= -->
 
+<main class="main">
 
-        <div id="syllabusTree"></div>
+<section class="hero">
 
+<div class="hero-label">
+COMPLETE OFFICIAL SYLLABUS DASHBOARD
+</div>
 
-    </main>
+<h2>
+Study smarter. Track everything.
+</h2>
 
+<p>
+Paper I र Paper II का सबै units तथा subtopics एउटै dashboard मा।
+प्रत्येक topic मा progress tracking, PDF note viewer र AI quiz system उपलब्ध छ।
+</p>
 
-    <aside
-        class="right"
-        id="rightSidebar"
-    >
+</section>
 
 
-        <div class="viewer-header">
+<section class="stats">
 
-            <span id="panelTitle">
-                Interactive Reader Engine
-            </span>
+<div class="stat">
+<strong>2</strong>
+<span>Papers</span>
+</div>
 
+<div class="stat">
+<strong>12</strong>
+<span>Units</span>
+</div>
 
-            <div>
+<div class="stat">
+<strong id="totalTopics">0</strong>
+<span>Subtopics</span>
+</div>
 
-                <button
-                    class="btn btn-normal"
-                    onclick="toggleMaximize()"
-                >
-                    Maximize 🗖
-                </button>
+<div class="stat">
+<strong id="completedTopics">0</strong>
+<span>Completed</span>
+</div>
 
-                <button
-                    class="btn btn-normal"
-                    onclick="closeMobileViewer()"
-                    id="closeMobileBtn"
-                    style="display:none"
-                >
-                    Close ✖
-                </button>
+<div class="stat">
+<strong id="percentage">0%</strong>
+<span>Progress</span>
+</div>
 
-            </div>
+</section>
 
-        </div>
 
+<section class="progress-box">
 
-        <div
-            class="viewer-body"
-            id="viewerContent"
-        >
+<div class="progress-header">
 
-            <div class="welcome">
+<h3>
+🚀 Overall Preparation Progress
+</h3>
 
-                <h2>
-                    Welcome to Study Engine
-                </h2>
+<span
+class="progress-label"
+id="progressLabel"
+>
+0% COMPLETE
+</span>
 
-                <p>
-                    Syllabus बाट कुनै topic को
-                    <b>View Note</b> थिचेर PDF खोल्नुहोस्।
-                    <br><br>
-                    <b>Generate Quiz</b> थिचेर Paper II को
-                    topic बाट Gemini AI quiz generate गर्नुहोस्।
-                </p>
+</div>
 
-            </div>
+<div class="progress">
 
-        </div>
+<div
+class="progress-bar"
+id="progressBar"
+>
+</div>
 
+</div>
 
-    </aside>
+</section>
 
+
+<div id="syllabusContainer"></div>
+
+</main>
+
+
+<!-- ================= VIEWER ================= -->
+
+<aside
+class="viewer"
+id="viewer"
+>
+
+<div class="viewer-header">
+
+<div
+class="viewer-title"
+id="viewerTitle"
+>
+Interactive Study Engine
+</div>
+
+<div>
+
+<button
+class="btn"
+onclick="maximizeViewer()"
+>
+⛶
+</button>
+
+<button
+class="btn"
+onclick="closeViewer()"
+>
+✕
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="viewer-body"
+id="viewerBody"
+>
+
+<div class="empty">
+
+<div class="empty-icon">
+📚
+</div>
+
+<h3>
+Study Engine Ready
+</h3>
+
+<p>
+Click <b>📖 Note</b> to open PDF notes
+or
+<b>✨ Quiz</b> to generate a topic quiz.
+</p>
+
+</div>
+
+</div>
+
+</aside>
 
 </div>
 
 
 <script>
 
-
-/* =====================================================
-   CONFIGURATION
-===================================================== */
-
-
-const NOTES_BASE_URL =
-    "https://sundardumre.com.np/notes";
-
-
-const GEMINI_MODEL =
-    "gemini-2.5-flash";
-
-
-const STORAGE_KEYS = {
-
-    progress:
-        "rbb_level5_progress",
-
-    apiKey:
-        "rbb_gemini_api_key",
-
-    theme:
-        "rbb_theme",
-
-    timer:
-        "rbb_timer_seconds"
-
-};
-
-
-/* =====================================================
-   PDF URL HELPER
-===================================================== */
-
-
-function pdf(filename) {
-
-    return `${NOTES_BASE_URL}/${filename}`;
-
-}
-
-
-/* =====================================================
-   RBB LEVEL 5 IT SYLLABUS
-===================================================== */
-
+/* ============================================================
+   COMPLETE SYLLABUS
+============================================================ */
 
 const syllabus = [
 
+/* ================= PAPER I ================= */
 
 {
 
-section_id:"paper1",
+paper:"PAPER I",
 
-section_title:
-"PAPER I — Banking and Organizational Management",
+title:"Banking and Organizational Management",
 
-section_marks:
-"Section A — 50 Marks | Section B — 50 Marks",
+section:"SECTION A",
 
-topics:[
+marks:"50 Marks • Units 1–6",
 
+units:[
 
 {
 
 id:"1",
 
-title:
-"1. Financial Institutions in Nepal",
+title:"Financial Institutions in Nepal: Role, Contribution and Status",
 
-subtopics:[
+subs:[
 
-["1.1.1","Commercial Banks","commercial-banks.pdf"],
+["1.1.1","Commercial Banks"],
 
-["1.1.2","Development Banks","development-banks.pdf"],
+["1.1.2","Development Banks"],
 
-["1.1.3","Finance Companies","finance-companies.pdf"],
+["1.1.3","Finance Companies"],
 
-["1.1.4","Microfinance Institutions","microfinance-institutions.pdf"],
+["1.1.4","Microfinance Institutions"],
 
-["1.1.5","Infrastructure Development Bank","infrastructure-development-bank.pdf"],
+["1.1.5","Infrastructure Development Bank"],
 
-["1.2.1","Insurance Companies","insurance-companies.pdf"],
+["1.2.1","Insurance Companies"],
 
-["1.2.2","Employee Provident Fund","employee-provident-fund.pdf"],
+["1.2.2","Employee Provident Fund"],
 
-["1.2.3","Citizen Investment Trust","citizen-investment-trust.pdf"],
+["1.2.3","Citizen Investment Trust"],
 
-["1.2.4","Social Security Fund","social-security-fund.pdf"]
+["1.2.4","Social Security Fund"]
 
 ]
 
 },
-
 
 {
 
 id:"2",
 
-title:
-"2. Some of the Key Basic Banking Terminology",
+title:"Some of the Key Basic Banking Terminology",
 
-subtopics:[
+subs:[
 
-["2.1","Capital Fund","capital-fund.pdf"],
+["2.1","Capital Fund"],
 
-["2.2","Loan Loss Provisioning","loan-loss-provisioning.pdf"],
+["2.2","Loan Loss Provisioning"],
 
-["2.3","Credit-Deposit (CD) Ratio","credit-deposit-ratio.pdf"],
+["2.3","Credit-Deposit (CD) Ratio"],
 
-["2.4","Cash Reserve Ratio (CRR)","cash-reserve-ratio.pdf"],
+["2.4","Cash Reserve Ratio (CRR)"],
 
-["2.5","Refinancing, Rescheduling and Restructuring","refinancing-rescheduling-restructuring.pdf"],
+["2.5","Refinancing, Rescheduling and Restructuring"],
 
-["2.6","Base Rate","base-rate.pdf"],
+["2.6","Base Rate"],
 
-["2.7","Credit Information and Blacklisting","credit-information-blacklisting.pdf"],
+["2.7","Credit Information and Blacklisting"],
 
-["2.8","Credit Ratings","credit-ratings.pdf"],
+["2.8","Credit Ratings"],
 
-["2.9","Know Your Customer (KYC)","know-your-customer.pdf"],
+["2.9","Know Your Customer (KYC)"],
 
-["2.10","Audit and Internal Control","audit-internal-control.pdf"]
+["2.10","Audit and Internal Control"]
 
 ]
 
 },
-
 
 {
 
 id:"3",
 
-title:
-"3. Banking Related Laws",
+title:"Banking Related Law",
 
-subtopics:[
+subs:[
 
-["3.1","Nepal Rastra Bank Act, 2058","nepal-rastra-bank-act-2058.pdf"],
+["3.1","Nepal Rastra Bank Act, 2058"],
 
-["3.2","Bank and Financial Institution Act, 2073","bafia-2073.pdf"],
+["3.2","Bank and Financial Institution Act, 2073"],
 
-["3.3","Payment and Settlement Act, 2075","payment-settlement-act-2075.pdf"],
+["3.3","Payment and Settlement Act, 2075"],
 
-["3.4","Money Laundering Prevention Act, 2064","money-laundering-prevention-act-2064.pdf"],
+["3.4","Money Laundering Prevention Act, 2064"],
 
-["3.5","Banking Offence and Punishment Act, 2064","banking-offence-punishment-act-2064.pdf"],
+["3.5","Banking Offence and Punishment Act, 2064"],
 
-["3.6","Negotiable Instruments Act, 2034","negotiable-instruments-act-2034.pdf"],
+["3.6","Negotiable Instruments Act, 2034"],
 
-["3.7","Electronic Transaction Act, 2063","electronic-transaction-act-2063.pdf"]
+["3.7","Electronic Transaction Act, 2063"]
 
 ]
 
 },
-
 
 {
 
 id:"4",
 
-title:
-"4. Organizational Behavior",
+title:"Organizational Behavior",
 
-subtopics:[
+subs:[
 
-["4.1","Job Description, Terms of Reference and Responsibilities","job-description-responsibilities.pdf"],
+["4.1","Job Description, Terms of Reference and Responsibilities"],
 
-["4.2","Job Motivation and Performance","job-motivation-performance.pdf"],
+["4.2","Job Motivation and Performance"],
 
-["4.3","Communication: Skill and Approach","communication-skills.pdf"],
+["4.3","Communication: Skill and Approach"],
 
-["4.4","Team Building and Workmanship","team-building.pdf"],
+["4.4","Team Building and Workmanship"],
 
-["4.5","Customer Satisfaction and Delivery","customer-satisfaction.pdf"],
+["4.5","Customer Satisfaction and Delivery"],
 
-["4.6","Grievance Handling","grievance-handling.pdf"]
+["4.6","Grievance Handling"]
 
 ]
 
 },
-
 
 {
 
 id:"5",
 
-title:
-"5. Other Related Laws",
+title:"Other Related Laws",
 
-subtopics:[
+subs:[
 
-["5.1","Companies Act, 2063","companies-act-2063.pdf"],
+["5.1","Companies Act, 2063"],
 
-["5.2","Labour Act, 2074","labour-act-2074.pdf"],
+["5.2","Labour Act, 2074"],
 
-["5.3","Public Procurement Act, 2063","public-procurement-act-2063.pdf"],
+["5.3","Public Procurement Act, 2063"],
 
-["5.4","Right to Information Act, 2064","right-to-information-act-2064.pdf"],
+["5.4","Right to Information Act, 2064"],
 
-["5.5","RBB Employee Service Regulation, 2070","rbb-employee-service-regulation-2070.pdf"],
+["5.5","Rastriya Banijya Bank Employee Service Bylaws, 2070"],
 
-["5.6","NRB Unified Directives and Circulars","nrb-unified-directives.pdf"]
+["5.6","Unified Directives / Circulars issued by Nepal Rastra Bank for Commercial Banks"]
 
 ]
 
 },
 
-
 {
 
 id:"6",
 
-title:
-"6. Digital / Electronic Payment Systems",
+title:"Digital / Electronic Payment Systems",
 
-subtopics:[
+subs:[
 
-["6.1","Electronic Cheque Clearing","electronic-cheque-clearing.pdf"],
+["6.1","Electronic Cheque Clearing"],
 
-["6.2","IPS, ConnectIPS, RTGS and SWIFT","ips-connectips-rtgs-swift.pdf"],
+["6.2","IPS, ConnectIPS, RTGS and SWIFT"],
 
-["6.3","Internet Banking, Mobile Banking, QR Code and NFC","digital-banking-technologies.pdf"],
+["6.3","Internet Banking, Mobile Banking, QR Code and NFC"],
 
-["6.4","Digital Payment Cards","digital-payment-cards.pdf"],
+["6.4","Digital Payment Cards"],
 
-["6.5","Payment through Wallets","digital-wallets.pdf"],
+["6.5","Payment through Wallets"],
 
-["6.6","Central Bank Digital Currency (CBDC)","cbdc.pdf"]
+["6.6","Central Bank Digital Currency (CBDC)"]
 
 ]
 
@@ -1219,81 +1260,75 @@ subtopics:[
 },
 
 
+/* ================= PAPER II SECTION A ================= */
+
 {
 
-section_id:"paper2a",
+paper:"PAPER II",
 
-section_title:
-"PAPER II — Information Technology & Management",
+title:"Information Technology & Management",
 
-section_marks:
-"Section A — 50 Marks",
+section:"SECTION A",
 
-topics:[
+marks:"50 Marks • Units 1–3",
 
+units:[
 
 {
 
 id:"1",
 
-title:
-"1. Introduction of Computer",
+title:"Introduction of Computer",
 
-subtopics:[
+subs:[
 
-["1.1","Types of Computers","types-of-computers.pdf"],
+["1.1","Types of Computers: Analog Computer, Digital Computer, Hybrid Computer, Mainframe and Super Computer and their comparison in terms of speed, storage capacity and memory"],
 
-["1.2","Internet, Email System and Web Design","internet-email-web-design.pdf"],
+["1.2","Basic Knowledge of Internet, Email System and Web Design"],
 
-["1.3","Physical Security of IT Infrastructure","physical-security-it-infrastructure.pdf"],
+["1.3","Basic Knowledge of Physical Security of IT Infrastructure"],
 
-["1.4","Artificial Intelligence, Machine Learning and Blockchain","ai-machine-learning-blockchain.pdf"]
+["1.4","Basic Knowledge of Artificial Intelligence (AI), Machine Learning (ML) and Blockchain"]
 
 ]
 
 },
-
 
 {
 
 id:"2",
 
-title:
-"2. Computer Architecture",
+title:"Computer Architecture",
 
-subtopics:[
+subs:[
 
-["2.1","Basic Computer Architecture, Registers and Memory Management","computer-architecture.pdf"],
+["2.1","Basic Computer Architecture, Registers and Memory Management"],
 
-["2.2","Organization of Hard Disk","hard-disk-organization.pdf"],
+["2.2","Organization of Hard Disk"],
 
-["2.3","CPU Architecture","cpu-architecture.pdf"],
+["2.3","CPU Architecture"],
 
-["2.4","I/O Management, Interface, Requests and Devices","io-management.pdf"]
+["2.4","I/O Management, I/O Interface, I/O Requests Handling and I/O Devices"]
 
 ]
 
 },
 
-
 {
 
 id:"3",
 
-title:
-"3. Communication and Computer Network Technologies",
+title:"Communication and Computer Network Technologies",
 
-subtopics:[
+subs:[
 
-["3.1","Networking Devices: Repeater, Hub, Switch and Router","networking-devices.pdf"],
+["3.1","Networking Devices: Repeater, Hub, Switch and Router"],
 
-["3.2","Switching Technologies, Modems and Remote Network Access","switching-modems-remote-access.pdf"],
+["3.2","Switching Technologies, Modems and Remote Network Access, Error Detection and Correction Techniques"],
 
-["3.3","Error Detection and Correction Techniques","error-detection-correction.pdf"],
+["3.3","Internet Services and Internet Protocol / Addressing"],
 
-["3.4","Internet Services and Internet Protocol / Addressing","internet-protocol-addressing.pdf"],
-
-["3.5","Network Security and Cryptography","network-security-cryptography.pdf"]
+["3.4","Network Security and Cryptography"]
 
 ]
 
@@ -1304,83 +1339,79 @@ subtopics:[
 },
 
 
+/* ================= PAPER II SECTION B ================= */
+
 {
 
-section_id:"paper2b",
+paper:"PAPER II",
 
-section_title:
-"PAPER II — Information Technology & Management",
+title:"Information Technology & Management",
 
-section_marks:
-"Section B — 50 Marks",
+section:"SECTION B",
 
-topics:[
+marks:"50 Marks • Units 4–6",
 
+units:[
 
 {
 
 id:"4",
 
-title:
-"4. Operating System and Information Systems",
+title:"Operating System and Information Systems",
 
-subtopics:[
+subs:[
 
-["4.1","Basic Knowledge of Operating System","operating-system.pdf"],
+["4.1","Basic Knowledge of Operating System"],
 
-["4.2","Process Management and Scheduling","process-management-scheduling.pdf"],
+["4.2","Process Management and Scheduling"],
 
-["4.3","DOS, UNIX and Windows Operating Systems","dos-unix-windows.pdf"],
+["4.3","DOS Operating System, UNIX Operating Systems and Windows Operating System"],
 
-["4.4","Security Threats in Operating System","os-security-threats.pdf"]
+["4.4","Identifying and Managing Security Threats in Operating System"]
 
 ]
 
 },
-
 
 {
 
 id:"5",
 
-title:
-"5. Database Management System, Data Mining/Warehousing and Web Technology",
+title:"Database Management System, Database Design, Data Mining / Warehousing and Web Technology",
 
-subtopics:[
+subs:[
 
-["5.1","Basic Knowledge of Database Management System","dbms.pdf"],
+["5.1","Basic Knowledge of Database Management System"],
 
-["5.2","Table, Record, Relationship and Indexing","database-concepts.pdf"],
+["5.2","Basic Concept of Table, Record, Relationship and Indexing"],
 
-["5.3","Data Warehousing and Data Warehousing Process","data-warehousing.pdf"],
+["5.3","Data Warehousing and Process in Data Warehousing"],
 
-["5.4","HTML, Script, Stylesheet, XML, Web Server and Proxy Server","web-technology.pdf"],
+["5.4","Basics of HTML, Script, Stylesheet, XML, Web Server and Proxy Server"],
 
-["5.5","Disaster Recovery Planning","disaster-recovery-planning.pdf"]
+["5.5","Disaster Recovery Planning"]
 
 ]
 
 },
 
-
 {
 
 id:"6",
 
-title:
-"6. Cybersecurity and IT Policies",
+title:"Cybersecurity and IT Policies",
 
-subtopics:[
+subs:[
 
-["6.1","Cyber Security, Access Control, Threats and Vulnerabilities","cyber-security-basics.pdf"],
+["6.1","Introduction to Cyber Security, Access Control Mechanisms, Threats and Vulnerabilities, Security Attacks, Authentication and Authorization, Password Management"],
 
-["6.2","Social Engineering, Malware, DoS, DDoS and Phishing","common-cyber-security-threats.pdf"],
+["6.2","Common Security Threats: Social Engineering, Malware, DDoS, DoS, Phishing and its Types"],
 
-["6.3","ICT Policy of Nepal, 2072","ict-policy-nepal-2072.pdf"],
+["6.3","ICT Policy of Nepal, 2072"],
 
-["6.4","IT Guidelines Issued by Nepal Rastra Bank","nrb-it-guidelines.pdf"],
+["6.4","IT Guidelines issued by Nepal Rastra Bank"],
 
-["6.5","Cyber Resilience Guidelines, 2023","cyber-resilience-guidelines-2023.pdf"]
+["6.5","Cyber Resilience Guidelines, 2023 issued by Nepal Rastra Bank"]
 
 ]
 
@@ -1393,1441 +1424,1087 @@ subtopics:[
 ];
 
 
-/* =====================================================
-   LOCAL STORAGE
-===================================================== */
+/* ============================================================
+   CONFIGURATION
+============================================================ */
 
+const NOTES_BASE_URL =
+"https://sundardumre.com.np/notes/";
 
-let completedTopics =
-    JSON.parse(
-        localStorage.getItem(
-            STORAGE_KEYS.progress
-        ) || "{}"
-    );
+const PROGRESS_STORAGE =
+"rbb_complete_progress";
 
+const TIMER_STORAGE =
+"rbb_complete_timer";
 
-function saveProgress() {
+const THEME_STORAGE =
+"rbb_complete_theme";
 
-    localStorage.setItem(
-        STORAGE_KEYS.progress,
-        JSON.stringify(completedTopics)
-    );
 
-}
+/* ============================================================
+   STATE
+============================================================ */
 
+let progress =
+JSON.parse(
+localStorage.getItem(PROGRESS_STORAGE) || "{}"
+);
 
-function saveApiKey() {
+let seconds =
+Number(
+localStorage.getItem(TIMER_STORAGE) || 10800
+);
 
-    const key =
-        document.getElementById(
-            "geminiApiKey"
-        ).value.trim();
+let timerInterval = null;
 
-
-    if (!key) {
-
-        alert(
-            "Please enter Gemini API key."
-        );
-
-        return;
-
-    }
-
-
-    localStorage.setItem(
-        STORAGE_KEYS.apiKey,
-        key
-    );
-
-
-    alert(
-        "Gemini API key saved."
-    );
-
-}
-
-
-function loadApiKey() {
-
-    const key =
-        localStorage.getItem(
-            STORAGE_KEYS.apiKey
-        );
-
-
-    if (key) {
-
-        document.getElementById(
-            "geminiApiKey"
-        ).value = key;
-
-    }
-
-}
-
-
-/* =====================================================
-   RENDER SYLLABUS
-===================================================== */
-
-
-let totalTopics = 0;
-
-
-function renderSyllabus() {
-
-    const container =
-        document.getElementById(
-            "syllabusTree"
-        );
-
-
-    container.innerHTML = "";
-
-
-    totalTopics = 0;
-
-
-    syllabus.forEach(section => {
-
-
-        const banner =
-            document.createElement(
-                "div"
-            );
-
-
-        banner.className =
-            "section-banner";
-
-
-        banner.innerHTML = `
-
-            <h3>
-                ${section.section_title}
-            </h3>
-
-            <p>
-                ${section.section_marks}
-            </p>
-
-        `;
-
-
-        container.appendChild(
-            banner
-        );
-
-
-        section.topics.forEach(topic => {
-
-
-            const accordion =
-                document.createElement(
-                    "div"
-                );
-
-
-            accordion.className =
-                "accordion";
-
-
-            let rows = "";
-
-
-            topic.subtopics.forEach(
-                sub => {
-
-
-                    totalTopics++;
-
-
-                    const id =
-                        sub[0];
-
-
-                    const title =
-                        sub[1];
-
-
-                    const url =
-                        pdf(sub[2]);
-
-
-                    const checked =
-                        completedTopics[id]
-                            ? "checked"
-                            : "";
-
-
-                    const safeId =
-                        id.replace(
-                            /[^a-zA-Z0-9]/g,
-                            "_"
-                        );
-
-
-                    rows += `
-
-                        <div class="topic-row">
-
-                            <input
-                                type="checkbox"
-                                id="check_${safeId}"
-                                ${checked}
-                                onchange="
-                                    toggleProgress(
-                                        '${id}'
-                                    )
-                                "
-                            >
-
-
-                            <span class="topic-text">
-
-                                <span class="topic-code">
-                                    ${id}
-                                </span>
-
-                                ${title}
-
-                            </span>
-
-
-                            <div class="topic-actions">
-
-                                <button
-                                    class="topic-btn note-btn"
-                                    onclick="
-                                        openPdf(
-                                            ${JSON.stringify(title)},
-                                            ${JSON.stringify(url)}
-                                        )
-                                    "
-                                >
-                                    📖 Note
-                                </button>
-
-
-                                ${
-                                    section.section_id
-                                    .startsWith(
-                                        "paper2"
-                                    )
-                                    ?
-
-                                    `
-
-                                    <button
-                                        class="topic-btn quiz-btn"
-                                        onclick="
-                                            generateQuiz(
-                                                ${JSON.stringify(title)}
-                                            )
-                                        "
-                                    >
-                                        🤖 Quiz
-                                    </button>
-
-                                    `
-
-                                    : ""
-
-                                }
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                }
-            );
-
-
-            accordion.innerHTML = `
-
-                <div
-                    class="accordion-header"
-                    onclick="toggleAccordion(this)"
-                >
-
-                    <span class="accordion-title">
-                        ${topic.title}
-                    </span>
-
-                    <span>
-                        ▼
-                    </span>
-
-                </div>
-
-
-                <div class="accordion-content">
-
-                    ${rows}
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                accordion
-            );
-
-        });
-
-    });
-
-
-    updateProgress();
-
-}
-
-
-/* =====================================================
-   PROGRESS PERSISTENCE
-===================================================== */
-
-
-function toggleProgress(id) {
-
-    const checkbox =
-        document.querySelector(
-            `input[id="check_${id.replace(
-                /[^a-zA-Z0-9]/g,
-                "_"
-            )}"]`
-        );
-
-
-    if (
-        checkbox &&
-        checkbox.checked
-    ) {
-
-        completedTopics[id] =
-            true;
-
-    } else {
-
-        delete completedTopics[id];
-
-    }
-
-
-    saveProgress();
-
-    updateProgress();
-
-}
-
-
-function updateProgress() {
-
-    const completed =
-        Object.keys(
-            completedTopics
-        ).length;
-
-
-    const percentage =
-        totalTopics
-            ? Math.round(
-                (
-                    completed /
-                    totalTopics
-                ) * 100
-            )
-            : 0;
-
-
-    document.getElementById(
-        "progPct"
-    ).innerText =
-        `${percentage}% Completed`;
-
-
-    document.getElementById(
-        "progBar"
-    ).style.width =
-        `${percentage}%`;
-
-
-    document.getElementById(
-        "trackerSummary"
-    ).innerText =
-        `${completed} of ${totalTopics} topics completed.`;
-
-}
-
-
-/* =====================================================
-   ACCORDION
-===================================================== */
-
-
-function toggleAccordion(header) {
-
-    const content =
-        header.nextElementSibling;
-
-
-    content.classList.toggle(
-        "open"
-    );
-
-
-    if (
-        content.classList.contains(
-            "open"
-        )
-    ) {
-
-        content.style.maxHeight =
-            content.scrollHeight +
-            "px";
-
-    } else {
-
-        content.style.maxHeight =
-            "0px";
-
-    }
-
-}
-
-
-/* =====================================================
-   PDF VIEWER
-===================================================== */
-
-
-function openPdf(title, url) {
-
-    const viewer =
-        document.getElementById(
-            "viewerContent"
-        );
-
-
-    const sidebar =
-        document.getElementById(
-            "rightSidebar"
-        );
-
-
-    if (
-        window.innerWidth <= 992
-    ) {
-
-        sidebar.classList.add(
-            "active-mobile"
-        );
-
-
-        document.getElementById(
-            "closeMobileBtn"
-        ).style.display =
-            "inline-block";
-
-    }
-
-
-    viewer.innerHTML = `
-
-        <div class="loading">
-
-            <div class="spinner"></div>
-
-            <p>
-                Checking PDF availability...
-            </p>
-
-        </div>
-
-    `;
-
-
-    fetch(
-        url,
-        {
-            method:"HEAD",
-            mode:"cors"
-        }
-    )
-
-    .then(response => {
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                "PDF_NOT_FOUND"
-            );
-
-        }
-
-
-        showPdf(
-            title,
-            url
-        );
-
-    })
-
-    .catch(() => {
-
-        showPdfNotAvailable(
-            title,
-            url
-        );
-
-    });
-
-}
-
-
-function showPdf(title, url) {
-
-    const viewer =
-        document.getElementById(
-            "viewerContent"
-        );
-
-
-    viewer.innerHTML = `
-
-        <div class="pdf-container">
-
-            <div class="pdf-toolbar">
-
-                <h3>
-                    📚 ${escapeHtml(title)}
-                </h3>
-
-
-                <a
-                    class="open-pdf"
-                    href="${url}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Open Full ↗
-                </a>
-
-            </div>
-
-
-            <iframe
-                class="pdf-frame"
-                src="${url}#toolbar=1&navpanes=0"
-                title="${escapeHtml(title)}"
-            ></iframe>
-
-        </div>
-
-    `;
-
-}
-
-
-function showPdfNotAvailable(title, url) {
-
-    const viewer =
-        document.getElementById(
-            "viewerContent"
-        );
-
-
-    viewer.innerHTML = `
-
-        <div class="pdf-not-available">
-
-            <div class="pdf-error-icon">
-                📄
-            </div>
-
-
-            <h2>
-                PDF Not Available
-            </h2>
-
-
-            <p>
-                This note has not been uploaded yet.
-            </p>
-
-
-            <span class="pdf-title">
-                ${escapeHtml(title)}
-            </span>
-
-
-            <br>
-
-
-            <a
-                class="open-pdf"
-                href="${url}"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Check PDF URL ↗
-            </a>
-
-        </div>
-
-    `;
-
-}
-
-
-function escapeHtml(value) {
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =====================================================
-   GEMINI QUIZ API
-===================================================== */
-
-
-async function generateQuiz(topic) {
-
-    const apiKey =
-        localStorage.getItem(
-            STORAGE_KEYS.apiKey
-        );
-
-
-    if (!apiKey) {
-
-        alert(
-            "First enter and save Gemini API Key."
-        );
-
-        return;
-
-    }
-
-
-    const viewer =
-        document.getElementById(
-            "viewerContent"
-        );
-
-
-    const sidebar =
-        document.getElementById(
-            "rightSidebar"
-        );
-
-
-    if (
-        window.innerWidth <= 992
-    ) {
-
-        sidebar.classList.add(
-            "active-mobile"
-        );
-
-
-        document.getElementById(
-            "closeMobileBtn"
-        ).style.display =
-            "inline-block";
-
-    }
-
-
-    viewer.innerHTML = `
-
-        <div class="loading">
-
-            <div class="spinner"></div>
-
-            <p>
-                Gemini is generating quiz...
-            </p>
-
-        </div>
-
-    `;
-
-
-    const prompt = `
-
-You are an expert Nepal competitive examination quiz generator.
-
-Generate 10 multiple choice questions for:
-
-RBB Level 5 Senior Assistant (Information Technology)
-
-Paper II — Information Technology & Management.
-
-Topic:
-${topic}
-
-Rules:
-
-1. Generate exactly 10 questions.
-2. Each question must have exactly 4 options.
-3. Include one correct answer.
-4. Questions must be suitable for competitive written examination.
-5. Do not include explanations inside the JSON.
-6. Return ONLY valid JSON.
-
-Required JSON format:
-
-{
-  "topic": "${topic}",
-  "questions": [
-    {
-      "question": "Question text",
-      "options": [
-        "Option A",
-        "Option B",
-        "Option C",
-        "Option D"
-      ],
-      "answer": 0
-    }
-  ]
-}
-
-The answer must be the zero-based option index.
-`;
-
-
-    try {
-
-
-        const response =
-            await fetch(
-
-                `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
-
-                {
-
-                    method:"POST",
-
-                    headers:{
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body:JSON.stringify({
-
-                        contents:[
-
-                            {
-
-                                parts:[
-
-                                    {
-                                        text:prompt
-                                    }
-
-                                ]
-
-                            }
-
-                        ],
-
-                        generationConfig:{
-
-                            temperature:0.4,
-
-                            responseMimeType:
-                                "application/json"
-
-                        }
-
-                    })
-
-                }
-
-            );
-
-
-        if (
-            !response.ok
-        ) {
-
-            const error =
-                await response.text();
-
-
-            throw new Error(
-                error
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        const raw =
-            data
-                .candidates[0]
-                .content
-                .parts[0]
-                .text;
-
-
-        const quiz =
-            JSON.parse(
-                raw
-            );
-
-
-        renderQuiz(
-            quiz
-        );
-
-
-    }
-
-    catch(error) {
-
-        console.error(
-            error
-        );
-
-
-        viewer.innerHTML = `
-
-            <div class="pdf-not-available">
-
-                <div class="pdf-error-icon">
-                    ⚠️
-                </div>
-
-
-                <h2>
-                    Quiz Generation Failed
-                </h2>
-
-
-                <p>
-                    Gemini API response process गर्न सकिएन।
-                </p>
-
-
-                <small
-                    style="
-                    color:var(--muted);
-                    max-width:500px;
-                    word-break:break-word;
-                    "
-                >
-                    ${escapeHtml(
-                        error.message
-                    )}
-                </small>
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-/* =====================================================
-   QUIZ RENDER
-===================================================== */
-
-
-let currentQuiz = null;
+let quizData = null;
 
 let quizScore = 0;
 
-let answeredQuestions = 0;
+let quizAnswered = 0;
 
 
-function renderQuiz(quiz) {
+/* ============================================================
+   HELPERS
+============================================================ */
 
-    currentQuiz =
-        quiz;
+function escapeHTML(value){
 
-
-    quizScore =
-        0;
-
-
-    answeredQuestions =
-        0;
-
-
-    const viewer =
-        document.getElementById(
-            "viewerContent"
-        );
-
-
-    let html = `
-
-        <div class="quiz-container">
-
-            <div class="quiz-header">
-
-                <h2>
-                    🤖 AI Quiz
-                </h2>
-
-                <p>
-                    ${escapeHtml(
-                        quiz.topic
-                    )}
-                </p>
-
-            </div>
-
-
-            <div
-                id="quizResult"
-            ></div>
-
-    `;
-
-
-    quiz.questions.forEach(
-        (question, index) => {
-
-
-            html += `
-
-                <div
-                    class="quiz-question"
-                    id="question_${index}"
-                >
-
-                    <h4>
-                        ${index + 1}.
-                        ${escapeHtml(
-                            question.question
-                        )}
-                    </h4>
-
-            `;
-
-
-            question.options.forEach(
-                (option, optionIndex) => {
-
-
-                    html += `
-
-                        <button
-                            class="quiz-option"
-                            onclick="
-                                answerQuestion(
-                                    ${index},
-                                    ${optionIndex},
-                                    this
-                                )
-                            "
-                        >
-                            ${String.fromCharCode(
-                                65 +
-                                optionIndex
-                            )}.
-
-                            ${escapeHtml(
-                                option
-                            )}
-
-                        </button>
-
-                    `;
-
-                }
-            );
-
-
-            html += `
-
-                </div>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-        </div>
-
-    `;
-
-
-    viewer.innerHTML =
-        html;
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-function answerQuestion(
-    questionIndex,
-    selectedIndex,
-    button
-) {
-
-    const question =
-        currentQuiz
-            .questions[
-                questionIndex
-            ];
-
-
-    const container =
-        document.getElementById(
-            `question_${questionIndex}`
-        );
-
-
-    const buttons =
-        container.querySelectorAll(
-            ".quiz-option"
-        );
-
-
-    if (
-        container.dataset.answered
-    ) {
-
-        return;
-
-    }
-
-
-    container.dataset.answered =
-        "true";
-
-
-    answeredQuestions++;
-
-
-    buttons.forEach(
-        (btn, index) => {
-
-
-            btn.disabled =
-                true;
-
-
-            if (
-                index ===
-                question.answer
-            ) {
-
-                btn.classList.add(
-                    "correct"
-                );
-
-            }
-
-        }
-    );
-
-
-    if (
-        selectedIndex ===
-        question.answer
-    ) {
-
-        quizScore++;
-
-    } else {
-
-        button.classList.add(
-            "wrong"
-        );
-
-    }
-
-
-    updateQuizResult();
-
-}
-
-
-function updateQuizResult() {
-
-    const result =
-        document.getElementById(
-            "quizResult"
-        );
-
-
-    if (!result) return;
-
-
-    result.innerHTML = `
-
-        <div class="quiz-result">
-
-            <h2>
-                ${quizScore} / ${currentQuiz.questions.length}
-            </h2>
-
-            <p>
-                Answered:
-                ${answeredQuestions}
-                /
-                ${currentQuiz.questions.length}
-            </p>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   THEME PERSISTENCE
-===================================================== */
-
-
-function toggleTheme() {
-
-    const html =
-        document.documentElement;
-
-
-    const current =
-        html.getAttribute(
-            "data-theme"
-        );
-
-
-    const next =
-        current === "dark"
-            ? "light"
-            : "dark";
-
-
-    html.setAttribute(
-        "data-theme",
-        next
-    );
-
-
-    localStorage.setItem(
-        STORAGE_KEYS.theme,
-        next
-    );
-
-
-    updateThemeText();
-
-}
-
-
-function updateThemeText() {
-
-    const theme =
-        document.documentElement
-            .getAttribute(
-                "data-theme"
-            );
-
-
-    document.getElementById(
-        "themeIcon"
-    ).innerText =
-        theme === "dark"
-            ? "🌙"
-            : "☀️";
-
-
-    document.getElementById(
-        "themeText"
-    ).innerText =
-        theme === "dark"
-            ? "Dark"
-            : "Light";
-
-}
-
-
-function loadTheme() {
-
-    const theme =
-        localStorage.getItem(
-            STORAGE_KEYS.theme
-        );
-
-
-    if (theme) {
-
-        document.documentElement
-            .setAttribute(
-                "data-theme",
-                theme
-            );
-
-    }
-
-
-    updateThemeText();
-
-}
-
-
-/* =====================================================
-   TIMER WITH LOCAL STORAGE
-===================================================== */
-
-
-let timerInterval =
-    null;
-
-
-let totalSeconds =
-    Number(
-        localStorage.getItem(
-            STORAGE_KEYS.timer
-        )
-    ) ||
-    3 * 60 * 60;
-
-
-function updateTimerDisplay() {
-
-    const h =
-        String(
-            Math.floor(
-                totalSeconds /
-                3600
-            )
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const m =
-        String(
-            Math.floor(
-                (
-                    totalSeconds %
-                    3600
-                ) /
-                60
-            )
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const s =
-        String(
-            totalSeconds %
-            60
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    document.getElementById(
-        "timerBox"
-    ).innerText =
-        `${h}:${m}:${s}`;
-
-
-    localStorage.setItem(
-        STORAGE_KEYS.timer,
-        totalSeconds
-    );
-
-}
-
-
-function startTimer() {
-
-    if (
-        timerInterval
-    ) return;
-
-
-    timerInterval =
-        setInterval(
-            () => {
-
-
-                if (
-                    totalSeconds >
-                    0
-                ) {
-
-                    totalSeconds--;
-
-                    updateTimerDisplay();
-
-                } else {
-
-                    pauseTimer();
-
-                    alert(
-                        "Time's up!"
-                    );
-
-                }
-
-            },
-            1000
-        );
-
-}
-
-
-function pauseTimer() {
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    timerInterval =
-        null;
-
-
-    updateTimerDisplay();
-
-}
-
-
-function applyCustomTime() {
-
-    pauseTimer();
-
-
-    const hours =
-        parseInt(
-            document.getElementById(
-                "hrIn"
-            ).value
-        ) ||
-        0;
-
-
-    const minutes =
-        parseInt(
-            document.getElementById(
-                "minIn"
-            ).value
-        ) ||
-        0;
-
-
-    totalSeconds =
-        (
-            hours *
-            3600
-        )
-        +
-        (
-            minutes *
-            60
-        );
-
-
-    updateTimerDisplay();
-
-}
-
-
-/* =====================================================
-   VIEWER CONTROLS
-===================================================== */
-
-
-function toggleMaximize() {
-
-    const sidebar =
-        document.getElementById(
-            "rightSidebar"
-        );
-
-
-    sidebar.classList.toggle(
-        "maximized"
-    );
-
-}
-
-
-function closeMobileViewer() {
-
-    document.getElementById(
-        "rightSidebar"
-    ).classList.remove(
-        "active-mobile"
-    );
-
-}
-
-
-/* =====================================================
-   INITIALIZE
-===================================================== */
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadTheme();
-
-        loadApiKey();
-
-        renderSyllabus();
-
-        updateTimerDisplay();
-
-    }
+function getAllTopics(){
+
+return syllabus.flatMap(
+paper =>
+paper.units.flatMap(
+unit =>
+unit.subs.map(
+sub => ({
+code:sub[0],
+title:sub[1],
+unit:unit.title,
+paper:paper.paper
+})
+)
+)
 );
 
+}
+
+
+function createPDFUrl(code,title){
+
+const filename =
+`${code}-${title
+.toLowerCase()
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-|-$/g,"")
+}.pdf`;
+
+return NOTES_BASE_URL + encodeURIComponent(filename);
+
+}
+
+
+/* ============================================================
+   RENDER SYLLABUS
+============================================================ */
+
+function renderSyllabus(){
+
+const container =
+document.getElementById("syllabusContainer");
+
+container.innerHTML = "";
+
+syllabus.forEach(group => {
+
+const section =
+document.createElement("section");
+
+section.innerHTML = `
+
+<div class="section-title">
+
+<div>
+
+<h2>
+${escapeHTML(group.paper)}
+•
+${escapeHTML(group.title)}
+</h2>
+
+<p>
+${escapeHTML(group.section)}
+•
+${escapeHTML(group.marks)}
+</p>
+
+</div>
+
+</div>
+
+`;
+
+group.units.forEach(unit => {
+
+const unitElement =
+document.createElement("article");
+
+unitElement.className = "unit";
+
+let subtopicsHTML = "";
+
+unit.subs.forEach(sub => {
+
+const code = sub[0];
+
+const title = sub[1];
+
+const checked =
+progress[code]
+? "checked"
+: "";
+
+subtopicsHTML += `
+
+<div class="subtopic">
+
+<input
+type="checkbox"
+${checked}
+onchange="updateTopicProgress('${code}',this.checked)"
+>
+
+<div class="subtopic-text">
+
+<span class="code">
+${escapeHTML(code)}
+</span>
+
+${escapeHTML(title)}
+
+</div>
+
+<div class="subtopic-actions">
+
+<button
+class="small-btn note-btn"
+onclick='openNote(${JSON.stringify(code)},${JSON.stringify(title)})'
+>
+📖 Note
+</button>
+
+<button
+class="small-btn quiz-btn"
+onclick='openQuiz(${JSON.stringify(code)},${JSON.stringify(title)},${JSON.stringify(unit.title)})'
+>
+✨ Quiz
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+
+unitElement.innerHTML = `
+
+<div
+class="unit-header"
+onclick="toggleUnit(this)"
+>
+
+<div class="unit-number">
+${escapeHTML(unit.id)}
+</div>
+
+<div class="unit-title">
+${escapeHTML(unit.title)}
+</div>
+
+<div class="unit-count">
+${unit.subs.length} topics
+</div>
+
+<div class="arrow">
+⌄
+</div>
+
+</div>
+
+<div class="subtopics">
+
+${subtopicsHTML}
+
+</div>
+
+`;
+
+section.appendChild(unitElement);
+
+});
+
+container.appendChild(section);
+
+});
+
+updateProgress();
+
+}
+
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+function updateTopicProgress(code,checked){
+
+if(checked){
+
+progress[code] = true;
+
+}else{
+
+delete progress[code];
+
+}
+
+localStorage.setItem(
+PROGRESS_STORAGE,
+JSON.stringify(progress)
+);
+
+updateProgress();
+
+}
+
+
+function updateProgress(){
+
+const total =
+getAllTopics().length;
+
+const completed =
+Object.keys(progress).length;
+
+const percentage =
+total === 0
+? 0
+: Math.round(
+(completed / total) * 100
+);
+
+document.getElementById(
+"totalTopics"
+).textContent = total;
+
+document.getElementById(
+"completedTopics"
+).textContent = completed;
+
+document.getElementById(
+"percentage"
+).textContent = percentage + "%";
+
+document.getElementById(
+"sideTotal"
+).textContent = total;
+
+document.getElementById(
+"sideDone"
+).textContent = completed;
+
+document.getElementById(
+"sidePercent"
+).textContent = percentage + "%";
+
+document.getElementById(
+"progressBar"
+).style.width =
+percentage + "%";
+
+document.getElementById(
+"progressLabel"
+).textContent =
+percentage + "% COMPLETE";
+
+}
+
+
+function resetProgress(){
+
+if(
+confirm(
+"Are you sure you want to reset all progress?"
+)
+){
+
+progress = {};
+
+localStorage.removeItem(
+PROGRESS_STORAGE
+);
+
+renderSyllabus();
+
+}
+
+}
+
+
+/* ============================================================
+   UNIT CONTROLS
+============================================================ */
+
+function toggleUnit(header){
+
+header
+.parentElement
+.classList
+.toggle("open");
+
+}
+
+
+function expandAll(){
+
+document
+.querySelectorAll(".unit")
+.forEach(
+unit =>
+unit.classList.add("open")
+);
+
+}
+
+
+function collapseAll(){
+
+document
+.querySelectorAll(".unit")
+.forEach(
+unit =>
+unit.classList.remove("open")
+);
+
+}
+
+
+/* ============================================================
+   VIEWER
+============================================================ */
+
+function showViewer(){
+
+document
+.getElementById("viewer")
+.classList
+.add("show");
+
+}
+
+
+function closeViewer(){
+
+document
+.getElementById("viewer")
+.classList
+.remove("show");
+
+}
+
+
+function maximizeViewer(){
+
+const viewer =
+document.getElementById("viewer");
+
+if(
+viewer.style.position === "fixed"
+){
+
+viewer.style.cssText = "";
+
+}else{
+
+viewer.style.position = "fixed";
+
+viewer.style.inset = "0";
+
+viewer.style.height = "100vh";
+
+viewer.style.zIndex = "9999";
+
+}
+
+}
+
+
+/* ============================================================
+   PDF NOTE VIEWER
+============================================================ */
+
+function openNote(code,title){
+
+showViewer();
+
+document
+.getElementById("viewerTitle")
+.textContent =
+"PDF NOTE • " + code;
+
+const pdfURL =
+createPDFUrl(code,title);
+
+document
+.getElementById("viewerBody")
+.innerHTML = `
+
+<div class="pdf-wrapper">
+
+<div class="pdf-toolbar">
+
+<h3>
+${escapeHTML(title)}
+</h3>
+
+<a
+class="btn btn-primary"
+href="${escapeHTML(pdfURL)}"
+target="_blank"
+rel="noopener"
+>
+Open Full ↗
+</a>
+
+</div>
+
+<iframe
+class="pdf-frame"
+src="${escapeHTML(pdfURL)}#toolbar=1&navpanes=0"
+title="${escapeHTML(title)}"
+onerror="pdfNotFound('${escapeHTML(title)}')"
+>
+</iframe>
+
+</div>
+
+`;
+
+}
+
+
+/*
+IMPORTANT:
+
+Browser iframe cannot reliably detect every
+404 response from another domain.
+
+If the PDF URL does not exist,
+the server/browser will show its own 404 page.
+
+This fallback function is included for
+manual/explicit failure handling.
+*/
+
+function pdfNotFound(title){
+
+document
+.getElementById("viewerBody")
+.innerHTML = `
+
+<div class="not-found">
+
+<h2>
+📄 PDF Not Available
+</h2>
+
+<p>
+The note for
+<b>${escapeHTML(title)}</b>
+was not found at the configured notes URL.
+</p>
+
+<p>
+Please check the PDF filename or upload the
+corresponding note to the notes directory.
+</p>
+
+</div>
+
+`;
+
+}
+
+
+/* ============================================================
+   DUMMY GEMINI QUIZ FUNCTION
+============================================================ */
+
+/*
+
+DO NOT PUT API KEY IN THE UI.
+
+Replace ONLY this function later.
+
+Example location:
+
+async function dummyQuizFetch(topic,unit){
+
+    // Your Gemini fetch code here
+
+}
+
+*/
+
+async function dummyQuizFetch(topic,unit){
+
+await new Promise(
+resolve =>
+setTimeout(resolve,700)
+);
+
+return {
+
+topic:topic,
+
+unit:unit,
+
+questions:[
+
+{
+
+question:
+`What is the main concept of "${topic}"?`,
+
+options:[
+
+"The core concept related to the topic",
+
+"An unrelated concept",
+
+"A random administrative process",
+
+"None of the above"
+
+],
+
+answer:0
+
+},
+
+{
+
+question:
+`Which option is most closely associated with "${topic}"?`,
+
+options:[
+
+"Its key principles and applications",
+
+"An unrelated subject",
+
+"Only a non-technical activity",
+
+"None of the above"
+
+],
+
+answer:0
+
+},
+
+{
+
+question:
+`What should be studied for "${topic}"?`,
+
+options:[
+
+"Definition, components, working and applications",
+
+"Only the name",
+
+"Unrelated information",
+
+"None of the above"
+
+],
+
+answer:0
+
+},
+
+{
+
+question:
+`What is a valid learning objective for "${topic}"?`,
+
+options:[
+
+"Explain its purpose, features and significance",
+
+"Avoid all technical concepts",
+
+"Study unrelated examples",
+
+"None of the above"
+
+],
+
+answer:0
+
+},
+
+{
+
+question:
+`For an examination, what should be prioritized?`,
+
+options:[
+
+"Concepts, terminology, working and applications",
+
+"Only memorizing the title",
+
+"Unrelated information",
+
+"None of the above"
+
+],
+
+answer:0
+
+}
+
+]
+
+};
+
+}
+
+
+/* ============================================================
+   QUIZ
+============================================================ */
+
+async function openQuiz(code,topic,unit){
+
+showViewer();
+
+document
+.getElementById("viewerTitle")
+.textContent =
+"AI QUIZ • " + code;
+
+document
+.getElementById("viewerBody")
+.innerHTML = `
+
+<div class="loader">
+
+<div>
+
+<div class="spinner"></div>
+
+<p>
+Generating quiz...
+</p>
+
+</div>
+
+</div>
+
+`;
+
+try{
+
+quizData =
+await dummyQuizFetch(
+topic,
+unit
+);
+
+quizScore = 0;
+
+quizAnswered = 0;
+
+renderQuiz();
+
+}catch(error){
+
+document
+.getElementById("viewerBody")
+.innerHTML = `
+
+<div class="not-found">
+
+<h2>
+Quiz Error
+</h2>
+
+<p>
+${escapeHTML(error.message)}
+</p>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+function renderQuiz(){
+
+let html = `
+
+<div class="quiz-head">
+
+<h2>
+✨
+${escapeHTML(quizData.topic)}
+</h2>
+
+<p>
+${escapeHTML(quizData.unit)}
+•
+Dummy quiz engine ready for Gemini integration.
+</p>
+
+</div>
+
+<div id="quizResult"></div>
+
+`;
+
+quizData.questions.forEach(
+(question,index) => {
+
+html += `
+
+<div
+class="question"
+id="question-${index}"
+>
+
+<h4>
+
+${index + 1}.
+${escapeHTML(question.question)}
+
+</h4>
+
+`;
+
+question.options.forEach(
+(option,optionIndex) => {
+
+html += `
+
+<button
+class="option"
+onclick="answerQuiz(
+${index},
+${optionIndex},
+this
+)"
+>
+
+${String.fromCharCode(65 + optionIndex)}.
+
+${escapeHTML(option)}
+
+</button>
+
+`;
+
+});
+
+html += `
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById("viewerBody")
+.innerHTML = html;
+
+}
+
+
+function answerQuiz(
+questionIndex,
+selectedIndex,
+button
+){
+
+const questionBox =
+document.getElementById(
+"question-" + questionIndex
+);
+
+if(
+questionBox.dataset.answered
+){
+
+return;
+
+}
+
+questionBox.dataset.answered = "true";
+
+quizAnswered++;
+
+const question =
+quizData.questions[
+questionIndex
+];
+
+const options =
+questionBox
+.querySelectorAll(".option");
+
+options.forEach(
+(option,index) => {
+
+option.disabled = true;
+
+if(
+index === question.answer
+){
+
+option.classList.add(
+"correct"
+);
+
+}
+
+});
+
+if(
+selectedIndex === question.answer
+){
+
+quizScore++;
+
+}else{
+
+button.classList.add(
+"wrong"
+);
+
+}
+
+document
+.getElementById("quizResult")
+.innerHTML = `
+
+<div class="result">
+
+<strong>
+${quizScore}/${quizData.questions.length}
+</strong>
+
+<span>
+Answered
+${quizAnswered}
+/
+${quizData.questions.length}
+</span>
+
+</div>
+
+`;
+
+}
+
+
+/* ============================================================
+   TIMER
+============================================================ */
+
+function updateTimer(){
+
+const hours =
+String(
+Math.floor(
+seconds / 3600
+)
+).padStart(2,"0");
+
+const minutes =
+String(
+Math.floor(
+(seconds % 3600) / 60
+)
+).padStart(2,"0");
+
+const secs =
+String(
+seconds % 60
+).padStart(2,"0");
+
+document
+.getElementById("timer")
+.textContent =
+`${hours}:${minutes}:${secs}`;
+
+localStorage.setItem(
+TIMER_STORAGE,
+seconds
+);
+
+}
+
+
+function startTimer(){
+
+if(
+timerInterval
+){
+
+return;
+
+}
+
+timerInterval =
+setInterval(
+() => {
+
+if(
+seconds > 0
+){
+
+seconds--;
+
+updateTimer();
+
+}else{
+
+pauseTimer();
+
+}
+
+},
+1000
+);
+
+}
+
+
+function pauseTimer(){
+
+clearInterval(
+timerInterval
+);
+
+timerInterval = null;
+
+}
+
+
+function resetTimer(){
+
+pauseTimer();
+
+seconds = 10800;
+
+updateTimer();
+
+}
+
+
+/* ============================================================
+   THEME
+============================================================ */
+
+function toggleTheme(){
+
+const current =
+document.documentElement
+.getAttribute("data-theme");
+
+if(
+current === "light"
+){
+
+document.documentElement
+.removeAttribute("data-theme");
+
+localStorage.setItem(
+"theme",
+"dark"
+);
+
+}else{
+
+document.documentElement
+.setAttribute(
+"data-theme",
+"light"
+);
+
+localStorage.setItem(
+"theme",
+"light"
+);
+
+}
+
+}
+
+
+/* ============================================================
+   INITIALIZATION
+============================================================ */
+
+document.addEventListener(
+"DOMContentLoaded",
+() => {
+
+const savedTheme =
+localStorage.getItem(
+"theme"
+);
+
+if(
+savedTheme === "light"
+){
+
+document.documentElement
+.setAttribute(
+"data-theme",
+"light"
+);
+
+}
+
+renderSyllabus();
+
+updateTimer();
+
+}
+
+);
 
 </script>
 
 </body>
-
 </html>
