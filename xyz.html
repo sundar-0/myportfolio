@@ -1,1071 +1,2295 @@
-<script>
-/* =====================================================
-   RBB LEVEL 5 IT — OFFICIAL SYLLABUS
-   PDF SOURCE: sundardumre.com.np/notes
-===================================================== */
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 
-const NOTES_BASE_URL = "https://sundardumre.com.np/notes";
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/*
-  IMPORTANT:
-  File name website मा भएको वास्तविक PDF filename
-  अनुसार मात्र परिवर्तन गर्नुहोस्।
+    <title>RBB Level 5 IT — Smart Exam Preparation Dashboard</title>
 
-  Example:
-  https://sundardumre.com.np/notes/commercial-banks.pdf
-*/
+    <style>
 
-window.rbbSyllabus = [
+        :root[data-theme="dark"] {
+            --bg-main: #040914;
+            --bg-side: #0a1124;
+            --bg-card: #0d1730;
+            --bg-hover: #111d3a;
+            --border-blue: #1b3564;
+            --accent-blue: #00bcd4;
+            --text-main: #e2e8f0;
+            --text-muted: #718096;
+            --green-active: #00e676;
+            --red-alert: #ff1744;
+            --purple-accent: #7c4dff;
+            --viewer-bg: #1e293b;
+            --viewer-text: #f8fafc;
+        }
 
-    /* =====================================================
-       PAPER I
-       BANKING AND ORGANIZATIONAL MANAGEMENT
-    ===================================================== */
+        :root[data-theme="light"] {
+            --bg-main: #f1f5f9;
+            --bg-side: #ffffff;
+            --bg-card: #ffffff;
+            --bg-hover: #f8fafc;
+            --border-blue: #cbd5e1;
+            --accent-blue: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --green-active: #16a34a;
+            --red-alert: #dc2626;
+            --purple-accent: #6d28d9;
+            --viewer-bg: #f8fafc;
+            --viewer-text: #0f172a;
+        }
 
-    {
-        section_id: "paper1-a",
-        section_title: "PAPER I — Banking and Organizational Management",
-        section_marks: "Section A — 50 Marks",
-        topics: [
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", system-ui, sans-serif;
+        }
 
-            {
-                id: "1",
-                title: "1. Financial Institutions in Nepal",
-                subtopics: [
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+        }
 
-                    {
-                        id: "1.1",
-                        title: "Commercial Banks",
-                        pdfUrl: `${NOTES_BASE_URL}/commercial-banks.pdf`
-                    },
+        button,
+        input {
+            font: inherit;
+        }
 
-                    {
-                        id: "1.2",
-                        title: "Development Banks",
-                        pdfUrl: `${NOTES_BASE_URL}/development-banks.pdf`
-                    },
+        .header {
+            height: 72px;
+            background: var(--bg-side);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid var(--border-blue);
+            z-index: 100;
+        }
 
-                    {
-                        id: "1.3",
-                        title: "Finance Companies",
-                        pdfUrl: `${NOTES_BASE_URL}/finance-companies.pdf`
-                    },
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-                    {
-                        id: "1.4",
-                        title: "Microfinance Institutions",
-                        pdfUrl: `${NOTES_BASE_URL}/microfinance-institutions.pdf`
-                    },
+        .tracker-lbl {
+            color: var(--accent-blue);
+            font-weight: 800;
+            font-size: 15px;
+        }
 
-                    {
-                        id: "1.5",
-                        title: "Infrastructure Development Bank",
-                        pdfUrl: `${NOTES_BASE_URL}/infrastructure-development-bank.pdf`
-                    },
+        .tracker-lbl small {
+            display: block;
+            color: var(--text-muted);
+            font-size: 10px;
+            margin-top: 3px;
+        }
 
-                    {
-                        id: "1.6",
-                        title: "Insurance Companies",
-                        pdfUrl: `${NOTES_BASE_URL}/insurance-companies.pdf`
-                    },
+        .timer-display {
+            background: #000;
+            color: #ffb300;
+            font-family: monospace;
+            font-size: 22px;
+            padding: 4px 14px;
+            border-radius: 6px;
+            border: 1px solid #ffb300;
+            font-weight: bold;
+        }
 
-                    {
-                        id: "1.7",
-                        title: "Employee Provident Fund",
-                        pdfUrl: `${NOTES_BASE_URL}/employee-provident-fund.pdf`
-                    },
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
 
-                    {
-                        id: "1.8",
-                        title: "Citizen Investment Trust",
-                        pdfUrl: `${NOTES_BASE_URL}/citizen-investment-trust.pdf`
-                    },
+        .time-input {
+            width: 48px;
+            padding: 6px;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            color: var(--text-main);
+            border-radius: 5px;
+        }
 
-                    {
-                        id: "1.9",
-                        title: "Social Security Fund",
-                        pdfUrl: `${NOTES_BASE_URL}/social-security-fund.pdf`
-                    }
-                ]
-            },
+        .btn,
+        .theme-toggle-btn,
+        .mx-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
 
-            {
-                id: "2",
-                title: "2. Some of the Key Basic Banking Terminology",
-                subtopics: [
+        .btn-apply {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-blue);
+        }
 
-                    {
-                        id: "2.1",
-                        title: "Capital Fund",
-                        pdfUrl: `${NOTES_BASE_URL}/capital-fund.pdf`
-                    },
+        .btn-start {
+            background: #005a43;
+            color: #00e676;
+            border: 1px solid #00e676;
+        }
 
-                    {
-                        id: "2.2",
-                        title: "Loan Loss Provisioning",
-                        pdfUrl: `${NOTES_BASE_URL}/loan-loss-provisioning.pdf`
-                    },
+        .btn-pause {
+            background: #6a1b1b;
+            color: #ff1744;
+            border: 1px solid #ff1744;
+        }
 
-                    {
-                        id: "2.3",
-                        title: "Credit-Deposit (CD) Ratio",
-                        pdfUrl: `${NOTES_BASE_URL}/credit-deposit-ratio.pdf`
-                    },
+        .theme-toggle-btn {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-blue);
+        }
 
-                    {
-                        id: "2.4",
-                        title: "Cash Reserve Ratio (CRR)",
-                        pdfUrl: `${NOTES_BASE_URL}/cash-reserve-ratio.pdf`
-                    },
+        .app-container {
+            display: flex;
+            height: calc(100vh - 72px);
+            overflow: hidden;
+        }
 
-                    {
-                        id: "2.5",
-                        title: "Refinancing, Rescheduling and Restructuring",
-                        pdfUrl: `${NOTES_BASE_URL}/refinancing-rescheduling-restructuring.pdf`
-                    },
+        .left-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--bg-side);
+            border-right: 2px solid var(--border-blue);
+            padding: 18px;
+            overflow-y: auto;
+        }
 
-                    {
-                        id: "2.6",
-                        title: "Base Rate",
-                        pdfUrl: `${NOTES_BASE_URL}/base-rate.pdf`
-                    },
+        .brand-title,
+        .api-config-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
 
-                    {
-                        id: "2.7",
-                        title: "Credit Information and Blacklisting",
-                        pdfUrl: `${NOTES_BASE_URL}/credit-information-blacklisting.pdf`
-                    },
+        .brand-title h1 {
+            color: var(--accent-blue);
+            font-size: 16px;
+            line-height: 1.5;
+        }
 
-                    {
-                        id: "2.8",
-                        title: "Credit Ratings",
-                        pdfUrl: `${NOTES_BASE_URL}/credit-ratings.pdf`
-                    },
+        .brand-title p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
 
-                    {
-                        id: "2.9",
-                        title: "Know Your Customer (KYC)",
-                        pdfUrl: `${NOTES_BASE_URL}/know-your-customer.pdf`
-                    },
+        .api-config-card h3 {
+            color: var(--green-active);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
 
-                    {
-                        id: "2.10",
-                        title: "Audit and Internal Control",
-                        pdfUrl: `${NOTES_BASE_URL}/audit-internal-control.pdf`
-                    }
-                ]
-            },
+        .api-config-card p {
+            font-size: 12px;
+            line-height: 1.6;
+        }
 
-            {
-                id: "3",
-                title: "3. Banking Related Laws",
-                subtopics: [
+        .center-content {
+            flex: 1;
+            min-width: 0;
+            padding: 20px;
+            overflow-y: auto;
+        }
 
-                    {
-                        id: "3.1",
-                        title: "Nepal Rastra Bank Act, 2058",
-                        pdfUrl: `${NOTES_BASE_URL}/nepal-rastra-bank-act-2058.pdf`
-                    },
+        .progress-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
 
-                    {
-                        id: "3.2",
-                        title: "Bank and Financial Institution Act, 2073",
-                        pdfUrl: `${NOTES_BASE_URL}/bafia-2073.pdf`
-                    },
+        .progress-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
 
-                    {
-                        id: "3.3",
-                        title: "Payment and Settlement Act, 2075",
-                        pdfUrl: `${NOTES_BASE_URL}/payment-settlement-act-2075.pdf`
-                    },
+        .eyebrow {
+            display: block;
+            color: var(--accent-blue);
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
 
-                    {
-                        id: "3.4",
-                        title: "Money Laundering Prevention Act, 2064",
-                        pdfUrl: `${NOTES_BASE_URL}/money-laundering-prevention-act-2064.pdf`
-                    },
+        .progress-topline h2 {
+            font-size: 20px;
+        }
 
-                    {
-                        id: "3.5",
-                        title: "Banking Offence and Punishment Act, 2064",
-                        pdfUrl: `${NOTES_BASE_URL}/banking-offence-act-2064.pdf`
-                    },
+        .progress-badge {
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }
 
-                    {
-                        id: "3.6",
-                        title: "Negotiable Instruments Act, 2034",
-                        pdfUrl: `${NOTES_BASE_URL}/negotiable-instruments-act-2034.pdf`
-                    },
+        .progress-bar-bg {
+            background: var(--bg-hover);
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
 
-                    {
-                        id: "3.7",
-                        title: "Electronic Transaction Act, 2063",
-                        pdfUrl: `${NOTES_BASE_URL}/electronic-transaction-act-2063.pdf`
-                    }
-                ]
-            },
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                var(--accent-blue),
+                var(--purple-accent)
+            );
+            transition: width .3s ease;
+        }
 
-            {
-                id: "4",
-                title: "4. Organizational Behavior",
-                subtopics: [
+        .accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
 
-                    {
-                        id: "4.1",
-                        title: "Job Description, Terms of Reference and Responsibilities",
-                        pdfUrl: `${NOTES_BASE_URL}/job-description-responsibilities.pdf`
-                    },
+        .accordion-header {
+            padding: 15px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
 
-                    {
-                        id: "4.2",
-                        title: "Job Motivation and Performance",
-                        pdfUrl: `${NOTES_BASE_URL}/job-motivation-performance.pdf`
-                    },
+        .accordion-header:hover {
+            background: var(--bg-hover);
+        }
 
-                    {
-                        id: "4.3",
-                        title: "Communication: Skill and Approach",
-                        pdfUrl: `${NOTES_BASE_URL}/communication-skills.pdf`
-                    },
+        .accordion-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-                    {
-                        id: "4.4",
-                        title: "Team Building and Workmanship",
-                        pdfUrl: `${NOTES_BASE_URL}/team-building.pdf`
-                    },
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            background: var(--bg-side);
+            padding: 0 18px;
+            transition: max-height .3s ease;
+        }
 
-                    {
-                        id: "4.5",
-                        title: "Customer Satisfaction and Delivery",
-                        pdfUrl: `${NOTES_BASE_URL}/customer-satisfaction.pdf`
-                    },
+        .accordion-content.open {
+            padding: 8px 18px 14px;
+            border-top: 1px solid var(--border-blue);
+        }
 
-                    {
-                        id: "4.6",
-                        title: "Grievance Handling",
-                        pdfUrl: `${NOTES_BASE_URL}/grievance-handling.pdf`
-                    }
-                ]
-            },
+        .topic-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-blue);
+        }
 
-            {
-                id: "5",
-                title: "5. Other Related Laws",
-                subtopics: [
+        .topic-row:last-child {
+            border-bottom: none;
+        }
 
-                    {
-                        id: "5.1",
-                        title: "Companies Act, 2063",
-                        pdfUrl: `${NOTES_BASE_URL}/companies-act-2063.pdf`
-                    },
+        .topic-row input {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--accent-blue);
+            flex-shrink: 0;
+        }
 
-                    {
-                        id: "5.2",
-                        title: "Labour Act, 2074",
-                        pdfUrl: `${NOTES_BASE_URL}/labour-act-2074.pdf`
-                    },
+        .topic-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.5;
+        }
 
-                    {
-                        id: "5.3",
-                        title: "Public Procurement Act, 2063",
-                        pdfUrl: `${NOTES_BASE_URL}/public-procurement-act-2063.pdf`
-                    },
+        .topic-code {
+            color: var(--accent-blue);
+            font-weight: bold;
+            margin-right: 5px;
+        }
 
-                    {
-                        id: "5.4",
-                        title: "Right to Information Act, 2064",
-                        pdfUrl: `${NOTES_BASE_URL}/right-to-information-act-2064.pdf`
-                    },
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
 
-                    {
-                        id: "5.5",
-                        title: "RBB Employee Service Regulation, 2070",
-                        pdfUrl: `${NOTES_BASE_URL}/rbb-employee-service-regulation-2070.pdf`
-                    },
+        .view-btn,
+        .quiz-btn {
+            border: 1px solid var(--border-blue);
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 600;
+        }
 
-                    {
-                        id: "5.6",
-                        title: "NRB Unified Directives and Circulars",
-                        pdfUrl: `${NOTES_BASE_URL}/nrb-unified-directives.pdf`
-                    }
-                ]
-            },
+        .view-btn {
+            background: rgba(0, 188, 212, .1);
+            color: var(--accent-blue);
+        }
 
-            {
-                id: "6",
-                title: "6. Digital / Electronic Payment Systems",
-                subtopics: [
+        .quiz-btn {
+            background: rgba(124, 77, 255, .15);
+            color: var(--purple-accent);
+        }
 
-                    {
-                        id: "6.1",
-                        title: "Electronic Cheque Clearing",
-                        pdfUrl: `${NOTES_BASE_URL}/electronic-cheque-clearing.pdf`
-                    },
+        .right-sidebar {
+            width: 480px;
+            flex-shrink: 0;
+            background: var(--viewer-bg);
+            border-left: 2px solid var(--border-blue);
+            display: flex;
+            flex-direction: column;
+        }
 
-                    {
-                        id: "6.2",
-                        title: "IPS, ConnectIPS, RTGS and SWIFT",
-                        pdfUrl: `${NOTES_BASE_URL}/ips-connectips-rtgs-swift.pdf`
-                    },
+        .right-sidebar.maximized {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+        }
 
-                    {
-                        id: "6.3",
-                        title: "Internet Banking, Mobile Banking, QR Code and NFC",
-                        pdfUrl: `${NOTES_BASE_URL}/digital-banking-technologies.pdf`
-                    },
+        .viewer-header {
+            min-height: 55px;
+            background: var(--bg-side);
+            color: var(--accent-blue);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-blue);
+            font-weight: bold;
+            font-size: 13px;
+        }
 
-                    {
-                        id: "6.4",
-                        title: "Digital Payment Cards",
-                        pdfUrl: `${NOTES_BASE_URL}/digital-payment-cards.pdf`
-                    },
+        .mx-btn {
+            background: rgba(0, 188, 212, .15);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
 
-                    {
-                        id: "6.5",
-                        title: "Payment through Wallets",
-                        pdfUrl: `${NOTES_BASE_URL}/digital-wallets.pdf`
-                    },
+        .viewer-body {
+            flex: 1;
+            min-height: 0;
+            padding: 15px;
+            overflow: hidden;
+        }
 
-                    {
-                        id: "6.6",
-                        title: "Central Bank Digital Currency (CBDC)",
-                        pdfUrl: `${NOTES_BASE_URL}/cbdc.pdf`
-                    }
-                ]
+        .pdf-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-toolbar h3 {
+            color: var(--text-main);
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .open-pdf-btn {
+            background: var(--accent-blue);
+            color: white;
+            text-decoration: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .pdf-frame {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .welcome-viewer {
+            padding: 20px;
+            color: var(--viewer-text);
+        }
+
+        .welcome-viewer h3 {
+            margin-bottom: 10px;
+        }
+
+        .section-banner {
+            margin: 20px 0 12px;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(
+                135deg,
+                rgba(0,188,212,.12),
+                rgba(124,77,255,.12)
+            );
+            border: 1px solid var(--border-blue);
+        }
+
+        .section-banner h3 {
+            color: var(--accent-blue);
+            font-size: 16px;
+        }
+
+        .section-banner p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media(max-width: 1100px) {
+
+            .right-sidebar {
+                width: 380px;
             }
-        ]
-    },
 
+        }
 
-    /* =====================================================
-       PAPER II
-       INFORMATION TECHNOLOGY & MANAGEMENT
-    ===================================================== */
+        @media(max-width: 992px) {
 
-    {
-        section_id: "paper2-a",
-        section_title: "PAPER II — Information Technology & Management",
-        section_marks: "Section A — 50 Marks",
-        topics: [
-
-            {
-                id: "1",
-                title: "1. Introduction of Computer",
-                subtopics: [
-
-                    {
-                        id: "1.1",
-                        title: "Types of Computers",
-                        pdfUrl: `${NOTES_BASE_URL}/types-of-computers.pdf`
-                    },
-
-                    {
-                        id: "1.2",
-                        title: "Internet, Email System and Web Design",
-                        pdfUrl: `${NOTES_BASE_URL}/internet-email-web-design.pdf`
-                    },
-
-                    {
-                        id: "1.3",
-                        title: "Physical Security of IT Infrastructure",
-                        pdfUrl: `${NOTES_BASE_URL}/physical-security-it-infrastructure.pdf`
-                    },
-
-                    {
-                        id: "1.4",
-                        title: "Artificial Intelligence, Machine Learning and Blockchain",
-                        pdfUrl: `${NOTES_BASE_URL}/ai-machine-learning-blockchain.pdf`
-                    }
-                ]
-            },
-
-            {
-                id: "2",
-                title: "2. Computer Architecture",
-                subtopics: [
-
-                    {
-                        id: "2.1",
-                        title: "Basic Computer Architecture, Registers and Memory Management",
-                        pdfUrl: `${NOTES_BASE_URL}/computer-architecture.pdf`
-                    },
-
-                    {
-                        id: "2.2",
-                        title: "Organization of Hard Disk",
-                        pdfUrl: `${NOTES_BASE_URL}/hard-disk-organization.pdf`
-                    },
-
-                    {
-                        id: "2.3",
-                        title: "CPU Architecture",
-                        pdfUrl: `${NOTES_BASE_URL}/cpu-architecture.pdf`
-                    },
-
-                    {
-                        id: "2.4",
-                        title: "I/O Management, Interface, Requests and Devices",
-                        pdfUrl: `${NOTES_BASE_URL}/io-management.pdf`
-                    }
-                ]
-            },
-
-            {
-                id: "3",
-                title: "3. Communication and Computer Network Technologies",
-                subtopics: [
-
-                    {
-                        id: "3.1",
-                        title: "Networking Devices: Repeater, Hub, Switch and Router",
-                        pdfUrl: `${NOTES_BASE_URL}/networking-devices.pdf`
-                    },
-
-                    {
-                        id: "3.2",
-                        title: "Switching Technologies, Modems and Remote Network Access",
-                        pdfUrl: `${NOTES_BASE_URL}/switching-modems-remote-access.pdf`
-                    },
-
-                    {
-                        id: "3.3",
-                        title: "Error Detection and Correction Techniques",
-                        pdfUrl: `${NOTES_BASE_URL}/error-detection-correction.pdf`
-                    },
-
-                    {
-                        id: "3.4",
-                        title: "Internet Services and Internet Protocol / Addressing",
-                        pdfUrl: `${NOTES_BASE_URL}/internet-protocol-addressing.pdf`
-                    },
-
-                    {
-                        id: "3.5",
-                        title: "Network Security and Cryptography",
-                        pdfUrl: `${NOTES_BASE_URL}/network-security-cryptography.pdf`
-                    }
-                ]
+            body {
+                height: auto;
+                overflow: auto;
             }
-        ]
-    },
 
-    {
-        section_id: "paper2-b",
-        section_title: "PAPER II — Information Technology & Management",
-        section_marks: "Section B — 50 Marks",
-        topics: [
-
-            {
-                id: "4",
-                title: "4. Operating System and Information Systems",
-                subtopics: [
-
-                    {
-                        id: "4.1",
-                        title: "Basic Knowledge of Operating System",
-                        pdfUrl: `${NOTES_BASE_URL}/operating-system.pdf`
-                    },
-
-                    {
-                        id: "4.2",
-                        title: "Process Management and Scheduling",
-                        pdfUrl: `${NOTES_BASE_URL}/process-management-scheduling.pdf`
-                    },
-
-                    {
-                        id: "4.3",
-                        title: "DOS, UNIX and Windows Operating Systems",
-                        pdfUrl: `${NOTES_BASE_URL}/dos-unix-windows.pdf`
-                    },
-
-                    {
-                        id: "4.4",
-                        title: "Security Threats in Operating System",
-                        pdfUrl: `${NOTES_BASE_URL}/os-security-threats.pdf`
-                    }
-                ]
-            },
-
-            {
-                id: "5",
-                title: "5. Database Management System, Data Mining/Warehousing and Web Technology",
-                subtopics: [
-
-                    {
-                        id: "5.1",
-                        title: "Basic Knowledge of Database Management System",
-                        pdfUrl: `${NOTES_BASE_URL}/dbms.pdf`
-                    },
-
-                    {
-                        id: "5.2",
-                        title: "Table, Record, Relationship and Indexing",
-                        pdfUrl: `${NOTES_BASE_URL}/database-concepts.pdf`
-                    },
-
-                    {
-                        id: "5.3",
-                        title: "Data Warehousing and Data Warehousing Process",
-                        pdfUrl: `${NOTES_BASE_URL}/data-warehousing.pdf`
-                    },
-
-                    {
-                        id: "5.4",
-                        title: "HTML, Script, Stylesheet, XML, Web Server and Proxy Server",
-                        pdfUrl: `${NOTES_BASE_URL}/web-technology.pdf`
-                    },
-
-                    {
-                        id: "5.5",
-                        title: "Disaster Recovery Planning",
-                        pdfUrl: `${NOTES_BASE_URL}/disaster-recovery-planning.pdf`
-                    }
-                ]
-            },
-
-            {
-                id: "6",
-                title: "6. Cybersecurity and IT Policies",
-                subtopics: [
-
-                    {
-                        id: "6.1",
-                        title: "Cyber Security, Access Control, Threats and Vulnerabilities",
-                        pdfUrl: `${NOTES_BASE_URL}/cyber-security-basics.pdf`
-                    },
-
-                    {
-                        id: "6.2",
-                        title: "Social Engineering, Malware, DoS, DDoS and Phishing",
-                        pdfUrl: `${NOTES_BASE_URL}/common-cyber-security-threats.pdf`
-                    },
-
-                    {
-                        id: "6.3",
-                        title: "ICT Policy of Nepal, 2072",
-                        pdfUrl: `${NOTES_BASE_URL}/ict-policy-nepal-2072.pdf`
-                    },
-
-                    {
-                        id: "6.4",
-                        title: "IT Guidelines Issued by Nepal Rastra Bank",
-                        pdfUrl: `${NOTES_BASE_URL}/nrb-it-guidelines.pdf`
-                    },
-
-                    {
-                        id: "6.5",
-                        title: "Cyber Resilience Guidelines, 2023",
-                        pdfUrl: `${NOTES_BASE_URL}/cyber-resilience-guidelines-2023.pdf`
-                    }
-                ]
+            .header {
+                height: auto;
+                min-height: 72px;
+                flex-direction: column;
+                align-items: flex-start;
             }
-        ]
-    }
-];
+
+            .app-container {
+                height: auto;
+                min-height: calc(100vh - 150px);
+                flex-direction: column;
+                overflow: visible;
+            }
+
+            .left-sidebar {
+                width: 100%;
+            }
+
+            .center-content {
+                width: 100%;
+                overflow: visible;
+            }
+
+            .right-sidebar {
+                position: fixed;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                display: none;
+                z-index: 99999;
+            }
+
+            .right-sidebar.active-mobile {
+                display: flex;
+            }
+
+            .pdf-frame {
+                min-height: 0;
+            }
+
+        }
+
+        @media(max-width: 600px) {
+
+            .header-controls {
+                width: 100%;
+            }
+
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .progress-topline {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .topic-row {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .topic-text {
+                min-width: calc(100% - 35px);
+            }
+
+            .action-btns {
+                width: 100%;
+                margin-left: 29px;
+            }
+
+            .view-btn {
+                flex: 1;
+            }
+
+        }
+
+    </style>
+</head>
 
 
-/* =====================================================
-   RENDER SYLLABUS
-===================================================== */
+<body>
 
-function renderSyllabus() {
+    <!-- HEADER -->
 
-    const container = document.getElementById("syllabusTree");
+    <header class="header">
 
-    container.innerHTML = "";
+        <div class="header-left">
 
-    let totalSubtopics = 0;
+            <span class="tracker-lbl">
 
-    window.rbbSyllabus.forEach(section => {
+                🏦 RBB LEVEL 5 IT
 
-        const sectionBanner = document.createElement("div");
+                <small>
+                    Smart Exam Preparation Dashboard
+                </small>
 
-        sectionBanner.className = "section-title-banner";
+            </span>
 
-        sectionBanner.innerHTML = `
-            <div style="
-                padding:15px;
-                margin:20px 0 12px;
-                border-radius:10px;
-                background:linear-gradient(
-                    135deg,
-                    rgba(0,188,212,.12),
-                    rgba(124,77,255,.12)
-                );
-                border:1px solid var(--border-blue);
-            ">
+            <div
+                class="timer-display"
+                id="timerBox"
+            >
+                03:00:00
+            </div>
 
-                <div style="
-                    color:var(--accent-blue);
-                    font-size:16px;
-                    font-weight:800;
-                ">
-                    ${section.section_title}
-                </div>
+        </div>
 
-                <div style="
-                    color:var(--text-muted);
-                    font-size:12px;
-                    margin-top:5px;
-                ">
-                    ${section.section_marks}
-                </div>
+
+        <div class="header-controls">
+
+            <input
+                type="number"
+                class="time-input"
+                id="hrIn"
+                value="3"
+                min="0"
+            >
+
+            <span>hr</span>
+
+            <input
+                type="number"
+                class="time-input"
+                id="minIn"
+                value="0"
+                min="0"
+                max="59"
+            >
+
+            <span>min</span>
+
+            <button
+                class="btn btn-apply"
+                onclick="applyCustomTime()"
+            >
+                Apply
+            </button>
+
+            <button
+                class="btn btn-start"
+                onclick="startTimer()"
+            >
+                Start
+            </button>
+
+            <button
+                class="btn btn-pause"
+                onclick="pauseTimer()"
+            >
+                Pause
+            </button>
+
+            <button
+                class="theme-toggle-btn"
+                onclick="toggleTheme()"
+            >
+
+                <span id="themeIcon">
+                    🌙
+                </span>
+
+                <span id="themeText">
+                    Dark
+                </span>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <div class="app-container">
+
+
+        <!-- LEFT SIDEBAR -->
+
+        <aside class="left-sidebar">
+
+            <div class="brand-title">
+
+                <h1>
+                    राष्ट्रिय वाणिज्य बैंक लिमिटेड
+                </h1>
+
+                <p>
+                    तह ५ - वरिष्ठ सहायक (सूचना प्रविधि)
+                </p>
 
             </div>
-        `;
-
-        container.appendChild(sectionBanner);
 
 
-        section.topics.forEach(topic => {
+            <div class="api-config-card">
 
-            const item = document.createElement("div");
+                <h3>
+                    📊 Study Tracker
+                </h3>
 
-            item.className = "accordion-item";
+                <p id="trackerSummary">
+                    Calculating stats...
+                </p>
 
-            let subHtml = "";
+            </div>
 
-            topic.subtopics.forEach(sub => {
+        </aside>
 
-                totalSubtopics++;
 
-                subHtml += `
+        <!-- SYLLABUS -->
 
-                    <div class="topic-row">
+        <main class="center-content">
 
-                        <input
-                            type="checkbox"
-                            id="chk_${sub.id.replaceAll(".", "_")}"
-                            onchange="updateProgress()"
-                        >
+            <div class="progress-container">
 
-                        <span class="topic-text">
-                            <strong>${sub.id}</strong>
-                            ${sub.title}
+                <div class="progress-topline">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            YOUR PREPARATION JOURNEY
                         </span>
 
-                        <div class="action-btns">
-
-                            <button
-                                class="view-btn"
-                                onclick="openPdf(
-                                    '${sub.title.replaceAll("'", "\\'")}',
-                                    '${sub.pdfUrl}'
-                                )"
-                            >
-                                📖 View Note
-                            </button>
-
-                        </div>
+                        <h2>
+                            Syllabus Progress
+                        </h2>
 
                     </div>
 
-                `;
-            });
-
-
-            item.innerHTML = `
-
-                <div
-                    class="accordion-header"
-                    onclick="toggleAccordion(this)"
-                >
-
-                    <span class="accordion-title">
-                        ${topic.title}
-                    </span>
-
-                    <span class="accordion-arrow">
-                        ▼
+                    <span
+                        id="progPct"
+                        class="progress-badge"
+                    >
+                        0% Completed
                     </span>
 
                 </div>
 
-                <div class="accordion-content">
-                    ${subHtml}
+
+                <div class="progress-bar-bg">
+
+                    <div
+                        class="progress-bar-fill"
+                        id="progBar"
+                    >
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="syllabusTree"></div>
+
+        </main>
+
+
+        <!-- PDF VIEWER -->
+
+        <aside
+            class="right-sidebar"
+            id="pdfViewerSidebar"
+        >
+
+            <div class="viewer-header">
+
+                <span id="panelTitle">
+                    Interactive Reader Engine
+                </span>
+
+
+                <div>
+
+                    <button
+                        class="mx-btn"
+                        id="toggleMaximizeBtn"
+                        onclick="toggleViewerMaximize()"
+                    >
+                        Maximize 🗖
+                    </button>
+
+                    <button
+                        class="mx-btn"
+                        id="closeMobileBtn"
+                        onclick="closeMobileViewer()"
+                        style="display:none"
+                    >
+                        Close ✖
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="viewer-body"
+                id="viewerContent"
+            >
+
+                <div class="welcome-viewer">
+
+                    <h3>
+                        Welcome to Interactive Study Engine
+                    </h3>
+
+                    <p>
+                        कुनै पनि syllabus topic को
+                        <strong>
+                            View Note
+                        </strong>
+                        थिचेर PDF notes हेर्नुहोस्।
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <script>
+
+        /* =====================================================
+           PDF BASE URL
+        ===================================================== */
+
+        const NOTES_BASE_URL =
+            "https://sundardumre.com.np/notes";
+
+
+        /*
+            Change filenames according to your actual PDF filenames.
+        */
+
+
+        const PDF_FILES = {
+
+            commercialBanks:
+                "commercial-banks.pdf",
+
+            developmentBanks:
+                "development-banks.pdf",
+
+            financeCompanies:
+                "finance-companies.pdf",
+
+            microfinance:
+                "microfinance-institutions.pdf",
+
+            infrastructureBank:
+                "infrastructure-development-bank.pdf",
+
+            insurance:
+                "insurance-companies.pdf",
+
+            epf:
+                "employee-provident-fund.pdf",
+
+            citizenInvestment:
+                "citizen-investment-trust.pdf",
+
+            socialSecurity:
+                "social-security-fund.pdf",
+
+            capitalFund:
+                "capital-fund.pdf",
+
+            loanLoss:
+                "loan-loss-provisioning.pdf",
+
+            cdRatio:
+                "credit-deposit-ratio.pdf",
+
+            crr:
+                "cash-reserve-ratio.pdf",
+
+            bankingLaws:
+                "banking-laws.pdf",
+
+            organizationalBehavior:
+                "organizational-behavior.pdf",
+
+            otherLaws:
+                "other-related-laws.pdf",
+
+            digitalPayment:
+                "digital-payment-systems.pdf",
+
+            computerIntroduction:
+                "introduction-of-computer.pdf",
+
+            computerArchitecture:
+                "computer-architecture.pdf",
+
+            networking:
+                "computer-network-technologies.pdf",
+
+            operatingSystem:
+                "operating-system.pdf",
+
+            dbms:
+                "database-management-system.pdf",
+
+            cybersecurity:
+                "cybersecurity-it-policies.pdf"
+
+        };
+
+
+        function pdf(file) {
+
+            return `${NOTES_BASE_URL}/${file}`;
+
+        }
+
+
+        /* =====================================================
+           OFFICIAL RBB LEVEL 5 IT SYLLABUS
+        ===================================================== */
+
+        window.rbbSyllabus = [
+
+            {
+
+                section_id: "paper1",
+
+                section_title:
+                    "PAPER I — Banking and Organizational Management",
+
+                section_marks:
+                    "Section A — 50 Marks | Section B — 50 MCQ Marks",
+
+                topics: [
+
+                    {
+
+                        id: "1",
+
+                        title:
+                            "1. Financial Institutions in Nepal",
+
+                        subtopics: [
+
+                            {
+                                id: "1.1.1",
+                                title: "Commercial Banks",
+                                pdfUrl: pdf(PDF_FILES.commercialBanks)
+                            },
+
+                            {
+                                id: "1.1.2",
+                                title: "Development Banks",
+                                pdfUrl: pdf(PDF_FILES.developmentBanks)
+                            },
+
+                            {
+                                id: "1.1.3",
+                                title: "Finance Companies",
+                                pdfUrl: pdf(PDF_FILES.financeCompanies)
+                            },
+
+                            {
+                                id: "1.1.4",
+                                title: "Microfinance Institutions",
+                                pdfUrl: pdf(PDF_FILES.microfinance)
+                            },
+
+                            {
+                                id: "1.1.5",
+                                title: "Infrastructure Development Bank",
+                                pdfUrl: pdf(PDF_FILES.infrastructureBank)
+                            },
+
+                            {
+                                id: "1.2.1",
+                                title: "Insurance Companies",
+                                pdfUrl: pdf(PDF_FILES.insurance)
+                            },
+
+                            {
+                                id: "1.2.2",
+                                title: "Employee Provident Fund",
+                                pdfUrl: pdf(PDF_FILES.epf)
+                            },
+
+                            {
+                                id: "1.2.3",
+                                title: "Citizen Investment Trust",
+                                pdfUrl: pdf(PDF_FILES.citizenInvestment)
+                            },
+
+                            {
+                                id: "1.2.4",
+                                title: "Social Security Fund",
+                                pdfUrl: pdf(PDF_FILES.socialSecurity)
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "2",
+
+                        title:
+                            "2. Some of the Key Basic Banking Terminology",
+
+                        subtopics: [
+
+                            {
+                                id: "2.1",
+                                title: "Capital Fund",
+                                pdfUrl: pdf(PDF_FILES.capitalFund)
+                            },
+
+                            {
+                                id: "2.2",
+                                title: "Loan Loss Provisioning",
+                                pdfUrl: pdf(PDF_FILES.loanLoss)
+                            },
+
+                            {
+                                id: "2.3",
+                                title: "Credit-Deposit (CD) Ratio",
+                                pdfUrl: pdf(PDF_FILES.cdRatio)
+                            },
+
+                            {
+                                id: "2.4",
+                                title: "Cash Reserve Ratio (CRR)",
+                                pdfUrl: pdf(PDF_FILES.crr)
+                            },
+
+                            {
+                                id: "2.5",
+                                title:
+                                    "Refinancing, Rescheduling and Restructuring",
+                                pdfUrl:
+                                    pdf("refinancing-rescheduling-restructuring.pdf")
+                            },
+
+                            {
+                                id: "2.6",
+                                title: "Base Rate",
+                                pdfUrl: pdf("base-rate.pdf")
+                            },
+
+                            {
+                                id: "2.7",
+                                title:
+                                    "Credit Information and Blacklisting",
+                                pdfUrl:
+                                    pdf("credit-information-blacklisting.pdf")
+                            },
+
+                            {
+                                id: "2.8",
+                                title: "Credit Ratings",
+                                pdfUrl: pdf("credit-ratings.pdf")
+                            },
+
+                            {
+                                id: "2.9",
+                                title:
+                                    "Know Your Customer (KYC)",
+                                pdfUrl: pdf("know-your-customer.pdf")
+                            },
+
+                            {
+                                id: "2.10",
+                                title:
+                                    "Audit and Internal Control",
+                                pdfUrl:
+                                    pdf("audit-internal-control.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "3",
+
+                        title:
+                            "3. Banking Related Law",
+
+                        subtopics: [
+
+                            {
+                                id: "3.1",
+                                title:
+                                    "Nepal Rastra Bank Act, 2058",
+                                pdfUrl:
+                                    pdf("nepal-rastra-bank-act-2058.pdf")
+                            },
+
+                            {
+                                id: "3.2",
+                                title:
+                                    "Bank and Financial Institution Act, 2073",
+                                pdfUrl:
+                                    pdf("bafia-2073.pdf")
+                            },
+
+                            {
+                                id: "3.3",
+                                title:
+                                    "Payment and Settlement Act, 2075",
+                                pdfUrl:
+                                    pdf("payment-settlement-act-2075.pdf")
+                            },
+
+                            {
+                                id: "3.4",
+                                title:
+                                    "Money Laundering Prevention Act, 2064",
+                                pdfUrl:
+                                    pdf("money-laundering-prevention-act-2064.pdf")
+                            },
+
+                            {
+                                id: "3.5",
+                                title:
+                                    "Banking Offence and Punishment Act, 2064",
+                                pdfUrl:
+                                    pdf("banking-offence-punishment-act-2064.pdf")
+                            },
+
+                            {
+                                id: "3.6",
+                                title:
+                                    "Negotiable Instruments Act, 2034",
+                                pdfUrl:
+                                    pdf("negotiable-instruments-act-2034.pdf")
+                            },
+
+                            {
+                                id: "3.7",
+                                title:
+                                    "Electronic Transaction Act, 2063",
+                                pdfUrl:
+                                    pdf("electronic-transaction-act-2063.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "4",
+
+                        title:
+                            "4. Organizational Behavior",
+
+                        subtopics: [
+
+                            {
+                                id: "4.1",
+                                title:
+                                    "Job Description, Terms of Reference and Responsibilities",
+                                pdfUrl:
+                                    pdf("job-description-responsibilities.pdf")
+                            },
+
+                            {
+                                id: "4.2",
+                                title:
+                                    "Job Motivation and Performance",
+                                pdfUrl:
+                                    pdf("job-motivation-performance.pdf")
+                            },
+
+                            {
+                                id: "4.3",
+                                title:
+                                    "Communication: Skill and Approach",
+                                pdfUrl:
+                                    pdf("communication-skills-approach.pdf")
+                            },
+
+                            {
+                                id: "4.4",
+                                title:
+                                    "Team Building and Workmanship",
+                                pdfUrl:
+                                    pdf("team-building-workmanship.pdf")
+                            },
+
+                            {
+                                id: "4.5",
+                                title:
+                                    "Customer Satisfaction and Delivery",
+                                pdfUrl:
+                                    pdf("customer-satisfaction-delivery.pdf")
+                            },
+
+                            {
+                                id: "4.6",
+                                title:
+                                    "Grievance Handling",
+                                pdfUrl:
+                                    pdf("grievance-handling.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "5",
+
+                        title:
+                            "5. Other Related Laws",
+
+                        subtopics: [
+
+                            {
+                                id: "5.1",
+                                title:
+                                    "Companies Act, 2063",
+                                pdfUrl:
+                                    pdf("companies-act-2063.pdf")
+                            },
+
+                            {
+                                id: "5.2",
+                                title:
+                                    "Labour Act, 2074",
+                                pdfUrl:
+                                    pdf("labour-act-2074.pdf")
+                            },
+
+                            {
+                                id: "5.3",
+                                title:
+                                    "Public Procurement Act, 2063",
+                                pdfUrl:
+                                    pdf("public-procurement-act-2063.pdf")
+                            },
+
+                            {
+                                id: "5.4",
+                                title:
+                                    "Right to Information Act, 2064",
+                                pdfUrl:
+                                    pdf("right-to-information-act-2064.pdf")
+                            },
+
+                            {
+                                id: "5.5",
+                                title:
+                                    "RBB Employee Service Regulation, 2070",
+                                pdfUrl:
+                                    pdf("rbb-employee-service-regulation-2070.pdf")
+                            },
+
+                            {
+                                id: "5.6",
+                                title:
+                                    "NRB Unified Directives and Circulars",
+                                pdfUrl:
+                                    pdf("nrb-unified-directives-circulars.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "6",
+
+                        title:
+                            "6. Digital / Electronic Payment Systems",
+
+                        subtopics: [
+
+                            {
+                                id: "6.1",
+                                title:
+                                    "Electronic Cheque Clearing",
+                                pdfUrl:
+                                    pdf("electronic-cheque-clearing.pdf")
+                            },
+
+                            {
+                                id: "6.2",
+                                title:
+                                    "IPS, ConnectIPS, RTGS and SWIFT",
+                                pdfUrl:
+                                    pdf("ips-connectips-rtgs-swift.pdf")
+                            },
+
+                            {
+                                id: "6.3",
+                                title:
+                                    "Internet Banking, Mobile Banking, QR Code and NFC",
+                                pdfUrl:
+                                    pdf("internet-mobile-banking-qr-nfc.pdf")
+                            },
+
+                            {
+                                id: "6.4",
+                                title:
+                                    "Digital Payment Cards",
+                                pdfUrl:
+                                    pdf("digital-payment-cards.pdf")
+                            },
+
+                            {
+                                id: "6.5",
+                                title:
+                                    "Payment through Wallets",
+                                pdfUrl:
+                                    pdf("payment-wallets.pdf")
+                            },
+
+                            {
+                                id: "6.6",
+                                title:
+                                    "Central Bank Digital Currency (CBDC)",
+                                pdfUrl:
+                                    pdf("central-bank-digital-currency.pdf")
+                            }
+
+                        ]
+
+                    }
+
+                ]
+
+            },
+
+
+            {
+
+                section_id: "paper2a",
+
+                section_title:
+                    "PAPER II — Information Technology & Management",
+
+                section_marks:
+                    "Section A — 50 Marks",
+
+                topics: [
+
+                    {
+
+                        id: "1",
+
+                        title:
+                            "1. Introduction of Computer",
+
+                        subtopics: [
+
+                            {
+                                id: "1.1",
+                                title:
+                                    "Types of Computers: Analog, Digital, Hybrid, Mainframe and Super Computer",
+                                pdfUrl:
+                                    pdf("types-of-computers.pdf")
+                            },
+
+                            {
+                                id: "1.2",
+                                title:
+                                    "Internet, Email System and Web Design",
+                                pdfUrl:
+                                    pdf("internet-email-web-design.pdf")
+                            },
+
+                            {
+                                id: "1.3",
+                                title:
+                                    "Physical Security of IT Infrastructure",
+                                pdfUrl:
+                                    pdf("physical-security-it-infrastructure.pdf")
+                            },
+
+                            {
+                                id: "1.4",
+                                title:
+                                    "Artificial Intelligence, Machine Learning and Blockchain",
+                                pdfUrl:
+                                    pdf("ai-machine-learning-blockchain.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "2",
+
+                        title:
+                            "2. Computer Architecture",
+
+                        subtopics: [
+
+                            {
+                                id: "2.1",
+                                title:
+                                    "Basic Computer Architecture, Registers and Memory Management",
+                                pdfUrl:
+                                    pdf("basic-computer-architecture.pdf")
+                            },
+
+                            {
+                                id: "2.2",
+                                title:
+                                    "Organization of Hard Disk",
+                                pdfUrl:
+                                    pdf("hard-disk-organization.pdf")
+                            },
+
+                            {
+                                id: "2.3",
+                                title:
+                                    "CPU Architecture",
+                                pdfUrl:
+                                    pdf("cpu-architecture.pdf")
+                            },
+
+                            {
+                                id: "2.4",
+                                title:
+                                    "I/O Management, I/O Interface, I/O Requests Handling and I/O Devices",
+                                pdfUrl:
+                                    pdf("io-management-interface-devices.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "3",
+
+                        title:
+                            "3. Communication and Computer Network Technologies",
+
+                        subtopics: [
+
+                            {
+                                id: "3.1",
+                                title:
+                                    "Networking Devices: Repeater, Hub, Switch and Router",
+                                pdfUrl:
+                                    pdf("networking-devices.pdf")
+                            },
+
+                            {
+                                id: "3.2",
+                                title:
+                                    "Switching Technologies, Modems and Remote Network Access",
+                                pdfUrl:
+                                    pdf("switching-technologies-modems.pdf")
+                            },
+
+                            {
+                                id: "3.3",
+                                title:
+                                    "Error Detection and Correction Techniques",
+                                pdfUrl:
+                                    pdf("error-detection-correction.pdf")
+                            },
+
+                            {
+                                id: "3.4",
+                                title:
+                                    "Internet Services, Internet Protocol and Addressing",
+                                pdfUrl:
+                                    pdf("internet-services-protocol-addressing.pdf")
+                            },
+
+                            {
+                                id: "3.5",
+                                title:
+                                    "Network Security and Cryptography",
+                                pdfUrl:
+                                    pdf("network-security-cryptography.pdf")
+                            }
+
+                        ]
+
+                    }
+
+                ]
+
+            },
+
+
+            {
+
+                section_id: "paper2b",
+
+                section_title:
+                    "PAPER II — Information Technology & Management",
+
+                section_marks:
+                    "Section B — 50 Marks",
+
+                topics: [
+
+                    {
+
+                        id: "4",
+
+                        title:
+                            "4. Operating System and Information Systems",
+
+                        subtopics: [
+
+                            {
+                                id: "4.1",
+                                title:
+                                    "Basic Knowledge of Operating System",
+                                pdfUrl:
+                                    pdf("operating-system-basics.pdf")
+                            },
+
+                            {
+                                id: "4.2",
+                                title:
+                                    "Process Management and Scheduling",
+                                pdfUrl:
+                                    pdf("process-management-scheduling.pdf")
+                            },
+
+                            {
+                                id: "4.3",
+                                title:
+                                    "DOS, UNIX and Windows Operating Systems",
+                                pdfUrl:
+                                    pdf("dos-unix-windows-operating-systems.pdf")
+                            },
+
+                            {
+                                id: "4.4",
+                                title:
+                                    "Identifying and Managing Security Threats in OS",
+                                pdfUrl:
+                                    pdf("operating-system-security-threats.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "5",
+
+                        title:
+                            "5. Database Management System, Data Mining/Warehousing and Web Technology",
+
+                        subtopics: [
+
+                            {
+                                id: "5.1",
+                                title:
+                                    "Basic Knowledge of Database Management System",
+                                pdfUrl:
+                                    pdf("database-management-system.pdf")
+                            },
+
+                            {
+                                id: "5.2",
+                                title:
+                                    "Table, Record, Relationship and Indexing",
+                                pdfUrl:
+                                    pdf("database-table-record-relationship-indexing.pdf")
+                            },
+
+                            {
+                                id: "5.3",
+                                title:
+                                    "Data Warehousing and Data Warehousing Process",
+                                pdfUrl:
+                                    pdf("data-warehousing-process.pdf")
+                            },
+
+                            {
+                                id: "5.4",
+                                title:
+                                    "HTML, Script, Stylesheet, XML, Web Server and Proxy Server",
+                                pdfUrl:
+                                    pdf("web-technology-html-xml-server.pdf")
+                            },
+
+                            {
+                                id: "5.5",
+                                title:
+                                    "Disaster Recovery Planning",
+                                pdfUrl:
+                                    pdf("disaster-recovery-planning.pdf")
+                            }
+
+                        ]
+
+                    },
+
+
+                    {
+
+                        id: "6",
+
+                        title:
+                            "6. Cybersecurity and IT Policies",
+
+                        subtopics: [
+
+                            {
+                                id: "6.1",
+                                title:
+                                    "Cyber Security, Access Control, Threats, Vulnerabilities, Authentication, Authorization and Password Management",
+                                pdfUrl:
+                                    pdf("cybersecurity-access-control.pdf")
+                            },
+
+                            {
+                                id: "6.2",
+                                title:
+                                    "Social Engineering, Malware, DoS, DDoS and Phishing",
+                                pdfUrl:
+                                    pdf("common-security-threats.pdf")
+                            },
+
+                            {
+                                id: "6.3",
+                                title:
+                                    "ICT Policy of Nepal, 2072",
+                                pdfUrl:
+                                    pdf("ict-policy-nepal-2072.pdf")
+                            },
+
+                            {
+                                id: "6.4",
+                                title:
+                                    "IT Guidelines Issued by Nepal Rastra Bank",
+                                pdfUrl:
+                                    pdf("nrb-it-guidelines.pdf")
+                            },
+
+                            {
+                                id: "6.5",
+                                title:
+                                    "Cyber Resilience Guidelines, 2023",
+                                pdfUrl:
+                                    pdf("cyber-resilience-guidelines-2023.pdf")
+                            }
+
+                        ]
+
+                    }
+
+                ]
+
+            }
+
+        ];
+
+
+        /* =====================================================
+           RENDER SYLLABUS
+        ===================================================== */
+
+        function renderSyllabus() {
+
+            const container =
+                document.getElementById(
+                    "syllabusTree"
+                );
+
+            container.innerHTML = "";
+
+            let totalSubtopics = 0;
+
+
+            window.rbbSyllabus.forEach(section => {
+
+
+                const banner =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                banner.className =
+                    "section-banner";
+
+
+                banner.innerHTML = `
+
+                    <h3>
+                        ${section.section_title}
+                    </h3>
+
+                    <p>
+                        ${section.section_marks}
+                    </p>
+
+                `;
+
+
+                container.appendChild(
+                    banner
+                );
+
+
+                section.topics.forEach(topic => {
+
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    item.className =
+                        "accordion-item";
+
+
+                    let subHtml = "";
+
+
+                    topic.subtopics.forEach(sub => {
+
+
+                        totalSubtopics++;
+
+
+                        const safeId =
+                            sub.id.replace(
+                                /[^a-zA-Z0-9]/g,
+                                "_"
+                            );
+
+
+                        subHtml += `
+
+                            <div class="topic-row">
+
+                                <input
+                                    type="checkbox"
+                                    id="chk_${safeId}"
+                                    onchange="updateProgress()"
+                                >
+
+                                <span class="topic-text">
+
+                                    <span class="topic-code">
+                                        ${sub.id}
+                                    </span>
+
+                                    ${sub.title}
+
+                                </span>
+
+
+                                <div class="action-btns">
+
+                                    <button
+                                        class="view-btn"
+                                        onclick="openPdf(
+                                            ${JSON.stringify(sub.title)},
+                                            ${JSON.stringify(sub.pdfUrl)}
+                                        )"
+                                    >
+                                        📖 View Note
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    });
+
+
+                    item.innerHTML = `
+
+                        <div
+                            class="accordion-header"
+                            onclick="toggleAccordion(this)"
+                        >
+
+                            <span class="accordion-title">
+                                ${topic.title}
+                            </span>
+
+                            <span>
+                                ▼
+                            </span>
+
+                        </div>
+
+
+                        <div class="accordion-content">
+
+                            ${subHtml}
+
+                        </div>
+
+                    `;
+
+
+                    container.appendChild(
+                        item
+                    );
+
+                });
+
+            });
+
+
+            window.totalTopicsCount =
+                totalSubtopics;
+
+
+            updateProgress();
+
+        }
+
+
+        /* =====================================================
+           ACCORDION
+        ===================================================== */
+
+        function toggleAccordion(header) {
+
+            const content =
+                header.nextElementSibling;
+
+
+            content.classList.toggle(
+                "open"
+            );
+
+
+            if (
+                content.classList.contains(
+                    "open"
+                )
+            ) {
+
+                content.style.maxHeight =
+                    content.scrollHeight +
+                    "px";
+
+            } else {
+
+                content.style.maxHeight =
+                    "0px";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PDF VIEWER
+        ===================================================== */
+
+        function openPdf(title, url) {
+
+            const viewer =
+                document.getElementById(
+                    "viewerContent"
+                );
+
+
+            const panelTitle =
+                document.getElementById(
+                    "panelTitle"
+                );
+
+
+            const sidebar =
+                document.getElementById(
+                    "pdfViewerSidebar"
+                );
+
+
+            panelTitle.innerText =
+                "📖 PDF Notes Reader";
+
+
+            if (
+                window.innerWidth <= 992
+            ) {
+
+                sidebar.classList.add(
+                    "active-mobile"
+                );
+
+
+                document.getElementById(
+                    "closeMobileBtn"
+                ).style.display =
+                    "inline-block";
+
+            }
+
+
+            viewer.innerHTML = `
+
+                <div class="pdf-container">
+
+                    <div class="pdf-toolbar">
+
+                        <h3
+                            title="${title}"
+                        >
+                            📚 ${title}
+                        </h3>
+
+
+                        <a
+                            href="${url}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="open-pdf-btn"
+                        >
+                            Open Full ↗
+                        </a>
+
+                    </div>
+
+
+                    <iframe
+                        class="pdf-frame"
+                        src="${url}#toolbar=1&navpanes=0"
+                        title="${title}"
+                    >
+
+                        <p>
+
+                            PDF viewer supported छैन।
+
+                            <a
+                                href="${url}"
+                                target="_blank"
+                            >
+                                Open PDF
+                            </a>
+
+                        </p>
+
+                    </iframe>
+
                 </div>
 
             `;
 
-            container.appendChild(item);
-
-        });
-
-    });
-
-
-    window.totalTopicsCount = totalSubtopics;
-
-    updateProgress();
-
-}
-
-
-/* =====================================================
-   ACCORDION
-===================================================== */
-
-function toggleAccordion(header) {
-
-    const content = header.nextElementSibling;
-
-    content.classList.toggle("open");
-
-    if (content.classList.contains("open")) {
-
-        content.style.maxHeight =
-            content.scrollHeight + "px";
-
-    } else {
-
-        content.style.maxHeight = "0px";
-
-    }
-
-}
-
-
-/* =====================================================
-   PDF VIEWER
-===================================================== */
-
-function openPdf(title, url) {
-
-    const viewer =
-        document.getElementById("viewerContent");
-
-    const panelTitle =
-        document.getElementById("panelTitle");
-
-    const sidebar =
-        document.getElementById("pdfViewerSidebar");
-
-
-    panelTitle.innerText = "📖 PDF Notes Reader";
-
-
-    if (window.innerWidth <= 992) {
-
-        sidebar.classList.add("active-mobile");
-
-        document.getElementById(
-            "closeMobileBtn"
-        ).style.display = "inline-block";
-
-    }
-
-
-    viewer.innerHTML = `
-
-        <div class="pdf-container">
-
-            <div class="pdf-toolbar">
-
-                <h3 title="${title}">
-                    📚 ${title}
-                </h3>
-
-                <a
-                    href="${url}"
-                    target="_blank"
-                    class="open-pdf-btn"
-                >
-                    Open Full ↗
-                </a>
-
-            </div>
-
-
-            <iframe
-                class="pdf-frame"
-                src="${url}#toolbar=1&navpanes=0&scrollbar=1"
-                type="application/pdf"
-                loading="lazy"
-            >
-
-                <p>
-                    Browser ले PDF support नगरेमा
-                    <a href="${url}" target="_blank">
-                        PDF Open गर्नुहोस्
-                    </a>
-                </p>
-
-            </iframe>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   PROGRESS TRACKER
-===================================================== */
-
-function updateProgress() {
-
-    const checkboxes =
-        document.querySelectorAll(
-            ".topic-row input[type='checkbox']"
-        );
-
-    let checkedCount = 0;
-
-    checkboxes.forEach(chk => {
-
-        if (chk.checked) {
-            checkedCount++;
         }
 
-    });
+
+        /* =====================================================
+           MAXIMIZE
+        ===================================================== */
+
+        function toggleViewerMaximize() {
+
+            const sidebar =
+                document.getElementById(
+                    "pdfViewerSidebar"
+                );
 
 
-    const total =
-        window.totalTopicsCount || 1;
+            const btn =
+                document.getElementById(
+                    "toggleMaximizeBtn"
+                );
 
 
-    const percentage =
-        Math.round(
-            (checkedCount / total) * 100
-        );
+            sidebar.classList.toggle(
+                "maximized"
+            );
 
 
-    document.getElementById(
-        "progPct"
-    ).innerText =
-        `${percentage}% Completed`;
+            btn.innerText =
+                sidebar.classList.contains(
+                    "maximized"
+                )
+                    ? "Restore 🗗"
+                    : "Maximize 🗖";
+
+        }
 
 
-    document.getElementById(
-        "progBar"
-    ).style.width =
-        `${percentage}%`;
+        /* =====================================================
+           MOBILE CLOSE
+        ===================================================== */
+
+        function closeMobileViewer() {
+
+            document
+                .getElementById(
+                    "pdfViewerSidebar"
+                )
+                .classList.remove(
+                    "active-mobile"
+                );
+
+        }
 
 
-    document.getElementById(
-        "trackerSummary"
-    ).innerText =
-        `${checkedCount} of ${total} subtopics completed.`;
+        /* =====================================================
+           PROGRESS
+        ===================================================== */
 
-}
+        function updateProgress() {
 
-
-/* =====================================================
-   MAXIMIZE VIEWER
-===================================================== */
-
-function toggleViewerMaximize() {
-
-    const sidebar =
-        document.getElementById(
-            "pdfViewerSidebar"
-        );
-
-    const btn =
-        document.getElementById(
-            "toggleMaximizeBtn"
-        );
+            const checkboxes =
+                document.querySelectorAll(
+                    ".topic-row input[type='checkbox']"
+                );
 
 
-    sidebar.classList.toggle("maximized");
+            let checkedCount = 0;
 
 
-    btn.innerText =
-        sidebar.classList.contains("maximized")
-            ? "Restore 🗗"
-            : "Maximize 🗖";
+            checkboxes.forEach(
+                checkbox => {
 
-}
+                    if (
+                        checkbox.checked
+                    ) {
 
+                        checkedCount++;
 
-/* =====================================================
-   MOBILE CLOSE
-===================================================== */
+                    }
 
-function closeMobileViewer() {
-
-    document
-        .getElementById(
-            "pdfViewerSidebar"
-        )
-        .classList.remove(
-            "active-mobile"
-        );
-
-}
+                }
+            );
 
 
-/* =====================================================
-   THEME
-===================================================== */
-
-function toggleTheme() {
-
-    const html =
-        document.documentElement;
+            const total =
+                window.totalTopicsCount ||
+                1;
 
 
-    const currentTheme =
-        html.getAttribute(
-            "data-theme"
-        );
+            const percentage =
+                Math.round(
+                    (
+                        checkedCount /
+                        total
+                    ) * 100
+                );
 
 
-    const newTheme =
-        currentTheme === "dark"
-            ? "light"
-            : "dark";
+            document.getElementById(
+                "progPct"
+            ).innerText =
+                `${percentage}% Completed`;
 
 
-    html.setAttribute(
-        "data-theme",
-        newTheme
-    );
+            document.getElementById(
+                "progBar"
+            ).style.width =
+                `${percentage}%`;
 
 
-    document.getElementById(
-        "themeIcon"
-    ).innerText =
-        newTheme === "dark"
-            ? "🌙"
-            : "☀️";
+            document.getElementById(
+                "trackerSummary"
+            ).innerText =
+                `${checkedCount} of ${total} subtopics completed.`;
+
+        }
 
 
-    document.getElementById(
-        "themeText"
-    ).innerText =
-        newTheme === "dark"
-            ? "Dark"
-            : "Light";
+        /* =====================================================
+           THEME
+        ===================================================== */
 
-}
+        function toggleTheme() {
 
-
-/* =====================================================
-   TIMER
-===================================================== */
-
-let timerInterval = null;
-
-let totalSeconds =
-    3 * 60 * 60;
+            const html =
+                document.documentElement;
 
 
-function updateTimerDisplay() {
-
-    const h =
-        String(
-            Math.floor(
-                totalSeconds / 3600
-            )
-        ).padStart(2, "0");
+            const currentTheme =
+                html.getAttribute(
+                    "data-theme"
+                );
 
 
-    const m =
-        String(
-            Math.floor(
-                (totalSeconds % 3600) / 60
-            )
-        ).padStart(2, "0");
+            const newTheme =
+                currentTheme === "dark"
+                    ? "light"
+                    : "dark";
 
 
-    const s =
-        String(
-            totalSeconds % 60
-        ).padStart(2, "0");
+            html.setAttribute(
+                "data-theme",
+                newTheme
+            );
 
 
-    document.getElementById(
-        "timerBox"
-    ).innerText =
-        `${h}:${m}:${s}`;
-
-}
-
-
-function startTimer() {
-
-    if (timerInterval) return;
+            document.getElementById(
+                "themeIcon"
+            ).innerText =
+                newTheme === "dark"
+                    ? "🌙"
+                    : "☀️";
 
 
-    timerInterval =
-        setInterval(() => {
+            document.getElementById(
+                "themeText"
+            ).innerText =
+                newTheme === "dark"
+                    ? "Dark"
+                    : "Light";
 
-            if (totalSeconds > 0) {
+        }
 
-                totalSeconds--;
+
+        /* =====================================================
+           TIMER
+        ===================================================== */
+
+        let timerInterval = null;
+
+        let totalSeconds =
+            3 * 60 * 60;
+
+
+        function updateTimerDisplay() {
+
+            const hours =
+                String(
+                    Math.floor(
+                        totalSeconds / 3600
+                    )
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            const minutes =
+                String(
+                    Math.floor(
+                        (
+                            totalSeconds %
+                            3600
+                        ) / 60
+                    )
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            const seconds =
+                String(
+                    totalSeconds %
+                    60
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            document.getElementById(
+                "timerBox"
+            ).innerText =
+                `${hours}:${minutes}:${seconds}`;
+
+        }
+
+
+        function startTimer() {
+
+            if (
+                timerInterval
+            ) return;
+
+
+            timerInterval =
+                setInterval(
+                    () => {
+
+
+                        if (
+                            totalSeconds >
+                            0
+                        ) {
+
+                            totalSeconds--;
+
+                            updateTimerDisplay();
+
+                        } else {
+
+                            pauseTimer();
+
+                            alert(
+                                "Time's up!"
+                            );
+
+                        }
+
+                    },
+                    1000
+                );
+
+        }
+
+
+        function pauseTimer() {
+
+            clearInterval(
+                timerInterval
+            );
+
+
+            timerInterval =
+                null;
+
+        }
+
+
+        function applyCustomTime() {
+
+            pauseTimer();
+
+
+            const hours =
+                parseInt(
+                    document.getElementById(
+                        "hrIn"
+                    ).value
+                ) || 0;
+
+
+            const minutes =
+                parseInt(
+                    document.getElementById(
+                        "minIn"
+                    ).value
+                ) || 0;
+
+
+            totalSeconds =
+                (
+                    hours *
+                    3600
+                )
+                +
+                (
+                    minutes *
+                    60
+                );
+
+
+            updateTimerDisplay();
+
+        }
+
+
+        /* =====================================================
+           INITIALIZE
+        ===================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                renderSyllabus();
 
                 updateTimerDisplay();
 
-            } else {
-
-                pauseTimer();
-
-                alert(
-                    "Time's up!"
-                );
-
             }
+        );
 
-        }, 1000);
+    </script>
 
-}
+</body>
 
-
-function pauseTimer() {
-
-    clearInterval(
-        timerInterval
-    );
-
-    timerInterval =
-        null;
-
-}
-
-
-function applyCustomTime() {
-
-    pauseTimer();
-
-
-    const h =
-        parseInt(
-            document.getElementById(
-                "hrIn"
-            ).value
-        ) || 0;
-
-
-    const m =
-        parseInt(
-            document.getElementById(
-                "minIn"
-            ).value
-        ) || 0;
-
-
-    totalSeconds =
-        (h * 3600)
-        +
-        (m * 60);
-
-
-    updateTimerDisplay();
-
-}
-
-
-/* =====================================================
-   INITIALIZE
-===================================================== */
-
-window.onload = () => {
-
-    renderSyllabus();
-
-    updateTimerDisplay();
-
-};
-</script>
+</html>
