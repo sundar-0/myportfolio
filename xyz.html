@@ -7,6 +7,7 @@
 <title>RBB Level 5 Complete Study Hub</title>
 
 <style>
+
 :root{
     --bg:#070b16;
     --card:#10182b;
@@ -54,6 +55,7 @@ body::after{
     border-radius:50%;
     filter:blur(100px);
     opacity:.18;
+    pointer-events:none;
 }
 
 body::before{
@@ -68,13 +70,19 @@ body::after{
     bottom:-150px;
 }
 
+/* ============================================================
+   APP
+============================================================ */
+
 .app{
     min-height:100vh;
     display:grid;
     grid-template-columns:280px minmax(0,1fr) 430px;
 }
 
-/* ================= HEADER ================= */
+/* ============================================================
+   HEADER
+============================================================ */
 
 .header{
     grid-column:1/-1;
@@ -105,8 +113,13 @@ body::after{
     display:grid;
     place-items:center;
     font-size:22px;
-    background:linear-gradient(135deg,var(--cyan),var(--purple));
-    box-shadow:0 0 30px rgba(34,211,238,.35);
+    background:linear-gradient(
+        135deg,
+        var(--cyan),
+        var(--purple)
+    );
+    box-shadow:
+        0 0 30px rgba(34,211,238,.35);
 }
 
 .brand h1{
@@ -146,7 +159,12 @@ body::after{
 .btn-primary{
     color:white;
     border:0;
-    background:linear-gradient(135deg,var(--cyan),var(--purple));
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--purple)
+        );
 }
 
 .btn-green{
@@ -171,7 +189,9 @@ body::after{
     font-family:monospace;
 }
 
-/* ================= SIDEBAR ================= */
+/* ============================================================
+   SIDEBAR
+============================================================ */
 
 .sidebar{
     min-height:calc(100vh - 74px);
@@ -188,7 +208,12 @@ body::after{
     padding:16px;
     margin-bottom:14px;
     border-radius:17px;
-    background:linear-gradient(145deg,var(--card2),var(--card));
+    background:
+        linear-gradient(
+            145deg,
+            var(--card2),
+            var(--card)
+        );
     border:1px solid var(--border);
 }
 
@@ -220,7 +245,9 @@ body::after{
     color:var(--muted);
 }
 
-/* ================= MAIN ================= */
+/* ============================================================
+   MAIN
+============================================================ */
 
 .main{
     padding:24px;
@@ -321,16 +348,19 @@ body::after{
     width:0;
     height:100%;
     border-radius:20px;
-    background:linear-gradient(
-        90deg,
-        var(--cyan),
-        var(--purple),
-        var(--pink)
-    );
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan),
+            var(--purple),
+            var(--pink)
+        );
     transition:.5s;
 }
 
-/* ================= SECTION ================= */
+/* ============================================================
+   SECTION
+============================================================ */
 
 .section-title{
     display:flex;
@@ -350,7 +380,9 @@ body::after{
     font-size:11px;
 }
 
-/* ================= UNIT ================= */
+/* ============================================================
+   UNIT
+============================================================ */
 
 .unit{
     margin-bottom:13px;
@@ -382,6 +414,7 @@ body::after{
     font-size:13px;
     font-weight:900;
     background:rgba(34,211,238,.12);
+    flex-shrink:0;
 }
 
 .unit-title{
@@ -466,7 +499,9 @@ body::after{
     color:var(--purple);
 }
 
-/* ================= VIEWER ================= */
+/* ============================================================
+   PDF VIEWER
+============================================================ */
 
 .viewer{
     min-height:calc(100vh - 74px);
@@ -475,32 +510,66 @@ body::after{
     top:74px;
     display:flex;
     flex-direction:column;
-    background:var(--card);
+    background:#0b1020;
     border-left:1px solid var(--border);
+    overflow:hidden;
+    transition:
+        width .35s ease,
+        height .35s ease,
+        inset .35s ease,
+        border-radius .35s ease,
+        box-shadow .35s ease;
 }
 
 .viewer-header{
-    padding:15px;
+    min-height:64px;
+    padding:12px 15px;
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:10px;
+    background:rgba(10,15,29,.96);
     border-bottom:1px solid var(--border);
+    flex-shrink:0;
 }
 
 .viewer-title{
+    min-width:0;
     color:var(--cyan);
     font-size:12px;
     font-weight:900;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.viewer-controls{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+}
+
+.viewer-controls .btn{
+    min-width:38px;
+    height:36px;
+    padding:7px 10px;
 }
 
 .viewer-body{
     flex:1;
-    overflow:auto;
-    padding:16px;
+    min-height:0;
+    overflow:hidden;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
 }
 
 .empty{
-    padding:70px 20px;
+    flex:1;
+    display:grid;
+    place-items:center;
+    padding:40px 20px;
     text-align:center;
     color:var(--muted);
 }
@@ -519,21 +588,27 @@ body::after{
 }
 
 .pdf-wrapper{
+    width:100%;
     height:100%;
+    min-height:0;
     display:flex;
     flex-direction:column;
     gap:10px;
 }
 
 .pdf-toolbar{
+    min-height:42px;
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
     gap:10px;
+    flex-shrink:0;
 }
 
 .pdf-toolbar h3{
     margin:0;
+    flex:1;
+    min-width:0;
     font-size:12px;
     overflow:hidden;
     white-space:nowrap;
@@ -541,17 +616,22 @@ body::after{
 }
 
 .pdf-frame{
-    flex:1;
+    display:block;
     width:100%;
-    min-height:500px;
+    height:100%;
+    min-height:0;
+    flex:1;
     border:1px solid var(--border);
     border-radius:12px;
-    background:white;
+    background:#fff;
 }
 
 .not-found{
+    flex:1;
+    display:grid;
+    place-items:center;
     text-align:center;
-    padding:70px 20px;
+    padding:50px 20px;
 }
 
 .not-found h2{
@@ -564,17 +644,36 @@ body::after{
     line-height:1.7;
 }
 
-/* ================= QUIZ ================= */
+/* ============================================================
+   MAXIMIZED VIEWER
+============================================================ */
+
+.viewer.maximized{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100dvh;
+    min-height:100dvh;
+    z-index:9999;
+    border:0;
+    border-radius:0;
+    box-shadow:0 0 80px rgba(0,0,0,.8);
+}
+
+/* ============================================================
+   QUIZ
+============================================================ */
 
 .quiz-head{
     padding:16px;
     border-radius:15px;
     border:1px solid var(--border);
-    background:linear-gradient(
-        135deg,
-        rgba(167,139,250,.15),
-        rgba(244,114,182,.1)
-    );
+    background:
+        linear-gradient(
+            135deg,
+            rgba(167,139,250,.15),
+            rgba(244,114,182,.1)
+        );
     margin-bottom:14px;
 }
 
@@ -645,7 +744,9 @@ body::after{
     font-size:26px;
 }
 
-/* ================= LOADER ================= */
+/* ============================================================
+   LOADER
+============================================================ */
 
 .loader{
     display:grid;
@@ -666,12 +767,16 @@ body::after{
 }
 
 @keyframes spin{
+
     to{
         transform:rotate(360deg);
     }
+
 }
 
-/* ================= RESPONSIVE ================= */
+/* ============================================================
+   RESPONSIVE
+============================================================ */
 
 @media(max-width:1250px){
 
@@ -683,8 +788,11 @@ body::after{
         display:none;
         position:fixed;
         inset:0;
-        height:100vh;
-        z-index:100;
+        width:100vw;
+        height:100dvh;
+        min-height:100dvh;
+        z-index:1000;
+        border:0;
     }
 
     .viewer.show{
@@ -694,6 +802,7 @@ body::after{
     .stats{
         grid-template-columns:repeat(3,1fr);
     }
+
 }
 
 @media(max-width:760px){
@@ -724,6 +833,10 @@ body::after{
         padding:14px;
     }
 
+    .hero{
+        padding:20px;
+    }
+
     .hero h2{
         font-size:22px;
     }
@@ -743,7 +856,41 @@ body::after{
     .unit-count{
         display:none;
     }
+
+    .viewer-header{
+        min-height:58px;
+        padding:10px;
+    }
+
+    .viewer-body{
+        padding:8px;
+    }
+
+    .viewer-title{
+        font-size:10px;
+    }
+
+    .viewer-controls .btn{
+        min-width:34px;
+        height:34px;
+        padding:6px 8px;
+        font-size:12px;
+    }
+
+    .pdf-toolbar{
+        gap:6px;
+    }
+
+    .pdf-toolbar h3{
+        font-size:10px;
+    }
+
+    .pdf-frame{
+        border-radius:8px;
+    }
+
 }
+
 </style>
 </head>
 
@@ -751,322 +898,458 @@ body::after{
 
 <div class="app">
 
-<!-- ================= HEADER ================= -->
+<!-- ============================================================
+     HEADER
+============================================================ -->
 
 <header class="header">
 
-<div class="brand">
+    <div class="brand">
 
-<div class="logo">🏦</div>
+        <div class="logo">
+            🏦
+        </div>
 
-<div>
-<h1>RBB LEVEL 5 — SENIOR ASSISTANT</h1>
-<p>Complete Paper I + Paper II Smart Study Hub</p>
-</div>
+        <div>
 
-</div>
+            <h1>
+                RBB LEVEL 5 — SENIOR ASSISTANT
+            </h1>
 
-<div class="header-actions">
+            <p>
+                Complete Paper I + Paper II Smart Study Hub
+            </p>
 
-<div class="timer" id="timer">
-03:00:00
-</div>
+        </div>
 
-<button class="btn btn-green" onclick="startTimer()">
-▶ Start
-</button>
+    </div>
 
-<button class="btn btn-orange" onclick="pauseTimer()">
-⏸ Pause
-</button>
 
-<button class="btn" onclick="resetTimer()">
-↺ Reset
-</button>
+    <div class="header-actions">
 
-<button class="btn" onclick="toggleTheme()">
-◐ Theme
-</button>
+        <div
+            class="timer"
+            id="timer"
+        >
+            03:00:00
+        </div>
 
-</div>
+
+        <button
+            class="btn btn-green"
+            onclick="startTimer()"
+        >
+            ▶ Start
+        </button>
+
+
+        <button
+            class="btn btn-orange"
+            onclick="pauseTimer()"
+        >
+            ⏸ Pause
+        </button>
+
+
+        <button
+            class="btn"
+            onclick="resetTimer()"
+        >
+            ↺ Reset
+        </button>
+
+
+        <button
+            class="btn"
+            onclick="toggleTheme()"
+        >
+            ◐ Theme
+        </button>
+
+    </div>
 
 </header>
 
 
-<!-- ================= SIDEBAR ================= -->
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
 
 <aside class="sidebar">
 
-<div class="card">
+    <div class="card">
 
-<h3>🏦 राष्ट्रिय वाणिज्य बैंक लिमिटेड</h3>
+        <h3>
+            🏦 राष्ट्रिय वाणिज्य बैंक लिमिटेड
+        </h3>
 
-<p>
-तह ५ — वरिष्ठ सहायक
-(सूचना प्रविधि)
-</p>
+        <p>
+            तह ५ — वरिष्ठ सहायक
+            (सूचना प्रविधि)
+        </p>
 
-<p>
-Complete preparation dashboard for
-<b>Paper I + Paper II</b>
-</p>
+        <p>
+            Complete preparation dashboard for
+            <b>Paper I + Paper II</b>
+        </p>
 
-</div>
-
-
-<div class="card">
-
-<h3>📋 Examination Structure</h3>
-
-<p>
-<b>Paper I:</b>
-Banking and Organizational Management
-</p>
-
-<p>
-<b>Paper II:</b>
-Information Technology & Management
-</p>
-
-<p>
-Written Examination:
-<b>200 Marks</b>
-</p>
-
-<p>
-Interview:
-<b>30 Marks</b>
-</p>
-
-</div>
+    </div>
 
 
-<div class="card">
+    <div class="card">
 
-<h3>📊 Study Progress</h3>
+        <h3>
+            📋 Examination Structure
+        </h3>
 
-<div class="side-stat">
-<span>Total Topics</span>
-<strong id="sideTotal">0</strong>
-</div>
+        <p>
+            <b>Paper I:</b>
+            Banking and Organizational Management
+        </p>
 
-<div class="side-stat">
-<span>Completed</span>
-<strong id="sideDone">0</strong>
-</div>
+        <p>
+            <b>Paper II:</b>
+            Information Technology & Management
+        </p>
 
-<div class="side-stat">
-<span>Progress</span>
-<strong id="sidePercent">0%</strong>
-</div>
+        <p>
+            Written Examination:
+            <b>200 Marks</b>
+        </p>
 
-</div>
+        <p>
+            Interview:
+            <b>30 Marks</b>
+        </p>
 
-
-<div class="card">
-
-<h3>⚡ Quick Actions</h3>
-
-<button
-class="btn btn-primary"
-style="width:100%;margin-bottom:8px"
-onclick="expandAll()"
->
-Expand All
-</button>
-
-<button
-class="btn"
-style="width:100%;margin-bottom:8px"
-onclick="collapseAll()"
->
-Collapse All
-</button>
-
-<button
-class="btn btn-pink"
-style="width:100%"
-onclick="resetProgress()"
->
-Reset Progress
-</button>
-
-</div>
+    </div>
 
 
-<div class="card">
+    <div class="card">
 
-<h3>🤖 Gemini Quiz Integration</h3>
+        <h3>
+            📊 Study Progress
+        </h3>
 
-<p>
-No API key input system is used.
-</p>
+        <div class="side-stat">
 
-<p>
-Replace only:
-</p>
+            <span>
+                Total Topics
+            </span>
 
-<p>
-<b>dummyQuizFetch()</b>
-</p>
+            <strong
+                id="sideTotal"
+            >
+                0
+            </strong>
 
-<p>
-with your own Gemini API request.
-</p>
+        </div>
 
-</div>
+
+        <div class="side-stat">
+
+            <span>
+                Completed
+            </span>
+
+            <strong
+                id="sideDone"
+            >
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="side-stat">
+
+            <span>
+                Progress
+            </span>
+
+            <strong
+                id="sidePercent"
+            >
+                0%
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            ⚡ Quick Actions
+        </h3>
+
+
+        <button
+            class="btn btn-primary"
+            style="width:100%;margin-bottom:8px"
+            onclick="expandAll()"
+        >
+            Expand All
+        </button>
+
+
+        <button
+            class="btn"
+            style="width:100%;margin-bottom:8px"
+            onclick="collapseAll()"
+        >
+            Collapse All
+        </button>
+
+
+        <button
+            class="btn btn-pink"
+            style="width:100%"
+            onclick="resetProgress()"
+        >
+            Reset Progress
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>
+            🤖 Gemini Quiz Integration
+        </h3>
+
+        <p>
+            No API key input system is used.
+        </p>
+
+        <p>
+            Replace only:
+        </p>
+
+        <p>
+            <b>dummyQuizFetch()</b>
+        </p>
+
+        <p>
+            with your own Gemini API request.
+        </p>
+
+    </div>
 
 </aside>
 
 
-<!-- ================= MAIN ================= -->
+<!-- ============================================================
+     MAIN
+============================================================ -->
 
 <main class="main">
 
-<section class="hero">
+    <section class="hero">
 
-<div class="hero-label">
-COMPLETE OFFICIAL SYLLABUS DASHBOARD
-</div>
-
-<h2>
-Study smarter. Track everything.
-</h2>
-
-<p>
-Paper I र Paper II का सबै units तथा subtopics एउटै dashboard मा।
-प्रत्येक topic मा progress tracking, PDF note viewer र AI quiz system उपलब्ध छ।
-</p>
-
-</section>
+        <div class="hero-label">
+            COMPLETE OFFICIAL SYLLABUS DASHBOARD
+        </div>
 
 
-<section class="stats">
-
-<div class="stat">
-<strong>2</strong>
-<span>Papers</span>
-</div>
-
-<div class="stat">
-<strong>12</strong>
-<span>Units</span>
-</div>
-
-<div class="stat">
-<strong id="totalTopics">0</strong>
-<span>Subtopics</span>
-</div>
-
-<div class="stat">
-<strong id="completedTopics">0</strong>
-<span>Completed</span>
-</div>
-
-<div class="stat">
-<strong id="percentage">0%</strong>
-<span>Progress</span>
-</div>
-
-</section>
+        <h2>
+            Study smarter. Track everything.
+        </h2>
 
 
-<section class="progress-box">
+        <p>
+            Paper I र Paper II का सबै units तथा subtopics एउटै dashboard मा।
+            प्रत्येक topic मा progress tracking, PDF note viewer र AI quiz system उपलब्ध छ।
+        </p>
 
-<div class="progress-header">
-
-<h3>
-🚀 Overall Preparation Progress
-</h3>
-
-<span
-class="progress-label"
-id="progressLabel"
->
-0% COMPLETE
-</span>
-
-</div>
-
-<div class="progress">
-
-<div
-class="progress-bar"
-id="progressBar"
->
-</div>
-
-</div>
-
-</section>
+    </section>
 
 
-<div id="syllabusContainer"></div>
+    <section class="stats">
+
+        <div class="stat">
+
+            <strong>
+                2
+            </strong>
+
+            <span>
+                Papers
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <strong>
+                12
+            </strong>
+
+            <span>
+                Units
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <strong
+                id="totalTopics"
+            >
+                0
+            </strong>
+
+            <span>
+                Subtopics
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <strong
+                id="completedTopics"
+            >
+                0
+            </strong>
+
+            <span>
+                Completed
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <strong
+                id="percentage"
+            >
+                0%
+            </strong>
+
+            <span>
+                Progress
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <section class="progress-box">
+
+        <div class="progress-header">
+
+            <h3>
+                🚀 Overall Preparation Progress
+            </h3>
+
+
+            <span
+                class="progress-label"
+                id="progressLabel"
+            >
+                0% COMPLETE
+            </span>
+
+        </div>
+
+
+        <div class="progress">
+
+            <div
+                class="progress-bar"
+                id="progressBar"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <div
+        id="syllabusContainer"
+    ></div>
 
 </main>
 
 
-<!-- ================= VIEWER ================= -->
+<!-- ============================================================
+     INTERNAL PDF / QUIZ VIEWER
+============================================================ -->
 
 <aside
-class="viewer"
-id="viewer"
+    class="viewer"
+    id="viewer"
 >
 
-<div class="viewer-header">
+    <div class="viewer-header">
 
-<div
-class="viewer-title"
-id="viewerTitle"
->
-Interactive Study Engine
-</div>
-
-<div>
-
-<button
-class="btn"
-onclick="maximizeViewer()"
->
-⛶
-</button>
-
-<button
-class="btn"
-onclick="closeViewer()"
->
-✕
-</button>
-
-</div>
-
-</div>
+        <div
+            class="viewer-title"
+            id="viewerTitle"
+        >
+            Interactive Study Engine
+        </div>
 
 
-<div
-class="viewer-body"
-id="viewerBody"
->
+        <div class="viewer-controls">
 
-<div class="empty">
+            <button
+                class="btn"
+                id="maximizeBtn"
+                onclick="toggleMaximizeViewer()"
+                title="Maximize Viewer"
+            >
+                ⛶
+            </button>
 
-<div class="empty-icon">
-📚
-</div>
 
-<h3>
-Study Engine Ready
-</h3>
+            <button
+                class="btn"
+                onclick="closeViewer()"
+                title="Close Viewer"
+            >
+                ✕
+            </button>
 
-<p>
-Click <b>📖 Note</b> to open PDF notes
-or
-<b>✨ Quiz</b> to generate a topic quiz.
-</p>
+        </div>
 
-</div>
+    </div>
 
-</div>
+
+    <div
+        class="viewer-body"
+        id="viewerBody"
+    >
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📚
+            </div>
+
+
+            <h3>
+                Study Engine Ready
+            </h3>
+
+
+            <p>
+                Click <b>📖 Note</b> to open PDF notes
+                or
+                <b>✨ Quiz</b> to generate a topic quiz.
+            </p>
+
+        </div>
+
+    </div>
 
 </aside>
 
@@ -1081,343 +1364,437 @@ or
 
 const syllabus = [
 
-/* ================= PAPER I ================= */
+/* ============================================================
+   PAPER I
+============================================================ */
 
 {
 
-paper:"PAPER I",
+    paper:"PAPER I",
 
-title:"Banking and Organizational Management",
+    title:"Banking and Organizational Management",
 
-section:"SECTION A",
+    section:"SECTION A",
 
-marks:"50 Marks • Units 1–6",
+    marks:"50 Marks • Units 1–6",
 
-units:[
+    units:[
 
-{
+        {
 
-id:"1",
+            id:"1",
 
-title:"Financial Institutions in Nepal: Role, Contribution and Status",
+            title:
+            "Financial Institutions in Nepal: Role, Contribution and Status",
 
-subs:[
+            subs:[
 
-["1.1.1","Commercial Banks"],
+                ["1.1.1","Commercial Banks"],
 
-["1.1.2","Development Banks"],
+                ["1.1.2","Development Banks"],
 
-["1.1.3","Finance Companies"],
+                ["1.1.3","Finance Companies"],
 
-["1.1.4","Microfinance Institutions"],
+                ["1.1.4","Microfinance Institutions"],
 
-["1.1.5","Infrastructure Development Bank"],
+                ["1.1.5","Infrastructure Development Bank"],
 
-["1.2.1","Insurance Companies"],
+                ["1.2.1","Insurance Companies"],
 
-["1.2.2","Employee Provident Fund"],
+                ["1.2.2","Employee Provident Fund"],
 
-["1.2.3","Citizen Investment Trust"],
+                ["1.2.3","Citizen Investment Trust"],
 
-["1.2.4","Social Security Fund"]
+                ["1.2.4","Social Security Fund"]
 
-]
+            ]
 
-},
+        },
 
-{
 
-id:"2",
+        {
 
-title:"Some of the Key Basic Banking Terminology",
+            id:"2",
 
-subs:[
+            title:
+            "Some of the Key Basic Banking Terminology",
 
-["2.1","Capital Fund"],
+            subs:[
 
-["2.2","Loan Loss Provisioning"],
+                ["2.1","Capital Fund"],
 
-["2.3","Credit-Deposit (CD) Ratio"],
+                ["2.2","Loan Loss Provisioning"],
 
-["2.4","Cash Reserve Ratio (CRR)"],
+                ["2.3","Credit-Deposit (CD) Ratio"],
 
-["2.5","Refinancing, Rescheduling and Restructuring"],
+                ["2.4","Cash Reserve Ratio (CRR)"],
 
-["2.6","Base Rate"],
+                ["2.5","Refinancing, Rescheduling and Restructuring"],
 
-["2.7","Credit Information and Blacklisting"],
+                ["2.6","Base Rate"],
 
-["2.8","Credit Ratings"],
+                ["2.7","Credit Information and Blacklisting"],
 
-["2.9","Know Your Customer (KYC)"],
+                ["2.8","Credit Ratings"],
 
-["2.10","Audit and Internal Control"]
+                ["2.9","Know Your Customer (KYC)"],
 
-]
+                ["2.10","Audit and Internal Control"]
 
-},
+            ]
 
-{
+        },
 
-id:"3",
 
-title:"Banking Related Law",
+        {
 
-subs:[
+            id:"3",
 
-["3.1","Nepal Rastra Bank Act, 2058"],
+            title:"Banking Related Law",
 
-["3.2","Bank and Financial Institution Act, 2073"],
+            subs:[
 
-["3.3","Payment and Settlement Act, 2075"],
+                ["3.1","Nepal Rastra Bank Act, 2058"],
 
-["3.4","Money Laundering Prevention Act, 2064"],
+                ["3.2","Bank and Financial Institution Act, 2073"],
 
-["3.5","Banking Offence and Punishment Act, 2064"],
+                ["3.3","Payment and Settlement Act, 2075"],
 
-["3.6","Negotiable Instruments Act, 2034"],
+                ["3.4","Money Laundering Prevention Act, 2064"],
 
-["3.7","Electronic Transaction Act, 2063"]
+                ["3.5","Banking Offence and Punishment Act, 2064"],
 
-]
+                ["3.6","Negotiable Instruments Act, 2034"],
 
-},
+                ["3.7","Electronic Transaction Act, 2063"]
 
-{
+            ]
 
-id:"4",
+        },
 
-title:"Organizational Behavior",
 
-subs:[
+        {
 
-["4.1","Job Description, Terms of Reference and Responsibilities"],
+            id:"4",
 
-["4.2","Job Motivation and Performance"],
+            title:"Organizational Behavior",
 
-["4.3","Communication: Skill and Approach"],
+            subs:[
 
-["4.4","Team Building and Workmanship"],
+                ["4.1","Job Description, Terms of Reference and Responsibilities"],
 
-["4.5","Customer Satisfaction and Delivery"],
+                ["4.2","Job Motivation and Performance"],
 
-["4.6","Grievance Handling"]
+                ["4.3","Communication: Skill and Approach"],
 
-]
+                ["4.4","Team Building and Workmanship"],
 
-},
+                ["4.5","Customer Satisfaction and Delivery"],
 
-{
+                ["4.6","Grievance Handling"]
 
-id:"5",
+            ]
 
-title:"Other Related Laws",
+        },
 
-subs:[
 
-["5.1","Companies Act, 2063"],
+        {
 
-["5.2","Labour Act, 2074"],
+            id:"5",
 
-["5.3","Public Procurement Act, 2063"],
+            title:"Other Related Laws",
 
-["5.4","Right to Information Act, 2064"],
+            subs:[
 
-["5.5","Rastriya Banijya Bank Employee Service Bylaws, 2070"],
+                ["5.1","Companies Act, 2063"],
 
-["5.6","Unified Directives / Circulars issued by Nepal Rastra Bank for Commercial Banks"]
+                ["5.2","Labour Act, 2074"],
 
-]
+                ["5.3","Public Procurement Act, 2063"],
 
-},
+                ["5.4","Right to Information Act, 2064"],
 
-{
+                ["5.5","Rastriya Banijya Bank Employee Service Bylaws, 2070"],
 
-id:"6",
+                [
+                    "5.6",
+                    "Unified Directives / Circulars issued by Nepal Rastra Bank for Commercial Banks"
+                ]
 
-title:"Digital / Electronic Payment Systems",
+            ]
 
-subs:[
+        },
 
-["6.1","Electronic Cheque Clearing"],
 
-["6.2","IPS, ConnectIPS, RTGS and SWIFT"],
+        {
 
-["6.3","Internet Banking, Mobile Banking, QR Code and NFC"],
+            id:"6",
 
-["6.4","Digital Payment Cards"],
+            title:"Digital / Electronic Payment Systems",
 
-["6.5","Payment through Wallets"],
+            subs:[
 
-["6.6","Central Bank Digital Currency (CBDC)"]
+                ["6.1","Electronic Cheque Clearing"],
 
-]
+                ["6.2","IPS, ConnectIPS, RTGS and SWIFT"],
 
-}
+                ["6.3","Internet Banking, Mobile Banking, QR Code and NFC"],
 
-]
+                ["6.4","Digital Payment Cards"],
 
-},
+                ["6.5","Payment through Wallets"],
 
+                ["6.6","Central Bank Digital Currency (CBDC)"]
 
-/* ================= PAPER II SECTION A ================= */
+            ]
 
-{
+        }
 
-paper:"PAPER II",
-
-title:"Information Technology & Management",
-
-section:"SECTION A",
-
-marks:"50 Marks • Units 1–3",
-
-units:[
-
-{
-
-id:"1",
-
-title:"Introduction of Computer",
-
-subs:[
-
-["1.1","Types of Computers: Analog Computer, Digital Computer, Hybrid Computer, Mainframe and Super Computer and their comparison in terms of speed, storage capacity and memory"],
-
-["1.2","Basic Knowledge of Internet, Email System and Web Design"],
-
-["1.3","Basic Knowledge of Physical Security of IT Infrastructure"],
-
-["1.4","Basic Knowledge of Artificial Intelligence (AI), Machine Learning (ML) and Blockchain"]
-
-]
-
-},
-
-{
-
-id:"2",
-
-title:"Computer Architecture",
-
-subs:[
-
-["2.1","Basic Computer Architecture, Registers and Memory Management"],
-
-["2.2","Organization of Hard Disk"],
-
-["2.3","CPU Architecture"],
-
-["2.4","I/O Management, I/O Interface, I/O Requests Handling and I/O Devices"]
-
-]
-
-},
-
-{
-
-id:"3",
-
-title:"Communication and Computer Network Technologies",
-
-subs:[
-
-["3.1","Networking Devices: Repeater, Hub, Switch and Router"],
-
-["3.2","Switching Technologies, Modems and Remote Network Access, Error Detection and Correction Techniques"],
-
-["3.3","Internet Services and Internet Protocol / Addressing"],
-
-["3.4","Network Security and Cryptography"]
-
-]
-
-}
-
-]
+    ]
 
 },
 
 
-/* ================= PAPER II SECTION B ================= */
+/* ============================================================
+   PAPER II SECTION A
+============================================================ */
 
 {
 
-paper:"PAPER II",
+    paper:"PAPER II",
 
-title:"Information Technology & Management",
+    title:"Information Technology & Management",
 
-section:"SECTION B",
+    section:"SECTION A",
 
-marks:"50 Marks • Units 4–6",
+    marks:"50 Marks • Units 1–3",
 
-units:[
+    units:[
 
-{
+        {
 
-id:"4",
+            id:"1",
 
-title:"Operating System and Information Systems",
+            title:"Introduction of Computer",
 
-subs:[
+            subs:[
 
-["4.1","Basic Knowledge of Operating System"],
+                [
+                    "1.1",
+                    "Types of Computers: Analog Computer, Digital Computer, Hybrid Computer, Mainframe and Super Computer and their comparison in terms of speed, storage capacity and memory"
+                ],
 
-["4.2","Process Management and Scheduling"],
+                [
+                    "1.2",
+                    "Basic Knowledge of Internet, Email System and Web Design"
+                ],
 
-["4.3","DOS Operating System, UNIX Operating Systems and Windows Operating System"],
+                [
+                    "1.3",
+                    "Basic Knowledge of Physical Security of IT Infrastructure"
+                ],
 
-["4.4","Identifying and Managing Security Threats in Operating System"]
+                [
+                    "1.4",
+                    "Basic Knowledge of Artificial Intelligence (AI), Machine Learning (ML) and Blockchain"
+                ]
 
-]
+            ]
+
+        },
+
+
+        {
+
+            id:"2",
+
+            title:"Computer Architecture",
+
+            subs:[
+
+                [
+                    "2.1",
+                    "Basic Computer Architecture, Registers and Memory Management"
+                ],
+
+                [
+                    "2.2",
+                    "Organization of Hard Disk"
+                ],
+
+                [
+                    "2.3",
+                    "CPU Architecture"
+                ],
+
+                [
+                    "2.4",
+                    "I/O Management, I/O Interface, I/O Requests Handling and I/O Devices"
+                ]
+
+            ]
+
+        },
+
+
+        {
+
+            id:"3",
+
+            title:"Communication and Computer Network Technologies",
+
+            subs:[
+
+                [
+                    "3.1",
+                    "Networking Devices: Repeater, Hub, Switch and Router"
+                ],
+
+                [
+                    "3.2",
+                    "Switching Technologies, Modems and Remote Network Access, Error Detection and Correction Techniques"
+                ],
+
+                [
+                    "3.3",
+                    "Internet Services and Internet Protocol / Addressing"
+                ],
+
+                [
+                    "3.4",
+                    "Network Security and Cryptography"
+                ]
+
+            ]
+
+        }
+
+    ]
 
 },
 
-{
 
-id:"5",
-
-title:"Database Management System, Database Design, Data Mining / Warehousing and Web Technology",
-
-subs:[
-
-["5.1","Basic Knowledge of Database Management System"],
-
-["5.2","Basic Concept of Table, Record, Relationship and Indexing"],
-
-["5.3","Data Warehousing and Process in Data Warehousing"],
-
-["5.4","Basics of HTML, Script, Stylesheet, XML, Web Server and Proxy Server"],
-
-["5.5","Disaster Recovery Planning"]
-
-]
-
-},
+/* ============================================================
+   PAPER II SECTION B
+============================================================ */
 
 {
 
-id:"6",
+    paper:"PAPER II",
 
-title:"Cybersecurity and IT Policies",
+    title:"Information Technology & Management",
 
-subs:[
+    section:"SECTION B",
 
-["6.1","Introduction to Cyber Security, Access Control Mechanisms, Threats and Vulnerabilities, Security Attacks, Authentication and Authorization, Password Management"],
+    marks:"50 Marks • Units 4–6",
 
-["6.2","Common Security Threats: Social Engineering, Malware, DDoS, DoS, Phishing and its Types"],
+    units:[
 
-["6.3","ICT Policy of Nepal, 2072"],
+        {
 
-["6.4","IT Guidelines issued by Nepal Rastra Bank"],
+            id:"4",
 
-["6.5","Cyber Resilience Guidelines, 2023 issued by Nepal Rastra Bank"]
+            title:
+            "Operating System and Information Systems",
 
-]
+            subs:[
 
-}
+                ["4.1","Basic Knowledge of Operating System"],
 
-]
+                ["4.2","Process Management and Scheduling"],
+
+                [
+                    "4.3",
+                    "DOS Operating System, UNIX Operating Systems and Windows Operating System"
+                ],
+
+                [
+                    "4.4",
+                    "Identifying and Managing Security Threats in Operating System"
+                ]
+
+            ]
+
+        },
+
+
+        {
+
+            id:"5",
+
+            title:
+            "Database Management System, Database Design, Data Mining / Warehousing and Web Technology",
+
+            subs:[
+
+                [
+                    "5.1",
+                    "Basic Knowledge of Database Management System"
+                ],
+
+                [
+                    "5.2",
+                    "Basic Concept of Table, Record, Relationship and Indexing"
+                ],
+
+                [
+                    "5.3",
+                    "Data Warehousing and Process in Data Warehousing"
+                ],
+
+                [
+                    "5.4",
+                    "Basics of HTML, Script, Stylesheet, XML, Web Server and Proxy Server"
+                ],
+
+                [
+                    "5.5",
+                    "Disaster Recovery Planning"
+                ]
+
+            ]
+
+        },
+
+
+        {
+
+            id:"6",
+
+            title:"Cybersecurity and IT Policies",
+
+            subs:[
+
+                [
+                    "6.1",
+                    "Introduction to Cyber Security, Access Control Mechanisms, Threats and Vulnerabilities, Security Attacks, Authentication and Authorization, Password Management"
+                ],
+
+                [
+                    "6.2",
+                    "Common Security Threats: Social Engineering, Malware, DDoS, DoS, Phishing and its Types"
+                ],
+
+                [
+                    "6.3",
+                    "ICT Policy of Nepal, 2072"
+                ],
+
+                [
+                    "6.4",
+                    "IT Guidelines issued by Nepal Rastra Bank"
+                ],
+
+                [
+                    "6.5",
+                    "Cyber Resilience Guidelines, 2023 issued by Nepal Rastra Bank"
+                ]
+
+            ]
+
+        }
+
+    ]
 
 }
 
@@ -1437,9 +1814,6 @@ const PROGRESS_STORAGE =
 const TIMER_STORAGE =
 "rbb_complete_timer";
 
-const THEME_STORAGE =
-"rbb_complete_theme";
-
 
 /* ============================================================
    STATE
@@ -1447,12 +1821,16 @@ const THEME_STORAGE =
 
 let progress =
 JSON.parse(
-localStorage.getItem(PROGRESS_STORAGE) || "{}"
+    localStorage.getItem(
+        PROGRESS_STORAGE
+    ) || "{}"
 );
 
 let seconds =
 Number(
-localStorage.getItem(TIMER_STORAGE) || 10800
+    localStorage.getItem(
+        TIMER_STORAGE
+    ) || 10800
 );
 
 let timerInterval = null;
@@ -1470,46 +1848,91 @@ let quizAnswered = 0;
 
 function escapeHTML(value){
 
-return String(value)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
 function getAllTopics(){
 
-return syllabus.flatMap(
-paper =>
-paper.units.flatMap(
-unit =>
-unit.subs.map(
-sub => ({
-code:sub[0],
-title:sub[1],
-unit:unit.title,
-paper:paper.paper
-})
-)
-)
-);
+    return syllabus.flatMap(
+
+        paper =>
+
+            paper.units.flatMap(
+
+                unit =>
+
+                    unit.subs.map(
+
+                        sub => ({
+
+                            code:sub[0],
+
+                            title:sub[1],
+
+                            unit:unit.title,
+
+                            paper:paper.paper
+
+                        })
+
+                    )
+
+            )
+
+    );
 
 }
 
 
 function createPDFUrl(code,title){
 
-const filename =
-`${code}-${title
-.toLowerCase()
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/^-|-$/g,"")
-}.pdf`;
+    const filename =
 
-return NOTES_BASE_URL + encodeURIComponent(filename);
+        `${code}-${title
+
+            .toLowerCase()
+
+            .replace(
+                /[^a-z0-9]+/g,
+                "-"
+            )
+
+            .replace(
+                /^-|-$/g,
+                ""
+            )
+
+        }.pdf`;
+
+    return NOTES_BASE_URL +
+        encodeURIComponent(filename);
 
 }
 
@@ -1520,147 +1943,288 @@ return NOTES_BASE_URL + encodeURIComponent(filename);
 
 function renderSyllabus(){
 
-const container =
-document.getElementById("syllabusContainer");
+    const container =
+        document.getElementById(
+            "syllabusContainer"
+        );
 
-container.innerHTML = "";
-
-syllabus.forEach(group => {
-
-const section =
-document.createElement("section");
-
-section.innerHTML = `
-
-<div class="section-title">
-
-<div>
-
-<h2>
-${escapeHTML(group.paper)}
-•
-${escapeHTML(group.title)}
-</h2>
-
-<p>
-${escapeHTML(group.section)}
-•
-${escapeHTML(group.marks)}
-</p>
-
-</div>
-
-</div>
-
-`;
-
-group.units.forEach(unit => {
-
-const unitElement =
-document.createElement("article");
-
-unitElement.className = "unit";
-
-let subtopicsHTML = "";
-
-unit.subs.forEach(sub => {
-
-const code = sub[0];
-
-const title = sub[1];
-
-const checked =
-progress[code]
-? "checked"
-: "";
-
-subtopicsHTML += `
-
-<div class="subtopic">
-
-<input
-type="checkbox"
-${checked}
-onchange="updateTopicProgress('${code}',this.checked)"
->
-
-<div class="subtopic-text">
-
-<span class="code">
-${escapeHTML(code)}
-</span>
-
-${escapeHTML(title)}
-
-</div>
-
-<div class="subtopic-actions">
-
-<button
-class="small-btn note-btn"
-onclick='openNote(${JSON.stringify(code)},${JSON.stringify(title)})'
->
-📖 Note
-</button>
-
-<button
-class="small-btn quiz-btn"
-onclick='openQuiz(${JSON.stringify(code)},${JSON.stringify(title)},${JSON.stringify(unit.title)})'
->
-✨ Quiz
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
+    container.innerHTML = "";
 
 
-unitElement.innerHTML = `
+    syllabus.forEach(
 
-<div
-class="unit-header"
-onclick="toggleUnit(this)"
->
+        group => {
 
-<div class="unit-number">
-${escapeHTML(unit.id)}
-</div>
+            const section =
+                document.createElement(
+                    "section"
+                );
 
-<div class="unit-title">
-${escapeHTML(unit.title)}
-</div>
 
-<div class="unit-count">
-${unit.subs.length} topics
-</div>
+            section.innerHTML = `
 
-<div class="arrow">
-⌄
-</div>
+                <div class="section-title">
 
-</div>
+                    <div>
 
-<div class="subtopics">
+                        <h2>
 
-${subtopicsHTML}
+                            ${escapeHTML(
+                                group.paper
+                            )}
 
-</div>
+                            •
 
-`;
+                            ${escapeHTML(
+                                group.title
+                            )}
 
-section.appendChild(unitElement);
+                        </h2>
 
-});
 
-container.appendChild(section);
+                        <p>
 
-});
+                            ${escapeHTML(
+                                group.section
+                            )}
 
-updateProgress();
+                            •
+
+                            ${escapeHTML(
+                                group.marks
+                            )}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            group.units.forEach(
+
+                unit => {
+
+                    const unitElement =
+                        document.createElement(
+                            "article"
+                        );
+
+
+                    unitElement.className =
+                        "unit";
+
+
+                    let subtopicsHTML =
+                        "";
+
+
+                    unit.subs.forEach(
+
+                        sub => {
+
+                            const code =
+                                sub[0];
+
+                            const title =
+                                sub[1];
+
+
+                            const checked =
+                                progress[code]
+                                    ? "checked"
+                                    : "";
+
+
+                            subtopicsHTML += `
+
+                                <div class="subtopic">
+
+                                    <input
+
+                                        type="checkbox"
+
+                                        ${checked}
+
+                                        onchange="
+
+                                            updateTopicProgress(
+
+                                                '${code}',
+
+                                                this.checked
+
+                                            )
+
+                                        "
+
+                                    >
+
+
+                                    <div class="subtopic-text">
+
+                                        <span class="code">
+
+                                            ${escapeHTML(
+                                                code
+                                            )}
+
+                                        </span>
+
+
+                                        ${escapeHTML(
+                                            title
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="subtopic-actions">
+
+                                        <button
+
+                                            class="small-btn note-btn"
+
+                                            onclick='
+
+                                                openNote(
+
+                                                    ${JSON.stringify(
+                                                        code
+                                                    )},
+
+                                                    ${JSON.stringify(
+                                                        title
+                                                    )}
+
+                                                )
+
+                                            '
+
+                                        >
+
+                                            📖 Note
+
+                                        </button>
+
+
+                                        <button
+
+                                            class="small-btn quiz-btn"
+
+                                            onclick='
+
+                                                openQuiz(
+
+                                                    ${JSON.stringify(
+                                                        code
+                                                    )},
+
+                                                    ${JSON.stringify(
+                                                        title
+                                                    )},
+
+                                                    ${JSON.stringify(
+                                                        unit.title
+                                                    )}
+
+                                                )
+
+                                            '
+
+                                        >
+
+                                            ✨ Quiz
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }
+
+                    );
+
+
+                    unitElement.innerHTML = `
+
+                        <div
+
+                            class="unit-header"
+
+                            onclick="toggleUnit(this)"
+
+                        >
+
+                            <div class="unit-number">
+
+                                ${escapeHTML(
+                                    unit.id
+                                )}
+
+                            </div>
+
+
+                            <div class="unit-title">
+
+                                ${escapeHTML(
+                                    unit.title
+                                )}
+
+                            </div>
+
+
+                            <div class="unit-count">
+
+                                ${unit.subs.length}
+
+                                topics
+
+                            </div>
+
+
+                            <div class="arrow">
+
+                                ⌄
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="subtopics">
+
+                            ${subtopicsHTML}
+
+                        </div>
+
+                    `;
+
+
+                    section.appendChild(
+                        unitElement
+                    );
+
+                }
+
+            );
+
+
+            container.appendChild(
+                section
+            );
+
+        }
+
+    );
+
+
+    updateProgress();
 
 }
 
@@ -1669,97 +2233,139 @@ updateProgress();
    PROGRESS
 ============================================================ */
 
-function updateTopicProgress(code,checked){
+function updateTopicProgress(
+    code,
+    checked
+){
 
-if(checked){
+    if(checked){
 
-progress[code] = true;
+        progress[code] =
+            true;
 
-}else{
+    }else{
 
-delete progress[code];
+        delete progress[code];
 
-}
+    }
 
-localStorage.setItem(
-PROGRESS_STORAGE,
-JSON.stringify(progress)
-);
 
-updateProgress();
+    localStorage.setItem(
+
+        PROGRESS_STORAGE,
+
+        JSON.stringify(
+            progress
+        )
+
+    );
+
+
+    updateProgress();
 
 }
 
 
 function updateProgress(){
 
-const total =
-getAllTopics().length;
+    const total =
+        getAllTopics().length;
 
-const completed =
-Object.keys(progress).length;
 
-const percentage =
-total === 0
-? 0
-: Math.round(
-(completed / total) * 100
-);
+    const completed =
+        Object.keys(
+            progress
+        ).length;
 
-document.getElementById(
-"totalTopics"
-).textContent = total;
 
-document.getElementById(
-"completedTopics"
-).textContent = completed;
+    const percentage =
+        total === 0
 
-document.getElementById(
-"percentage"
-).textContent = percentage + "%";
+            ? 0
 
-document.getElementById(
-"sideTotal"
-).textContent = total;
+            : Math.round(
 
-document.getElementById(
-"sideDone"
-).textContent = completed;
+                (
+                    completed /
+                    total
+                ) * 100
 
-document.getElementById(
-"sidePercent"
-).textContent = percentage + "%";
+            );
 
-document.getElementById(
-"progressBar"
-).style.width =
-percentage + "%";
 
-document.getElementById(
-"progressLabel"
-).textContent =
-percentage + "% COMPLETE";
+    document.getElementById(
+        "totalTopics"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "completedTopics"
+    ).textContent =
+        completed;
+
+
+    document.getElementById(
+        "percentage"
+    ).textContent =
+        percentage + "%";
+
+
+    document.getElementById(
+        "sideTotal"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "sideDone"
+    ).textContent =
+        completed;
+
+
+    document.getElementById(
+        "sidePercent"
+    ).textContent =
+        percentage + "%";
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        percentage + "%";
+
+
+    document.getElementById(
+        "progressLabel"
+    ).textContent =
+        percentage +
+        "% COMPLETE";
 
 }
 
 
 function resetProgress(){
 
-if(
-confirm(
-"Are you sure you want to reset all progress?"
-)
-){
+    if(
 
-progress = {};
+        confirm(
 
-localStorage.removeItem(
-PROGRESS_STORAGE
-);
+            "Are you sure you want to reset all progress?"
 
-renderSyllabus();
+        )
 
-}
+    ){
+
+        progress =
+            {};
+
+        localStorage.removeItem(
+            PROGRESS_STORAGE
+        );
+
+        renderSyllabus();
+
+    }
 
 }
 
@@ -1770,181 +2376,357 @@ renderSyllabus();
 
 function toggleUnit(header){
 
-header
-.parentElement
-.classList
-.toggle("open");
+    header
+
+        .parentElement
+
+        .classList
+
+        .toggle(
+            "open"
+        );
 
 }
 
 
 function expandAll(){
 
-document
-.querySelectorAll(".unit")
-.forEach(
-unit =>
-unit.classList.add("open")
-);
+    document
+
+        .querySelectorAll(
+            ".unit"
+        )
+
+        .forEach(
+
+            unit =>
+
+                unit.classList.add(
+                    "open"
+                )
+
+        );
 
 }
 
 
 function collapseAll(){
 
-document
-.querySelectorAll(".unit")
-.forEach(
-unit =>
-unit.classList.remove("open")
-);
+    document
+
+        .querySelectorAll(
+            ".unit"
+        )
+
+        .forEach(
+
+            unit =>
+
+                unit.classList.remove(
+                    "open"
+                )
+
+        );
 
 }
 
 
 /* ============================================================
-   VIEWER
+   RESPONSIVE PDF VIEWER
 ============================================================ */
 
 function showViewer(){
 
-document
-.getElementById("viewer")
-.classList
-.add("show");
+    const viewer =
+        document.getElementById(
+            "viewer"
+        );
+
+
+    viewer.classList.add(
+        "show"
+    );
 
 }
 
 
 function closeViewer(){
 
-document
-.getElementById("viewer")
-.classList
-.remove("show");
+    const viewer =
+        document.getElementById(
+            "viewer"
+        );
+
+
+    viewer.classList.remove(
+        "show"
+    );
+
+
+    viewer.classList.remove(
+        "maximized"
+    );
+
+
+    const maximizeBtn =
+        document.getElementById(
+            "maximizeBtn"
+        );
+
+
+    if(maximizeBtn){
+
+        maximizeBtn.textContent =
+            "⛶";
+
+        maximizeBtn.title =
+            "Maximize Viewer";
+
+    }
 
 }
 
 
-function maximizeViewer(){
+/* ============================================================
+   MAXIMIZE / RESTORE VIEWER
+============================================================ */
 
-const viewer =
-document.getElementById("viewer");
+function toggleMaximizeViewer(){
 
-if(
-viewer.style.position === "fixed"
-){
+    const viewer =
+        document.getElementById(
+            "viewer"
+        );
 
-viewer.style.cssText = "";
 
-}else{
+    const maximizeBtn =
+        document.getElementById(
+            "maximizeBtn"
+        );
 
-viewer.style.position = "fixed";
 
-viewer.style.inset = "0";
+    const isMaximized =
+        viewer.classList.toggle(
+            "maximized"
+        );
 
-viewer.style.height = "100vh";
 
-viewer.style.zIndex = "9999";
+    if(isMaximized){
+
+        maximizeBtn.textContent =
+            "⛶";
+
+        maximizeBtn.title =
+            "Restore Viewer";
+
+    }else{
+
+        maximizeBtn.textContent =
+            "⛶";
+
+        maximizeBtn.title =
+            "Maximize Viewer";
+
+    }
 
 }
 
-}
+
+/* ============================================================
+   ESC KEY
+============================================================ */
+
+document.addEventListener(
+
+    "keydown",
+
+    function(event){
+
+        if(
+            event.key !==
+            "Escape"
+        ){
+
+            return;
+
+        }
+
+
+        const viewer =
+            document.getElementById(
+                "viewer"
+            );
+
+
+        if(
+
+            viewer.classList.contains(
+                "maximized"
+            )
+
+        ){
+
+            viewer.classList.remove(
+                "maximized"
+            );
+
+        }else{
+
+            closeViewer();
+
+        }
+
+    }
+
+);
 
 
 /* ============================================================
    PDF NOTE VIEWER
 ============================================================ */
 
-function openNote(code,title){
+function openNote(
+    code,
+    title
+){
 
-showViewer();
+    showViewer();
 
-document
-.getElementById("viewerTitle")
-.textContent =
-"PDF NOTE • " + code;
 
-const pdfURL =
-createPDFUrl(code,title);
+    document
 
-document
-.getElementById("viewerBody")
-.innerHTML = `
+        .getElementById(
+            "viewerTitle"
+        )
 
-<div class="pdf-wrapper">
+        .textContent =
+            "PDF NOTE • " +
+            code;
 
-<div class="pdf-toolbar">
 
-<h3>
-${escapeHTML(title)}
-</h3>
+    const pdfURL =
+        createPDFUrl(
+            code,
+            title
+        );
 
-<a
-class="btn btn-primary"
-href="${escapeHTML(pdfURL)}"
-target="_blank"
-rel="noopener"
->
-Open Full ↗
-</a>
 
-</div>
+    document
 
-<iframe
-class="pdf-frame"
-src="${escapeHTML(pdfURL)}#toolbar=1&navpanes=0"
-title="${escapeHTML(title)}"
-onerror="pdfNotFound('${escapeHTML(title)}')"
->
-</iframe>
+        .getElementById(
+            "viewerBody"
+        )
 
-</div>
+        .innerHTML = `
 
-`;
+            <div class="pdf-wrapper">
+
+
+                <div class="pdf-toolbar">
+
+
+                    <h3>
+
+                        ${escapeHTML(
+                            title
+                        )}
+
+                    </h3>
+
+
+                    <button
+
+                        class="btn btn-primary"
+
+                        onclick="reloadPDF()"
+
+                    >
+
+                        ↻ Reload
+
+                    </button>
+
+
+                </div>
+
+
+                <iframe
+
+                    id="pdfFrame"
+
+                    class="pdf-frame"
+
+                    src="${escapeHTML(
+
+                        pdfURL
+
+                    )}#toolbar=1&navpanes=0&scrollbar=1"
+
+                    title="${escapeHTML(
+
+                        title
+
+                    )}"
+
+                    loading="lazy"
+
+                    allowfullscreen
+
+                >
+
+                </iframe>
+
+
+            </div>
+
+        `;
+
+
+    window.currentPDF =
+        pdfURL;
 
 }
 
 
-/*
-IMPORTANT:
+/* ============================================================
+   RELOAD PDF
+============================================================ */
 
-Browser iframe cannot reliably detect every
-404 response from another domain.
+function reloadPDF(){
 
-If the PDF URL does not exist,
-the server/browser will show its own 404 page.
+    const frame =
+        document.getElementById(
+            "pdfFrame"
+        );
 
-This fallback function is included for
-manual/explicit failure handling.
-*/
 
-function pdfNotFound(title){
+    if(!frame){
 
-document
-.getElementById("viewerBody")
-.innerHTML = `
+        return;
 
-<div class="not-found">
+    }
 
-<h2>
-📄 PDF Not Available
-</h2>
 
-<p>
-The note for
-<b>${escapeHTML(title)}</b>
-was not found at the configured notes URL.
-</p>
+    const currentSrc =
+        frame.src;
 
-<p>
-Please check the PDF filename or upload the
-corresponding note to the notes directory.
-</p>
 
-</div>
+    frame.src =
+        "about:blank";
 
-`;
+
+    setTimeout(
+
+        () => {
+
+            frame.src =
+                currentSrc;
+
+        },
+
+        100
+
+    );
 
 }
 
@@ -1953,145 +2735,148 @@ corresponding note to the notes directory.
    DUMMY GEMINI QUIZ FUNCTION
 ============================================================ */
 
-/*
+async function dummyQuizFetch(
+    topic,
+    unit
+){
 
-DO NOT PUT API KEY IN THE UI.
+    await new Promise(
 
-Replace ONLY this function later.
+        resolve =>
 
-Example location:
+            setTimeout(
+                resolve,
+                700
+            )
 
-async function dummyQuizFetch(topic,unit){
+    );
 
-    // Your Gemini fetch code here
 
-}
+    return {
 
-*/
+        topic:topic,
 
-async function dummyQuizFetch(topic,unit){
+        unit:unit,
 
-await new Promise(
-resolve =>
-setTimeout(resolve,700)
-);
+        questions:[
 
-return {
+            {
 
-topic:topic,
+                question:
 
-unit:unit,
+                    `What is the main concept of "${topic}"?`,
 
-questions:[
+                options:[
 
-{
+                    "The core concept related to the topic",
 
-question:
-`What is the main concept of "${topic}"?`,
+                    "An unrelated concept",
 
-options:[
+                    "A random administrative process",
 
-"The core concept related to the topic",
+                    "None of the above"
 
-"An unrelated concept",
+                ],
 
-"A random administrative process",
+                answer:0
 
-"None of the above"
+            },
 
-],
 
-answer:0
+            {
 
-},
+                question:
 
-{
+                    `Which option is most closely associated with "${topic}"?`,
 
-question:
-`Which option is most closely associated with "${topic}"?`,
+                options:[
 
-options:[
+                    "Its key principles and applications",
 
-"Its key principles and applications",
+                    "An unrelated subject",
 
-"An unrelated subject",
+                    "Only a non-technical activity",
 
-"Only a non-technical activity",
+                    "None of the above"
 
-"None of the above"
+                ],
 
-],
+                answer:0
 
-answer:0
+            },
 
-},
 
-{
+            {
 
-question:
-`What should be studied for "${topic}"?`,
+                question:
 
-options:[
+                    `What should be studied for "${topic}"?`,
 
-"Definition, components, working and applications",
+                options:[
 
-"Only the name",
+                    "Definition, components, working and applications",
 
-"Unrelated information",
+                    "Only the name",
 
-"None of the above"
+                    "Unrelated information",
 
-],
+                    "None of the above"
 
-answer:0
+                ],
 
-},
+                answer:0
 
-{
+            },
 
-question:
-`What is a valid learning objective for "${topic}"?`,
 
-options:[
+            {
 
-"Explain its purpose, features and significance",
+                question:
 
-"Avoid all technical concepts",
+                    `What is a valid learning objective for "${topic}"?`,
 
-"Study unrelated examples",
+                options:[
 
-"None of the above"
+                    "Explain its purpose, features and significance",
 
-],
+                    "Avoid all technical concepts",
 
-answer:0
+                    "Study unrelated examples",
 
-},
+                    "None of the above"
 
-{
+                ],
 
-question:
-`For an examination, what should be prioritized?`,
+                answer:0
 
-options:[
+            },
 
-"Concepts, terminology, working and applications",
 
-"Only memorizing the title",
+            {
 
-"Unrelated information",
+                question:
 
-"None of the above"
+                    `For an examination, what should be prioritized?`,
 
-],
+                options:[
 
-answer:0
+                    "Concepts, terminology, working and applications",
 
-}
+                    "Only memorizing the title",
 
-]
+                    "Unrelated information",
 
-};
+                    "None of the above"
+
+                ],
+
+                answer:0
+
+            }
+
+        ]
+
+    };
 
 }
 
@@ -2100,238 +2885,361 @@ answer:0
    QUIZ
 ============================================================ */
 
-async function openQuiz(code,topic,unit){
+async function openQuiz(
+    code,
+    topic,
+    unit
+){
 
-showViewer();
+    showViewer();
 
-document
-.getElementById("viewerTitle")
-.textContent =
-"AI QUIZ • " + code;
 
-document
-.getElementById("viewerBody")
-.innerHTML = `
+    document
 
-<div class="loader">
+        .getElementById(
+            "viewerTitle"
+        )
 
-<div>
+        .textContent =
+            "AI QUIZ • " +
+            code;
 
-<div class="spinner"></div>
 
-<p>
-Generating quiz...
-</p>
+    document
 
-</div>
+        .getElementById(
+            "viewerBody"
+        )
 
-</div>
+        .innerHTML = `
 
-`;
+            <div class="loader">
 
-try{
+                <div>
 
-quizData =
-await dummyQuizFetch(
-topic,
-unit
-);
+                    <div class="spinner"></div>
 
-quizScore = 0;
+                    <p>
+                        Generating quiz...
+                    </p>
 
-quizAnswered = 0;
+                </div>
 
-renderQuiz();
+            </div>
 
-}catch(error){
+        `;
 
-document
-.getElementById("viewerBody")
-.innerHTML = `
 
-<div class="not-found">
+    try{
 
-<h2>
-Quiz Error
-</h2>
+        quizData =
+            await dummyQuizFetch(
+                topic,
+                unit
+            );
 
-<p>
-${escapeHTML(error.message)}
-</p>
 
-</div>
+        quizScore =
+            0;
 
-`;
 
-}
+        quizAnswered =
+            0;
+
+
+        renderQuiz();
+
+
+    }catch(error){
+
+        document
+
+            .getElementById(
+                "viewerBody"
+            )
+
+            .innerHTML = `
+
+                <div class="not-found">
+
+                    <h2>
+                        Quiz Error
+                    </h2>
+
+
+                    <p>
+
+                        ${escapeHTML(
+                            error.message
+                        )}
+
+                    </p>
+
+                </div>
+
+            `;
+
+    }
 
 }
 
 
 function renderQuiz(){
 
-let html = `
+    let html = `
 
-<div class="quiz-head">
+        <div class="quiz-head">
 
-<h2>
-✨
-${escapeHTML(quizData.topic)}
-</h2>
+            <h2>
 
-<p>
-${escapeHTML(quizData.unit)}
-•
-Dummy quiz engine ready for Gemini integration.
-</p>
+                ✨
 
-</div>
+                ${escapeHTML(
+                    quizData.topic
+                )}
 
-<div id="quizResult"></div>
+            </h2>
 
-`;
 
-quizData.questions.forEach(
-(question,index) => {
+            <p>
 
-html += `
+                ${escapeHTML(
+                    quizData.unit
+                )}
 
-<div
-class="question"
-id="question-${index}"
->
+                •
 
-<h4>
+                Dummy quiz engine ready for Gemini integration.
 
-${index + 1}.
-${escapeHTML(question.question)}
+            </p>
 
-</h4>
+        </div>
 
-`;
 
-question.options.forEach(
-(option,optionIndex) => {
+        <div id="quizResult"></div>
 
-html += `
+    `;
 
-<button
-class="option"
-onclick="answerQuiz(
-${index},
-${optionIndex},
-this
-)"
->
 
-${String.fromCharCode(65 + optionIndex)}.
+    quizData.questions.forEach(
 
-${escapeHTML(option)}
+        (question,index) => {
 
-</button>
 
-`;
+            html += `
 
-});
+                <div
 
-html += `
+                    class="question"
 
-</div>
+                    id="question-${index}"
 
-`;
+                >
 
-});
+                    <h4>
 
-document
-.getElementById("viewerBody")
-.innerHTML = html;
+                        ${index + 1}.
+
+                        ${escapeHTML(
+                            question.question
+                        )}
+
+                    </h4>
+
+            `;
+
+
+            question.options.forEach(
+
+                (option,optionIndex) => {
+
+
+                    html += `
+
+                        <button
+
+                            class="option"
+
+                            onclick="answerQuiz(
+
+                                ${index},
+
+                                ${optionIndex},
+
+                                this
+
+                            )"
+
+                        >
+
+                            ${String.fromCharCode(
+                                65 +
+                                optionIndex
+                            )}.
+
+                            ${escapeHTML(
+                                option
+                            )}
+
+                        </button>
+
+                    `;
+
+                }
+
+            );
+
+
+            html += `
+
+                </div>
+
+            `;
+
+        }
+
+    );
+
+
+    document
+
+        .getElementById(
+            "viewerBody"
+        )
+
+        .innerHTML =
+            html;
 
 }
 
 
 function answerQuiz(
-questionIndex,
-selectedIndex,
-button
+
+    questionIndex,
+
+    selectedIndex,
+
+    button
+
 ){
 
-const questionBox =
-document.getElementById(
-"question-" + questionIndex
-);
+    const questionBox =
+        document.getElementById(
 
-if(
-questionBox.dataset.answered
-){
+            "question-" +
+            questionIndex
 
-return;
+        );
 
-}
 
-questionBox.dataset.answered = "true";
+    if(
 
-quizAnswered++;
+        questionBox.dataset.answered
 
-const question =
-quizData.questions[
-questionIndex
-];
+    ){
 
-const options =
-questionBox
-.querySelectorAll(".option");
+        return;
 
-options.forEach(
-(option,index) => {
+    }
 
-option.disabled = true;
 
-if(
-index === question.answer
-){
+    questionBox.dataset.answered =
+        "true";
 
-option.classList.add(
-"correct"
-);
 
-}
+    quizAnswered++;
 
-});
 
-if(
-selectedIndex === question.answer
-){
+    const question =
+        quizData.questions[
+            questionIndex
+        ];
 
-quizScore++;
 
-}else{
+    const options =
+        questionBox.querySelectorAll(
+            ".option"
+        );
 
-button.classList.add(
-"wrong"
-);
 
-}
+    options.forEach(
 
-document
-.getElementById("quizResult")
-.innerHTML = `
+        (option,index) => {
 
-<div class="result">
+            option.disabled =
+                true;
 
-<strong>
-${quizScore}/${quizData.questions.length}
-</strong>
 
-<span>
-Answered
-${quizAnswered}
-/
-${quizData.questions.length}
-</span>
+            if(
 
-</div>
+                index ===
+                question.answer
 
-`;
+            ){
+
+                option.classList.add(
+                    "correct"
+                );
+
+            }
+
+        }
+
+    );
+
+
+    if(
+
+        selectedIndex ===
+        question.answer
+
+    ){
+
+        quizScore++;
+
+    }else{
+
+        button.classList.add(
+            "wrong"
+        );
+
+    }
+
+
+    document
+
+        .getElementById(
+            "quizResult"
+        )
+
+        .innerHTML = `
+
+            <div class="result">
+
+                <strong>
+
+                    ${quizScore}/
+
+                    ${quizData.questions.length}
+
+                </strong>
+
+
+                <span>
+
+                    Answered
+
+                    ${quizAnswered}
+
+                    /
+
+                    ${quizData.questions.length}
+
+                </span>
+
+            </div>
+
+        `;
 
 }
 
@@ -2342,91 +3250,139 @@ ${quizData.questions.length}
 
 function updateTimer(){
 
-const hours =
-String(
-Math.floor(
-seconds / 3600
-)
-).padStart(2,"0");
+    const hours =
 
-const minutes =
-String(
-Math.floor(
-(seconds % 3600) / 60
-)
-).padStart(2,"0");
+        String(
 
-const secs =
-String(
-seconds % 60
-).padStart(2,"0");
+            Math.floor(
+                seconds /
+                3600
+            )
 
-document
-.getElementById("timer")
-.textContent =
-`${hours}:${minutes}:${secs}`;
+        ).padStart(
+            2,
+            "0"
+        );
 
-localStorage.setItem(
-TIMER_STORAGE,
-seconds
-);
+
+    const minutes =
+
+        String(
+
+            Math.floor(
+
+                (
+                    seconds %
+                    3600
+
+                ) / 60
+
+            )
+
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const secs =
+
+        String(
+
+            seconds %
+            60
+
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    document
+
+        .getElementById(
+            "timer"
+        )
+
+        .textContent =
+
+            `${hours}:${minutes}:${secs}`;
+
+
+    localStorage.setItem(
+
+        TIMER_STORAGE,
+
+        seconds
+
+    );
 
 }
 
 
 function startTimer(){
 
-if(
-timerInterval
-){
+    if(
+        timerInterval
+    ){
 
-return;
+        return;
 
-}
+    }
 
-timerInterval =
-setInterval(
-() => {
 
-if(
-seconds > 0
-){
+    timerInterval =
 
-seconds--;
+        setInterval(
 
-updateTimer();
+            () => {
 
-}else{
+                if(
+                    seconds >
+                    0
+                ){
 
-pauseTimer();
+                    seconds--;
 
-}
+                    updateTimer();
 
-},
-1000
-);
+                }else{
+
+                    pauseTimer();
+
+                }
+
+            },
+
+            1000
+
+        );
 
 }
 
 
 function pauseTimer(){
 
-clearInterval(
-timerInterval
-);
+    clearInterval(
+        timerInterval
+    );
 
-timerInterval = null;
+    timerInterval =
+        null;
 
 }
 
 
 function resetTimer(){
 
-pauseTimer();
+    pauseTimer();
 
-seconds = 10800;
 
-updateTimer();
+    seconds =
+        10800;
+
+
+    updateTimer();
 
 }
 
@@ -2437,36 +3393,46 @@ updateTimer();
 
 function toggleTheme(){
 
-const current =
-document.documentElement
-.getAttribute("data-theme");
+    const current =
+        document.documentElement
+        .getAttribute(
+            "data-theme"
+        );
 
-if(
-current === "light"
-){
 
-document.documentElement
-.removeAttribute("data-theme");
+    if(
 
-localStorage.setItem(
-"theme",
-"dark"
-);
+        current ===
+        "light"
 
-}else{
+    ){
 
-document.documentElement
-.setAttribute(
-"data-theme",
-"light"
-);
+        document.documentElement
+            .removeAttribute(
+                "data-theme"
+            );
 
-localStorage.setItem(
-"theme",
-"light"
-);
 
-}
+        localStorage.setItem(
+            "theme",
+            "dark"
+        );
+
+    }else{
+
+        document.documentElement
+            .setAttribute(
+                "data-theme",
+                "light"
+            );
+
+
+        localStorage.setItem(
+            "theme",
+            "light"
+        );
+
+    }
 
 }
 
@@ -2476,31 +3442,40 @@ localStorage.setItem(
 ============================================================ */
 
 document.addEventListener(
-"DOMContentLoaded",
-() => {
 
-const savedTheme =
-localStorage.getItem(
-"theme"
-);
+    "DOMContentLoaded",
 
-if(
-savedTheme === "light"
-){
+    () => {
 
-document.documentElement
-.setAttribute(
-"data-theme",
-"light"
-);
 
-}
+        const savedTheme =
+            localStorage.getItem(
+                "theme"
+            );
 
-renderSyllabus();
 
-updateTimer();
+        if(
 
-}
+            savedTheme ===
+            "light"
+
+        ){
+
+            document.documentElement
+                .setAttribute(
+                    "data-theme",
+                    "light"
+                );
+
+        }
+
+
+        renderSyllabus();
+
+
+        updateTimer();
+
+    }
 
 );
 
