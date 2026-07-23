@@ -2,2293 +2,2831 @@
 <html lang="en" data-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>RBB Level 5 IT — Smart Exam Preparation Dashboard</title>
-
-    <style>
-
-        :root[data-theme="dark"] {
-            --bg-main: #040914;
-            --bg-side: #0a1124;
-            --bg-card: #0d1730;
-            --bg-hover: #111d3a;
-            --border-blue: #1b3564;
-            --accent-blue: #00bcd4;
-            --text-main: #e2e8f0;
-            --text-muted: #718096;
-            --green-active: #00e676;
-            --red-alert: #ff1744;
-            --purple-accent: #7c4dff;
-            --viewer-bg: #1e293b;
-            --viewer-text: #f8fafc;
-        }
-
-        :root[data-theme="light"] {
-            --bg-main: #f1f5f9;
-            --bg-side: #ffffff;
-            --bg-card: #ffffff;
-            --bg-hover: #f8fafc;
-            --border-blue: #cbd5e1;
-            --accent-blue: #0284c7;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --green-active: #16a34a;
-            --red-alert: #dc2626;
-            --purple-accent: #6d28d9;
-            --viewer-bg: #f8fafc;
-            --viewer-text: #0f172a;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", system-ui, sans-serif;
-        }
-
-        body {
-            background: var(--bg-main);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        .header {
-            height: 72px;
-            background: var(--bg-side);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 2px solid var(--border-blue);
-            z-index: 100;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .tracker-lbl {
-            color: var(--accent-blue);
-            font-weight: 800;
-            font-size: 15px;
-        }
-
-        .tracker-lbl small {
-            display: block;
-            color: var(--text-muted);
-            font-size: 10px;
-            margin-top: 3px;
-        }
-
-        .timer-display {
-            background: #000;
-            color: #ffb300;
-            font-family: monospace;
-            font-size: 22px;
-            padding: 4px 14px;
-            border-radius: 6px;
-            border: 1px solid #ffb300;
-            font-weight: bold;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .time-input {
-            width: 48px;
-            padding: 6px;
-            text-align: center;
-            background: var(--bg-card);
-            border: 1px solid var(--border-blue);
-            color: var(--text-main);
-            border-radius: 5px;
-        }
-
-        .btn,
-        .theme-toggle-btn,
-        .mx-btn {
-            border: none;
-            border-radius: 6px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .btn-apply {
-            background: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-blue);
-        }
-
-        .btn-start {
-            background: #005a43;
-            color: #00e676;
-            border: 1px solid #00e676;
-        }
-
-        .btn-pause {
-            background: #6a1b1b;
-            color: #ff1744;
-            border: 1px solid #ff1744;
-        }
-
-        .theme-toggle-btn {
-            background: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-blue);
-        }
-
-        .app-container {
-            display: flex;
-            height: calc(100vh - 72px);
-            overflow: hidden;
-        }
-
-        .left-sidebar {
-            width: 280px;
-            flex-shrink: 0;
-            background: var(--bg-side);
-            border-right: 2px solid var(--border-blue);
-            padding: 18px;
-            overflow-y: auto;
-        }
-
-        .brand-title,
-        .api-config-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-blue);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .brand-title h1 {
-            color: var(--accent-blue);
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .brand-title p {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-top: 6px;
-        }
-
-        .api-config-card h3 {
-            color: var(--green-active);
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .api-config-card p {
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .center-content {
-            flex: 1;
-            min-width: 0;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .progress-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-blue);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 20px;
-        }
-
-        .progress-topline {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 15px;
-        }
-
-        .eyebrow {
-            display: block;
-            color: var(--accent-blue);
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .progress-topline h2 {
-            font-size: 20px;
-        }
-
-        .progress-badge {
-            color: var(--accent-blue);
-            border: 1px solid var(--accent-blue);
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .progress-bar-bg {
-            background: var(--bg-hover);
-            height: 12px;
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                var(--accent-blue),
-                var(--purple-accent)
-            );
-            transition: width .3s ease;
-        }
-
-        .accordion-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-blue);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
-
-        .accordion-header {
-            padding: 15px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .accordion-header:hover {
-            background: var(--bg-hover);
-        }
-
-        .accordion-title {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            background: var(--bg-side);
-            padding: 0 18px;
-            transition: max-height .3s ease;
-        }
-
-        .accordion-content.open {
-            padding: 8px 18px 14px;
-            border-top: 1px solid var(--border-blue);
-        }
-
-        .topic-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-blue);
-        }
-
-        .topic-row:last-child {
-            border-bottom: none;
-        }
-
-        .topic-row input {
-            width: 17px;
-            height: 17px;
-            accent-color: var(--accent-blue);
-            flex-shrink: 0;
-        }
-
-        .topic-text {
-            flex: 1;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .topic-code {
-            color: var(--accent-blue);
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        .action-btns {
-            display: flex;
-            gap: 6px;
-        }
-
-        .view-btn,
-        .quiz-btn {
-            border: 1px solid var(--border-blue);
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 11px;
-            cursor: pointer;
-            white-space: nowrap;
-            font-weight: 600;
-        }
-
-        .view-btn {
-            background: rgba(0, 188, 212, .1);
-            color: var(--accent-blue);
-        }
-
-        .quiz-btn {
-            background: rgba(124, 77, 255, .15);
-            color: var(--purple-accent);
-        }
-
-        .right-sidebar {
-            width: 480px;
-            flex-shrink: 0;
-            background: var(--viewer-bg);
-            border-left: 2px solid var(--border-blue);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .right-sidebar.maximized {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-        }
-
-        .viewer-header {
-            min-height: 55px;
-            background: var(--bg-side);
-            color: var(--accent-blue);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-blue);
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .mx-btn {
-            background: rgba(0, 188, 212, .15);
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-        }
-
-        .viewer-body {
-            flex: 1;
-            min-height: 0;
-            padding: 15px;
-            overflow: hidden;
-        }
-
-        .pdf-container {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pdf-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .pdf-toolbar h3 {
-            color: var(--text-main);
-            font-size: 14px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .open-pdf-btn {
-            background: var(--accent-blue);
-            color: white;
-            text-decoration: none;
-            padding: 7px 12px;
-            border-radius: 5px;
-            font-size: 11px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .pdf-frame {
-            width: 100%;
-            flex: 1;
-            min-height: 0;
-            border: 1px solid var(--border-blue);
-            border-radius: 8px;
-            background: white;
-        }
-
-        .welcome-viewer {
-            padding: 20px;
-            color: var(--viewer-text);
-        }
-
-        .welcome-viewer h3 {
-            margin-bottom: 10px;
-        }
-
-        .section-banner {
-            margin: 20px 0 12px;
-            padding: 15px;
-            border-radius: 10px;
-            background: linear-gradient(
-                135deg,
-                rgba(0,188,212,.12),
-                rgba(124,77,255,.12)
-            );
-            border: 1px solid var(--border-blue);
-        }
-
-        .section-banner h3 {
-            color: var(--accent-blue);
-            font-size: 16px;
-        }
-
-        .section-banner p {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        @media(max-width: 1100px) {
-
-            .right-sidebar {
-                width: 380px;
-            }
-
-        }
-
-        @media(max-width: 992px) {
-
-            body {
-                height: auto;
-                overflow: auto;
-            }
-
-            .header {
-                height: auto;
-                min-height: 72px;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .app-container {
-                height: auto;
-                min-height: calc(100vh - 150px);
-                flex-direction: column;
-                overflow: visible;
-            }
-
-            .left-sidebar {
-                width: 100%;
-            }
-
-            .center-content {
-                width: 100%;
-                overflow: visible;
-            }
-
-            .right-sidebar {
-                position: fixed;
-                inset: 0;
-                width: 100%;
-                height: 100%;
-                display: none;
-                z-index: 99999;
-            }
-
-            .right-sidebar.active-mobile {
-                display: flex;
-            }
-
-            .pdf-frame {
-                min-height: 0;
-            }
-
-        }
-
-        @media(max-width: 600px) {
-
-            .header-controls {
-                width: 100%;
-            }
-
-            .header-left {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .progress-topline {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .topic-row {
-                align-items: flex-start;
-                flex-wrap: wrap;
-            }
-
-            .topic-text {
-                min-width: calc(100% - 35px);
-            }
-
-            .action-btns {
-                width: 100%;
-                margin-left: 29px;
-            }
-
-            .view-btn {
-                flex: 1;
-            }
-
-        }
-
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RBB Level 5 IT Smart Preparation</title>
+
+<style>
+
+:root[data-theme="dark"] {
+    --bg-main:#040914;
+    --bg-side:#0a1124;
+    --bg-card:#0d1730;
+    --bg-hover:#111d3a;
+    --border:#1b3564;
+    --blue:#00bcd4;
+    --text:#e2e8f0;
+    --muted:#718096;
+    --green:#00e676;
+    --red:#ff1744;
+    --purple:#7c4dff;
+    --yellow:#ffb300;
+}
+
+:root[data-theme="light"] {
+    --bg-main:#f1f5f9;
+    --bg-side:#ffffff;
+    --bg-card:#ffffff;
+    --bg-hover:#f8fafc;
+    --border:#cbd5e1;
+    --blue:#0284c7;
+    --text:#0f172a;
+    --muted:#64748b;
+    --green:#16a34a;
+    --red:#dc2626;
+    --purple:#6d28d9;
+    --yellow:#d97706;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Segoe UI,system-ui,sans-serif;
+}
+
+body {
+    background:var(--bg-main);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,
+input,
+select {
+    font:inherit;
+}
+
+button {
+    cursor:pointer;
+}
+
+.header {
+    min-height:72px;
+    background:var(--bg-side);
+    border-bottom:2px solid var(--border);
+    padding:10px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.header-left {
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.brand {
+    color:var(--blue);
+    font-weight:800;
+}
+
+.brand small {
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+}
+
+.timer {
+    background:#000;
+    color:var(--yellow);
+    border:1px solid var(--yellow);
+    padding:6px 14px;
+    border-radius:6px;
+    font-family:monospace;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.header-controls {
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.time-input {
+    width:48px;
+    padding:6px;
+    background:var(--bg-card);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:5px;
+    text-align:center;
+}
+
+.btn {
+    padding:8px 12px;
+    border-radius:6px;
+    border:1px solid var(--border);
+    font-size:12px;
+    font-weight:bold;
+}
+
+.btn-start {
+    background:#005a43;
+    color:var(--green);
+}
+
+.btn-pause {
+    background:#6a1b1b;
+    color:var(--red);
+}
+
+.btn-normal {
+    background:var(--bg-card);
+    color:var(--text);
+}
+
+.btn-blue {
+    background:var(--blue);
+    color:white;
+    border:none;
+}
+
+.app {
+    display:flex;
+    min-height:calc(100vh - 72px);
+}
+
+.left-sidebar {
+    width:270px;
+    flex-shrink:0;
+    background:var(--bg-side);
+    border-right:2px solid var(--border);
+    padding:18px;
+}
+
+.brand-card,
+.config-card {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:15px;
+}
+
+.brand-card h2 {
+    color:var(--blue);
+    font-size:16px;
+    line-height:1.5;
+}
+
+.brand-card p {
+    color:var(--muted);
+    font-size:12px;
+    margin-top:7px;
+}
+
+.config-card h3 {
+    color:var(--green);
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.config-card label {
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:10px;
+    margin-bottom:5px;
+}
+
+.api-input {
+    width:100%;
+    padding:8px;
+    background:var(--bg-main);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:5px;
+    font-size:11px;
+}
+
+.center {
+    flex:1;
+    min-width:0;
+    padding:20px;
+    overflow-y:auto;
+}
+
+.progress-card {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:20px;
+}
+
+.progress-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.progress-top h2 {
+    font-size:20px;
+}
+
+.progress-top small {
+    color:var(--blue);
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.progress-badge {
+    color:var(--blue);
+    border:1px solid var(--blue);
+    border-radius:20px;
+    padding:6px 12px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.progress-bg {
+    height:12px;
+    background:var(--bg-hover);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-fill {
+    width:0%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        var(--blue),
+        var(--purple)
+    );
+    transition:.3s;
+}
+
+.section-banner {
+    margin:20px 0 12px;
+    padding:15px;
+    border-radius:10px;
+    background:linear-gradient(
+        135deg,
+        rgba(0,188,212,.12),
+        rgba(124,77,255,.12)
+    );
+    border:1px solid var(--border);
+}
+
+.section-banner h3 {
+    color:var(--blue);
+    font-size:16px;
+}
+
+.section-banner p {
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.accordion {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:12px;
+    overflow:hidden;
+}
+
+.accordion-header {
+    padding:15px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+}
+
+.accordion-header:hover {
+    background:var(--bg-hover);
+}
+
+.accordion-title {
+    font-size:14px;
+    font-weight:600;
+}
+
+.accordion-content {
+    max-height:0;
+    overflow:hidden;
+    padding:0 18px;
+    background:var(--bg-side);
+    transition:max-height .3s ease;
+}
+
+.accordion-content.open {
+    padding:8px 18px 14px;
+    border-top:1px solid var(--border);
+}
+
+.topic-row {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.topic-row:last-child {
+    border-bottom:none;
+}
+
+.topic-row input {
+    width:17px;
+    height:17px;
+    accent-color:var(--blue);
+}
+
+.topic-text {
+    flex:1;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.topic-code {
+    color:var(--blue);
+    font-weight:bold;
+    margin-right:5px;
+}
+
+.topic-actions {
+    display:flex;
+    gap:6px;
+}
+
+.topic-btn {
+    padding:6px 9px;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:bold;
+    border:1px solid var(--border);
+}
+
+.note-btn {
+    color:var(--blue);
+    background:rgba(0,188,212,.1);
+}
+
+.quiz-btn {
+    color:var(--purple);
+    background:rgba(124,77,255,.12);
+}
+
+.right {
+    width:480px;
+    flex-shrink:0;
+    background:var(--bg-main);
+    border-left:2px solid var(--border);
+    display:flex;
+    flex-direction:column;
+}
+
+.right.maximized {
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:9999;
+}
+
+.viewer-header {
+    min-height:55px;
+    padding:12px 16px;
+    background:var(--bg-side);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--blue);
+    font-size:13px;
+    font-weight:bold;
+}
+
+.viewer-body {
+    flex:1;
+    min-height:0;
+    padding:15px;
+    overflow:hidden;
+}
+
+.welcome,
+.pdf-container,
+.quiz-container {
+    height:100%;
+}
+
+.welcome {
+    padding:20px;
+}
+
+.welcome h2 {
+    margin-bottom:10px;
+}
+
+.welcome p {
+    color:var(--muted);
+    line-height:1.7;
+}
+
+.pdf-container {
+    display:flex;
+    flex-direction:column;
+}
+
+.pdf-toolbar {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.pdf-toolbar h3 {
+    font-size:14px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.open-pdf {
+    background:var(--blue);
+    color:white;
+    padding:7px 10px;
+    border-radius:5px;
+    text-decoration:none;
+    font-size:11px;
+    white-space:nowrap;
+}
+
+.pdf-frame {
+    width:100%;
+    flex:1;
+    min-height:0;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:white;
+}
+
+.loading {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    color:var(--muted);
+}
+
+.spinner {
+    width:40px;
+    height:40px;
+    border:4px solid var(--border);
+    border-top-color:var(--blue);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+.pdf-not-available {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:25px;
+}
+
+.pdf-error-icon {
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.pdf-not-available h2 {
+    color:var(--red);
+    margin-bottom:10px;
+}
+
+.pdf-not-available p {
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.pdf-title {
+    color:var(--blue);
+    font-size:13px;
+}
+
+.quiz-container {
+    overflow-y:auto;
+}
+
+.quiz-header {
+    padding-bottom:15px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:15px;
+}
+
+.quiz-header h2 {
+    color:var(--purple);
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+.quiz-header p {
+    color:var(--muted);
+    font-size:12px;
+}
+
+.quiz-question {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px;
+    margin-bottom:12px;
+}
+
+.quiz-question h4 {
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:10px;
+}
+
+.quiz-option {
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:9px;
+    margin:6px 0;
+    background:var(--bg-main);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:12px;
+}
+
+.quiz-option:hover {
+    border-color:var(--blue);
+}
+
+.quiz-option.correct {
+    background:rgba(0,230,118,.15);
+    border-color:var(--green);
+}
+
+.quiz-option.wrong {
+    background:rgba(255,23,68,.15);
+    border-color:var(--red);
+}
+
+.quiz-result {
+    background:var(--bg-card);
+    border:1px solid var(--blue);
+    border-radius:8px;
+    padding:15px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.quiz-result h2 {
+    color:var(--green);
+}
+
+.quiz-actions {
+    display:flex;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.quiz-actions button {
+    flex:1;
+}
+
+@media(max-width:1100px) {
+    .right {
+        width:390px;
+    }
+}
+
+@media(max-width:992px) {
+
+    .header {
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .app {
+        flex-direction:column;
+    }
+
+    .left-sidebar {
+        width:100%;
+    }
+
+    .right {
+        position:fixed;
+        inset:0;
+        width:100%;
+        height:100%;
+        display:none;
+        z-index:9999;
+    }
+
+    .right.active-mobile {
+        display:flex;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .header-left {
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .header-controls {
+        width:100%;
+    }
+
+    .progress-top {
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .topic-row {
+        flex-wrap:wrap;
+        align-items:flex-start;
+    }
+
+    .topic-text {
+        min-width:calc(100% - 35px);
+    }
+
+    .topic-actions {
+        width:100%;
+        margin-left:27px;
+    }
+
+    .topic-btn {
+        flex:1;
+    }
+
+}
+
+</style>
+
 </head>
 
 
 <body>
 
-    <!-- HEADER -->
 
-    <header class="header">
+<header class="header">
 
-        <div class="header-left">
+    <div class="header-left">
 
-            <span class="tracker-lbl">
+        <div class="brand">
 
-                🏦 RBB LEVEL 5 IT
+            🏦 RBB LEVEL 5 IT
 
-                <small>
-                    Smart Exam Preparation Dashboard
-                </small>
-
-            </span>
-
-            <div
-                class="timer-display"
-                id="timerBox"
-            >
-                03:00:00
-            </div>
+            <small>
+                Smart Exam Preparation Dashboard
+            </small>
 
         </div>
 
 
-        <div class="header-controls">
-
-            <input
-                type="number"
-                class="time-input"
-                id="hrIn"
-                value="3"
-                min="0"
-            >
-
-            <span>hr</span>
-
-            <input
-                type="number"
-                class="time-input"
-                id="minIn"
-                value="0"
-                min="0"
-                max="59"
-            >
-
-            <span>min</span>
-
-            <button
-                class="btn btn-apply"
-                onclick="applyCustomTime()"
-            >
-                Apply
-            </button>
-
-            <button
-                class="btn btn-start"
-                onclick="startTimer()"
-            >
-                Start
-            </button>
-
-            <button
-                class="btn btn-pause"
-                onclick="pauseTimer()"
-            >
-                Pause
-            </button>
-
-            <button
-                class="theme-toggle-btn"
-                onclick="toggleTheme()"
-            >
-
-                <span id="themeIcon">
-                    🌙
-                </span>
-
-                <span id="themeText">
-                    Dark
-                </span>
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <!-- MAIN -->
-
-    <div class="app-container">
-
-
-        <!-- LEFT SIDEBAR -->
-
-        <aside class="left-sidebar">
-
-            <div class="brand-title">
-
-                <h1>
-                    राष्ट्रिय वाणिज्य बैंक लिमिटेड
-                </h1>
-
-                <p>
-                    तह ५ - वरिष्ठ सहायक (सूचना प्रविधि)
-                </p>
-
-            </div>
-
-
-            <div class="api-config-card">
-
-                <h3>
-                    📊 Study Tracker
-                </h3>
-
-                <p id="trackerSummary">
-                    Calculating stats...
-                </p>
-
-            </div>
-
-        </aside>
-
-
-        <!-- SYLLABUS -->
-
-        <main class="center-content">
-
-            <div class="progress-container">
-
-                <div class="progress-topline">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            YOUR PREPARATION JOURNEY
-                        </span>
-
-                        <h2>
-                            Syllabus Progress
-                        </h2>
-
-                    </div>
-
-                    <span
-                        id="progPct"
-                        class="progress-badge"
-                    >
-                        0% Completed
-                    </span>
-
-                </div>
-
-
-                <div class="progress-bar-bg">
-
-                    <div
-                        class="progress-bar-fill"
-                        id="progBar"
-                    >
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div id="syllabusTree"></div>
-
-        </main>
-
-
-        <!-- PDF VIEWER -->
-
-        <aside
-            class="right-sidebar"
-            id="pdfViewerSidebar"
+        <div
+            class="timer"
+            id="timerBox"
         >
-
-            <div class="viewer-header">
-
-                <span id="panelTitle">
-                    Interactive Reader Engine
-                </span>
-
-
-                <div>
-
-                    <button
-                        class="mx-btn"
-                        id="toggleMaximizeBtn"
-                        onclick="toggleViewerMaximize()"
-                    >
-                        Maximize 🗖
-                    </button>
-
-                    <button
-                        class="mx-btn"
-                        id="closeMobileBtn"
-                        onclick="closeMobileViewer()"
-                        style="display:none"
-                    >
-                        Close ✖
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="viewer-body"
-                id="viewerContent"
-            >
-
-                <div class="welcome-viewer">
-
-                    <h3>
-                        Welcome to Interactive Study Engine
-                    </h3>
-
-                    <p>
-                        कुनै पनि syllabus topic को
-                        <strong>
-                            View Note
-                        </strong>
-                        थिचेर PDF notes हेर्नुहोस्।
-                    </p>
-
-                </div>
-
-            </div>
-
-        </aside>
+            03:00:00
+        </div>
 
     </div>
 
 
-    <script>
+    <div class="header-controls">
+
+        <input
+            class="time-input"
+            id="hrIn"
+            type="number"
+            min="0"
+            value="3"
+        >
+
+        <span>hr</span>
+
+        <input
+            class="time-input"
+            id="minIn"
+            type="number"
+            min="0"
+            max="59"
+            value="0"
+        >
 
-        /* =====================================================
-           PDF BASE URL
-        ===================================================== */
+        <span>min</span>
+
+        <button
+            class="btn btn-normal"
+            onclick="applyCustomTime()"
+        >
+            Apply
+        </button>
+
+        <button
+            class="btn btn-start"
+            onclick="startTimer()"
+        >
+            Start
+        </button>
+
+        <button
+            class="btn btn-pause"
+            onclick="pauseTimer()"
+        >
+            Pause
+        </button>
 
-        const NOTES_BASE_URL =
-            "https://sundardumre.com.np/notes";
+        <button
+            class="btn btn-normal"
+            onclick="toggleTheme()"
+        >
+            <span id="themeIcon">🌙</span>
+            <span id="themeText">Dark</span>
+        </button>
 
+    </div>
 
-        /*
-            Change filenames according to your actual PDF filenames.
-        */
+</header>
 
 
-        const PDF_FILES = {
+<div class="app">
 
-            commercialBanks:
-                "commercial-banks.pdf",
 
-            developmentBanks:
-                "development-banks.pdf",
+    <aside class="left-sidebar">
 
-            financeCompanies:
-                "finance-companies.pdf",
 
-            microfinance:
-                "microfinance-institutions.pdf",
+        <div class="brand-card">
 
-            infrastructureBank:
-                "infrastructure-development-bank.pdf",
+            <h2>
+                राष्ट्रिय वाणिज्य बैंक लिमिटेड
+            </h2>
 
-            insurance:
-                "insurance-companies.pdf",
+            <p>
+                तह ५, वरिष्ठ सहायक
+                (सूचना प्रविधि)
+            </p>
 
-            epf:
-                "employee-provident-fund.pdf",
+        </div>
 
-            citizenInvestment:
-                "citizen-investment-trust.pdf",
 
-            socialSecurity:
-                "social-security-fund.pdf",
+        <div class="config-card">
 
-            capitalFund:
-                "capital-fund.pdf",
+            <h3>
+                🤖 Gemini Quiz API
+            </h3>
 
-            loanLoss:
-                "loan-loss-provisioning.pdf",
+            <label>
+                Gemini API Key
+            </label>
 
-            cdRatio:
-                "credit-deposit-ratio.pdf",
+            <input
+                type="password"
+                class="api-input"
+                id="geminiApiKey"
+                placeholder="Enter Gemini API Key"
+            >
 
-            crr:
-                "cash-reserve-ratio.pdf",
+            <button
+                class="btn btn-blue"
+                style="width:100%;margin-top:8px"
+                onclick="saveApiKey()"
+            >
+                Save API Key
+            </button>
 
-            bankingLaws:
-                "banking-laws.pdf",
+            <p
+                style="
+                color:var(--muted);
+                font-size:10px;
+                line-height:1.5;
+                margin-top:10px
+                "
+            >
+                API key localStorage मा save हुन्छ।
+                Production मा frontend मा API key नराख्नुहोस्।
+            </p>
 
-            organizationalBehavior:
-                "organizational-behavior.pdf",
+        </div>
 
-            otherLaws:
-                "other-related-laws.pdf",
 
-            digitalPayment:
-                "digital-payment-systems.pdf",
+        <div class="config-card">
 
-            computerIntroduction:
-                "introduction-of-computer.pdf",
+            <h3>
+                📊 Study Progress
+            </h3>
 
-            computerArchitecture:
-                "computer-architecture.pdf",
+            <p
+                id="trackerSummary"
+                style="
+                color:var(--muted);
+                font-size:12px;
+                line-height:1.6
+                "
+            >
+                Loading...
+            </p>
 
-            networking:
-                "computer-network-technologies.pdf",
+        </div>
 
-            operatingSystem:
-                "operating-system.pdf",
 
-            dbms:
-                "database-management-system.pdf",
+    </aside>
 
-            cybersecurity:
-                "cybersecurity-it-policies.pdf"
 
-        };
+    <main class="center">
 
 
-        function pdf(file) {
+        <div class="progress-card">
 
-            return `${NOTES_BASE_URL}/${file}`;
+            <div class="progress-top">
 
-        }
+                <div>
 
+                    <small>
+                        YOUR PREPARATION JOURNEY
+                    </small>
 
-        /* =====================================================
-           OFFICIAL RBB LEVEL 5 IT SYLLABUS
-        ===================================================== */
+                    <h2>
+                        Syllabus Progress
+                    </h2>
 
-        window.rbbSyllabus = [
+                </div>
 
-            {
 
-                section_id: "paper1",
+                <span
+                    class="progress-badge"
+                    id="progPct"
+                >
+                    0% Completed
+                </span>
 
-                section_title:
-                    "PAPER I — Banking and Organizational Management",
+            </div>
 
-                section_marks:
-                    "Section A — 50 Marks | Section B — 50 MCQ Marks",
 
-                topics: [
+            <div class="progress-bg">
 
-                    {
+                <div
+                    class="progress-fill"
+                    id="progBar"
+                ></div>
 
-                        id: "1",
+            </div>
 
-                        title:
-                            "1. Financial Institutions in Nepal",
+        </div>
 
-                        subtopics: [
-
-                            {
-                                id: "1.1.1",
-                                title: "Commercial Banks",
-                                pdfUrl: pdf(PDF_FILES.commercialBanks)
-                            },
-
-                            {
-                                id: "1.1.2",
-                                title: "Development Banks",
-                                pdfUrl: pdf(PDF_FILES.developmentBanks)
-                            },
-
-                            {
-                                id: "1.1.3",
-                                title: "Finance Companies",
-                                pdfUrl: pdf(PDF_FILES.financeCompanies)
-                            },
-
-                            {
-                                id: "1.1.4",
-                                title: "Microfinance Institutions",
-                                pdfUrl: pdf(PDF_FILES.microfinance)
-                            },
-
-                            {
-                                id: "1.1.5",
-                                title: "Infrastructure Development Bank",
-                                pdfUrl: pdf(PDF_FILES.infrastructureBank)
-                            },
-
-                            {
-                                id: "1.2.1",
-                                title: "Insurance Companies",
-                                pdfUrl: pdf(PDF_FILES.insurance)
-                            },
-
-                            {
-                                id: "1.2.2",
-                                title: "Employee Provident Fund",
-                                pdfUrl: pdf(PDF_FILES.epf)
-                            },
-
-                            {
-                                id: "1.2.3",
-                                title: "Citizen Investment Trust",
-                                pdfUrl: pdf(PDF_FILES.citizenInvestment)
-                            },
-
-                            {
-                                id: "1.2.4",
-                                title: "Social Security Fund",
-                                pdfUrl: pdf(PDF_FILES.socialSecurity)
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "2",
-
-                        title:
-                            "2. Some of the Key Basic Banking Terminology",
-
-                        subtopics: [
-
-                            {
-                                id: "2.1",
-                                title: "Capital Fund",
-                                pdfUrl: pdf(PDF_FILES.capitalFund)
-                            },
-
-                            {
-                                id: "2.2",
-                                title: "Loan Loss Provisioning",
-                                pdfUrl: pdf(PDF_FILES.loanLoss)
-                            },
-
-                            {
-                                id: "2.3",
-                                title: "Credit-Deposit (CD) Ratio",
-                                pdfUrl: pdf(PDF_FILES.cdRatio)
-                            },
-
-                            {
-                                id: "2.4",
-                                title: "Cash Reserve Ratio (CRR)",
-                                pdfUrl: pdf(PDF_FILES.crr)
-                            },
-
-                            {
-                                id: "2.5",
-                                title:
-                                    "Refinancing, Rescheduling and Restructuring",
-                                pdfUrl:
-                                    pdf("refinancing-rescheduling-restructuring.pdf")
-                            },
-
-                            {
-                                id: "2.6",
-                                title: "Base Rate",
-                                pdfUrl: pdf("base-rate.pdf")
-                            },
-
-                            {
-                                id: "2.7",
-                                title:
-                                    "Credit Information and Blacklisting",
-                                pdfUrl:
-                                    pdf("credit-information-blacklisting.pdf")
-                            },
-
-                            {
-                                id: "2.8",
-                                title: "Credit Ratings",
-                                pdfUrl: pdf("credit-ratings.pdf")
-                            },
-
-                            {
-                                id: "2.9",
-                                title:
-                                    "Know Your Customer (KYC)",
-                                pdfUrl: pdf("know-your-customer.pdf")
-                            },
-
-                            {
-                                id: "2.10",
-                                title:
-                                    "Audit and Internal Control",
-                                pdfUrl:
-                                    pdf("audit-internal-control.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "3",
-
-                        title:
-                            "3. Banking Related Law",
-
-                        subtopics: [
-
-                            {
-                                id: "3.1",
-                                title:
-                                    "Nepal Rastra Bank Act, 2058",
-                                pdfUrl:
-                                    pdf("nepal-rastra-bank-act-2058.pdf")
-                            },
-
-                            {
-                                id: "3.2",
-                                title:
-                                    "Bank and Financial Institution Act, 2073",
-                                pdfUrl:
-                                    pdf("bafia-2073.pdf")
-                            },
-
-                            {
-                                id: "3.3",
-                                title:
-                                    "Payment and Settlement Act, 2075",
-                                pdfUrl:
-                                    pdf("payment-settlement-act-2075.pdf")
-                            },
-
-                            {
-                                id: "3.4",
-                                title:
-                                    "Money Laundering Prevention Act, 2064",
-                                pdfUrl:
-                                    pdf("money-laundering-prevention-act-2064.pdf")
-                            },
-
-                            {
-                                id: "3.5",
-                                title:
-                                    "Banking Offence and Punishment Act, 2064",
-                                pdfUrl:
-                                    pdf("banking-offence-punishment-act-2064.pdf")
-                            },
-
-                            {
-                                id: "3.6",
-                                title:
-                                    "Negotiable Instruments Act, 2034",
-                                pdfUrl:
-                                    pdf("negotiable-instruments-act-2034.pdf")
-                            },
-
-                            {
-                                id: "3.7",
-                                title:
-                                    "Electronic Transaction Act, 2063",
-                                pdfUrl:
-                                    pdf("electronic-transaction-act-2063.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "4",
-
-                        title:
-                            "4. Organizational Behavior",
-
-                        subtopics: [
-
-                            {
-                                id: "4.1",
-                                title:
-                                    "Job Description, Terms of Reference and Responsibilities",
-                                pdfUrl:
-                                    pdf("job-description-responsibilities.pdf")
-                            },
-
-                            {
-                                id: "4.2",
-                                title:
-                                    "Job Motivation and Performance",
-                                pdfUrl:
-                                    pdf("job-motivation-performance.pdf")
-                            },
-
-                            {
-                                id: "4.3",
-                                title:
-                                    "Communication: Skill and Approach",
-                                pdfUrl:
-                                    pdf("communication-skills-approach.pdf")
-                            },
-
-                            {
-                                id: "4.4",
-                                title:
-                                    "Team Building and Workmanship",
-                                pdfUrl:
-                                    pdf("team-building-workmanship.pdf")
-                            },
-
-                            {
-                                id: "4.5",
-                                title:
-                                    "Customer Satisfaction and Delivery",
-                                pdfUrl:
-                                    pdf("customer-satisfaction-delivery.pdf")
-                            },
-
-                            {
-                                id: "4.6",
-                                title:
-                                    "Grievance Handling",
-                                pdfUrl:
-                                    pdf("grievance-handling.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "5",
-
-                        title:
-                            "5. Other Related Laws",
-
-                        subtopics: [
-
-                            {
-                                id: "5.1",
-                                title:
-                                    "Companies Act, 2063",
-                                pdfUrl:
-                                    pdf("companies-act-2063.pdf")
-                            },
-
-                            {
-                                id: "5.2",
-                                title:
-                                    "Labour Act, 2074",
-                                pdfUrl:
-                                    pdf("labour-act-2074.pdf")
-                            },
-
-                            {
-                                id: "5.3",
-                                title:
-                                    "Public Procurement Act, 2063",
-                                pdfUrl:
-                                    pdf("public-procurement-act-2063.pdf")
-                            },
-
-                            {
-                                id: "5.4",
-                                title:
-                                    "Right to Information Act, 2064",
-                                pdfUrl:
-                                    pdf("right-to-information-act-2064.pdf")
-                            },
-
-                            {
-                                id: "5.5",
-                                title:
-                                    "RBB Employee Service Regulation, 2070",
-                                pdfUrl:
-                                    pdf("rbb-employee-service-regulation-2070.pdf")
-                            },
-
-                            {
-                                id: "5.6",
-                                title:
-                                    "NRB Unified Directives and Circulars",
-                                pdfUrl:
-                                    pdf("nrb-unified-directives-circulars.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "6",
-
-                        title:
-                            "6. Digital / Electronic Payment Systems",
-
-                        subtopics: [
-
-                            {
-                                id: "6.1",
-                                title:
-                                    "Electronic Cheque Clearing",
-                                pdfUrl:
-                                    pdf("electronic-cheque-clearing.pdf")
-                            },
-
-                            {
-                                id: "6.2",
-                                title:
-                                    "IPS, ConnectIPS, RTGS and SWIFT",
-                                pdfUrl:
-                                    pdf("ips-connectips-rtgs-swift.pdf")
-                            },
-
-                            {
-                                id: "6.3",
-                                title:
-                                    "Internet Banking, Mobile Banking, QR Code and NFC",
-                                pdfUrl:
-                                    pdf("internet-mobile-banking-qr-nfc.pdf")
-                            },
-
-                            {
-                                id: "6.4",
-                                title:
-                                    "Digital Payment Cards",
-                                pdfUrl:
-                                    pdf("digital-payment-cards.pdf")
-                            },
-
-                            {
-                                id: "6.5",
-                                title:
-                                    "Payment through Wallets",
-                                pdfUrl:
-                                    pdf("payment-wallets.pdf")
-                            },
-
-                            {
-                                id: "6.6",
-                                title:
-                                    "Central Bank Digital Currency (CBDC)",
-                                pdfUrl:
-                                    pdf("central-bank-digital-currency.pdf")
-                            }
-
-                        ]
-
-                    }
-
-                ]
-
-            },
-
-
-            {
-
-                section_id: "paper2a",
-
-                section_title:
-                    "PAPER II — Information Technology & Management",
-
-                section_marks:
-                    "Section A — 50 Marks",
-
-                topics: [
-
-                    {
-
-                        id: "1",
-
-                        title:
-                            "1. Introduction of Computer",
-
-                        subtopics: [
-
-                            {
-                                id: "1.1",
-                                title:
-                                    "Types of Computers: Analog, Digital, Hybrid, Mainframe and Super Computer",
-                                pdfUrl:
-                                    pdf("types-of-computers.pdf")
-                            },
-
-                            {
-                                id: "1.2",
-                                title:
-                                    "Internet, Email System and Web Design",
-                                pdfUrl:
-                                    pdf("internet-email-web-design.pdf")
-                            },
-
-                            {
-                                id: "1.3",
-                                title:
-                                    "Physical Security of IT Infrastructure",
-                                pdfUrl:
-                                    pdf("physical-security-it-infrastructure.pdf")
-                            },
-
-                            {
-                                id: "1.4",
-                                title:
-                                    "Artificial Intelligence, Machine Learning and Blockchain",
-                                pdfUrl:
-                                    pdf("ai-machine-learning-blockchain.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "2",
-
-                        title:
-                            "2. Computer Architecture",
-
-                        subtopics: [
-
-                            {
-                                id: "2.1",
-                                title:
-                                    "Basic Computer Architecture, Registers and Memory Management",
-                                pdfUrl:
-                                    pdf("basic-computer-architecture.pdf")
-                            },
-
-                            {
-                                id: "2.2",
-                                title:
-                                    "Organization of Hard Disk",
-                                pdfUrl:
-                                    pdf("hard-disk-organization.pdf")
-                            },
-
-                            {
-                                id: "2.3",
-                                title:
-                                    "CPU Architecture",
-                                pdfUrl:
-                                    pdf("cpu-architecture.pdf")
-                            },
-
-                            {
-                                id: "2.4",
-                                title:
-                                    "I/O Management, I/O Interface, I/O Requests Handling and I/O Devices",
-                                pdfUrl:
-                                    pdf("io-management-interface-devices.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "3",
-
-                        title:
-                            "3. Communication and Computer Network Technologies",
-
-                        subtopics: [
-
-                            {
-                                id: "3.1",
-                                title:
-                                    "Networking Devices: Repeater, Hub, Switch and Router",
-                                pdfUrl:
-                                    pdf("networking-devices.pdf")
-                            },
-
-                            {
-                                id: "3.2",
-                                title:
-                                    "Switching Technologies, Modems and Remote Network Access",
-                                pdfUrl:
-                                    pdf("switching-technologies-modems.pdf")
-                            },
-
-                            {
-                                id: "3.3",
-                                title:
-                                    "Error Detection and Correction Techniques",
-                                pdfUrl:
-                                    pdf("error-detection-correction.pdf")
-                            },
-
-                            {
-                                id: "3.4",
-                                title:
-                                    "Internet Services, Internet Protocol and Addressing",
-                                pdfUrl:
-                                    pdf("internet-services-protocol-addressing.pdf")
-                            },
-
-                            {
-                                id: "3.5",
-                                title:
-                                    "Network Security and Cryptography",
-                                pdfUrl:
-                                    pdf("network-security-cryptography.pdf")
-                            }
-
-                        ]
-
-                    }
-
-                ]
-
-            },
-
-
-            {
-
-                section_id: "paper2b",
-
-                section_title:
-                    "PAPER II — Information Technology & Management",
-
-                section_marks:
-                    "Section B — 50 Marks",
-
-                topics: [
-
-                    {
-
-                        id: "4",
-
-                        title:
-                            "4. Operating System and Information Systems",
-
-                        subtopics: [
-
-                            {
-                                id: "4.1",
-                                title:
-                                    "Basic Knowledge of Operating System",
-                                pdfUrl:
-                                    pdf("operating-system-basics.pdf")
-                            },
-
-                            {
-                                id: "4.2",
-                                title:
-                                    "Process Management and Scheduling",
-                                pdfUrl:
-                                    pdf("process-management-scheduling.pdf")
-                            },
-
-                            {
-                                id: "4.3",
-                                title:
-                                    "DOS, UNIX and Windows Operating Systems",
-                                pdfUrl:
-                                    pdf("dos-unix-windows-operating-systems.pdf")
-                            },
-
-                            {
-                                id: "4.4",
-                                title:
-                                    "Identifying and Managing Security Threats in OS",
-                                pdfUrl:
-                                    pdf("operating-system-security-threats.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "5",
-
-                        title:
-                            "5. Database Management System, Data Mining/Warehousing and Web Technology",
-
-                        subtopics: [
-
-                            {
-                                id: "5.1",
-                                title:
-                                    "Basic Knowledge of Database Management System",
-                                pdfUrl:
-                                    pdf("database-management-system.pdf")
-                            },
-
-                            {
-                                id: "5.2",
-                                title:
-                                    "Table, Record, Relationship and Indexing",
-                                pdfUrl:
-                                    pdf("database-table-record-relationship-indexing.pdf")
-                            },
-
-                            {
-                                id: "5.3",
-                                title:
-                                    "Data Warehousing and Data Warehousing Process",
-                                pdfUrl:
-                                    pdf("data-warehousing-process.pdf")
-                            },
-
-                            {
-                                id: "5.4",
-                                title:
-                                    "HTML, Script, Stylesheet, XML, Web Server and Proxy Server",
-                                pdfUrl:
-                                    pdf("web-technology-html-xml-server.pdf")
-                            },
-
-                            {
-                                id: "5.5",
-                                title:
-                                    "Disaster Recovery Planning",
-                                pdfUrl:
-                                    pdf("disaster-recovery-planning.pdf")
-                            }
-
-                        ]
-
-                    },
-
-
-                    {
-
-                        id: "6",
-
-                        title:
-                            "6. Cybersecurity and IT Policies",
-
-                        subtopics: [
-
-                            {
-                                id: "6.1",
-                                title:
-                                    "Cyber Security, Access Control, Threats, Vulnerabilities, Authentication, Authorization and Password Management",
-                                pdfUrl:
-                                    pdf("cybersecurity-access-control.pdf")
-                            },
-
-                            {
-                                id: "6.2",
-                                title:
-                                    "Social Engineering, Malware, DoS, DDoS and Phishing",
-                                pdfUrl:
-                                    pdf("common-security-threats.pdf")
-                            },
-
-                            {
-                                id: "6.3",
-                                title:
-                                    "ICT Policy of Nepal, 2072",
-                                pdfUrl:
-                                    pdf("ict-policy-nepal-2072.pdf")
-                            },
-
-                            {
-                                id: "6.4",
-                                title:
-                                    "IT Guidelines Issued by Nepal Rastra Bank",
-                                pdfUrl:
-                                    pdf("nrb-it-guidelines.pdf")
-                            },
-
-                            {
-                                id: "6.5",
-                                title:
-                                    "Cyber Resilience Guidelines, 2023",
-                                pdfUrl:
-                                    pdf("cyber-resilience-guidelines-2023.pdf")
-                            }
-
-                        ]
-
-                    }
-
-                ]
-
-            }
-
-        ];
-
-
-        /* =====================================================
-           RENDER SYLLABUS
-        ===================================================== */
-
-        function renderSyllabus() {
-
-            const container =
-                document.getElementById(
-                    "syllabusTree"
-                );
-
-            container.innerHTML = "";
-
-            let totalSubtopics = 0;
-
-
-            window.rbbSyllabus.forEach(section => {
-
-
-                const banner =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                banner.className =
-                    "section-banner";
-
-
-                banner.innerHTML = `
-
-                    <h3>
-                        ${section.section_title}
-                    </h3>
-
-                    <p>
-                        ${section.section_marks}
-                    </p>
-
-                `;
-
-
-                container.appendChild(
-                    banner
+
+        <div id="syllabusTree"></div>
+
+
+    </main>
+
+
+    <aside
+        class="right"
+        id="rightSidebar"
+    >
+
+
+        <div class="viewer-header">
+
+            <span id="panelTitle">
+                Interactive Reader Engine
+            </span>
+
+
+            <div>
+
+                <button
+                    class="btn btn-normal"
+                    onclick="toggleMaximize()"
+                >
+                    Maximize 🗖
+                </button>
+
+                <button
+                    class="btn btn-normal"
+                    onclick="closeMobileViewer()"
+                    id="closeMobileBtn"
+                    style="display:none"
+                >
+                    Close ✖
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="viewer-body"
+            id="viewerContent"
+        >
+
+            <div class="welcome">
+
+                <h2>
+                    Welcome to Study Engine
+                </h2>
+
+                <p>
+                    Syllabus बाट कुनै topic को
+                    <b>View Note</b> थिचेर PDF खोल्नुहोस्।
+                    <br><br>
+                    <b>Generate Quiz</b> थिचेर Paper II को
+                    topic बाट Gemini AI quiz generate गर्नुहोस्।
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+
+const NOTES_BASE_URL =
+    "https://sundardumre.com.np/notes";
+
+
+const GEMINI_MODEL =
+    "gemini-2.5-flash";
+
+
+const STORAGE_KEYS = {
+
+    progress:
+        "rbb_level5_progress",
+
+    apiKey:
+        "rbb_gemini_api_key",
+
+    theme:
+        "rbb_theme",
+
+    timer:
+        "rbb_timer_seconds"
+
+};
+
+
+/* =====================================================
+   PDF URL HELPER
+===================================================== */
+
+
+function pdf(filename) {
+
+    return `${NOTES_BASE_URL}/${filename}`;
+
+}
+
+
+/* =====================================================
+   RBB LEVEL 5 IT SYLLABUS
+===================================================== */
+
+
+const syllabus = [
+
+
+{
+
+section_id:"paper1",
+
+section_title:
+"PAPER I — Banking and Organizational Management",
+
+section_marks:
+"Section A — 50 Marks | Section B — 50 Marks",
+
+topics:[
+
+
+{
+
+id:"1",
+
+title:
+"1. Financial Institutions in Nepal",
+
+subtopics:[
+
+["1.1.1","Commercial Banks","commercial-banks.pdf"],
+
+["1.1.2","Development Banks","development-banks.pdf"],
+
+["1.1.3","Finance Companies","finance-companies.pdf"],
+
+["1.1.4","Microfinance Institutions","microfinance-institutions.pdf"],
+
+["1.1.5","Infrastructure Development Bank","infrastructure-development-bank.pdf"],
+
+["1.2.1","Insurance Companies","insurance-companies.pdf"],
+
+["1.2.2","Employee Provident Fund","employee-provident-fund.pdf"],
+
+["1.2.3","Citizen Investment Trust","citizen-investment-trust.pdf"],
+
+["1.2.4","Social Security Fund","social-security-fund.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"2",
+
+title:
+"2. Some of the Key Basic Banking Terminology",
+
+subtopics:[
+
+["2.1","Capital Fund","capital-fund.pdf"],
+
+["2.2","Loan Loss Provisioning","loan-loss-provisioning.pdf"],
+
+["2.3","Credit-Deposit (CD) Ratio","credit-deposit-ratio.pdf"],
+
+["2.4","Cash Reserve Ratio (CRR)","cash-reserve-ratio.pdf"],
+
+["2.5","Refinancing, Rescheduling and Restructuring","refinancing-rescheduling-restructuring.pdf"],
+
+["2.6","Base Rate","base-rate.pdf"],
+
+["2.7","Credit Information and Blacklisting","credit-information-blacklisting.pdf"],
+
+["2.8","Credit Ratings","credit-ratings.pdf"],
+
+["2.9","Know Your Customer (KYC)","know-your-customer.pdf"],
+
+["2.10","Audit and Internal Control","audit-internal-control.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"3",
+
+title:
+"3. Banking Related Laws",
+
+subtopics:[
+
+["3.1","Nepal Rastra Bank Act, 2058","nepal-rastra-bank-act-2058.pdf"],
+
+["3.2","Bank and Financial Institution Act, 2073","bafia-2073.pdf"],
+
+["3.3","Payment and Settlement Act, 2075","payment-settlement-act-2075.pdf"],
+
+["3.4","Money Laundering Prevention Act, 2064","money-laundering-prevention-act-2064.pdf"],
+
+["3.5","Banking Offence and Punishment Act, 2064","banking-offence-punishment-act-2064.pdf"],
+
+["3.6","Negotiable Instruments Act, 2034","negotiable-instruments-act-2034.pdf"],
+
+["3.7","Electronic Transaction Act, 2063","electronic-transaction-act-2063.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"4",
+
+title:
+"4. Organizational Behavior",
+
+subtopics:[
+
+["4.1","Job Description, Terms of Reference and Responsibilities","job-description-responsibilities.pdf"],
+
+["4.2","Job Motivation and Performance","job-motivation-performance.pdf"],
+
+["4.3","Communication: Skill and Approach","communication-skills.pdf"],
+
+["4.4","Team Building and Workmanship","team-building.pdf"],
+
+["4.5","Customer Satisfaction and Delivery","customer-satisfaction.pdf"],
+
+["4.6","Grievance Handling","grievance-handling.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"5",
+
+title:
+"5. Other Related Laws",
+
+subtopics:[
+
+["5.1","Companies Act, 2063","companies-act-2063.pdf"],
+
+["5.2","Labour Act, 2074","labour-act-2074.pdf"],
+
+["5.3","Public Procurement Act, 2063","public-procurement-act-2063.pdf"],
+
+["5.4","Right to Information Act, 2064","right-to-information-act-2064.pdf"],
+
+["5.5","RBB Employee Service Regulation, 2070","rbb-employee-service-regulation-2070.pdf"],
+
+["5.6","NRB Unified Directives and Circulars","nrb-unified-directives.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"6",
+
+title:
+"6. Digital / Electronic Payment Systems",
+
+subtopics:[
+
+["6.1","Electronic Cheque Clearing","electronic-cheque-clearing.pdf"],
+
+["6.2","IPS, ConnectIPS, RTGS and SWIFT","ips-connectips-rtgs-swift.pdf"],
+
+["6.3","Internet Banking, Mobile Banking, QR Code and NFC","digital-banking-technologies.pdf"],
+
+["6.4","Digital Payment Cards","digital-payment-cards.pdf"],
+
+["6.5","Payment through Wallets","digital-wallets.pdf"],
+
+["6.6","Central Bank Digital Currency (CBDC)","cbdc.pdf"]
+
+]
+
+}
+
+]
+
+},
+
+
+{
+
+section_id:"paper2a",
+
+section_title:
+"PAPER II — Information Technology & Management",
+
+section_marks:
+"Section A — 50 Marks",
+
+topics:[
+
+
+{
+
+id:"1",
+
+title:
+"1. Introduction of Computer",
+
+subtopics:[
+
+["1.1","Types of Computers","types-of-computers.pdf"],
+
+["1.2","Internet, Email System and Web Design","internet-email-web-design.pdf"],
+
+["1.3","Physical Security of IT Infrastructure","physical-security-it-infrastructure.pdf"],
+
+["1.4","Artificial Intelligence, Machine Learning and Blockchain","ai-machine-learning-blockchain.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"2",
+
+title:
+"2. Computer Architecture",
+
+subtopics:[
+
+["2.1","Basic Computer Architecture, Registers and Memory Management","computer-architecture.pdf"],
+
+["2.2","Organization of Hard Disk","hard-disk-organization.pdf"],
+
+["2.3","CPU Architecture","cpu-architecture.pdf"],
+
+["2.4","I/O Management, Interface, Requests and Devices","io-management.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"3",
+
+title:
+"3. Communication and Computer Network Technologies",
+
+subtopics:[
+
+["3.1","Networking Devices: Repeater, Hub, Switch and Router","networking-devices.pdf"],
+
+["3.2","Switching Technologies, Modems and Remote Network Access","switching-modems-remote-access.pdf"],
+
+["3.3","Error Detection and Correction Techniques","error-detection-correction.pdf"],
+
+["3.4","Internet Services and Internet Protocol / Addressing","internet-protocol-addressing.pdf"],
+
+["3.5","Network Security and Cryptography","network-security-cryptography.pdf"]
+
+]
+
+}
+
+]
+
+},
+
+
+{
+
+section_id:"paper2b",
+
+section_title:
+"PAPER II — Information Technology & Management",
+
+section_marks:
+"Section B — 50 Marks",
+
+topics:[
+
+
+{
+
+id:"4",
+
+title:
+"4. Operating System and Information Systems",
+
+subtopics:[
+
+["4.1","Basic Knowledge of Operating System","operating-system.pdf"],
+
+["4.2","Process Management and Scheduling","process-management-scheduling.pdf"],
+
+["4.3","DOS, UNIX and Windows Operating Systems","dos-unix-windows.pdf"],
+
+["4.4","Security Threats in Operating System","os-security-threats.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"5",
+
+title:
+"5. Database Management System, Data Mining/Warehousing and Web Technology",
+
+subtopics:[
+
+["5.1","Basic Knowledge of Database Management System","dbms.pdf"],
+
+["5.2","Table, Record, Relationship and Indexing","database-concepts.pdf"],
+
+["5.3","Data Warehousing and Data Warehousing Process","data-warehousing.pdf"],
+
+["5.4","HTML, Script, Stylesheet, XML, Web Server and Proxy Server","web-technology.pdf"],
+
+["5.5","Disaster Recovery Planning","disaster-recovery-planning.pdf"]
+
+]
+
+},
+
+
+{
+
+id:"6",
+
+title:
+"6. Cybersecurity and IT Policies",
+
+subtopics:[
+
+["6.1","Cyber Security, Access Control, Threats and Vulnerabilities","cyber-security-basics.pdf"],
+
+["6.2","Social Engineering, Malware, DoS, DDoS and Phishing","common-cyber-security-threats.pdf"],
+
+["6.3","ICT Policy of Nepal, 2072","ict-policy-nepal-2072.pdf"],
+
+["6.4","IT Guidelines Issued by Nepal Rastra Bank","nrb-it-guidelines.pdf"],
+
+["6.5","Cyber Resilience Guidelines, 2023","cyber-resilience-guidelines-2023.pdf"]
+
+]
+
+}
+
+]
+
+}
+
+];
+
+
+/* =====================================================
+   LOCAL STORAGE
+===================================================== */
+
+
+let completedTopics =
+    JSON.parse(
+        localStorage.getItem(
+            STORAGE_KEYS.progress
+        ) || "{}"
+    );
+
+
+function saveProgress() {
+
+    localStorage.setItem(
+        STORAGE_KEYS.progress,
+        JSON.stringify(completedTopics)
+    );
+
+}
+
+
+function saveApiKey() {
+
+    const key =
+        document.getElementById(
+            "geminiApiKey"
+        ).value.trim();
+
+
+    if (!key) {
+
+        alert(
+            "Please enter Gemini API key."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        STORAGE_KEYS.apiKey,
+        key
+    );
+
+
+    alert(
+        "Gemini API key saved."
+    );
+
+}
+
+
+function loadApiKey() {
+
+    const key =
+        localStorage.getItem(
+            STORAGE_KEYS.apiKey
+        );
+
+
+    if (key) {
+
+        document.getElementById(
+            "geminiApiKey"
+        ).value = key;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER SYLLABUS
+===================================================== */
+
+
+let totalTopics = 0;
+
+
+function renderSyllabus() {
+
+    const container =
+        document.getElementById(
+            "syllabusTree"
+        );
+
+
+    container.innerHTML = "";
+
+
+    totalTopics = 0;
+
+
+    syllabus.forEach(section => {
+
+
+        const banner =
+            document.createElement(
+                "div"
+            );
+
+
+        banner.className =
+            "section-banner";
+
+
+        banner.innerHTML = `
+
+            <h3>
+                ${section.section_title}
+            </h3>
+
+            <p>
+                ${section.section_marks}
+            </p>
+
+        `;
+
+
+        container.appendChild(
+            banner
+        );
+
+
+        section.topics.forEach(topic => {
+
+
+            const accordion =
+                document.createElement(
+                    "div"
                 );
 
 
-                section.topics.forEach(topic => {
+            accordion.className =
+                "accordion";
 
 
-                    const item =
-                        document.createElement(
-                            "div"
+            let rows = "";
+
+
+            topic.subtopics.forEach(
+                sub => {
+
+
+                    totalTopics++;
+
+
+                    const id =
+                        sub[0];
+
+
+                    const title =
+                        sub[1];
+
+
+                    const url =
+                        pdf(sub[2]);
+
+
+                    const checked =
+                        completedTopics[id]
+                            ? "checked"
+                            : "";
+
+
+                    const safeId =
+                        id.replace(
+                            /[^a-zA-Z0-9]/g,
+                            "_"
                         );
 
 
-                    item.className =
-                        "accordion-item";
+                    rows += `
+
+                        <div class="topic-row">
+
+                            <input
+                                type="checkbox"
+                                id="check_${safeId}"
+                                ${checked}
+                                onchange="
+                                    toggleProgress(
+                                        '${id}'
+                                    )
+                                "
+                            >
 
 
-                    let subHtml = "";
+                            <span class="topic-text">
 
-
-                    topic.subtopics.forEach(sub => {
-
-
-                        totalSubtopics++;
-
-
-                        const safeId =
-                            sub.id.replace(
-                                /[^a-zA-Z0-9]/g,
-                                "_"
-                            );
-
-
-                        subHtml += `
-
-                            <div class="topic-row">
-
-                                <input
-                                    type="checkbox"
-                                    id="chk_${safeId}"
-                                    onchange="updateProgress()"
-                                >
-
-                                <span class="topic-text">
-
-                                    <span class="topic-code">
-                                        ${sub.id}
-                                    </span>
-
-                                    ${sub.title}
-
+                                <span class="topic-code">
+                                    ${id}
                                 </span>
 
+                                ${title}
 
-                                <div class="action-btns">
+                            </span>
+
+
+                            <div class="topic-actions">
+
+                                <button
+                                    class="topic-btn note-btn"
+                                    onclick="
+                                        openPdf(
+                                            ${JSON.stringify(title)},
+                                            ${JSON.stringify(url)}
+                                        )
+                                    "
+                                >
+                                    📖 Note
+                                </button>
+
+
+                                ${
+                                    section.section_id
+                                    .startsWith(
+                                        "paper2"
+                                    )
+                                    ?
+
+                                    `
 
                                     <button
-                                        class="view-btn"
-                                        onclick="openPdf(
-                                            ${JSON.stringify(sub.title)},
-                                            ${JSON.stringify(sub.pdfUrl)}
-                                        )"
+                                        class="topic-btn quiz-btn"
+                                        onclick="
+                                            generateQuiz(
+                                                ${JSON.stringify(title)}
+                                            )
+                                        "
                                     >
-                                        📖 View Note
+                                        🤖 Quiz
                                     </button>
 
-                                </div>
+                                    `
+
+                                    : ""
+
+                                }
 
                             </div>
-
-                        `;
-
-                    });
-
-
-                    item.innerHTML = `
-
-                        <div
-                            class="accordion-header"
-                            onclick="toggleAccordion(this)"
-                        >
-
-                            <span class="accordion-title">
-                                ${topic.title}
-                            </span>
-
-                            <span>
-                                ▼
-                            </span>
-
-                        </div>
-
-
-                        <div class="accordion-content">
-
-                            ${subHtml}
 
                         </div>
 
                     `;
 
-
-                    container.appendChild(
-                        item
-                    );
-
-                });
-
-            });
-
-
-            window.totalTopicsCount =
-                totalSubtopics;
-
-
-            updateProgress();
-
-        }
-
-
-        /* =====================================================
-           ACCORDION
-        ===================================================== */
-
-        function toggleAccordion(header) {
-
-            const content =
-                header.nextElementSibling;
-
-
-            content.classList.toggle(
-                "open"
+                }
             );
 
 
-            if (
-                content.classList.contains(
-                    "open"
-                )
-            ) {
+            accordion.innerHTML = `
 
-                content.style.maxHeight =
-                    content.scrollHeight +
-                    "px";
+                <div
+                    class="accordion-header"
+                    onclick="toggleAccordion(this)"
+                >
 
-            } else {
+                    <span class="accordion-title">
+                        ${topic.title}
+                    </span>
 
-                content.style.maxHeight =
-                    "0px";
+                    <span>
+                        ▼
+                    </span>
 
-            }
+                </div>
+
+
+                <div class="accordion-content">
+
+                    ${rows}
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                accordion
+            );
+
+        });
+
+    });
+
+
+    updateProgress();
+
+}
+
+
+/* =====================================================
+   PROGRESS PERSISTENCE
+===================================================== */
+
+
+function toggleProgress(id) {
+
+    const checkbox =
+        document.querySelector(
+            `input[id="check_${id.replace(
+                /[^a-zA-Z0-9]/g,
+                "_"
+            )}"]`
+        );
+
+
+    if (
+        checkbox &&
+        checkbox.checked
+    ) {
+
+        completedTopics[id] =
+            true;
+
+    } else {
+
+        delete completedTopics[id];
+
+    }
+
+
+    saveProgress();
+
+    updateProgress();
+
+}
+
+
+function updateProgress() {
+
+    const completed =
+        Object.keys(
+            completedTopics
+        ).length;
+
+
+    const percentage =
+        totalTopics
+            ? Math.round(
+                (
+                    completed /
+                    totalTopics
+                ) * 100
+            )
+            : 0;
+
+
+    document.getElementById(
+        "progPct"
+    ).innerText =
+        `${percentage}% Completed`;
+
+
+    document.getElementById(
+        "progBar"
+    ).style.width =
+        `${percentage}%`;
+
+
+    document.getElementById(
+        "trackerSummary"
+    ).innerText =
+        `${completed} of ${totalTopics} topics completed.`;
+
+}
+
+
+/* =====================================================
+   ACCORDION
+===================================================== */
+
+
+function toggleAccordion(header) {
+
+    const content =
+        header.nextElementSibling;
+
+
+    content.classList.toggle(
+        "open"
+    );
+
+
+    if (
+        content.classList.contains(
+            "open"
+        )
+    ) {
+
+        content.style.maxHeight =
+            content.scrollHeight +
+            "px";
+
+    } else {
+
+        content.style.maxHeight =
+            "0px";
+
+    }
+
+}
+
+
+/* =====================================================
+   PDF VIEWER
+===================================================== */
+
+
+function openPdf(title, url) {
+
+    const viewer =
+        document.getElementById(
+            "viewerContent"
+        );
+
+
+    const sidebar =
+        document.getElementById(
+            "rightSidebar"
+        );
+
+
+    if (
+        window.innerWidth <= 992
+    ) {
+
+        sidebar.classList.add(
+            "active-mobile"
+        );
+
+
+        document.getElementById(
+            "closeMobileBtn"
+        ).style.display =
+            "inline-block";
+
+    }
+
+
+    viewer.innerHTML = `
+
+        <div class="loading">
+
+            <div class="spinner"></div>
+
+            <p>
+                Checking PDF availability...
+            </p>
+
+        </div>
+
+    `;
+
+
+    fetch(
+        url,
+        {
+            method:"HEAD",
+            mode:"cors"
+        }
+    )
+
+    .then(response => {
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                "PDF_NOT_FOUND"
+            );
 
         }
 
 
-        /* =====================================================
-           PDF VIEWER
-        ===================================================== */
+        showPdf(
+            title,
+            url
+        );
 
-        function openPdf(title, url) {
+    })
 
-            const viewer =
-                document.getElementById(
-                    "viewerContent"
-                );
+    .catch(() => {
 
+        showPdfNotAvailable(
+            title,
+            url
+        );
 
-            const panelTitle =
-                document.getElementById(
-                    "panelTitle"
-                );
+    });
 
-
-            const sidebar =
-                document.getElementById(
-                    "pdfViewerSidebar"
-                );
+}
 
 
-            panelTitle.innerText =
-                "📖 PDF Notes Reader";
+function showPdf(title, url) {
+
+    const viewer =
+        document.getElementById(
+            "viewerContent"
+        );
 
 
-            if (
-                window.innerWidth <= 992
-            ) {
+    viewer.innerHTML = `
 
-                sidebar.classList.add(
-                    "active-mobile"
-                );
+        <div class="pdf-container">
 
+            <div class="pdf-toolbar">
 
-                document.getElementById(
-                    "closeMobileBtn"
-                ).style.display =
-                    "inline-block";
-
-            }
+                <h3>
+                    📚 ${escapeHtml(title)}
+                </h3>
 
 
-            viewer.innerHTML = `
+                <a
+                    class="open-pdf"
+                    href="${url}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Open Full ↗
+                </a>
 
-                <div class="pdf-container">
+            </div>
 
-                    <div class="pdf-toolbar">
 
-                        <h3
-                            title="${title}"
+            <iframe
+                class="pdf-frame"
+                src="${url}#toolbar=1&navpanes=0"
+                title="${escapeHtml(title)}"
+            ></iframe>
+
+        </div>
+
+    `;
+
+}
+
+
+function showPdfNotAvailable(title, url) {
+
+    const viewer =
+        document.getElementById(
+            "viewerContent"
+        );
+
+
+    viewer.innerHTML = `
+
+        <div class="pdf-not-available">
+
+            <div class="pdf-error-icon">
+                📄
+            </div>
+
+
+            <h2>
+                PDF Not Available
+            </h2>
+
+
+            <p>
+                This note has not been uploaded yet.
+            </p>
+
+
+            <span class="pdf-title">
+                ${escapeHtml(title)}
+            </span>
+
+
+            <br>
+
+
+            <a
+                class="open-pdf"
+                href="${url}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Check PDF URL ↗
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   GEMINI QUIZ API
+===================================================== */
+
+
+async function generateQuiz(topic) {
+
+    const apiKey =
+        localStorage.getItem(
+            STORAGE_KEYS.apiKey
+        );
+
+
+    if (!apiKey) {
+
+        alert(
+            "First enter and save Gemini API Key."
+        );
+
+        return;
+
+    }
+
+
+    const viewer =
+        document.getElementById(
+            "viewerContent"
+        );
+
+
+    const sidebar =
+        document.getElementById(
+            "rightSidebar"
+        );
+
+
+    if (
+        window.innerWidth <= 992
+    ) {
+
+        sidebar.classList.add(
+            "active-mobile"
+        );
+
+
+        document.getElementById(
+            "closeMobileBtn"
+        ).style.display =
+            "inline-block";
+
+    }
+
+
+    viewer.innerHTML = `
+
+        <div class="loading">
+
+            <div class="spinner"></div>
+
+            <p>
+                Gemini is generating quiz...
+            </p>
+
+        </div>
+
+    `;
+
+
+    const prompt = `
+
+You are an expert Nepal competitive examination quiz generator.
+
+Generate 10 multiple choice questions for:
+
+RBB Level 5 Senior Assistant (Information Technology)
+
+Paper II — Information Technology & Management.
+
+Topic:
+${topic}
+
+Rules:
+
+1. Generate exactly 10 questions.
+2. Each question must have exactly 4 options.
+3. Include one correct answer.
+4. Questions must be suitable for competitive written examination.
+5. Do not include explanations inside the JSON.
+6. Return ONLY valid JSON.
+
+Required JSON format:
+
+{
+  "topic": "${topic}",
+  "questions": [
+    {
+      "question": "Question text",
+      "options": [
+        "Option A",
+        "Option B",
+        "Option C",
+        "Option D"
+      ],
+      "answer": 0
+    }
+  ]
+}
+
+The answer must be the zero-based option index.
+`;
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
+
+                {
+
+                    method:"POST",
+
+                    headers:{
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:JSON.stringify({
+
+                        contents:[
+
+                            {
+
+                                parts:[
+
+                                    {
+                                        text:prompt
+                                    }
+
+                                ]
+
+                            }
+
+                        ],
+
+                        generationConfig:{
+
+                            temperature:0.4,
+
+                            responseMimeType:
+                                "application/json"
+
+                        }
+
+                    })
+
+                }
+
+            );
+
+
+        if (
+            !response.ok
+        ) {
+
+            const error =
+                await response.text();
+
+
+            throw new Error(
+                error
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const raw =
+            data
+                .candidates[0]
+                .content
+                .parts[0]
+                .text;
+
+
+        const quiz =
+            JSON.parse(
+                raw
+            );
+
+
+        renderQuiz(
+            quiz
+        );
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+
+        viewer.innerHTML = `
+
+            <div class="pdf-not-available">
+
+                <div class="pdf-error-icon">
+                    ⚠️
+                </div>
+
+
+                <h2>
+                    Quiz Generation Failed
+                </h2>
+
+
+                <p>
+                    Gemini API response process गर्न सकिएन।
+                </p>
+
+
+                <small
+                    style="
+                    color:var(--muted);
+                    max-width:500px;
+                    word-break:break-word;
+                    "
+                >
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </small>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   QUIZ RENDER
+===================================================== */
+
+
+let currentQuiz = null;
+
+let quizScore = 0;
+
+let answeredQuestions = 0;
+
+
+function renderQuiz(quiz) {
+
+    currentQuiz =
+        quiz;
+
+
+    quizScore =
+        0;
+
+
+    answeredQuestions =
+        0;
+
+
+    const viewer =
+        document.getElementById(
+            "viewerContent"
+        );
+
+
+    let html = `
+
+        <div class="quiz-container">
+
+            <div class="quiz-header">
+
+                <h2>
+                    🤖 AI Quiz
+                </h2>
+
+                <p>
+                    ${escapeHtml(
+                        quiz.topic
+                    )}
+                </p>
+
+            </div>
+
+
+            <div
+                id="quizResult"
+            ></div>
+
+    `;
+
+
+    quiz.questions.forEach(
+        (question, index) => {
+
+
+            html += `
+
+                <div
+                    class="quiz-question"
+                    id="question_${index}"
+                >
+
+                    <h4>
+                        ${index + 1}.
+                        ${escapeHtml(
+                            question.question
+                        )}
+                    </h4>
+
+            `;
+
+
+            question.options.forEach(
+                (option, optionIndex) => {
+
+
+                    html += `
+
+                        <button
+                            class="quiz-option"
+                            onclick="
+                                answerQuestion(
+                                    ${index},
+                                    ${optionIndex},
+                                    this
+                                )
+                            "
                         >
-                            📚 ${title}
-                        </h3>
+                            ${String.fromCharCode(
+                                65 +
+                                optionIndex
+                            )}.
+
+                            ${escapeHtml(
+                                option
+                            )}
+
+                        </button>
+
+                    `;
+
+                }
+            );
 
 
-                        <a
-                            href="${url}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="open-pdf-btn"
-                        >
-                            Open Full ↗
-                        </a>
-
-                    </div>
-
-
-                    <iframe
-                        class="pdf-frame"
-                        src="${url}#toolbar=1&navpanes=0"
-                        title="${title}"
-                    >
-
-                        <p>
-
-                            PDF viewer supported छैन।
-
-                            <a
-                                href="${url}"
-                                target="_blank"
-                            >
-                                Open PDF
-                            </a>
-
-                        </p>
-
-                    </iframe>
+            html += `
 
                 </div>
 
             `;
 
         }
+    );
 
 
-        /* =====================================================
-           MAXIMIZE
-        ===================================================== */
+    html += `
 
-        function toggleViewerMaximize() {
+        </div>
 
-            const sidebar =
-                document.getElementById(
-                    "pdfViewerSidebar"
-                );
+    `;
 
 
-            const btn =
-                document.getElementById(
-                    "toggleMaximizeBtn"
-                );
+    viewer.innerHTML =
+        html;
 
+}
 
-            sidebar.classList.toggle(
-                "maximized"
-            );
 
+function answerQuestion(
+    questionIndex,
+    selectedIndex,
+    button
+) {
 
-            btn.innerText =
-                sidebar.classList.contains(
-                    "maximized"
-                )
-                    ? "Restore 🗗"
-                    : "Maximize 🗖";
+    const question =
+        currentQuiz
+            .questions[
+                questionIndex
+            ];
 
-        }
 
-
-        /* =====================================================
-           MOBILE CLOSE
-        ===================================================== */
-
-        function closeMobileViewer() {
-
-            document
-                .getElementById(
-                    "pdfViewerSidebar"
-                )
-                .classList.remove(
-                    "active-mobile"
-                );
-
-        }
-
-
-        /* =====================================================
-           PROGRESS
-        ===================================================== */
-
-        function updateProgress() {
-
-            const checkboxes =
-                document.querySelectorAll(
-                    ".topic-row input[type='checkbox']"
-                );
-
-
-            let checkedCount = 0;
-
-
-            checkboxes.forEach(
-                checkbox => {
-
-                    if (
-                        checkbox.checked
-                    ) {
-
-                        checkedCount++;
-
-                    }
-
-                }
-            );
-
-
-            const total =
-                window.totalTopicsCount ||
-                1;
-
-
-            const percentage =
-                Math.round(
-                    (
-                        checkedCount /
-                        total
-                    ) * 100
-                );
-
-
-            document.getElementById(
-                "progPct"
-            ).innerText =
-                `${percentage}% Completed`;
-
-
-            document.getElementById(
-                "progBar"
-            ).style.width =
-                `${percentage}%`;
-
-
-            document.getElementById(
-                "trackerSummary"
-            ).innerText =
-                `${checkedCount} of ${total} subtopics completed.`;
-
-        }
-
-
-        /* =====================================================
-           THEME
-        ===================================================== */
-
-        function toggleTheme() {
-
-            const html =
-                document.documentElement;
-
-
-            const currentTheme =
-                html.getAttribute(
-                    "data-theme"
-                );
-
-
-            const newTheme =
-                currentTheme === "dark"
-                    ? "light"
-                    : "dark";
-
-
-            html.setAttribute(
-                "data-theme",
-                newTheme
-            );
-
-
-            document.getElementById(
-                "themeIcon"
-            ).innerText =
-                newTheme === "dark"
-                    ? "🌙"
-                    : "☀️";
-
-
-            document.getElementById(
-                "themeText"
-            ).innerText =
-                newTheme === "dark"
-                    ? "Dark"
-                    : "Light";
-
-        }
-
-
-        /* =====================================================
-           TIMER
-        ===================================================== */
-
-        let timerInterval = null;
-
-        let totalSeconds =
-            3 * 60 * 60;
-
-
-        function updateTimerDisplay() {
-
-            const hours =
-                String(
-                    Math.floor(
-                        totalSeconds / 3600
-                    )
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            const minutes =
-                String(
-                    Math.floor(
-                        (
-                            totalSeconds %
-                            3600
-                        ) / 60
-                    )
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            const seconds =
-                String(
-                    totalSeconds %
-                    60
-                ).padStart(
-                    2,
-                    "0"
-                );
-
-
-            document.getElementById(
-                "timerBox"
-            ).innerText =
-                `${hours}:${minutes}:${seconds}`;
-
-        }
-
-
-        function startTimer() {
-
-            if (
-                timerInterval
-            ) return;
-
-
-            timerInterval =
-                setInterval(
-                    () => {
-
-
-                        if (
-                            totalSeconds >
-                            0
-                        ) {
-
-                            totalSeconds--;
-
-                            updateTimerDisplay();
-
-                        } else {
-
-                            pauseTimer();
-
-                            alert(
-                                "Time's up!"
-                            );
-
-                        }
-
-                    },
-                    1000
-                );
-
-        }
-
-
-        function pauseTimer() {
-
-            clearInterval(
-                timerInterval
-            );
-
-
-            timerInterval =
-                null;
-
-        }
-
-
-        function applyCustomTime() {
-
-            pauseTimer();
-
-
-            const hours =
-                parseInt(
-                    document.getElementById(
-                        "hrIn"
-                    ).value
-                ) || 0;
-
-
-            const minutes =
-                parseInt(
-                    document.getElementById(
-                        "minIn"
-                    ).value
-                ) || 0;
-
-
-            totalSeconds =
-                (
-                    hours *
-                    3600
-                )
-                +
-                (
-                    minutes *
-                    60
-                );
-
-
-            updateTimerDisplay();
-
-        }
-
-
-        /* =====================================================
-           INITIALIZE
-        ===================================================== */
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            () => {
-
-                renderSyllabus();
-
-                updateTimerDisplay();
-
-            }
+    const container =
+        document.getElementById(
+            `question_${questionIndex}`
         );
 
-    </script>
+
+    const buttons =
+        container.querySelectorAll(
+            ".quiz-option"
+        );
+
+
+    if (
+        container.dataset.answered
+    ) {
+
+        return;
+
+    }
+
+
+    container.dataset.answered =
+        "true";
+
+
+    answeredQuestions++;
+
+
+    buttons.forEach(
+        (btn, index) => {
+
+
+            btn.disabled =
+                true;
+
+
+            if (
+                index ===
+                question.answer
+            ) {
+
+                btn.classList.add(
+                    "correct"
+                );
+
+            }
+
+        }
+    );
+
+
+    if (
+        selectedIndex ===
+        question.answer
+    ) {
+
+        quizScore++;
+
+    } else {
+
+        button.classList.add(
+            "wrong"
+        );
+
+    }
+
+
+    updateQuizResult();
+
+}
+
+
+function updateQuizResult() {
+
+    const result =
+        document.getElementById(
+            "quizResult"
+        );
+
+
+    if (!result) return;
+
+
+    result.innerHTML = `
+
+        <div class="quiz-result">
+
+            <h2>
+                ${quizScore} / ${currentQuiz.questions.length}
+            </h2>
+
+            <p>
+                Answered:
+                ${answeredQuestions}
+                /
+                ${currentQuiz.questions.length}
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   THEME PERSISTENCE
+===================================================== */
+
+
+function toggleTheme() {
+
+    const html =
+        document.documentElement;
+
+
+    const current =
+        html.getAttribute(
+            "data-theme"
+        );
+
+
+    const next =
+        current === "dark"
+            ? "light"
+            : "dark";
+
+
+    html.setAttribute(
+        "data-theme",
+        next
+    );
+
+
+    localStorage.setItem(
+        STORAGE_KEYS.theme,
+        next
+    );
+
+
+    updateThemeText();
+
+}
+
+
+function updateThemeText() {
+
+    const theme =
+        document.documentElement
+            .getAttribute(
+                "data-theme"
+            );
+
+
+    document.getElementById(
+        "themeIcon"
+    ).innerText =
+        theme === "dark"
+            ? "🌙"
+            : "☀️";
+
+
+    document.getElementById(
+        "themeText"
+    ).innerText =
+        theme === "dark"
+            ? "Dark"
+            : "Light";
+
+}
+
+
+function loadTheme() {
+
+    const theme =
+        localStorage.getItem(
+            STORAGE_KEYS.theme
+        );
+
+
+    if (theme) {
+
+        document.documentElement
+            .setAttribute(
+                "data-theme",
+                theme
+            );
+
+    }
+
+
+    updateThemeText();
+
+}
+
+
+/* =====================================================
+   TIMER WITH LOCAL STORAGE
+===================================================== */
+
+
+let timerInterval =
+    null;
+
+
+let totalSeconds =
+    Number(
+        localStorage.getItem(
+            STORAGE_KEYS.timer
+        )
+    ) ||
+    3 * 60 * 60;
+
+
+function updateTimerDisplay() {
+
+    const h =
+        String(
+            Math.floor(
+                totalSeconds /
+                3600
+            )
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const m =
+        String(
+            Math.floor(
+                (
+                    totalSeconds %
+                    3600
+                ) /
+                60
+            )
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const s =
+        String(
+            totalSeconds %
+            60
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    document.getElementById(
+        "timerBox"
+    ).innerText =
+        `${h}:${m}:${s}`;
+
+
+    localStorage.setItem(
+        STORAGE_KEYS.timer,
+        totalSeconds
+    );
+
+}
+
+
+function startTimer() {
+
+    if (
+        timerInterval
+    ) return;
+
+
+    timerInterval =
+        setInterval(
+            () => {
+
+
+                if (
+                    totalSeconds >
+                    0
+                ) {
+
+                    totalSeconds--;
+
+                    updateTimerDisplay();
+
+                } else {
+
+                    pauseTimer();
+
+                    alert(
+                        "Time's up!"
+                    );
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+function pauseTimer() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerInterval =
+        null;
+
+
+    updateTimerDisplay();
+
+}
+
+
+function applyCustomTime() {
+
+    pauseTimer();
+
+
+    const hours =
+        parseInt(
+            document.getElementById(
+                "hrIn"
+            ).value
+        ) ||
+        0;
+
+
+    const minutes =
+        parseInt(
+            document.getElementById(
+                "minIn"
+            ).value
+        ) ||
+        0;
+
+
+    totalSeconds =
+        (
+            hours *
+            3600
+        )
+        +
+        (
+            minutes *
+            60
+        );
+
+
+    updateTimerDisplay();
+
+}
+
+
+/* =====================================================
+   VIEWER CONTROLS
+===================================================== */
+
+
+function toggleMaximize() {
+
+    const sidebar =
+        document.getElementById(
+            "rightSidebar"
+        );
+
+
+    sidebar.classList.toggle(
+        "maximized"
+    );
+
+}
+
+
+function closeMobileViewer() {
+
+    document.getElementById(
+        "rightSidebar"
+    ).classList.remove(
+        "active-mobile"
+    );
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadTheme();
+
+        loadApiKey();
+
+        renderSyllabus();
+
+        updateTimerDisplay();
+
+    }
+);
+
+
+</script>
 
 </body>
 
