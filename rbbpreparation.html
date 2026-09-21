@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RBB Level 5 | IT Assistant – Daily Topic Shuffler + Revision Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+  <style>
+    :root {
+      --bg: #0f1419; --surface: #1a2332; --surface-2: #243044; --border: #2d3a4f;
+      --text: #e8eef7; --text-muted: #8b9cb3; --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,0.15); --success: #22c55e; --success-soft: rgba(34,197,94,0.15);
+      --warning: #f59e0b; --warning-soft: rgba(245,158,11,0.15); --danger: #ef4444;
+      --radius: 16px; --shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter','Noto Sans Devanagari',system-ui,sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
+      background-image: radial-gradient(ellipse at 20% 0%, rgba(59,130,246,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(34,197,94,0.08) 0%, transparent 45%);
+    }
+    .container { max-width: 920px; margin: 0 auto; padding: 24px 18px 80px; }
+    header { text-align: center; margin-bottom: 28px; padding-top: 12px; }
+    header .badge {
+      display: inline-block; background: var(--accent-soft); color: var(--accent);
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; padding: 5px 12px;
+      border-radius: 999px; margin-bottom: 10px; border: 1px solid rgba(59,130,246,0.3);
+    }
+    header h1 { font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+    header h1 span { color: var(--accent); }
+    header p { color: var(--text-muted); font-size: 0.95rem; }
+    .progress-wrap {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 20px; margin-bottom: 22px; box-shadow: var(--shadow);
+    }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
+    .progress-header strong { color: var(--success); }
+    .progress-bar-bg { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg,#22c55e,#3b82f6); border-radius: 999px; transition: width 0.5s; width: 0%; }
+    .tod-card, .hierarchy-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px 22px; margin-bottom: 22px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+    }
+    .tod-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg,var(--accent),var(--success)); }
+    .tod-label, .section-label {
+      font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .tod-label .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+    .shuffle-stage { min-height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .topic-display {
+      font-size: 1.3rem; font-weight: 600; text-align: center; padding: 14px 16px; border-radius: 12px;
+      background: var(--surface-2); border: 1px solid var(--border); width: 100%; transition: all 0.25s;
+    }
+    .topic-display.shuffling { animation: shuffleGlow 0.18s ease infinite alternate; }
+    @keyframes shuffleGlow {
+      from { background: var(--surface-2); border-color: var(--border); }
+      to { background: rgba(59,130,246,0.18); border-color: var(--accent); }
+    }
+    .topic-display.selected { background: var(--accent-soft); border-color: var(--accent); color: #93c5fd; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 18px; font-size: 0.85rem; color: var(--text-muted); }
+    .meta-chip { background: var(--surface-2); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border); }
+    .meta-chip.paper1 { border-color: #a78bfa; color: #c4b5fd; }
+    .meta-chip.paper2 { border-color: #34d399; color: #6ee7b7; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    button {
+      font-family: inherit; font-size: 0.92rem; font-weight: 600; padding: 11px 18px; border-radius: 12px;
+      border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #16a34a; transform: translateY(-1px); }
+    .btn-warning { background: var(--warning); color: #111; }
+    .btn-warning:hover { background: #d97706; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--surface-2); color: var(--text); }
+    .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .btn-outline:hover { background: var(--accent-soft); }
+    .btn-sm { font-size: 0.8rem; padding: 7px 12px; border-radius: 8px; }
+    .explain-panel {
+      margin-top: 18px; background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 18px; display: none;
+    }
+    .explain-panel.visible { display: block; animation: fadeIn 0.35s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .explain-panel h3 { font-size: 0.95rem; margin-bottom: 8px; color: #93c5fd; }
+    .explain-panel .content { font-size: 0.92rem; white-space: pre-wrap; }
+    .explain-panel .hint { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 0.82rem; color: var(--text-muted); }
+    .revision-box { margin-top: 20px; display: none; border-top: 1px dashed var(--border); padding-top: 18px; }
+    .revision-box.visible { display: block; animation: fadeIn 0.3s ease; }
+    .revision-box > label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--warning); margin-bottom: 10px; }
+    .revision-box .note-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; margin-bottom: 12px; }
+    .revision-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ck.ck-editor {
+      border-radius: 12px;
+      overflow: visible !important;
+      width: 100%;
+      max-width: 100%;
+    }
+    .ck.ck-toolbar { background: var(--surface-2) !important; border-color: var(--border) !important; }
+    .ck.ck-toolbar .ck-button { color: var(--text) !important; }
+    .ck.ck-toolbar .ck-button:hover:not(.ck-disabled), .ck.ck-toolbar .ck-button.ck-on {
+      background: var(--accent-soft) !important; color: var(--accent) !important;
+    }
+    .ck.ck-editor__main > .ck-editor__editable {
+      background: var(--bg) !important;
+      color: var(--text) !important;
+      min-height: 220px;
+      max-height: 520px;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      width: 100%;
+      max-width: 100%;
+      border-color: var(--border) !important;
+      font-family: 'Inter','Noto Sans Devanagari',sans-serif !important;
+      font-size: 0.95rem !important;
+      line-height: 1.6 !important;
+    }
+    .ck.ck-editor__main > .ck-editor__editable:focus {
+      border-color: var(--accent) !important; box-shadow: 0 0 0 3px var(--accent-soft) !important;
+    }
+    .ck.ck-dropdown__panel { background: var(--surface) !important; border-color: var(--border) !important; }
+    .ck.ck-list__item .ck-button { color: var(--text) !important; }
+    .ck-content h2, .ck-content h3, .ck-content h4 { color: #93c5fd; margin: 0.6em 0 0.3em; }
+    .ck-content ul, .ck-content ol { padding-left: 1.4em; margin: 0.4em 0; }
+    .ck-content table { border-collapse: collapse; width: 100%; margin: 0.6em 0; }
+    .ck-content table td, .ck-content table th { border: 1px solid var(--border); padding: 6px 10px; }
+    .ck-content table th { background: var(--surface-2); }
+    .section-title { font-size: 1.1rem; font-weight: 600; margin: 28px 0 12px; display: flex; align-items: center; gap: 10px; }
+    .section-title .count { font-size: 0.78rem; background: var(--surface-2); padding: 2px 10px; border-radius: 999px; color: var(--text-muted); font-weight: 500; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .filter-btn {
+      font-size: 0.8rem; padding: 6px 14px; border-radius: 999px; background: var(--surface);
+      border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; font-weight: 500;
+    }
+    .filter-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+    .checklist { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--border);
+      transition: background 0.15s; cursor: pointer;
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-item:hover { background: var(--surface-2); }
+    .check-item.done { background: var(--success-soft); }
+    .check-item.done .topic-text { text-decoration: line-through; color: var(--text-muted); }
+    .check-item.has-note { border-left: 3px solid var(--warning); }
+    .check-box {
+      width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--border); flex-shrink: 0;
+      margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: transparent;
+    }
+    .check-item.done .check-box { background: var(--success); border-color: var(--success); color: white; }
+    .topic-text { flex: 1; font-size: 0.9rem; }
+    .topic-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .paper-tag { font-size: 0.68rem; padding: 2px 8px; border-radius: 6px; font-weight: 600; flex-shrink: 0; }
+    .paper-tag.p1 { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+    .paper-tag.p2 { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+    .note-badge { font-size: 0.65rem; background: var(--warning-soft); color: var(--warning); padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+    .hierarchy-card { display: none; }
+    .hierarchy-card.visible { display: block; }
+    .tree { font-size: 0.92rem; }
+    .tree-paper { margin-bottom: 16px; }
+    .tree-paper-title {
+      font-weight: 700; font-size: 1rem; padding: 10px 14px; background: var(--surface-2); border-radius: 10px;
+      margin-bottom: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+    }
+    .tree-paper-title .arrow { transition: transform 0.2s; font-size: 0.75rem; color: var(--text-muted); }
+    .tree-paper.collapsed .tree-paper-title .arrow { transform: rotate(-90deg); }
+    .tree-paper.collapsed .tree-children { display: none; }
+    .tree-children { padding-left: 18px; border-left: 2px solid var(--border); margin-left: 12px; }
+    .tree-node { position: relative; padding: 10px 0 10px 14px; border-bottom: 1px solid rgba(45,58,79,0.5); }
+    .tree-node:last-child { border-bottom: none; }
+    .tree-node::before { content: ''; position: absolute; left: -2px; top: 22px; width: 14px; height: 2px; background: var(--border); }
+    .tree-node-header { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+    .tree-node-title { font-weight: 600; flex: 1; min-width: 180px; }
+    .tree-node-body {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+      font-size: 0.88rem; margin-top: 6px; max-height: 220px; overflow-y: auto;
+    }
+    .tree-node-body h2, .tree-node-body h3, .tree-node-body h4 { color: #93c5fd; margin: 0.5em 0 0.25em; font-size: 1em; }
+    .tree-node-body ul, .tree-node-body ol { padding-left: 1.3em; margin: 0.35em 0; }
+    .tree-node-body table { border-collapse: collapse; width: 100%; margin: 0.5em 0; font-size: 0.85em; }
+    .tree-node-body table td, .tree-node-body table th { border: 1px solid var(--border); padding: 4px 8px; }
+    .tree-node-body table th { background: var(--surface-2); }
+    .tree-node-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tree-empty { text-align: center; padding: 30px 16px; color: var(--text-muted); }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none;
+      align-items: center; justify-content: center; z-index: 200; padding: 16px;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; padding: 22px; box-shadow: var(--shadow);
+    }
+    .modal h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .modal .sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end; }
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+      padding: 12px 20px; border-radius: 12px; font-size: 0.9rem; box-shadow: var(--shadow);
+      opacity: 0; transition: all 0.3s; z-index: 300; pointer-events: none; max-width: 90%; text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    footer { text-align: center; margin-top: 32px; font-size: 0.8rem; color: var(--text-muted); }
+    .all-done { text-align: center; padding: 36px 16px; color: var(--text-muted); }
+    /* ===== CKEditor images + SVG: always visible + responsive ===== */
+    .ck-content figure.image {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      margin: 1em 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      text-align: center;
+      clear: both;
+    }
+
+    .ck-content figure.image img,
+    .ck-content img[src*="image/svg+xml"],
+    .ck-content img[src*=".svg"] {
+      display: block !important;
+      width: auto !important;
+      max-width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+      margin: 0 auto !important;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .ck-content svg {
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+      margin: 12px auto;
+    }
+
+    /* Never let CKEditor image widgets clip their actual image. */
+    .ck-content .image-inline,
+    .ck-content .image.image-inline,
+    .ck-content .image.image-style-side,
+    .ck-content .image.image-style-align-left,
+    .ck-content .image.image-style-align-center,
+    .ck-content .image.image-style-align-right {
+      max-width: 100% !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+
+    .ck-content figure.image.image-style-side {
+      float: right;
+      width: min(50%, 420px) !important;
+      max-width: 50% !important;
+      margin: 0 0 1em 1.25em !important;
+    }
+
+    .ck-content figure.image.image-style-align-left {
+      float: none;
+      width: auto !important;
+      max-width: 100% !important;
+      margin: 1em auto 1em 0 !important;
+    }
+
+    .ck-content figure.image.image-style-align-center {
+      float: none;
+      width: auto !important;
+      max-width: 100% !important;
+      margin: 1em auto !important;
+    }
+
+    .ck-content figure.image.image-style-align-right {
+      float: none;
+      width: auto !important;
+      max-width: 100% !important;
+      margin: 1em 0 1em auto !important;
+    }
+
+    .ck-content figure.image figcaption {
+      color: var(--text-muted);
+      font-size: .78rem;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    /* Responsive images + SVG after the note is displayed outside CKEditor. */
+    .tree-node-body figure.image,
+    .note-body figure.image {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      overflow: visible !important;
+      margin: 1em 0 !important;
+    }
+
+    .tree-node-body figure.image img,
+    .note-body figure.image img,
+    .tree-node-body img[src*="image/svg+xml"],
+    .note-body img[src*="image/svg+xml"],
+    .tree-node-body svg,
+    .note-body svg {
+      display: block !important;
+      width: auto !important;
+      max-width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+      margin: 0 auto !important;
+      object-fit: contain;
+    }
+
+    /* Flow diagrams are image-based, so arrows cannot be broken by CKEditor. */
+    .ck-content .flow-diagram-image,
+    .tree-node-body .flow-diagram-image,
+    .note-body .flow-diagram-image {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+
+    .ck-content .flow-diagram-image img,
+    .tree-node-body .flow-diagram-image img,
+    .note-body .flow-diagram-image img {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
+    @media (max-width: 700px) {
+      .ck-content figure.image,
+      .ck-content figure.image.image-style-side,
+      .ck-content figure.image.image-style-align-left,
+      .ck-content figure.image.image-style-align-center,
+      .ck-content figure.image.image-style-align-right {
+        float: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 1em auto !important;
+      }
+
+      .ck-content figure.image img,
+      .tree-node-body figure.image img,
+      .note-body figure.image img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+      }
+
+      .ck.ck-editor__main > .ck-editor__editable {
+        max-height: 65vh;
+      }
+    }
+
+    @media (max-width: 560px) {
+      header h1 { font-size: 1.35rem; }
+      .topic-display { font-size: 1.1rem; }
+      .btn-row { flex-direction: column; }
+      button { width: 100%; justify-content: center; }
+      .revision-actions button { flex: 1; }
+    }
+    /* Attractive PDF */
+    #pdf-render-host {
+      position: fixed; left: 0; top: 0; width: 794px; background: #fff !important; color: #1a1a1a !important;
+      font-family: 'Noto Sans Devanagari','Inter',Arial,sans-serif !important; padding: 0;
+      z-index: 2147483646; opacity: 0.02; pointer-events: none; box-sizing: border-box; overflow: visible;
+    }
+    #pdf-render-host .pdf-page { padding: 36px 44px 40px; }
+    #pdf-render-host .pdf-header-bar {
+      background: linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%); color: #fff !important;
+      padding: 18px 22px; margin: -36px -44px 24px;
+    }
+    #pdf-render-host .pdf-header-bar h1 { font-size: 20px; margin: 0 0 4px; color: #fff !important; font-weight: 700; }
+    #pdf-render-host .pdf-header-bar .pdf-meta { color: rgba(255,255,255,0.85) !important; font-size: 12px; margin: 0; }
+    #pdf-render-host .pdf-section { margin-bottom: 28px; }
+    #pdf-render-host .pdf-topic-bar {
+      background: #eff6ff; border-left: 5px solid #2563eb; padding: 10px 14px; margin-bottom: 10px; border-radius: 0 8px 8px 0;
+    }
+    #pdf-render-host .pdf-topic { font-weight: 700; font-size: 15px; margin: 0 0 2px; color: #1e3a5f !important; }
+    #pdf-render-host .pdf-topic-meta { font-size: 11px; color: #64748b !important; margin: 0; }
+    #pdf-render-host .pdf-note {
+      background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 18px;
+      font-size: 13px; color: #1e293b !important; line-height: 1.65;
+    }
+    #pdf-render-host .pdf-note h2 { font-size: 16px; color: #1e40af !important; margin: 12px 0 6px; border-bottom: 2px solid #bfdbfe; padding-bottom: 4px; }
+    #pdf-render-host .pdf-note h3 { font-size: 14px; color: #1d4ed8 !important; margin: 10px 0 5px; }
+    #pdf-render-host .pdf-note h4 { font-size: 13px; color: #2563eb !important; margin: 8px 0 4px; }
+    #pdf-render-host .pdf-note p { margin: 0 0 8px; }
+    #pdf-render-host .pdf-note ul, #pdf-render-host .pdf-note ol { margin: 6px 0 10px; padding-left: 22px; }
+    #pdf-render-host .pdf-note li { margin-bottom: 4px; }
+    #pdf-render-host .pdf-note ul li { list-style-type: disc; }
+    #pdf-render-host .pdf-note ol li { list-style-type: decimal; }
+    #pdf-render-host .pdf-note table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 12px; }
+    #pdf-render-host .pdf-note table th { background: #1e40af !important; color: #fff !important; padding: 8px 10px; text-align: left; font-weight: 600; }
+    #pdf-render-host .pdf-note table td { border: 1px solid #cbd5e1; padding: 7px 10px; color: #1e293b !important; }
+    #pdf-render-host .pdf-note table tr:nth-child(even) td { background: #f1f5f9 !important; }
+    #pdf-render-host .pdf-note strong { font-weight: 700; color: #0f172a !important; }
+    #pdf-render-host .pdf-note em { font-style: italic; }
+    #pdf-render-host .pdf-note blockquote {
+      border-left: 3px solid #94a3b8; margin: 8px 0; padding: 6px 12px; color: #475569 !important; background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">RBB Level 5 · IT Assistant</div>
+      <h1>Daily Topic <span>Shuffler</span> + Revision</h1>
+      <p>आजको विषय छान्नुहोस् · रिच टेक्स्ट नोट लेख्नुहोस् · PDF मा खोल्नुहोस्</p>
+    </header>
+
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span>कुल प्रगति (पूरा विषय)</span>
+        <strong id="progressText">0 / 0</strong>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
+    </div>
+
+    <div class="tod-card">
+      <div class="tod-label"><span class="dot"></span> आजको विषय · Topic of the Day</div>
+      <div class="shuffle-stage">
+        <div class="topic-display" id="topicDisplay">तलको बटन थिचेर विषय छान्नुहोस्</div>
+      </div>
+      <div class="meta-row" id="metaRow" style="display:none;">
+        <span class="meta-chip" id="paperChip"></span>
+        <span class="meta-chip" id="sectionChip"></span>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="shuffleBtn" onclick="startShuffle()">Shuffle Topic</button>
+        <button class="btn-success" id="completeBtn" style="display:none;" onclick="markComplete()">✓ पूरा भयो</button>
+        <button class="btn-outline" id="explainBtn" style="display:none;" onclick="toggleExplain()">व्याख्या</button>
+      </div>
+      <div class="explain-panel" id="explainPanel">
+        <h3>अध्ययन नोट · Study Note</h3>
+        <div class="content" id="explainContent"></div>
+        <div class="hint" id="explainHint"></div>
+        <button class="btn-ghost btn-sm" style="margin-top:10px;" onclick="copyExplainPrompt()">AI का लागि व्याख्या प्रॉम्प्ट कपी</button>
+      </div>
+
+      <div class="revision-box" id="revisionBox">
+        <label>📝 मेरो रिभिजन नोट (Heading, List, Table, Image र HTML Documentation insert गर्न सकिन्छ)</label>
+        <div id="noteEditor"></div>
+        <input id="hiddenImageInput" type="file" accept="image/*,.svg,image/svg+xml" hidden onchange="handleExternalImageUpload(event)" />
+        <input id="hiddenHtmlInput" type="file" accept=".html,.htm,text/html" hidden onchange="handleHtmlDocumentationImport(event)" />
+        <div class="note-meta" id="noteMeta">अहिलेसम्म कुनै नोट सेभ भएको छैन</div>
+        <div class="revision-actions">
+          <button class="btn-success btn-sm" onclick="saveNote()">💾 सेभ / अपडेट</button>
+          <button class="btn-warning btn-sm" onclick="copyAccuracyPrompt()">🎯 AI सँग तुलना</button>
+          <button class="btn-outline btn-sm" onclick="insertResponsiveFlowDiagram()">↕️ Flow Diagram</button>
+          <button class="btn-outline btn-sm" onclick="triggerImageUpload()">🖼️ Image थप्नुहोस्</button>
+           <button class="btn-outline btn-sm" onclick="triggerHtmlDocumentationImport()">🌐 HTML Documentation</button>
+          <button class="btn-outline btn-sm" onclick="openNoteAsPdf()">📄 यो नोट PDF खोल्नुहोस्</button>
+          <button class="btn-ghost btn-sm" onclick="clearEditor()">खाली गर्नुहोस्</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">मेरो रिभिजन नोटहरू <span class="count" id="notesCount">0</span></div>
+    <div class="btn-row" style="justify-content:flex-start;margin-bottom:14px;">
+      <button class="btn-outline btn-sm" onclick="toggleHierarchy()">📂 Hierarchy मा खोल्नुहोस्</button>
+      <button class="btn-primary btn-sm" onclick="exportAllNotesPdf()">📄 सबै नोट PDF खोल्नुहोस्</button>
+    </div>
+    <div class="hierarchy-card" id="hierarchyCard">
+      <div class="section-label">Hierarchy · Linked Structure</div>
+      <div class="tree" id="notesTree"></div>
+    </div>
+
+    <div class="section-title">विषय सूची · Topic Checklist <span class="count" id="listCount">0</span></div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">सबै</button>
+      <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')">बाँकी</button>
+      <button class="filter-btn" data-filter="done" onclick="setFilter('done')">पूरा</button>
+      <button class="filter-btn" data-filter="withnote" onclick="setFilter('withnote')">नोट भएका</button>
+      <button class="filter-btn" data-filter="paper1" onclick="setFilter('paper1')">Paper I</button>
+      <button class="filter-btn" data-filter="paper2" onclick="setFilter('paper2')">Paper II</button>
+    </div>
+    <div class="checklist" id="checklist"></div>
+    <footer>RBB Level 5 · IT Assistant · CKEditor + localStorage · PDF viewer<br>अध्ययन जारी राख्नुहोस्</footer>
+  </div>
+
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <h3 id="modalTitle">नोट सम्पादन</h3>
+      <div class="sub" id="modalSub"></div>
+      <div id="modalEditor"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="closeModal()">रद्द</button>
+        <button class="btn-success" onclick="saveModalNote()">💾 अपडेट</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const topics = [
+      {id:"p1-1.1",paper:1,section:"A",unit:"1",title:"Financial Institutions in Nepal: Role, Contribution and Status",titleNe:"नेपालका वित्तीय संस्थाहरू: भूमिका, योगदान र स्थिति",keywords:"Commercial Banks, Development Banks"},
+      {id:"p1-1.1.1",paper:1,section:"A",unit:"1",title:"Banking Institutions – Commercial Banks",titleNe:"बैंकिङ संस्था – वाणिज्य बैंकहरू",keywords:"Commercial Banks"},
+      {id:"p1-1.1.2",paper:1,section:"A",unit:"1",title:"Banking Institutions – Development Banks",titleNe:"विकास बैंकहरू",keywords:"Development Banks"},
+      {id:"p1-1.1.3",paper:1,section:"A",unit:"1",title:"Banking Institutions – Finance Companies",titleNe:"वित्त कम्पनीहरू",keywords:"Finance Companies"},
+      {id:"p1-1.1.4",paper:1,section:"A",unit:"1",title:"Banking Institutions – Microfinance Institutions",titleNe:"लघुवित्त संस्थाहरू",keywords:"Microfinance"},
+      {id:"p1-1.1.5",paper:1,section:"A",unit:"1",title:"Infrastructure Development Bank",titleNe:"पूर्वाधार विकास बैंक",keywords:"Infrastructure Development Bank"},
+      {id:"p1-1.2",paper:1,section:"A",unit:"1",title:"Non-bank Financial Institutions",titleNe:"गैर-बैंकिङ वित्तीय संस्थाहरू",keywords:"Insurance, Investment Funds"},
+      {id:"p1-2",paper:1,section:"A",unit:"2",title:"Key Basic Banking Terminology",titleNe:"मुख्य बैंकिङ शब्दावली",keywords:"Capital Fund, CD Ratio, CRR, KYC"},
+      {id:"p1-2.1",paper:1,section:"A",unit:"2",title:"Capital Fund",titleNe:"पूँजी कोष",keywords:"Capital Fund"},
+      {id:"p1-2.2",paper:1,section:"A",unit:"2",title:"Loan Loss Provisioning",titleNe:"कर्जा नोक्सानी व्यवस्था",keywords:"Loan Loss Provisioning"},
+      {id:"p1-2.3",paper:1,section:"A",unit:"2",title:"Credit-Deposit (CD) Ratio",titleNe:"कर्जा-निक्षेप अनुपात",keywords:"CD Ratio"},
+      {id:"p1-2.4",paper:1,section:"A",unit:"2",title:"Cash Reserve Ratio (CRR)",titleNe:"नगद आरक्षित अनुपात",keywords:"CRR"},
+      {id:"p1-2.5",paper:1,section:"A",unit:"2",title:"Refinancing, Rescheduling, Restructuring",titleNe:"पुनर्वित्त, पुनर्तालिकीकरण, पुनर्संरचना",keywords:"Refinancing"},
+      {id:"p1-2.6",paper:1,section:"A",unit:"2",title:"Base Rate",titleNe:"आधार दर",keywords:"Base Rate"},
+      {id:"p1-2.7",paper:1,section:"A",unit:"2",title:"Credit Information and Blacklisting",titleNe:"कर्जा सूचना र कालोसूची",keywords:"Blacklisting CIB"},
+      {id:"p1-2.8",paper:1,section:"A",unit:"2",title:"Credit Ratings",titleNe:"कर्जा मूल्याङ्कन",keywords:"Credit Ratings"},
+      {id:"p1-2.9",paper:1,section:"A",unit:"2",title:"Know Your Customer (KYC)",titleNe:"ग्राहक पहिचान (KYC)",keywords:"KYC"},
+      {id:"p1-2.10",paper:1,section:"A",unit:"2",title:"Audit and Internal Control",titleNe:"लेखापरीक्षण र आन्तरिक नियन्त्रण",keywords:"Audit Internal Control"},
+      {id:"p1-3.1",paper:1,section:"A",unit:"3",title:"Nepal Rastra Bank Act, 2058",titleNe:"नेपाल राष्ट्र बैंक ऐन, २०५८",keywords:"NRB Act 2058"},
+      {id:"p1-3.2",paper:1,section:"A",unit:"3",title:"Bank and Financial Institution Act, 2073",titleNe:"बैंक तथा वित्तीय संस्था ऐन, २०७३",keywords:"BAFIA 2073"},
+      {id:"p1-3.3",paper:1,section:"A",unit:"3",title:"Payment and Settlement Act, 2075",titleNe:"भुक्तानी तथा फछ्र्यौट ऐन, २०७५",keywords:"Payment Settlement Act"},
+      {id:"p1-3.4",paper:1,section:"A",unit:"3",title:"Money Laundering Prevention Act, 2064",titleNe:"सम्पत्ति शुद्धीकरण निवारण ऐन, २०६४",keywords:"AML Act"},
+      {id:"p1-3.5",paper:1,section:"A",unit:"3",title:"Banking Offence and Punishment Act, 2064",titleNe:"बैंकिङ कसूर तथा सजाय ऐन, २०६४",keywords:"Banking Offence Act"},
+      {id:"p1-3.6",paper:1,section:"A",unit:"3",title:"Negotiable Instruments Act, 2034",titleNe:"परक्राम्य लिखत ऐन, २०३४",keywords:"Negotiable Instruments"},
+      {id:"p1-3.7",paper:1,section:"A",unit:"3",title:"Electronic Transaction Act, 2063",titleNe:"विद्युतीय कारोबार ऐन, २०६३",keywords:"ETA 2063"},
+      {id:"p1-4",paper:1,section:"A",unit:"4",title:"Organizational Behavior",titleNe:"संगठनात्मक व्यवहार",keywords:"Motivation Communication Team"},
+      {id:"p1-4.1",paper:1,section:"A",unit:"4",title:"Job Description, TOR and Responsibilities",titleNe:"कामको विवरण, TOR र जिम्मेवारी",keywords:"Job Description TOR"},
+      {id:"p1-4.2",paper:1,section:"A",unit:"4",title:"Job Motivation and Performance",titleNe:"कामको प्रेरणा र प्रदर्शन",keywords:"Motivation"},
+      {id:"p1-4.3",paper:1,section:"A",unit:"4",title:"Communication: Skill & Approach",titleNe:"सञ्चार: सीप र तरिका",keywords:"Communication"},
+      {id:"p1-4.4",paper:1,section:"A",unit:"4",title:"Team Building and Workmanship",titleNe:"टोली निर्माण र कार्यदक्षता",keywords:"Team Building"},
+      {id:"p1-4.5",paper:1,section:"A",unit:"4",title:"Customer Satisfaction and Delivery",titleNe:"ग्राहक सन्तुष्टि र सेवा वितरण",keywords:"Customer Satisfaction"},
+      {id:"p1-4.6",paper:1,section:"A",unit:"4",title:"Grievance Handling",titleNe:"गुनासो व्यवस्थापन",keywords:"Grievance"},
+      {id:"p1-5.1",paper:1,section:"A",unit:"5",title:"Companies Act, 2063",titleNe:"कम्पनी ऐन, २०६३",keywords:"Companies Act"},
+      {id:"p1-5.2",paper:1,section:"A",unit:"5",title:"Labour Act, 2074",titleNe:"श्रम ऐन, २०७४",keywords:"Labour Act"},
+      {id:"p1-5.3",paper:1,section:"A",unit:"5",title:"Public Procurement Act, 2063",titleNe:"सार्वजनिक खरिद ऐन, २०६३",keywords:"Public Procurement"},
+      {id:"p1-5.4",paper:1,section:"A",unit:"5",title:"Right to Information Act, 2064",titleNe:"सूचनाको हक सम्बन्धी ऐन, २०६४",keywords:"RTI Act"},
+      {id:"p1-5.5",paper:1,section:"A",unit:"5",title:"NRB Employee Service Bylaws, 2070",titleNe:"नेपाल राष्ट्र बैंक कर्मचारी सेवा विनियमावली, २०७०",keywords:"NRB Bylaws"},
+      {id:"p1-5.6",paper:1,section:"A",unit:"5",title:"Unified Directives / Circulars of NRB",titleNe:"नेपाल राष्ट्र बैंकका एकीकृत निर्देशन/परिपत्र",keywords:"NRB Directives"},
+      {id:"p1-6.1",paper:1,section:"A",unit:"6",title:"Electronic Cheque Clearing",titleNe:"विद्युतीय चेक क्लियरिङ",keywords:"ECC"},
+      {id:"p1-6.2",paper:1,section:"A",unit:"6",title:"IPS, ConnectIPS, RTGS, SWIFT",titleNe:"IPS, ConnectIPS, RTGS, SWIFT",keywords:"IPS RTGS SWIFT"},
+      {id:"p1-6.3",paper:1,section:"A",unit:"6",title:"Internet Banking, Mobile Banking, QR, NFC",titleNe:"इन्टरनेट बैंकिङ, मोबाइल बैंकिङ, QR, NFC",keywords:"Internet Mobile Banking"},
+      {id:"p1-6.4",paper:1,section:"A",unit:"6",title:"Digital Payment Cards",titleNe:"डिजिटल भुक्तानी कार्डहरू",keywords:"Payment Cards"},
+      {id:"p1-6.5",paper:1,section:"A",unit:"6",title:"Payment through Wallets",titleNe:"वालेट मार्फत भुक्तानी",keywords:"Wallets"},
+      {id:"p1-6.6",paper:1,section:"A",unit:"6",title:"Central Bank Digital Currency (CBDC)",titleNe:"केन्द्रीय बैंक डिजिटल मुद्रा (CBDC)",keywords:"CBDC"},
+      {id:"p2-1.1",paper:2,section:"A",unit:"1",title:"Types of Computers",titleNe:"कम्प्युटरका प्रकारहरू",keywords:"Analog Digital Hybrid Mainframe"},
+      {id:"p2-1.2",paper:2,section:"A",unit:"1",title:"Basic Knowledge of Internet/Email & Web Design",titleNe:"इन्टरनेट/इमेल र वेब डिजाइनको आधारभूत ज्ञान",keywords:"Internet Email Web"},
+      {id:"p2-1.3",paper:2,section:"A",unit:"1",title:"Physical Security of IT Infrastructure",titleNe:"आईटी पूर्वाधारको भौतिक सुरक्षा",keywords:"Physical Security"},
+      {id:"p2-1.4",paper:2,section:"A",unit:"1",title:"AI, Machine Learning and Blockchain",titleNe:"कृत्रिम बुद्धिमत्ता, मेसिन लर्निङ र ब्लकचेन",keywords:"AI ML Blockchain"},
+      {id:"p2-2.1",paper:2,section:"A",unit:"2",title:"Basic Computer Architecture, Registers, Memory",titleNe:"आधारभूत कम्प्युटर आर्किटेक्चर, रेजिस्टर, मेमोरी",keywords:"Computer Architecture"},
+      {id:"p2-2.2",paper:2,section:"A",unit:"2",title:"Organization of Hard Disk",titleNe:"हार्ड डिस्कको संगठन",keywords:"Hard Disk"},
+      {id:"p2-2.3",paper:2,section:"A",unit:"2",title:"CPU Architecture",titleNe:"सीपीयू आर्किटेक्चर",keywords:"CPU"},
+      {id:"p2-2.4",paper:2,section:"A",unit:"2",title:"I/O Management, Interface, Devices",titleNe:"I/O व्यवस्थापन, इन्टरफेस र उपकरणहरू",keywords:"I/O"},
+      {id:"p2-3.1",paper:2,section:"A",unit:"3",title:"Networking Devices: Repeater, Hub, Switch, Router",titleNe:"नेटवर्किङ उपकरणहरू",keywords:"Repeater Hub Switch Router"},
+      {id:"p2-3.2",paper:2,section:"A",unit:"3",title:"Switching, Modems, Error Detection & Correction",titleNe:"स्विचिङ, मोडेम, त्रुटि पत्ता लगाउने र सच्याउने प्रविधि",keywords:"Switching Modems"},
+      {id:"p2-3.3",paper:2,section:"A",unit:"3",title:"Internet Services & IP Addressing",titleNe:"इन्टरनेट सेवा र आईपी ठेगाना",keywords:"IP Addressing"},
+      {id:"p2-3.4",paper:2,section:"A",unit:"3",title:"Network Security & Cryptography",titleNe:"नेटवर्क सुरक्षा र क्रिप्टोग्राफी",keywords:"Network Security Cryptography"},
+      {id:"p2-4.1",paper:2,section:"B",unit:"4",title:"Basic Knowledge of Operating System",titleNe:"अपरेटिङ सिस्टमको आधारभूत ज्ञान",keywords:"Operating System"},
+      {id:"p2-4.2",paper:2,section:"B",unit:"4",title:"Process Management and Scheduling",titleNe:"प्रोसेस व्यवस्थापन र अनुसूची",keywords:"Process Management Scheduling"},
+      {id:"p2-4.3",paper:2,section:"B",unit:"4",title:"DOS, UNIX and Windows OS",titleNe:"DOS, UNIX र Windows अपरेटिङ सिस्टम",keywords:"DOS UNIX Windows"},
+      {id:"p2-4.4",paper:2,section:"B",unit:"4",title:"Security Threats in Operating Systems",titleNe:"अपरेटिङ सिस्टममा सुरक्षा खतराहरू",keywords:"OS Security"},
+      {id:"p2-5.1",paper:2,section:"B",unit:"5",title:"Basic Knowledge of DBMS",titleNe:"डेटाबेस व्यवस्थापन प्रणालीको आधारभूत ज्ञान",keywords:"DBMS"},
+      {id:"p2-5.2",paper:2,section:"B",unit:"5",title:"Table, Record, Relationship and Indexing",titleNe:"तालिका, रेकर्ड, सम्बन्ध र अनुक्रमणिका",keywords:"Table Record Indexing"},
+      {id:"p2-5.3",paper:2,section:"B",unit:"5",title:"Data Warehousing & Process",titleNe:"डेटा वेयरहाउसिङ र प्रक्रिया",keywords:"Data Warehousing"},
+      {id:"p2-5.4",paper:2,section:"B",unit:"5",title:"HTML, Script, Stylesheet, XML, Web & Proxy Server",titleNe:"HTML, स्क्रिप्ट, स्टाइलसिट, XML, वेब र प्रोक्सी सर्भर",keywords:"HTML XML Web Server"},
+      {id:"p2-5.5",paper:2,section:"B",unit:"5",title:"Disaster Recovery Planning",titleNe:"आपतकालीन पुनःप्राप्ति योजना",keywords:"DRP"},
+      {id:"p2-6.1",paper:2,section:"B",unit:"6",title:"Introduction to Cyber Security, Access Control, Threats",titleNe:"साइबर सुरक्षा परिचय, पहुँच नियन्त्रण, खतरा र कमजोरी",keywords:"Cyber Security Access Control"},
+      {id:"p2-6.2",paper:2,section:"B",unit:"6",title:"Common Security Threats: Social Engineering, Malware, DDoS, Phishing",titleNe:"सामान्य सुरक्षा खतराहरू: सोसल इन्जिनियरिङ, मालवेयर, DDoS, फिसिङ",keywords:"Malware Phishing DDoS"},
+      {id:"p2-6.3",paper:2,section:"B",unit:"6",title:"ICT Policy of Nepal, 2072",titleNe:"नेपालको आईसीटी नीति, २०७२",keywords:"ICT Policy 2072"},
+      {id:"p2-6.4",paper:2,section:"B",unit:"6",title:"IT Guidelines issued by Nepal Rastra Bank",titleNe:"नेपाल राष्ट्र बैंकका आईटी निर्देशिकाहरू",keywords:"NRB IT Guidelines"},
+      {id:"p2-6.5",paper:2,section:"B",unit:"6",title:"Cyber Resilience Guidelines, 2023 (NRB)",titleNe:"साइबर रेजिलियन्स निर्देशिका, २०२३ (ने.रा.बैंक)",keywords:"Cyber Resilience 2023"}
+    ];
+
+    const COMPLETED_KEY = "rbb_it5_completed";
+    const NOTES_KEY = "rbb_it5_revision_notes";
+    let completed = new Set(JSON.parse(localStorage.getItem(COMPLETED_KEY) || "[]"));
+    let notes = JSON.parse(localStorage.getItem(NOTES_KEY) || "{}");
+    let currentTopic = null, isShuffling = false, currentFilter = "all", editingTopicId = null;
+    let shuffleInterval = null, editorInstance = null, modalEditorInstance = null;
+
+    /* ================================================================
+       CKEditor configuration
+       - Image upload uses Base64 data URLs: no server/API is required.
+       - Images are resized/compressed before being stored in localStorage.
+       - The flow diagram is inserted as an SVG image, avoiding CKEditor
+         custom-HTML/arrow parsing problems while remaining fully responsive.
+       ================================================================ */
+    class Base64UploadAdapter {
+      constructor(loader) { this.loader = loader; this.reader = null; }
+      upload() {
+        return this.loader.file.then(file => new Promise((resolve, reject) => {
+          const isImage = file && (file.type.startsWith("image/") || file.type === "image/svg+xml" || /\.svg$/i.test(file.name));
+          if (!isImage) {
+            reject("कृपया image वा SVG file मात्र चयन गर्नुहोस्।");
+            return;
+          }
+          if (file.size > 10 * 1024 * 1024) {
+            reject("Image 10 MB भन्दा ठूलो हुनु हुँदैन।");
+            return;
+          }
+          this.reader = new FileReader();
+          this.reader.onload = () => {
+            const mime = file.type || (/\.svg$/i.test(file.name) ? "image/svg+xml" : "image/png");
+            optimizeImageDataUrl(this.reader.result, mime)
+              .then(dataUrl => resolve({ default: dataUrl }))
+              .catch(() => resolve({ default: this.reader.result }));
+          };
+          this.reader.onerror = () => reject("Image पढ्न सकिएन।");
+          this.reader.readAsDataURL(file);
+        }));
+      }
+      abort() { if (this.reader) this.reader.abort(); }
+    }
+
+    function Base64UploadAdapterPlugin(editor) {
+      editor.plugins.get("FileRepository").createUploadAdapter = loader => new Base64UploadAdapter(loader);
+    }
+
+    const CK_CONFIG = {
+      extraPlugins: [Base64UploadAdapterPlugin],
+      toolbar: [
+        "heading", "|", "bold", "italic", "link", "|",
+        "bulletedList", "numberedList", "|",
+        "insertTable", "uploadImage", "|", "undo", "redo"
+      ],
+      heading: { options: [
+        { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
+        { model: "heading2", view: "h2", title: "Heading 2", class: "ck-heading_heading2" },
+        { model: "heading3", view: "h3", title: "Heading 3", class: "ck-heading_heading3" },
+        { model: "heading4", view: "h4", title: "Heading 4", class: "ck-heading_heading4" }
+      ]},
+      image: {
+        toolbar: [
+          "imageTextAlternative", "|",
+          "imageStyle:inline", "imageStyle:block", "imageStyle:side", "resizeImage"
+        ]
+      },
+      table: { contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"] }
+    };
+
+    function optimizeImageDataUrl(dataUrl, mimeType) {
+      return new Promise(resolve => {
+        // Never rasterize SVG — keep pure vector data-URL
+        if (/svg/i.test(mimeType || "") || (typeof dataUrl === "string" && dataUrl.indexOf("image/svg+xml") !== -1)) {
+          resolve(dataUrl);
+          return;
+        }
+        const img = new Image();
+        img.onload = () => {
+          const maxSide = 1800;
+          const scale = Math.min(1, maxSide / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+          const w = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
+          const h = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+          const outputType = /png/i.test(mimeType) ? "image/png" : "image/jpeg";
+          const quality = outputType === "image/jpeg" ? 0.82 : undefined;
+          resolve(canvas.toDataURL(outputType, quality));
+        };
+        img.onerror = () => resolve(dataUrl);
+        img.src = dataUrl;
+      });
+    }
+
+
+    function saveCompleted(){ localStorage.setItem(COMPLETED_KEY, JSON.stringify([...completed])); }
+    function saveNotes(){
+      try {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+      } catch (err) {
+        showToast("Storage भरियो। Image सानो/कम गरेर फेरि सेभ गर्नुहोस्।");
+      }
+    }
+    function showToast(msg){
+      const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"),2800);
+    }
+    function getPendingTopics(){ return topics.filter(t=>!completed.has(t.id)); }
+    function formatDate(iso){ if(!iso)return""; return new Date(iso).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"}); }
+    function getTopicById(id){ return topics.find(t=>t.id===id); }
+    function stripHtml(html){ const d=document.createElement("div"); d.innerHTML=html||""; return (d.textContent||"").trim(); }
+    function isNoteEmpty(html){ return !stripHtml(html); }
+    function updateProgress(){
+      const total=topics.length, done=completed.size;
+      document.getElementById("progressText").textContent=`${done} / ${total}`;
+      document.getElementById("progressBar").style.width=`${(done/total)*100}%`;
+      document.getElementById("listCount").textContent=total;
+      document.getElementById("notesCount").textContent=Object.keys(notes).filter(id=>notes[id]&&!isNoteEmpty(notes[id].text)).length;
+    }
+
+    async function ensureEditor(){
+      if(editorInstance) return editorInstance;
+      editorInstance=await ClassicEditor.create(document.querySelector("#noteEditor"), CK_CONFIG);
+      editorInstance.editing.view.change(writer => {
+        writer.setStyle("max-width", "100%", editorInstance.editing.view.document.getRoot());
+      });
+      return editorInstance;
+    }
+    async function setEditorData(html){ const ed=await ensureEditor(); ed.setData(html||""); }
+    async function getEditorData(){ if(!editorInstance) return ""; return editorInstance.getData(); }
+    async function clearEditor(){ if(editorInstance) editorInstance.setData(""); }
+
+    function triggerImageUpload(){
+      const input = document.getElementById("hiddenImageInput");
+      if (input) input.click();
+    }
+
+    async function handleExternalImageUpload(event){
+      const file = event.target.files && event.target.files[0];
+      event.target.value = "";
+      if (!file) return;
+      const isImage = file.type.startsWith("image/") || file.type === "image/svg+xml" || /\.svg$/i.test(file.name);
+      if (!isImage) {
+        showToast("कृपया image वा SVG file मात्र चयन गर्नुहोस्।");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        showToast("Image 10 MB भन्दा ठूलो हुनु हुँदैन।");
+        return;
+      }
+      try {
+        const dataUrl = await fileToOptimizedDataUrl(file);
+        const ed = await ensureEditor();
+        ed.execute("insertImage", { source: dataUrl });
+        ed.editing.view.focus();
+        showToast(/\.svg$/i.test(file.name) || /svg/i.test(file.type) ? "🖼️ SVG Diagram थपियो!" : "🖼️ Image थपियो!");
+      } catch (err) {
+        showToast("Image थप्न सकिएन।");
+      }
+    }
+
+    /* ================================================================
+       HTML Documentation Import
+       - Imports a local .html/.htm file directly into CKEditor.
+       - Inserts at the current cursor position; it does NOT replace
+         the existing revision note.
+       - Extracts <body> content from a complete HTML document.
+       - Removes executable/embedded elements before insertion.
+       - CKEditor performs its normal data/model filtering afterward.
+       ================================================================ */
+    function triggerHtmlDocumentationImport(){
+      const input = document.getElementById("hiddenHtmlInput");
+      if(input) input.click();
+    }
+
+    function sanitizeImportedHtml(rawHtml){
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(rawHtml, "text/html");
+      const source = doc.body || doc.documentElement;
+      if(!source) return "";
+
+      // Remove executable / non-content elements
+      source.querySelectorAll(
+        "script, noscript, iframe, object, embed, form, base, meta, link[rel='stylesheet'], style, head, title"
+      ).forEach(el => el.remove());
+
+      // Remove inline event handlers
+      source.querySelectorAll("*").forEach(el => {
+        [...el.attributes].forEach(attr => {
+          if(/^on/i.test(attr.name)) el.removeAttribute(attr.name);
+        });
+      });
+
+      // CRITICAL: Convert every <svg> → <img src="data:image/svg+xml...">
+      // CKEditor Classic does NOT keep raw <svg> in the model. Without this,
+      // diagrams from documentation HTML are silently dropped.
+      source.querySelectorAll("svg").forEach(svg => {
+        try {
+          const serializer = new XMLSerializer();
+          let svgStr = serializer.serializeToString(svg);
+          if (!/\sxmlns=/.test(svgStr)) {
+            svgStr = svgStr.replace(/<svg\b/, '<svg xmlns="http://www.w3.org/2000/svg"');
+          }
+          // Prefer base64 for better CKEditor / browser compatibility
+          const b64 = btoa(unescape(encodeURIComponent(svgStr)));
+          const dataUrl = "data:image/svg+xml;base64," + b64;
+
+          const img = doc.createElement("img");
+          img.setAttribute("src", dataUrl);
+          img.setAttribute("alt", svg.getAttribute("aria-label") || svg.getAttribute("title") || "Diagram");
+          img.setAttribute("style", "max-width:100%;height:auto;display:block;margin:12px auto;");
+
+          const figure = doc.createElement("figure");
+          figure.className = "image";
+          figure.appendChild(img);
+
+          if (svg.parentNode) {
+            svg.parentNode.replaceChild(figure, svg);
+          }
+        } catch (e) {
+          console.warn("SVG convert failed:", e);
+        }
+      });
+
+      // Also normalize any existing <img> that already points to svg data-URL
+      source.querySelectorAll("img").forEach(img => {
+        const src = img.getAttribute("src") || "";
+        if (src.indexOf("image/svg+xml") !== -1 || /\.svg(\?|$)/i.test(src)) {
+          img.setAttribute("style", (img.getAttribute("style") || "") + ";max-width:100%;height:auto;display:block;margin:12px auto;");
+          if (!img.closest("figure.image")) {
+            const figure = doc.createElement("figure");
+            figure.className = "image";
+            img.parentNode.insertBefore(figure, img);
+            figure.appendChild(img);
+          }
+        }
+      });
+
+      return source.innerHTML.trim();
+    }
+
+    async function handleHtmlDocumentationImport(event){
+      const file = event.target.files && event.target.files[0];
+      event.target.value = "";
+      if(!file) return;
+
+      const isHtml =
+        file.type === "text/html" ||
+        /\.html?$/i.test(file.name);
+
+      if(!isHtml){
+        showToast("कृपया .html वा .htm file मात्र चयन गर्नुहोस्।");
+        return;
+      }
+
+      if(file.size > 8 * 1024 * 1024){
+        showToast("HTML file 8 MB भन्दा ठूलो हुनु हुँदैन।");
+        return;
+      }
+
+      try{
+        const raw = await file.text();
+        const importedHtml = sanitizeImportedHtml(raw);
+
+        if(!importedHtml || !stripHtml(importedHtml)){
+          showToast("HTML file मा import गर्न मिल्ने documentation content भेटिएन।");
+          return;
+        }
+
+        const ed = await ensureEditor();
+
+        // Prefer setData merge approach for reliability with images:
+        // 1) convert HTML → view → model
+        // 2) insert at selection
+        // If that fails (some CK builds filter heavily), fall back to appending via setData.
+        try {
+          const viewFragment = ed.data.processor.toView(importedHtml);
+          const modelFragment = ed.data.toModel(viewFragment);
+          ed.model.change(writer => {
+            const insertPos = ed.model.document.selection.getFirstPosition();
+            ed.model.insertContent(modelFragment, insertPos);
+          });
+        } catch (innerErr) {
+          console.warn("insertContent path failed, using append setData:", innerErr);
+          const current = ed.getData() || "";
+          ed.setData(current + "\n" + importedHtml);
+        }
+
+        ed.editing.view.focus();
+        showToast(`🌐 "${file.name}" को documentation + diagrams insert भयो!`);
+      }catch(err){
+        console.error("HTML documentation import failed:", err);
+        showToast("HTML documentation import गर्न सकिएन।");
+      }
+    }
+
+    function fileToOptimizedDataUrl(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        const mime = file.type || (/\.svg$/i.test(file.name) ? "image/svg+xml" : "image/png");
+        reader.onload = () => optimizeImageDataUrl(reader.result, mime).then(resolve).catch(reject);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function escapeXml(value){
+      return String(value).replace(/[<>&'"]/g, ch => ({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[ch]));
+    }
+
+    function buildResponsiveFlowSvg(){
+      const steps = [
+        "Goal / Common Objective",
+        "Identify Tasks",
+        "Select Team Members",
+        "Assign Roles & Responsibility",
+        "Communication & Coordination",
+        "Cooperation & Teamwork",
+        "Performance Evaluation",
+        "Feedback & Improvement"
+      ];
+      const width = 760;
+      const boxX = 70;
+      const boxW = 620;
+      const boxH = 58;
+      const arrowH = 34;
+      const top = 26;
+      const totalH = top + steps.length * boxH + (steps.length - 1) * arrowH + 26;
+      const lines = [];
+      const wrap = (text, max=42) => {
+        const words = text.split(" ");
+        const out=[]; let line="";
+        words.forEach(word=>{
+          const candidate=line ? line+" "+word : word;
+          if(candidate.length>max && line){ out.push(line); line=word; }
+          else line=candidate;
+        });
+        if(line) out.push(line);
+        return out.slice(0,2);
+      };
+      let y=top;
+      steps.forEach((step,i)=>{
+        lines.push(`<rect x="${boxX}" y="${y}" width="${boxW}" height="${boxH}" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>`);
+        lines.push(`<text x="${width/2}" y="${y+22}" text-anchor="middle" font-family="Noto Sans Devanagari, Inter, sans-serif" font-size="13" font-weight="700" fill="#1e3a5f">${i+1}. ${escapeXml(step)}</text>`);
+        lines.push(`<text x="${width/2}" y="${y+42}" text-anchor="middle" font-family="Noto Sans Devanagari, Inter, sans-serif" font-size="10.5" fill="#475569">${i===0?"सबै सदस्य एउटै लक्ष्यतर्फ काम गर्छन्":"सहकार्यबाट टोलीको कार्यसम्पादन सुधार हुन्छ"}</text>`);
+        y += boxH;
+        if(i < steps.length-1){
+          const cy=y + arrowH/2;
+          lines.push(`<line x1="${width/2}" y1="${y+3}" x2="${width/2}" y2="${y+arrowH-7}" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>`);
+          lines.push(`<polygon points="${width/2-7},${y+arrowH-10} ${width/2+7},${y+arrowH-10} ${width/2},${y+arrowH-1}" fill="#64748b"/>`);
+          y += arrowH;
+        }
+      });
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalH}" viewBox="0 0 ${width} ${totalH}">
+<rect width="100%" height="100%" fill="white"/>
+<text x="${width/2}" y="18" text-anchor="middle" font-family="Noto Sans Devanagari, Inter, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Team Building – Responsive Flow</text>
+${lines.join("")}
+</svg>`)}`;
+    }
+
+    async function insertResponsiveFlowDiagram(){
+      const ed = await ensureEditor();
+      const source = buildResponsiveFlowSvg();
+      ed.execute("insertImage", { source });
+      ed.editing.view.focus();
+      showToast("↕️ Responsive Flow Diagram थपियो!");
+    }
+
+    function startShuffle(){
+      if(isShuffling) return;
+      const pending=getPendingTopics();
+      if(pending.length===0){
+        showToast("सबै विषय पूरा भइसके!");
+        document.getElementById("topicDisplay").textContent="सबै विषय पूरा भयो!";
+        document.getElementById("topicDisplay").classList.remove("selected","shuffling");
+        document.getElementById("completeBtn").style.display="none";
+        document.getElementById("explainBtn").style.display="none";
+        document.getElementById("metaRow").style.display="none";
+        document.getElementById("revisionBox").classList.remove("visible");
+        return;
+      }
+      isShuffling=true;
+      const display=document.getElementById("topicDisplay");
+      document.getElementById("shuffleBtn").disabled=true;
+      display.classList.add("shuffling"); display.classList.remove("selected");
+      document.getElementById("completeBtn").style.display="none";
+      document.getElementById("explainBtn").style.display="none";
+      document.getElementById("metaRow").style.display="none";
+      document.getElementById("revisionBox").classList.remove("visible");
+      document.getElementById("explainPanel").classList.remove("visible");
+      let ticks=0; const maxTicks=16+Math.floor(Math.random()*8);
+      shuffleInterval=setInterval(()=>{
+        const r=pending[Math.floor(Math.random()*pending.length)];
+        display.textContent=r.titleNe||r.title; ticks++;
+        if(ticks>=maxTicks){ clearInterval(shuffleInterval); finishShuffle(pending); }
+      },85);
+    }
+
+    function finishShuffle(pending){
+      const chosen=pending[Math.floor(Math.random()*pending.length)];
+      currentTopic=chosen;
+      const display=document.getElementById("topicDisplay");
+      display.classList.remove("shuffling"); display.classList.add("selected");
+      display.innerHTML=`<div>${chosen.titleNe}</div><div style="font-size:0.82rem;font-weight:500;color:var(--text-muted);margin-top:6px;">${chosen.title}</div>`;
+      document.getElementById("paperChip").textContent=`Paper ${chosen.paper}`;
+      document.getElementById("paperChip").className=`meta-chip ${chosen.paper===1?"paper1":"paper2"}`;
+      document.getElementById("sectionChip").textContent=`Section ${chosen.section} · Unit ${chosen.unit}`;
+      document.getElementById("metaRow").style.display="flex";
+      document.getElementById("completeBtn").style.display="inline-flex";
+      document.getElementById("explainBtn").style.display="inline-flex";
+      document.getElementById("shuffleBtn").disabled=false; isShuffling=false;
+      showRevisionBox(chosen); showToast("आजको विषय तय भयो!");
+    }
+
+    async function showRevisionBox(topic){
+      document.getElementById("revisionBox").classList.add("visible");
+      const existing=notes[topic.id];
+      await setEditorData((existing&&existing.text)?existing.text:"");
+      document.getElementById("noteMeta").textContent=
+        (existing&&existing.text&&!isNoteEmpty(existing.text))
+          ? `अन्तिम अपडेट: ${formatDate(existing.updatedAt)}`
+          : "अहिलेसम्म कुनै नोट सेभ भएको छैन – Heading / List / Table प्रयोग गरेर लेख्नुहोस्";
+    }
+
+    function markComplete(){
+      if(!currentTopic) return;
+      completed.add(currentTopic.id); saveCompleted(); updateProgress(); renderChecklist();
+      showToast(`✓ "${currentTopic.titleNe}" पूरा चिन्ह लगाइयो`);
+      document.getElementById("completeBtn").style.display="none";
+      document.getElementById("explainBtn").style.display="none";
+      document.getElementById("explainPanel").classList.remove("visible");
+      document.getElementById("topicDisplay").classList.remove("selected");
+      document.getElementById("topicDisplay").innerHTML=`<div style="color:var(--success)">✓ पूरा भयो</div><div style="font-size:0.85rem;margin-top:4px;">${currentTopic.titleNe}</div>`;
+    }
+
+    async function saveNote(){
+      if(!currentTopic){ showToast("पहिले विषय छान्नुहोस्"); return; }
+      const html=await getEditorData();
+      if(isNoteEmpty(html)){ showToast("नोट खाली छ"); return; }
+      notes[currentTopic.id]={ text: html, updatedAt: new Date().toISOString() };
+      saveNotes();
+      document.getElementById("noteMeta").textContent=`अन्तिम अपडेट: ${formatDate(notes[currentTopic.id].updatedAt)}`;
+      updateProgress(); renderChecklist(); renderNotesTree(); showToast("💾 नोट सेभ भयो!");
+    }
+
+    async function copyAccuracyPrompt(){
+      if(!currentTopic){ showToast("पहिले विषय छान्नुहोस्"); return; }
+      const plain=stripHtml(await getEditorData());
+      if(!plain){ showToast("पहिले आफ्नो नोट लेख्नुहोस्"); return; }
+      const prompt=`तपाईं RBB Level 5 IT Assistant परीक्षाका लागि विशेषज्ञ शिक्षक हुनुहुन्छ।
+
+विषय: ${currentTopic.titleNe}
+English: ${currentTopic.title}
+Paper: ${currentTopic.paper} | Section: ${currentTopic.section} | Unit: ${currentTopic.unit}
+Keywords: ${currentTopic.keywords||"—"}
+
+मैले यो विषय पढेर बुझेको कुरा (मेरो रिभिजन नोट):
+"""
+${plain}
+"""
+
+कृपया निम्न तरिकाले मूल्याङ्कन र सहयोग गर्नुहोस् (नेपाली + अंग्रेजी मिश्रित, रोमन नेपाली प्रयोग नगर्नुहोस्):
+
+1. **सही कुराहरू (Correct points)** – मैले सही बुझेका बुँदाहरू
+2. **छुटेका महत्त्वपूर्ण बुँदाहरू (Missing important points)** – परीक्षामा आउन सक्ने तर मैले नलेखेका
+3. **गलत वा अधुरो कुरा (Incorrect / Incomplete)** – सच्याएर लेख्नुहोस्
+4. **Accuracy Score** – १० मा कति अंक र किन
+5. **सुधारिएको पूर्ण नोट** – परीक्षा-तयार संक्षिप्त नोट
+
+6. **आवश्यक चित्र / Diagram (यदि विषयले माग्छ भने अनिवार्य)**  
+   विषयसँग सम्बन्धित भए निम्न मध्ये जुन आवश्यक छ, स्पष्ट रूपमा बनाइदिनुहोस् वा ASCII/text diagram + लेबल सहित वर्णन गर्नुहोस्:
+   - **Figure / Illustration** – मुख्य अवधारणाको चित्र
+   - **System Diagram** – प्रणालीको समग्र संरचना
+   - **System Flow / Flowchart** – कार्यप्रवाह (step-by-step flow)
+   - **Labeled Diagram** – प्रत्येक भागमा लेबल सहितको चित्र
+   - **Internal Structure Diagram** – आन्तरिक संरचना (जस्तै CPU, OS process, network layers, DB architecture)
+   - **Working Diagram** – कसरी काम गर्छ भन्ने working/process diagram
+
+   प्रत्येक diagram मा:
+   - स्पष्ट शीर्षक
+   - मुख्य कम्पोनेन्टहरूको लेबल
+   - छोटो व्याख्या (के देखाउँछ र किन महत्त्वपूर्ण)
+   - परीक्षामा कसरी कोर्ने/वर्णन गर्ने टिप
+
+7. **परीक्षा टिप्स** – यो विषयबाट आउन सक्ने प्रश्न प्रकार (short note, differentiate, explain with diagram आदि)
+
+भाषा सरल, परीक्षा केन्द्रित र स्पष्ट राख्नुहोस्। Diagram आवश्यक नभए पनि "यो विषयमा diagram अनिवार्य छैन" भनी स्पष्ट लेख्नुहोस्; आवश्यक भए अनिवार्य समावेश गर्नुहोस्।`;
+      navigator.clipboard.writeText(prompt).then(()=>showToast("🎯 Accuracy प्रॉम्प्ट कपी भयो!")).catch(()=>showToast("कपी असफल"));
+    }
+
+    function toggleExplain(){
+      if(!currentTopic) return;
+      const panel=document.getElementById("explainPanel");
+      if(panel.classList.contains("visible")){ panel.classList.remove("visible"); return; }
+      document.getElementById("explainContent").textContent=`${currentTopic.titleNe}\n${currentTopic.title}\n\nPaper ${currentTopic.paper}, Section ${currentTopic.section}, Unit ${currentTopic.unit}\n\nKeywords: ${currentTopic.keywords||"—"}`;
+      document.getElementById("explainHint").textContent="विस्तृत व्याख्याका लागि AI प्रॉम्प्ट कपी गर्नुहोस्।";
+      panel.classList.add("visible");
+    }
+    function copyExplainPrompt(){
+      if(!currentTopic) return;
+      const prompt=`RBB Level 5 IT Assistant परीक्षाका लागि व्याख्या दिनुहोस् (नेपाली + अंग्रेजी मिश्रित, रोमन नेपाली नगर्नुहोस्):
+
+विषय: ${currentTopic.titleNe} / ${currentTopic.title}
+Paper ${currentTopic.paper}, Section ${currentTopic.section}, Unit ${currentTopic.unit}
+Keywords: ${currentTopic.keywords||"—"}
+
+समावेश गर्नुहोस्:
+1. परिभाषा र परिचय
+2. मुख्य बुँदा / प्रावधान / विशेषता
+3. महत्त्व (बैंकिङ वा आईटी सन्दर्भ)
+4. आवश्यक भए: Figure, System Diagram, System Flow/Flowchart, Labeled Diagram, Internal Structure, Working Diagram (ASCII/text diagram + लेबल + छोटो व्याख्या)
+5. परीक्षा टिप्स (short note, differentiate, explain with diagram आदि)
+
+भाषा सरल र परीक्षा केन्द्रित राख्नुहोस्।`;
+      navigator.clipboard.writeText(prompt).then(()=>showToast("व्याख्या प्रॉम्प्ट कपी भयो!"));
+    }
+
+    function toggleHierarchy(){
+      const card=document.getElementById("hierarchyCard");
+      card.classList.toggle("visible");
+      if(card.classList.contains("visible")) renderNotesTree();
+    }
+
+    function renderNotesTree(){
+      const tree=document.getElementById("notesTree");
+      const ids=Object.keys(notes).filter(id=>notes[id]&&!isNoteEmpty(notes[id].text));
+      if(!ids.length){ tree.innerHTML=`<div class="tree-empty">अहिलेसम्म कुनै रिभिजन नोट छैन।</div>`; return; }
+      const p1=ids.filter(id=>getTopicById(id)?.paper===1);
+      const p2=ids.filter(id=>getTopicById(id)?.paper===2);
+      function rp(title, ids, num){
+        if(!ids.length) return "";
+        const nodes=ids.map(id=>{
+          const t=getTopicById(id), n=notes[id];
+          return `<div class="tree-node">
+            <div class="tree-node-header"><div class="tree-node-title">${t.titleNe}</div><span class="paper-tag p${num}">P${num}</span></div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;">${t.title} · ${formatDate(n.updatedAt)}</div>
+            <div class="tree-node-body">${n.text}</div>
+            <div class="tree-node-actions">
+              <button class="btn-outline btn-sm" onclick="editNoteFromTree('${id}')">✏️ सम्पादन</button>
+              <button class="btn-primary btn-sm" onclick="openSingleNotePdf('${id}')">📄 PDF खोल्नुहोस्</button>
+              <button class="btn-ghost btn-sm" onclick="deleteNote('${id}')">🗑️</button>
+            </div></div>`;
+        }).join("");
+        return `<div class="tree-paper"><div class="tree-paper-title" onclick="this.parentElement.classList.toggle('collapsed')"><span class="arrow">▼</span> ${title} <span style="color:var(--text-muted);font-weight:500;font-size:0.85rem;">(${ids.length})</span></div><div class="tree-children">${nodes}</div></div>`;
+      }
+      tree.innerHTML=rp("📄 Paper I – Banking & Organizational Management",p1,1)+rp("💻 Paper II – Information Technology & Management",p2,2);
+    }
+
+    async function editNoteFromTree(id){
+      const t=getTopicById(id), n=notes[id]; if(!t||!n) return;
+      editingTopicId=id;
+      document.getElementById("modalTitle").textContent=t.titleNe;
+      document.getElementById("modalSub").textContent=t.title;
+      document.getElementById("editModal").classList.add("visible");
+      if(modalEditorInstance){ await modalEditorInstance.destroy(); modalEditorInstance=null; document.getElementById("modalEditor").innerHTML=""; }
+      modalEditorInstance=await ClassicEditor.create(document.querySelector("#modalEditor"), CK_CONFIG);
+      modalEditorInstance.setData(n.text||"");
+    }
+    async function closeModal(){
+      document.getElementById("editModal").classList.remove("visible");
+      if(modalEditorInstance){ await modalEditorInstance.destroy(); modalEditorInstance=null; document.getElementById("modalEditor").innerHTML=""; }
+      editingTopicId=null;
+    }
+    async function saveModalNote(){
+      if(!editingTopicId||!modalEditorInstance) return;
+      const html=modalEditorInstance.getData();
+      if(isNoteEmpty(html)){ showToast("नोट खाली राख्न मिल्दैन"); return; }
+      notes[editingTopicId]={ text:html, updatedAt:new Date().toISOString() };
+      saveNotes(); await closeModal(); renderNotesTree(); renderChecklist(); updateProgress();
+      if(currentTopic&&currentTopic.id===editingTopicId){
+        await setEditorData(html);
+        document.getElementById("noteMeta").textContent=`अन्तिम अपडेट: ${formatDate(notes[editingTopicId].updatedAt)}`;
+      }
+      showToast("नोट अपडेट भयो!");
+    }
+    function deleteNote(id){
+      if(!confirm("यो नोट मेटाउने हो?")) return;
+      delete notes[id]; saveNotes(); renderNotesTree(); renderChecklist(); updateProgress();
+      if(currentTopic&&currentTopic.id===id){ clearEditor(); document.getElementById("noteMeta").textContent="अहिलेसम्म कुनै नोट सेभ भएको छैन"; }
+      showToast("नोट मेटाइयो");
+    }
+
+    async function openNoteAsPdf(){
+      if(!currentTopic){ showToast("पहिले विषय छान्नुहोस्"); return; }
+      let html=await getEditorData();
+      if(isNoteEmpty(html)) html=(notes[currentTopic.id]&&notes[currentTopic.id].text)||"";
+      if(isNoteEmpty(html)){ showToast("नोट खाली छ"); return; }
+      generatePdf([{topic:currentTopic,text:html,updatedAt:(notes[currentTopic.id]&&notes[currentTopic.id].updatedAt)||new Date().toISOString()}], `Revision_${currentTopic.id}`);
+    }
+    function openSingleNotePdf(id){
+      const t=getTopicById(id), n=notes[id];
+      if(!t||!n||isNoteEmpty(n.text)) return;
+      generatePdf([{topic:t,text:n.text,updatedAt:n.updatedAt}], `Revision_${id}`);
+    }
+    function exportAllNotesPdf(){
+      const ids=Object.keys(notes).filter(id=>notes[id]&&!isNoteEmpty(notes[id].text));
+      if(!ids.length){ showToast("कुनै नोट छैन"); return; }
+      const items=ids.map(id=>({topic:getTopicById(id),text:notes[id].text,updatedAt:notes[id].updatedAt})).filter(x=>x.topic);
+      items.sort((a,b)=>a.topic.paper!==b.topic.paper?a.topic.paper-b.topic.paper:String(a.topic.unit).localeCompare(String(b.topic.unit)));
+      generatePdf(items,"RBB_Level5_All_Revision_Notes");
+    }
+
+    function generatePdf(items, filename){
+      if(!items||!items.length){ showToast("नोट छैन"); return; }
+
+      // Build note sections (CKEditor HTML preserved: lists, headings, tables)
+      let body = "";
+      items.forEach((item, i) => {
+        const t = item.topic;
+        body += `
+          <section class="note-block">
+            <div class="topic-bar">
+              <div class="topic-title">${i + 1}. ${t.titleNe || t.title}</div>
+              <div class="topic-meta">${t.title || ""} · Paper ${t.paper} · Section ${t.section} · Unit ${t.unit} · Updated: ${formatDate(item.updatedAt)}</div>
+            </div>
+            <div class="note-body">${item.text || "<p><em>(empty)</em></p>"}</div>
+          </section>`;
+      });
+
+      // Full standalone HTML document – always shows content in new tab
+      const docHtml = `<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RBB Level 5 – Revision Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Noto Sans Devanagari', 'Inter', Arial, sans-serif;
+    background: #e8eef5;
+    color: #1a1a1a;
+    line-height: 1.65;
+  }
+  .toolbar {
+    position: sticky; top: 0; z-index: 10;
+    background: #1e3a5f; color: #fff;
+    padding: 12px 20px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .toolbar h1 { font-size: 1rem; margin: 0; font-weight: 600; }
+  .toolbar .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .toolbar button {
+    font-family: inherit; font-size: 0.85rem; font-weight: 600;
+    padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer;
+  }
+  .btn-print { background: #3b82f6; color: #fff; }
+  .btn-print:hover { background: #2563eb; }
+  .btn-close { background: rgba(255,255,255,0.15); color: #fff; }
+  .page {
+    max-width: 800px; margin: 24px auto; background: #fff;
+    border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    color: #fff; padding: 28px 32px;
+  }
+  .header h1 { margin: 0 0 6px; font-size: 1.4rem; }
+  .header .meta { opacity: 0.9; font-size: 0.85rem; }
+  .content { padding: 28px 32px 40px; }
+  .note-block { margin-bottom: 32px; page-break-inside: avoid; }
+  .topic-bar {
+    background: #eff6ff; border-left: 5px solid #2563eb;
+    padding: 12px 16px; margin-bottom: 12px; border-radius: 0 8px 8px 0;
+  }
+  .topic-title { font-weight: 700; font-size: 1.05rem; color: #1e3a5f; margin-bottom: 2px; }
+  .topic-meta { font-size: 0.78rem; color: #64748b; }
+  .note-body {
+    background: #fafbfc; border: 1px solid #e2e8f0; border-radius: 8px;
+    padding: 18px 20px; font-size: 0.95rem; color: #1e293b;
+  }
+  .note-body h2 { font-size: 1.15rem; color: #1e40af; margin: 14px 0 8px; border-bottom: 2px solid #bfdbfe; padding-bottom: 4px; }
+  .note-body h3 { font-size: 1.05rem; color: #1d4ed8; margin: 12px 0 6px; }
+  .note-body h4 { font-size: 0.98rem; color: #2563eb; margin: 10px 0 5px; }
+  .note-body p { margin: 0 0 10px; }
+  .note-body ul, .note-body ol { margin: 8px 0 12px; padding-left: 1.6em; }
+  .note-body li { margin-bottom: 5px; }
+  .note-body ul li { list-style-type: disc; }
+  .note-body ol li { list-style-type: decimal; }
+  .note-body table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.9rem; }
+  .note-body table th { background: #1e40af; color: #fff; padding: 10px 12px; text-align: left; }
+  .note-body table td { border: 1px solid #cbd5e1; padding: 8px 12px; }
+  .note-body table tr:nth-child(even) td { background: #f1f5f9; }
+  .note-body strong { font-weight: 700; }
+  .note-body blockquote { border-left: 3px solid #94a3b8; margin: 10px 0; padding: 8px 14px; background: #f8fafc; color: #475569; }
+
+  /* ===== PDF VIEWER: NEVER CLIP/HIDE IMAGES ===== */
+  .page, .content, .note-block, .note-body {
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  .note-body figure.image,
+  .note-body figure.image.image-style-inline,
+  .note-body figure.image.image-style-block,
+  .note-body figure.image.image-style-side {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 16px auto !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    text-align: center !important;
+    float: none !important;
+    clear: both !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .note-body figure.image img,
+  .note-body img {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    border: 0 !important;
+  }
+
+  /* A very wide image is scaled to the printable/content width without distortion. */
+  .note-body figure.image img[data-pdf-responsive="true"],
+  .note-body img[data-pdf-responsive="true"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Override CKEditor inline image width/height attributes in the viewer. */
+  .note-body figure.image img[width],
+  .note-body figure.image img[height],
+  .note-body img[width],
+  .note-body img[height] {
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  .note-body figure.image figcaption {
+    display: block !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  @media (max-width: 820px) {
+    .page {
+      width: calc(100% - 20px) !important;
+      max-width: 800px !important;
+      margin: 10px auto !important;
+    }
+    .content { padding: 20px 16px 28px !important; }
+    .note-body { padding: 14px 12px !important; }
+    .note-body figure.image,
+    .note-body figure.image img,
+    .note-body img {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+    }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none !important; }
+    .page { margin: 0; box-shadow: none; border-radius: 0; max-width: none; }
+    .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .topic-bar, .note-body table th, .note-body table tr:nth-child(even) td {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>📄 RBB Level 5 · Revision Notes (${items.length})</h1>
+    <div class="btns">
+      <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn-close" onclick="window.close()">बन्द गर्नुहोस्</button>
+    </div>
+  </div>
+  <div class="page">
+    <div class="header">
+      <h1>RBB Level 5 · IT Assistant – Revision Notes</h1>
+      <div class="meta">Generated: ${new Date().toLocaleString("en-GB")} · Total notes: ${items.length}</div>
+    </div>
+    <div class="content">${body}</div>
+  </div>
+
+  <script>
+    /* Normalize every CKEditor image after all data-URL images have loaded.
+       This prevents half-visible images caused by old width/height attributes. */
+    function fixPdfViewerImages() {
+      document.querySelectorAll('.note-body img').forEach(function(img) {
+        img.removeAttribute('width');
+        img.removeAttribute('height');
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+        img.style.maxHeight = 'none';
+        img.style.display = 'block';
+        img.style.visibility = 'visible';
+        img.style.opacity = '1';
+        img.style.objectFit = 'contain';
+
+        if (img.naturalWidth && img.naturalHeight) {
+          var available = img.parentElement ? img.parentElement.clientWidth : 0;
+          if (available > 0 && img.naturalWidth > available) {
+            img.dataset.pdfResponsive = 'true';
+          } else {
+            img.style.width = 'auto';
+          }
+        }
+      });
+
+      document.querySelectorAll('.note-body figure.image').forEach(function(fig) {
+        fig.style.width = '100%';
+        fig.style.maxWidth = '100%';
+        fig.style.height = 'auto';
+        fig.style.overflow = 'visible';
+        fig.style.float = 'none';
+      });
+    }
+
+    window.addEventListener('load', function() {
+      fixPdfViewerImages();
+      setTimeout(fixPdfViewerImages, 150);
+    });
+  <\/script>
+</body>
+</html>`;
+
+      const win = window.open("", "_blank");
+      if (!win) {
+        showToast("Popup blocked – browser मा popup allow गर्नुहोस्");
+        return;
+      }
+      win.document.open();
+      win.document.write(docHtml);
+      win.document.close();
+      showToast("📄 नोट नयाँ ट्याबमा खोलियो – Print बाट PDF सेभ गर्न सकिन्छ");
+    }
+
+    function setFilter(f){
+      currentFilter=f;
+      document.querySelectorAll(".filter-btn").forEach(b=>b.classList.toggle("active",b.dataset.filter===f));
+      renderChecklist();
+    }
+    function renderChecklist(){
+      const list=document.getElementById("checklist");
+      let filtered=topics;
+      if(currentFilter==="pending") filtered=topics.filter(t=>!completed.has(t.id));
+      else if(currentFilter==="done") filtered=topics.filter(t=>completed.has(t.id));
+      else if(currentFilter==="withnote") filtered=topics.filter(t=>notes[t.id]&&!isNoteEmpty(notes[t.id].text));
+      else if(currentFilter==="paper1") filtered=topics.filter(t=>t.paper===1);
+      else if(currentFilter==="paper2") filtered=topics.filter(t=>t.paper===2);
+      if(!filtered.length){ list.innerHTML=`<div class="all-done">यस फिल्टरमा कुनै विषय छैन</div>`; return; }
+      list.innerHTML=filtered.map(t=>{
+        const done=completed.has(t.id), hasNote=notes[t.id]&&!isNoteEmpty(notes[t.id].text);
+        return `<div class="check-item ${done?"done":""} ${hasNote?"has-note":""}" onclick="selectTopicFromList('${t.id}')">
+          <div class="check-box" onclick="event.stopPropagation();toggleTopicComplete('${t.id}')">${done?"✓":""}</div>
+          <div class="topic-text">${t.titleNe}<div class="topic-meta">${t.title}</div></div>
+          ${hasNote?'<span class="note-badge">📝 नोट</span>':""}
+          <span class="paper-tag ${t.paper===1?"p1":"p2"}">P${t.paper}</span>
+        </div>`;
+      }).join("");
+    }
+    function toggleTopicComplete(id){
+      if(completed.has(id)){ completed.delete(id); showToast("पूरा चिन्ह हटाइयो"); }
+      else { completed.add(id); showToast("पूरा चिन्ह लगाइयो"); }
+      saveCompleted(); updateProgress(); renderChecklist();
+    }
+    async function selectTopicFromList(id){
+      const t=getTopicById(id); if(!t) return;
+      currentTopic=t;
+      const display=document.getElementById("topicDisplay");
+      display.classList.add("selected");
+      display.innerHTML=`<div>${t.titleNe}</div><div style="font-size:0.82rem;font-weight:500;color:var(--text-muted);margin-top:6px;">${t.title}</div>`;
+      document.getElementById("paperChip").textContent=`Paper ${t.paper}`;
+      document.getElementById("paperChip").className=`meta-chip ${t.paper===1?"paper1":"paper2"}`;
+      document.getElementById("sectionChip").textContent=`Section ${t.section} · Unit ${t.unit}`;
+      document.getElementById("metaRow").style.display="flex";
+      document.getElementById("completeBtn").style.display=completed.has(id)?"none":"inline-flex";
+      document.getElementById("explainBtn").style.display="inline-flex";
+      document.getElementById("explainPanel").classList.remove("visible");
+      await showRevisionBox(t);
+      document.querySelector(".tod-card").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    updateProgress();
+    renderChecklist();
+  </script>
+</body>
+</html>
