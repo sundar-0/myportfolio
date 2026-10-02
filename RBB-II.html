@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RBB Level 5 IT Officer | MCQ Master</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a;
+  --bg2: #1e293b;
+  --bg3: #334155;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --text2: #94a3b8;
+  --primary: #6366f1;
+  --primary2: #818cf8;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --accent: #06b6d4;
+  --border: #334155;
+  --shadow: 0 10px 40px rgba(0,0,0,0.4);
+  --radius: 16px;
+  --nav-h: 64px;
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg2: #ffffff;
+  --bg3: #e2e8f0;
+  --card: #ffffff;
+  --text: #0f172a;
+  --text2: #64748b;
+  --primary: #4f46e5;
+  --primary2: #6366f1;
+  --border: #e2e8f0;
+  --shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+/* Sticky Navbar */
+.navbar {
+  position: sticky; top:0; z-index:1000;
+  height: var(--nav-h);
+  background: rgba(15,23,42,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 1.25rem;
+  gap: 1rem;
+}
+[data-theme="light"] .navbar { background: rgba(255,255,255,0.9); }
+.nav-left { display:flex; align-items:center; gap:1rem; }
+.logo {
+  font-weight:800; font-size:1.15rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  white-space:nowrap;
+}
+.nav-dates {
+  display:flex; flex-direction:column; font-size:0.7rem; color:var(--text2);
+  line-height:1.3;
+}
+.nav-dates strong { color:var(--accent); font-size:0.75rem; }
+.motivation-box {
+  flex:1; max-width:420px; overflow:hidden;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size:0.9rem; font-weight:500; color:var(--primary2);
+  min-height:1.4em; text-align:center;
+}
+.motivation-box .cursor { display:inline-block; width:2px; height:1em; background:var(--primary); animation:blink 0.8s infinite; vertical-align:middle; margin-left:2px; }
+@keyframes blink { 50%{opacity:0} }
+.nav-right { display:flex; align-items:center; gap:0.6rem; }
+.btn-icon {
+  width:38px; height:38px; border-radius:10px;
+  border:1px solid var(--border); background:var(--bg2);
+  color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition: all 0.2s;
+}
+.btn-icon:hover { background:var(--primary); color:#fff; border-color:var(--primary); transform:translateY(-1px); }
+/* Layout */
+.container { max-width:1280px; margin:0 auto; padding:1.25rem; }
+.grid-main { display:grid; grid-template-columns: 260px 1fr; gap:1.25rem; }
+@media(max-width:900px){ .grid-main{ grid-template-columns:1fr; } .sidebar{ display:none; } .sidebar.open{ display:block; position:fixed; inset:0; z-index:900; background:var(--bg); overflow-y:auto; padding:1rem; } }
+/* Cards */
+.card {
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  padding:1.25rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform:translateY(-2px); }
+.card-title { font-size:1.05rem; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
+/* Sidebar */
+.sidebar .section { margin-bottom:1.25rem; }
+.sidebar h3 { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text2); margin-bottom:0.5rem; }
+.topic-item {
+  display:flex; align-items:center; gap:0.5rem;
+  padding:0.45rem 0.6rem; border-radius:8px; cursor:pointer;
+  font-size:0.85rem; transition:background 0.15s;
+}
+.topic-item:hover, .topic-item.active { background:var(--bg3); }
+.topic-item input[type=checkbox] { accent-color:var(--primary); width:16px; height:16px; }
+.progress-bar-bg { height:8px; background:var(--bg3); border-radius:99px; overflow:hidden; margin-top:0.4rem; }
+.progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--accent)); border-radius:99px; transition:width 0.4s ease; }
+/* Stats row */
+.stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.85rem; margin-bottom:1.25rem; }
+.stat-card {
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:1rem; text-align:center;
+}
+.stat-card .num { font-size:1.6rem; font-weight:800; background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.stat-card .label { font-size:0.75rem; color:var(--text2); margin-top:0.2rem; }
+/* Buttons */
+.btn {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  padding:0.55rem 1.1rem; border-radius:10px; border:none;
+  font-weight:600; font-size:0.9rem; cursor:pointer;
+  transition: all 0.2s; font-family:inherit;
+}
+.btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary2)); color:#fff; }
+.btn-primary:hover { filter:brightness(1.1); transform:translateY(-1px); }
+.btn-success { background:var(--success); color:#fff; }
+.btn-danger { background:var(--danger); color:#fff; }
+.btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+.btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+.btn-sm { padding:0.35rem 0.7rem; font-size:0.8rem; }
+/* Quiz area */
+.quiz-header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.75rem; margin-bottom:1rem; }
+.timer {
+  font-size:1.4rem; font-weight:800; font-variant-numeric:tabular-nums;
+  color:var(--warning); background:var(--bg3); padding:0.4rem 0.9rem; border-radius:10px;
+}
+.timer.danger { color:var(--danger); animation:pulse 1s infinite; }
+@keyframes pulse { 50%{opacity:0.6} }
+.question-card { margin-bottom:1rem; }
+.q-num { font-size:0.8rem; color:var(--text2); margin-bottom:0.4rem; }
+.q-text { font-size:1.05rem; font-weight:600; line-height:1.5; margin-bottom:1rem; }
+.options { display:flex; flex-direction:column; gap:0.55rem; }
+.option {
+  padding:0.85rem 1rem; border:2px solid var(--border); border-radius:12px;
+  cursor:pointer; transition:all 0.2s; display:flex; align-items:flex-start; gap:0.7rem;
+  background:var(--bg2);
+}
+.option:hover { border-color:var(--primary); background:rgba(99,102,241,0.08); }
+.option.selected { border-color:var(--primary); background:rgba(99,102,241,0.15); }
+.option.correct { border-color:var(--success); background:rgba(34,197,94,0.15); }
+.option.wrong { border-color:var(--danger); background:rgba(239,68,68,0.12); }
+.option .opt-letter {
+  width:28px; height:28px; border-radius:8px; background:var(--bg3);
+  display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0;
+}
+.option.selected .opt-letter { background:var(--primary); color:#fff; }
+.option.correct .opt-letter { background:var(--success); color:#fff; }
+.option.wrong .opt-letter { background:var(--danger); color:#fff; }
+.explanation {
+  margin-top:1rem; padding:0.9rem; background:var(--bg3); border-radius:10px;
+  font-size:0.9rem; line-height:1.5; display:none;
+}
+.explanation.show { display:block; animation:fadeIn 0.3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+/* Modal */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:2000;
+  display:none; align-items:center; justify-content:center; padding:1rem;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open { display:flex; animation:fadeIn 0.2s; }
+.modal {
+  background:var(--card); border-radius:20px; max-width:720px; width:100%;
+  max-height:90vh; overflow-y:auto; padding:1.5rem; border:1px solid var(--border);
+  box-shadow:0 25px 60px rgba(0,0,0,0.5);
+}
+.modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.modal-header h2 { font-size:1.25rem; }
+.close-btn { background:none; border:none; color:var(--text2); font-size:1.4rem; cursor:pointer; }
+/* Tabs */
+.tabs { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1rem; }
+.tab {
+  padding:0.45rem 0.9rem; border-radius:8px; border:1px solid var(--border);
+  background:transparent; color:var(--text2); cursor:pointer; font-weight:500; font-size:0.85rem;
+}
+.tab.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+/* Achievements */
+.badge-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:0.75rem; }
+.badge {
+  text-align:center; padding:0.9rem 0.5rem; border-radius:12px;
+  background:var(--bg3); border:1px solid var(--border); opacity:0.45; transition:all 0.3s;
+}
+.badge.earned { opacity:1; border-color:var(--warning); box-shadow:0 0 20px rgba(245,158,11,0.25); }
+.badge .icon { font-size:1.8rem; margin-bottom:0.3rem; }
+.badge .name { font-size:0.75rem; font-weight:600; }
+/* Notes */
+.note-toolbar { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem; }
+.ck-editor__editable { min-height:280px !important; background:var(--bg2) !important; color:var(--text) !important; }
+.ck.ck-toolbar { background:var(--bg3) !important; border-color:var(--border) !important; }
+.ck.ck-editor__main>.ck-editor__editable { border-color:var(--border) !important; }
+/* Toast */
+.toast {
+  position:fixed; bottom:1.5rem; right:1.5rem; z-index:3000;
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:0.85rem 1.2rem; box-shadow:var(--shadow); display:none;
+  animation:slideUp 0.3s; max-width:320px;
+}
+.toast.show { display:flex; align-items:center; gap:0.6rem; }
+@keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:none;opacity:1} }
+/* Level bar */
+.level-bar {
+  display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem;
+  background:var(--bg3); padding:0.6rem 1rem; border-radius:12px;
+}
+.level-badge {
+  background:linear-gradient(135deg,#f59e0b,#ef4444); color:#fff;
+  font-weight:800; padding:0.25rem 0.6rem; border-radius:8px; font-size:0.85rem;
+}
+/* Mobile menu */
+.mobile-menu-btn { display:none; }
+@media(max-width:900px){
+  .mobile-menu-btn { display:flex; }
+  .nav-dates { display:none; }
+  .motivation-box { font-size:0.8rem; max-width:180px; }
+}
+/* Animations */
+.fade-in { animation:fadeIn 0.4s ease; }
+.confetti { position:fixed; pointer-events:none; z-index:9999; }
+/* Checklist */
+.check-list { list-style:none; }
+.check-list li {
+  display:flex; align-items:center; gap:0.5rem; padding:0.4rem 0;
+  border-bottom:1px solid var(--border); font-size:0.85rem;
+}
+.check-list li .btn { flex-shrink:0; }
+/* PDF Viewer */
+.pdf-viewer {
+  width:100%; height:70vh; border:1px solid var(--border); border-radius:12px;
+  background:#fff;
+}
+/* Utility */
+.hidden { display:none !important; }
+.text-success { color:var(--success); }
+.text-danger { color:var(--danger); }
+.text-warning { color:var(--warning); }
+.mt-1 { margin-top:0.5rem; }
+.mt-2 { margin-top:1rem; }
+.flex { display:flex; }
+.gap-1 { gap:0.5rem; }
+.gap-2 { gap:1rem; }
+.flex-wrap { flex-wrap:wrap; }
+.justify-between { justify-content:space-between; }
+.items-center { align-items:center; }
+.w-full { width:100%; }
+</style>
+</head>
+<body data-theme="dark">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-left">
+    <button class="btn-icon mobile-menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-brain"></i> RBB IT Master</div>
+    <div class="nav-dates">
+      <div>आज: <strong id="nepaliDate">—</strong></div>
+      <div>परीक्षा: <strong id="examCountdown">—</strong></div>
+    </div>
+  </div>
+  <div class="motivation-box">
+    <span id="motivationText"></span><span class="cursor"></span>
+  </div>
+  <div class="nav-right">
+    <button class="btn-icon" onclick="toggleTheme()" title="Theme"><i class="fas fa-moon" id="themeIcon"></i></button>
+    <button class="btn-icon" onclick="openModal('importModal')" title="Import/Export"><i class="fas fa-file-import"></i></button>
+    <button class="btn-icon" onclick="openModal('achievementsModal')" title="Achievements"><i class="fas fa-trophy"></i></button>
+    <button class="btn-icon" onclick="openModal('notesModal')" title="My Notes"><i class="fas fa-sticky-note"></i></button>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- Level & XP -->
+  <div class="level-bar">
+    <div class="level-badge">Lv <span id="userLevel">1</span></div>
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:0.25rem">
+        <span>XP: <span id="userXP">0</span></span>
+        <span id="xpNext">100 XP to next</span>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="xpBar" style="width:0%"></div></div>
+    </div>
+    <div style="font-size:0.8rem;color:var(--text2)"><i class="fas fa-fire text-warning"></i> <span id="streak">0</span> day streak</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">Total MCQs</div></div>
+    <div class="stat-card"><div class="num" id="statDone">0</div><div class="label">Completed</div></div>
+    <div class="stat-card"><div class="num" id="statAccuracy">0%</div><div class="label">Accuracy</div></div>
+    <div class="stat-card"><div class="num" id="statScore">0</div><div class="label">Best Score</div></div>
+  </div>
+
+  <div class="grid-main">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="section">
+        <h3>Chapters / Topics</h3>
+        <div id="topicList"></div>
+      </div>
+      <div class="section">
+        <h3>Topic Progress Checklist</h3>
+        <ul class="check-list" id="topicChecklist"></ul>
+      </div>
+      <div class="section">
+        <button class="btn btn-primary w-full" onclick="startQuiz('all')"><i class="fas fa-play"></i> Full Mock (All)</button>
+        <button class="btn btn-outline w-full mt-1" onclick="startQuiz('random')"><i class="fas fa-random"></i> Random 30</button>
+        <button class="btn btn-outline w-full mt-1" onclick="startQuiz('weak')"><i class="fas fa-dumbbell"></i> Weak Areas</button>
+      </div>
+      <div class="section">
+        <button class="btn btn-sm btn-outline w-full" onclick="exportProgress()"><i class="fas fa-download"></i> Export Progress</button>
+        <button class="btn btn-sm btn-outline w-full mt-1" onclick="resetProgress()"><i class="fas fa-trash"></i> Reset Progress</button>
+      </div>
+      <button class="btn btn-sm btn-outline w-full" style="margin-top:1rem" onclick="toggleSidebar()">Close Menu</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <!-- Home / Practice -->
+      <div id="homeView">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-book-open"></i> Practice by Topic</div>
+          <p style="color:var(--text2);font-size:0.9rem;margin-bottom:1rem">Select a topic from the sidebar or start a full mock exam. 45 minutes • 10% negative marking.</p>
+          <div id="topicCards" class="stats-row"></div>
+        </div>
+
+        <div class="card mt-2">
+          <div class="card-title"><i class="fas fa-chart-line"></i> Strongest & Weakest Areas</div>
+          <div id="strengthAnalysis" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div>
+              <h4 class="text-success" style="margin-bottom:0.5rem"><i class="fas fa-arrow-up"></i> Strongest</h4>
+              <div id="strongTopics">—</div>
+            </div>
+            <div>
+              <h4 class="text-danger" style="margin-bottom:0.5rem"><i class="fas fa-arrow-down"></i> Focus On</h4>
+              <div id="weakTopics">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-2">
+          <div class="card-title"><i class="fas fa-history"></i> Recent Attempts</div>
+          <div id="recentAttempts" style="font-size:0.9rem;color:var(--text2)">No attempts yet. Start a quiz!</div>
+        </div>
+      </div>
+
+      <!-- Quiz View -->
+      <div id="quizView" class="hidden">
+        <div class="quiz-header">
+          <div>
+            <span class="q-num" id="quizProgress">Q 1 / 30</span>
+            <div style="font-size:0.85rem;color:var(--text2)" id="quizTopicLabel"></div>
+          </div>
+          <div class="timer" id="quizTimer">45:00</div>
+          <div class="flex gap-1">
+            <button class="btn btn-sm btn-outline" onclick="prevQuestion()" id="prevBtn"><i class="fas fa-arrow-left"></i></button>
+            <button class="btn btn-sm btn-outline" onclick="nextQuestion()" id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="submitQuiz()"><i class="fas fa-flag-checkered"></i> Submit</button>
+          </div>
+        </div>
+        <div class="card question-card" id="questionCard">
+          <!-- dynamically filled -->
+        </div>
+        <div class="flex gap-1 flex-wrap mt-1" id="qNav"></div>
+      </div>
+
+      <!-- Result View -->
+      <div id="resultView" class="hidden">
+        <div class="card" style="text-align:center">
+          <div style="font-size:3rem;margin-bottom:0.5rem" id="resultEmoji">🎉</div>
+          <h2 id="resultTitle">Quiz Complete!</h2>
+          <div class="stats-row mt-2" style="max-width:500px;margin-left:auto;margin-right:auto">
+            <div class="stat-card"><div class="num" id="resScore">0</div><div class="label">Score</div></div>
+            <div class="stat-card"><div class="num" id="resCorrect">0</div><div class="label">Correct</div></div>
+            <div class="stat-card"><div class="num" id="resWrong">0</div><div class="label">Wrong</div></div>
+            <div class="stat-card"><div class="num" id="resAccuracy">0%</div><div class="label">Accuracy</div></div>
+          </div>
+          <div class="mt-2 flex gap-1 justify-between flex-wrap" style="justify-content:center">
+            <button class="btn btn-primary" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download Report</button>
+            <button class="btn btn-outline" onclick="reviewAnswers()"><i class="fas fa-search"></i> Review</button>
+            <button class="btn btn-outline" onclick="showHome()"><i class="fas fa-home"></i> Home</button>
+          </div>
+        </div>
+        <div class="card mt-2" id="reviewSection" class="hidden"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="fas fa-file-import"></i> Import / Export MCQs</h2>
+      <button class="close-btn" onclick="closeModal('importModal')">&times;</button>
+    </div>
+    <p style="color:var(--text2);font-size:0.9rem;margin-bottom:1rem">Import JSON array of MCQs or export current set.</p>
+    <input type="file" id="importFile" accept=".json" class="hidden">
+    <div class="flex gap-1 flex-wrap">
+      <button class="btn btn-primary" onclick="document.getElementById('importFile').click()"><i class="fas fa-upload"></i> Import JSON</button>
+      <button class="btn btn-outline" onclick="exportMCQs()"><i class="fas fa-download"></i> Export JSON</button>
+    </div>
+    <textarea id="importPreview" style="width:100%;height:180px;margin-top:1rem;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:0.75rem;color:var(--text);font-family:monospace;font-size:0.8rem" placeholder="Paste JSON here or use file upload..."></textarea>
+    <button class="btn btn-success mt-1" onclick="importFromText()"><i class="fas fa-check"></i> Import from Textarea</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="achievementsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2><i class="fas fa-trophy"></i> Achievements & Badges</h2>
+      <button class="close-btn" onclick="closeModal('achievementsModal')">&times;</button>
+    </div>
+    <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="notesModal">
+  <div class="modal" style="max-width:900px">
+    <div class="modal-header">
+      <h2><i class="fas fa-sticky-note"></i> My Notes</h2>
+      <button class="close-btn" onclick="closeModal('notesModal')">&times;</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="editor" onclick="switchNoteTab(this)">Editor</button>
+      <button class="tab" data-tab="topicNotes" onclick="switchNoteTab(this)">Topic Notes</button>
+      <button class="tab" data-tab="aiVerify" onclick="switchNoteTab(this)">AI Verify Prompt</button>
+    </div>
+    <div id="noteEditorTab">
+      <div class="note-toolbar">
+        <button class="btn btn-sm btn-outline" onclick="saveNote()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-sm btn-outline" onclick="downloadNotePDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+        <button class="btn btn-sm btn-outline" onclick="importHTML()"><i class="fas fa-file-code"></i> HTML</button>
+        <button class="btn btn-sm btn-outline" onclick="importDOCX()"><i class="fas fa-file-word"></i> DOCX</button>
+        <button class="btn btn-sm btn-outline" onclick="svgToImage()"><i class="fas fa-image"></i> SVG→IMG</button>
+        <input type="file" id="htmlFile" accept=".html,.htm" class="hidden" onchange="handleHTMLImport(event)">
+        <input type="file" id="docxFile" accept=".docx" class="hidden" onchange="handleDOCXImport(event)">
+      </div>
+      <div id="ckeditor"></div>
+      <div class="mt-1" style="font-size:0.8rem;color:var(--text2)">Auto-saved to localStorage. Notes persist across refreshes.</div>
+    </div>
+    <div id="topicNotesTab" class="hidden">
+      <select id="topicNoteSelect" class="w-full" style="padding:0.5rem;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);margin-bottom:0.75rem" onchange="loadTopicNote()"></select>
+      <div id="topicNoteContent" style="min-height:200px;background:var(--bg3);border-radius:10px;padding:1rem;line-height:1.6"></div>
+      <div class="flex gap-1 flex-wrap mt-1">
+        <button class="btn btn-sm btn-primary" onclick="openTopicNoteEditor()"><i class="fas fa-edit"></i> Edit with Editor</button>
+        <button class="btn btn-sm btn-outline" onclick="viewTopicNotePDF()"><i class="fas fa-file-pdf"></i> View as PDF</button>
+        <button class="btn btn-sm btn-outline" onclick="downloadTopicNotePDF()"><i class="fas fa-download"></i> Download PDF</button>
+      </div>
+    </div>
+    <div id="aiVerifyTab" class="hidden">
+      <p style="color:var(--text2);font-size:0.9rem;margin-bottom:0.75rem">Copy this prompt and paste into any AI (ChatGPT, Claude, Grok) along with your note for verification:</p>
+      <div style="background:var(--bg3);border-radius:10px;padding:1rem;font-size:0.85rem;line-height:1.6;position:relative" id="aiPromptBox">
+        You are an expert IT Officer exam evaluator for Nepal Rastra Bank (RBB) Level 5.  
+        Review the following study notes for accuracy, completeness, and exam relevance.  
+        Point out any factual errors, missing key concepts, or outdated information.  
+        Suggest improvements and additional points that frequently appear in PSC / NRB IT Officer exams.  
+        Rate the note on a scale of 1–10 for exam readiness.  
+        Notes:  
+        [PASTE YOUR NOTE HERE]
+      </div>
+      <button class="btn btn-primary mt-1" onclick="copyPrompt()"><i class="fas fa-copy"></i> Copy Prompt</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal" style="max-width:95vw;max-height:95vh">
+    <div class="modal-header">
+      <h2>PDF Viewer</h2>
+      <button class="close-btn" onclick="closeModal('pdfModal')">&times;</button>
+    </div>
+    <iframe id="pdfFrame" class="pdf-viewer"></iframe>
+  </div>
+</div>
+
+<!-- Topic Note Editor Modal -->
+<div class="modal-overlay" id="topicNoteEditorModal">
+  <div class="modal" style="max-width:900px">
+    <div class="modal-header">
+      <h2><i class="fas fa-sticky-note"></i> Topic Note: <span id="topicNoteTitle" style="font-size:0.95rem;color:var(--primary2)"></span></h2>
+      <button class="close-btn" onclick="closeTopicNoteEditor()">&times;</button>
+    </div>
+    <div class="note-toolbar">
+      <button class="btn btn-sm btn-primary" onclick="saveTopicNoteFromEditor()"><i class="fas fa-save"></i> Save Note</button>
+      <button class="btn btn-sm btn-outline" onclick="downloadCurrentTopicNotePDF()"><i class="fas fa-file-pdf"></i> Download PDF</button>
+      <button class="btn btn-sm btn-outline" onclick="viewCurrentTopicNotePDF()"><i class="fas fa-eye"></i> Preview PDF</button>
+    </div>
+    <div id="topicCkeditor"></div>
+    <div class="mt-1" style="font-size:0.8rem;color:var(--text2)">Notes are saved per topic in localStorage and persist after refresh.</div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+<script>
+/* ===================== DATA ===================== */
+const DEFAULT_MCQS = [
+  {"id":1,"section":"A","topic":"1.1 Types of Computers: Analog, Digital, Hybrid, Mainframe, Super Computer","question":"A weather forecasting institution processes non-linear fluid dynamics partial differential equations requiring trillions of floating-point operations per second (FLOPS), whereas a commercial bank processes hundreds of thousands of concurrent credit card transactions per second requiring massive I/O throughput and continuous availability. Which pairing correctly matches these operational workloads?","options":{"A":"Bank: Mainframe Computer | Weather Lab: Supercomputer","B":"Bank: Supercomputer | Weather Lab: Mainframe Computer","C":"Bank: Analog Processor | Weather Lab: Hybrid Workstation","D":"Bank: High-Performance Hybrid | Weather Lab: Mainframe Cluster"},"correct_answer":"A","explanation":"Mainframe computers are specialized for enterprise transaction processing, massive concurrent I/O throughput, reliability, and continuous online transaction processing (OLTP). Supercomputers are engineered specifically for compute-intensive floating-point mathematical calculations such as weather modeling and quantum physics simulations.","difficulty":"Medium"},
+  {"id":2,"section":"A","topic":"1.1 Types of Computers: Analog, Digital, Hybrid, Mainframe, Super Computer","question":"An intensive care unit (ICU) patient monitoring system continuously measures continuous analog physiological signals (e.g. ECG voltage, blood pressure) and uses a digital processor to compute threshold alerts and log patient history. Which computing classification best describes this system?","options":{"A":"Digital computer, because the threshold evaluation logic and display output are entirely discrete.","B":"Hybrid computer, because it accepts continuous physical inputs directly and converts them for discrete digital analysis and control.","C":"Analog computer, because the primary physiological data source consists of continuous electrical signals.","D":"Mainframe computer, because it handles high-reliability critical telemetry."},"correct_answer":"B","explanation":"A hybrid computer combines the operational capabilities of both analog and digital computing systems. In medical telemetry, continuous physical parameters are measured using analog sensing units, while mathematical computation, threshold checks, and storage are executed by digital logic.","difficulty":"Medium"},
+  {"id":3,"section":"A","topic":"1.2 Basic Knowledge of Internet/Email System, Web Design","question":"When an email client submits a newly composed message to an enterprise outgoing mail server, and that server routes the email across the Internet to the recipient's mail domain, which combination of protocols is primarily utilized for submission and inter-server transfer respectively?","options":{"A":"IMAP for submission; POP3 for transfer across mail servers.","B":"POP3 for submission; SMTP for inter-server transfer.","C":"SMTP for submission; SMTP (via DNS MX lookup) for inter-server transfer.","D":"HTTP for submission; IMAP for inter-server transfer."},"correct_answer":"C","explanation":"Simple Mail Transfer Protocol (SMTP) is the standard protocol used both by mail clients to submit outgoing messages to a mail server and by relaying mail servers to route messages across the Internet. IMAP and POP3 are strictly client-retrieval protocols.","difficulty":"Hard"},
+  {"id":4,"section":"A","topic":"1.2 Basic Knowledge of Internet/Email System, Web Design","question":"In modern responsive web design, a web developer wants to ensure that layout elements re-flow fluidly across both rows and columns based on screen dimensions without relying on fixed pixel widths or heavy JavaScript calculations. Which native CSS layout module is specifically designed for 2D grid-based responsive component alignment?","options":{"A":"CSS Flexbox with fixed pixel margins.","B":"CSS Table Display properties.","C":"XML Schema Transformations (XSLT).","D":"CSS Grid Layout with fractional units (fr) and media queries."},"correct_answer":"D","explanation":"CSS Grid Layout provides a native two-dimensional (rows and columns) layout system in CSS, where fractional units (fr) dynamically distribute remaining free space.","difficulty":"Medium"},
+  {"id":5,"section":"A","topic":"1.3 Basic Knowledge of Physical Security of IT Infrastructure","question":"In a secure data center housing core banking servers, an unauthorized individual closely follows an authenticated engineer through an opened access door without presenting valid RFID credentials. What is this physical security intrusion tactic called, and what hardware control best prevents it?","options":{"A":"Tailgating (or Piggybacking); prevented by Mantrap vestibules with weight/biometric sensors.","B":"Shoulder Surfing; prevented by privacy screen filters.","C":"Dumpster Diving; prevented by industrial paper shredders.","D":"Eavesdropping; prevented by Faraday cage shielding."},"correct_answer":"A","explanation":"Tailgating occurs when an unauthorized person follows an authorized individual into a restricted physical area without presenting valid credentials. Mantrap is the most effective physical countermeasure.","difficulty":"Medium"},
+  {"id":6,"section":"A","topic":"1.4 Basic Knowledge of AI, Machine Learning (ML) and Blockchain","question":"In a public proof-of-work blockchain network like Bitcoin, what mathematical mechanism prevents a malicious actor from altering a historical transaction recorded 50 blocks deep in the ledger?","options":{"A":"A central administrator manually rejects historical block modifications.","B":"Modifying any block alters its cryptographic hash, invalidating all subsequent block headers and requiring the attacker to recalculate proof-of-work for all subsequent blocks faster than the rest of the network combined.","C":"Symmetric encryption keys automatically re-encrypt old blocks every 24 hours.","D":"Asymmetric RSA public keys automatically revoke tampered nodes from the peer-to-peer routing table."},"correct_answer":"B","explanation":"Blocks are cryptographically linked. Modifying a past block alters its hash, breaking the chain. An attacker must re-do PoW for the target and all subsequent blocks.","difficulty":"Hard"},
+  {"id":7,"section":"A","topic":"1.4 Basic Knowledge of AI, Machine Learning (ML) and Blockchain","question":"A machine learning engineer builds a credit default risk prediction model using historical loan records containing customer financial features paired with explicit ground-truth outcomes (Default = 1, No Default = 0). Which machine learning paradigm is being applied?","options":{"A":"Unsupervised Learning (K-Means Clustering)","B":"Reinforcement Learning (Q-Learning)","C":"Supervised Learning (Classification)","D":"Self-Organizing Map (Dimensionality Reduction)"},"correct_answer":"C","explanation":"Supervised Learning algorithms are trained on dataset inputs paired with known, explicit ground-truth labels. This is a Supervised Classification problem.","difficulty":"Easy"},
+  {"id":8,"section":"A","topic":"2.1 Basic Computer Architecture, Registers, Memory Management","question":"During execution of the CPU instruction cycle, which hardware register explicitly stores the memory address of the NEXT instruction waiting to be fetched from main memory?","options":{"A":"Instruction Register (IR)","B":"Memory Buffer Register (MBR)","C":"Accumulator (AC)","D":"Program Counter (PC)"},"correct_answer":"D","explanation":"The Program Counter (PC) register holds the memory address of the next instruction waiting to be fetched and executed.","difficulty":"Medium"},
+  {"id":9,"section":"A","topic":"2.1 Basic Computer Architecture, Registers, Memory Management","question":"A system uses virtual memory paging with a 32-bit logical address space and a page size of 4 KB (2^12 bytes). How many total entries exist in a single-level page table covering the full address space?","options":{"A":"2^20 (1,048,576) entries","B":"2^12 (4,096) entries","C":"2^32 (4,294,967,296) entries","D":"2^16 (65,536) entries"},"correct_answer":"A","explanation":"Page offset requires 12 bits. Remaining bits for page number: 32-12=20. Maximum pages = 2^20.","difficulty":"Hard"},
+  {"id":10,"section":"A","topic":"2.2 Organization of Hard Disk","question":"When an operating system issues a read request to a mechanical hard disk drive (HDD), total access time is dominated by mechanical movements. Which sequence accurately orders the physical components of total disk access latency?","options":{"A":"Rotational Latency -> Controller Latency -> Transfer Time","B":"Seek Time (arm movement to cylinder) -> Rotational Latency (platter rotation to sector) -> Data Transfer Time","C":"Transfer Time -> Seek Time -> Formatting Delay","D":"Head Switching Delay -> Cylinder Jump -> Buffer Read"},"correct_answer":"B","explanation":"Total Disk Access Time = Seek Time + Rotational Latency + Data Transfer Time.","difficulty":"Medium"},
+  {"id":11,"section":"A","topic":"2.3 CPU Architecture","question":"In a 5-stage RISC processor pipeline (IF, ID, EX, MEM, WB), a branch instruction is evaluated in the EX stage. If the branch prediction mechanism guessed incorrectly, which type of pipeline hazard occurs and how is it resolved?","options":{"A":"Structural hazard; resolved by duplicating ALU hardware units.","B":"Data hazard; resolved by operand forwarding from EX/MEM pipeline registers.","C":"Control (Branch) hazard; resolved by flushing invalid speculatively fetched instructions and inserting pipeline bubbles.","D":"Memory collision hazard; resolved by write-back cache locks."},"correct_answer":"C","explanation":"A Control (Branch) Hazard occurs when the pipeline fetches instructions based on branch prediction before the actual branch decision is computed. Mispredicted instructions must be flushed.","difficulty":"Hard"},
+  {"id":12,"section":"A","topic":"2.4 I/O Management, I/O Interface, I/O Requests Handling, I/O Devices","question":"A storage controller needs to transfer large data blocks from a high-speed NVMe/SATA disk directly into main RAM without continuously interrupting the CPU for every byte transferred. Which I/O handling technique achieves this requirement?","options":{"A":"Programmed I/O (Polling)","B":"Interrupt-Driven I/O","C":"Memory-Mapped I/O Polling","D":"Direct Memory Access (DMA)"},"correct_answer":"D","explanation":"Direct Memory Access (DMA) allows specialized hardware controllers to transfer entire blocks of data directly between I/O devices and system RAM without passing each byte through the CPU.","difficulty":"Medium"},
+  {"id":13,"section":"A","topic":"3.1 Networking Devices: Repeater, Hub, Switch, Router","question":"A network administrator replaces an unmanaged 16-port Ethernet Hub with a 16-port Layer-2 Ethernet Switch in an office network. How does this hardware replacement alter the total number of Collision Domains and Broadcast Domains in the local network?","options":{"A":"Collision Domains increase from 1 to 16; Broadcast Domains remain 1.","B":"Collision Domains decrease to 1; Broadcast Domains increase to 16.","C":"Collision Domains remain 1; Broadcast Domains increase to 16.","D":"Collision Domains increase to 16; Broadcast Domains increase to 16."},"correct_answer":"A","explanation":"A Layer-2 Switch creates a separate collision domain per port while keeping a single broadcast domain (unless VLANs).","difficulty":"Hard"},
+  {"id":14,"section":"A","topic":"3.2 Switching Technologies, Modems and Remote Network Access, Error Detection and Correction Techniques","question":"In cyclic redundancy error detection (CRC), a sender generates a frame checksum for a bit string message M(X) using a 3rd-degree generator polynomial G(X) = X^3 + X + 1. What mathematical operation is performed to derive the Frame Check Sequence (FCS)?","options":{"A":"Standard base-10 long division of M(X) by G(X).","B":"Modulo-2 binary division (bitwise XOR) of M(X) left-shifted by 3 bits by G(X), appending the remainder as FCS.","C":"Bitwise AND multiplication of M(X) with the bitwise inverse of G(X).","D":"Two's complement checksum addition across 16-bit boundaries."},"correct_answer":"B","explanation":"CRC uses modulo-2 binary arithmetic. Message is left-shifted by degree of G(X) and divided; remainder becomes FCS.","difficulty":"Hard"},
+  {"id":15,"section":"A","topic":"3.3 Internet Services, Internet Protocol/addressing","question":"A network engineer needs to subnet a Class C network block 192.168.1.0/24 to support at least 28 usable host IP addresses per subnet. Which subnet mask should be assigned, and how many usable subnets are created?","options":{"A":"Subnet Mask: 255.255.255.240 (/28); Usable Subnets: 16","B":"Subnet Mask: 255.255.255.192 (/26); Usable Subnets: 4","C":"Subnet Mask: 255.255.255.224 (/27); Usable Subnets: 8","D":"Subnet Mask: 255.255.255.248 (/29); Usable Subnets: 32"},"correct_answer":"C","explanation":"h=5 → 30 usable hosts. Prefix /27. Borrowing 3 bits from /24 yields 8 subnets.","difficulty":"Hard"},
+  {"id":16,"section":"A","topic":"3.4 Network Security, Cryptography","question":"Alice wants to transmit a sensitive document to Bob across a public network and ensure both message Confidentiality and Digital Non-Repudiation (Authenticity). How should Alice apply RSA public-key asymmetric cryptography?","options":{"A":"Encrypt message with Bob's Private Key; Sign hash with Alice's Public Key.","B":"Encrypt payload with a Shared Symmetric Key; Sign hash with Bob's Private Key.","C":"Encrypt message with Alice's Public Key; Sign hash with Bob's Public Key.","D":"Sign message digest with Alice's Private Key; Encrypt resulting payload with Bob's Public Key."},"correct_answer":"D","explanation":"Sign with Alice's private key (non-repudiation). Encrypt with Bob's public key (confidentiality).","difficulty":"Hard"},
+  {"id":17,"section":"B","topic":"4.1 Basic Knowledge of Operating System","question":"When a user-space application program needs to read data from a storage disk, it executes an instruction that triggers a hardware trap to transition execution from User Mode to Kernel Mode. What is this mechanism called?","options":{"A":"System Call (Software Interrupt)","B":"Context Switch","C":"Thread Barrier Synchronization","D":"Process Control Block (PCB) Swap"},"correct_answer":"A","explanation":"System Call triggers a trap that elevates privilege to Kernel Mode.","difficulty":"Medium"},
+  {"id":18,"section":"B","topic":"4.2 Process Management and Scheduling","question":"Four processes (P1, P2, P3, P4) arrive at time t=0 with CPU burst times of 6ms, 2ms, 8ms, and 4ms respectively. Under non-preemptive Shortest Job First (SJF) scheduling, what is the average waiting time for these processes?","options":{"A":"7.0 ms","B":"4.0 ms","C":"5.0 ms","D":"3.0 ms"},"correct_answer":"C","explanation":"Order: P2(2)→P4(4)→P1(6)→P3(8). Waiting: 0+2+6+12=20. Avg=5.0 ms.","difficulty":"Hard"},
+  {"id":19,"section":"B","topic":"4.3 DOS, UNIX/Windows Operating System","question":"In UNIX/Linux systems, when a process calls fork(), what are the return values delivered to the parent process and child process respectively upon successful execution?","options":{"A":"Parent receives 0; Child receives Parent's PID.","B":"Parent receives 1; Child receives 1.","C":"Parent receives PID of newly created Child; Child receives 0.","D":"Parent receives -1; Child receives 0."},"correct_answer":"C","explanation":"Parent receives child PID; child receives 0.","difficulty":"Medium"},
+  {"id":20,"section":"B","topic":"4.4 Identifying and Managing Security Threats in OS","question":"An attacker exploits an unchecked memory buffer input in a C program compiled on Linux, overwriting the saved stack frame pointer and return address with malicious shellcode memory addresses. What type of operating system security vulnerability was exploited, and what hardware/kernel defense mechanism mitigates it?","options":{"A":"SQL Injection; mitigated by Prepared Statements.","B":"Privilege Escalation via Symbolic Links; mitigated by chroot jail sandboxing.","C":"Cross-Site Scripting (XSS); mitigated by HTTP-only cookie flags.","D":"Stack-based Buffer Overflow; mitigated by Address Space Layout Randomization (ASLR) and Data Execution Prevention (NX/DEP bit)."},"correct_answer":"D","explanation":"Stack-based buffer overflow. Mitigated by ASLR and NX/DEP.","difficulty":"Hard"},
+  {"id":21,"section":"B","topic":"5.1 Basic Knowledge of Database Management System","question":"In relational database ACID properties, which property guarantees that once a database transaction commits, its state modifications permanently persist in non-volatile storage, even in the event of an immediate power outage or system crash?","options":{"A":"Durability","B":"Consistency","C":"Isolation","D":"Atomicity"},"correct_answer":"A","explanation":"Durability guarantees permanent persistence after COMMIT.","difficulty":"Easy"},
+  {"id":22,"section":"B","topic":"5.2 Basic Concept of Table, Record, Relationship and Indexing","question":"A database administrator creates a B+ Tree index on the 'Customer_ID' primary key of a 10-million row relational database table. Why is a B+ Tree index preferred over a standard binary search tree (BST) for disk-stored relational databases?","options":{"A":"B+ Trees store all actual record data exclusively in interior decision nodes.","B":"B+ Trees have a high fan-out (node branching factor), drastically reducing disk I/O depth, and store sequential data pointers in linked leaf nodes for fast range queries.","C":"B+ Trees reduce memory consumption by storing keys in uncompressed XML strings.","D":"B+ Trees eliminate the need for primary key constraints and duplicate key checks."},"correct_answer":"B","explanation":"High fan-out reduces tree height (disk I/O). Leaf nodes linked for range scans.","difficulty":"Hard"},
+  {"id":23,"section":"B","topic":"5.3 Data Warehousing, Process in Data warehousing","question":"In data warehousing architecture, what is the core operational sequence responsible for extracting data from disparate operational transactional systems (OLTP), transforming it into clean unified formats, and loading it into the data warehouse repository?","options":{"A":"OLAP Data Mining (ODM)","B":"EER Conceptual Schema Mapping","C":"ETL Process (Extract, Transform, Load)","D":"Disaster Recovery Data Synchronization (DRDS)"},"correct_answer":"C","explanation":"ETL is the foundational pipeline in data warehousing.","difficulty":"Medium"},
+  {"id":24,"section":"B","topic":"5.4 Basics of HTML, Script, Stylesheet, XML, Web Server and Proxy Server","question":"An enterprise deploys a Reverse Proxy Server (e.g., NGINX) in front of its web application server cluster. Which functional capability is specifically provided by a REVERSE proxy server rather than a Forward proxy server?","options":{"A":"Hiding internal client IP addresses while browsing external public websites.","B":"Enforcing outbound corporate web content filtering for internal employees.","C":"Caching internet DNS domain records on local desktop machines.","D":"Load balancing incoming client requests across backend servers, terminating SSL/TLS encryption, and masking backend server infrastructure."},"correct_answer":"D","explanation":"Reverse Proxy acts on behalf of backend servers: load balancing, SSL termination, masking.","difficulty":"Hard"},
+  {"id":25,"section":"B","topic":"5.5 Disaster Recovery Planning","question":"A bank's Business Continuity Policy establishes a Recovery Point Objective (RPO) of 15 minutes and a Recovery Time Objective (RTO) of 2 hours for its core banking system. What do these metrics specifically dictate following a severe database outage?","options":{"A":"RPO: Maximum acceptable data loss cannot exceed 15 minutes of transactions prior to disaster; RTO: Full service restoration must occur within 2 hours.","B":"RPO: System must be restored within 15 minutes; RTO: Maximum acceptable data loss is 2 hours.","C":"RPO: Backup tape storage must be refreshed every 2 hours; RTO: High availability switches every 15 minutes.","D":"RPO: Emergency DR drills conducted every 15 days; RTO: Audit reports completed within 2 hours."},"correct_answer":"A","explanation":"RPO = max data loss time. RTO = max downtime.","difficulty":"Medium"},
+  {"id":26,"section":"B","topic":"6.1 Introduction to Cyber Security, Access Control mechanisms, threats and vulnerabilities, Security attacks, Authentication and authorization, Password Management","question":"In Role-Based Access Control (RBAC) vs. Discretionary Access Control (DAC), what is the fundamental structural distinction regarding permission assignment?","options":{"A":"In DAC, permissions are managed strictly by central security policy; in RBAC, users sell their access rights.","B":"In DAC, the resource owner has full discretion to grant access permissions to other users; in RBAC, permissions are tied to defined organizational roles assigned by administrators.","C":"In RBAC, access decisions depend on dynamic environmental attributes like IP address; in DAC, access is immutable.","D":"In DAC, access requires multi-factor biometric tokens; in RBAC, access relies on static passwords."},"correct_answer":"B","explanation":"DAC: owner discretion. RBAC: permissions via roles.","difficulty":"Medium"},
+  {"id":27,"section":"B","topic":"6.2 Common Security threats: Social Engineering, Malwares, Distributed Denial of Service and Denial of Service, Phishing and its types","question":"An enterprise network experiences an attack where millions of compromised Internet-of-Things (IoT) botnet devices flood the core banking web router with TCP SYN packets, exhausting its connection state tables and rendering legitimate banking portals inaccessible. What specific cyber attack is being executed?","options":{"A":"Spear Phishing Attack","B":"Man-in-the-Browser Ransomware Attack","C":"Distributed Denial of Service (DDoS) TCP SYN Flood Attack","D":"Cross-Site Request Forgery (CSRF)"},"correct_answer":"C","explanation":"DDoS SYN flood from botnet exhausts connection tables.","difficulty":"Medium"},
+  {"id":28,"section":"B","topic":"6.3 ICT Policy of Nepal, 2072","question":"According to the official Information and Communication Technology (ICT) Policy of Nepal 2072, what key apex institutional body is established to oversee policy implementation, national strategy, and inter-agency ICT coordination across Nepal?","options":{"A":"Nepal Telecommunication Authority (NTA) Executive Committee","B":"Nepal Computer Emergency Response Team (NP-CERT) Directorate","C":"Department of Information Technology (DoIT) Security Division","D":"National Information Technology Development Council (NITDC) chaired by the Prime Minister"},"correct_answer":"D","explanation":"NITDC chaired by the Prime Minister is the apex body under ICT Policy 2072.","difficulty":"Hard"},
+  {"id":29,"section":"B","topic":"6.4 IT Guidelines (Issued by Nepal Rastra Bank)","question":"Under the IT Guidelines issued by Nepal Rastra Bank (NRB) for Licensed Financial Institutions, what mandatory operational requirement is specified regarding Information System (IS) Audits?","options":{"A":"A comprehensive IS Audit must be conducted periodically (at least annually) by qualified independent certified auditors (e.g., CISA certified).","B":"IS Audits must be conducted monthly by internal branch operational officers.","C":"IS Audits are required only when a cyber fraud loss exceeds NPR 10 million.","D":"IS Audits are replaced entirely by automated software vulnerability scanning."},"correct_answer":"A","explanation":"NRB mandates annual comprehensive IS Audit by independent certified auditors.","difficulty":"Medium"},
+  {"id":30,"section":"B","topic":"6.5 Cyber Resilience Guidelines, 2023 (Issued by Nepal Rastra Bank)","question":"Under the NRB Cyber Resilience Guidelines 2023, what is the mandatory requirement for licensed financial institutions regarding the reporting of critical cybersecurity incidents to Nepal Rastra Bank?","options":{"A":"Incidents must be reported within 30 business days after full financial recovery.","B":"Critical cybersecurity incidents (e.g. severe data breach, ransomware, core banking outage) must be reported immediately to NRB's IT Department.","C":"Incidents only need to be disclosed in annual shareholder reports.","D":"Reporting is voluntary and subject to internal board discretion."},"correct_answer":"B","explanation":"Critical incidents must be reported immediately to NRB IT Department.","difficulty":"Medium"}
+];
+
+/* ===================== STATE ===================== */
+let mcqs = JSON.parse(localStorage.getItem('rbb_mcqs')) || DEFAULT_MCQS;
+let progress = JSON.parse(localStorage.getItem('rbb_progress')) || { answered: {}, correct: {}, topicStats: {}, checklist: {} };
+let user = JSON.parse(localStorage.getItem('rbb_user')) || { xp: 0, level: 1, streak: 0, lastDate: null, badges: [], bestScore: 0, attempts: [] };
+let notes = JSON.parse(localStorage.getItem('rbb_notes')) || { general: '', topics: {} };
+let currentQuiz = null;
+let quizIndex = 0;
+let quizAnswers = {};
+let quizTimerInterval = null;
+let editor = null;
+
+/* ===================== NEPALI MOTIVATION ===================== */
+const MOTIVATIONS = [
+  "मेहनत कहिल्यै व्यर्थ जाँदैन – आजको प्रयास भोलिको सफलता हो।",
+  "परीक्षा पास गर्न होइन, ज्ञान आर्जन गर्न पढ्नुहोस्।",
+  "हरेक दिन थोरै थोरै गरेर ठूलो लक्ष्य हासिल गर्न सकिन्छ।",
+  "असफलता भनेको सफलताको पहिलो सिँढी हो।",
+  "तपाईंको एक मात्र प्रतिस्पर्धी तपाईं आफैं हुनुहुन्छ।",
+  "सपना देख्नुहोस्, योजना बनाउनुहोस्, र काम गर्नुहोस्।",
+  "कठिन समयले बलियो मान्छे बनाउँछ।",
+  "आजको लगनशीलता भोलिको गर्व हो।",
+  "ज्ञान नै शक्ति हो – यसलाई निरन्तर बढाउनुहोस्।",
+  "रोजगारीको लागि होइन, दक्षताको लागि तयारी गर्नुहोस्।",
+  "सफलता भनेको अन्तिम गन्तव्य होइन, यात्रा हो।",
+  "एक पटक असफल भए पनि फेरि उठ्नुहोस्।",
+  "समयको सदुपयोग नै सबैभन्दा ठूलो लगानी हो।",
+  "आत्मविश्वास र मेहनतको संयोजन अजेय हुन्छ।",
+  "तपाईंले सोच्नुभन्दा धेरै गर्न सक्नुहुन्छ।",
+  "हरेक प्रश्नले नयाँ ज्ञान ल्याउँछ।",
+  "निरन्तरता नै सफलताको साँचो हो।",
+  "आजको थकान भोलिको आनन्द बन्नेछ।",
+  "लक्ष्य स्पष्ट राख्नुहोस्, बाटो आफैं खुल्नेछ।",
+  "पढाइमा ध्यान दिनुहोस्, परिणाम आफैं आउँछ।",
+  "डरलाई जितेर अगाडि बढ्नुहोस्।",
+  "साना साना कदमले ठूलो यात्रा पूरा हुन्छ।",
+  "तपाईंको भविष्य तपाईंको हातमा छ।",
+  "मेहनती विद्यार्थी कहिल्यै हार्दैन।",
+  "ज्ञान बाँड्दा बढ्छ, लुकाउँदा घट्छ।",
+  "परीक्षा एउटा अवसर हो, चुनौती होइन।",
+  "आफूलाई चुनौती दिनुहोस्, सीमा तोड्नुहोस्।",
+  "सफलताका लागि धैर्य र लगनशीलता चाहिन्छ।",
+  "हरेक बिहान नयाँ अवसर लिएर आउँछ।",
+  "तपाईंको प्रयास कहिल्यै बेकार जाँदैन।",
+  "पढ्नुहोस्, बुझ्नुहोस्, लागू गर्नुहोस्।",
+  "कमजोरीलाई शक्तिमा परिणत गर्नुहोस्।",
+  "लक्ष्य पूरा नहुन्जेल रोकिनु हुँदैन।",
+  "आजको मिहिनेतले भोलिको मुस्कान ल्याउँछ।",
+  "ज्ञानको खोजी कहिल्यै रोकिँदैन।",
+  "आत्मसंयम नै ठूलो शक्ति हो।",
+  "सपना पूरा गर्न मेहनत अनिवार्य छ।",
+  "तपाईं एक्लै होइन, लाखौंले साथ दिएका छन्।",
+  "असम्भव भन्ने शब्द तपाईंको शब्दकोशबाट हटाउनुहोस्।",
+  "हरेक गल्ती नयाँ पाठ हो।",
+  "समय व्यवस्थापन सफलताको आधार हो।",
+  "ध्यान केन्द्रित गर्नुहोस्, विचलित नहुनुहोस्।",
+  "तपाईंको लगनशीलता अरूलाई प्रेरणा दिनेछ।",
+  "पढाइ र अभ्यासले मात्र निपुणता आउँछ।",
+  "आफ्नो गतिमा अगाडि बढ्नुहोस्।",
+  "सफलताको सूत्र: योजना + कार्य + धैर्य।",
+  "तपाईंले सुरु गरेको काम पूरा गर्नुहोस्।",
+  "ज्ञान नै तपाईंको सबैभन्दा ठूलो सम्पत्ति हो।",
+  "मेहनत गर्नुहोस्, भाग्य आफैं साथ दिनेछ।",
+  "आजको लगानी भोलिको प्रतिफल हो।"
+];
+
+/* ===================== AUDIO ===================== */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+function playTone(freq, dur, type='sine', vol=0.15) {
+  try {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = vol;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.stop(audioCtx.currentTime + dur);
+  } catch(e){}
+}
+function playCorrect() { playTone(523,0.12); setTimeout(()=>playTone(659,0.12),120); setTimeout(()=>playTone(784,0.2),240); }
+function playWrong() { playTone(200,0.25,'sawtooth',0.12); setTimeout(()=>playTone(150,0.3,'sawtooth',0.1),200); }
+
+/* ===================== NEPALI DATE & COUNTDOWN ===================== */
+// Approximate BS conversion (Kartik ≈ mid-Oct to mid-Nov)
+// Exam: Kartik 14/15. For 2083 BS ≈ 30-31 Oct 2026 (approx)
+function updateNepaliDate() {
+  const now = new Date();
+  // Simple display – real BS conversion needs full library; we approximate
+  const nepaliMonths = ['बैशाख','जेठ','असार','साउन','भदौ','असोज','कार्तिक','मंसिर','पुष','माघ','फागुन','चैत'];
+  // Rough offset: AD 2026-10-02 ≈ BS 2083 असोज 16 approx
+  // For display we use a fixed mapping for current period
+  const y = now.getFullYear();
+  const m = now.getMonth()+1;
+  const d = now.getDate();
+  // Approximate: Kartik starts ~ mid Oct
+  let bsYear = y + 57;
+  let bsMonthIdx = 6; // Kartik
+  let bsDay = d - 16; // rough
+  if (bsDay < 1) { bsMonthIdx = 5; bsDay += 30; }
+  document.getElementById('nepaliDate').textContent = `${bsYear} ${nepaliMonths[bsMonthIdx]} ${Math.max(1,bsDay)}`;
+
+  // Exam Kartik 14/15 → approx 30-31 Oct 2026
+  const examDate = new Date(2026, 9, 30); // 30 Oct 2026
+  const diff = examDate - now;
+  if (diff <= 0) {
+    document.getElementById('examCountdown').textContent = 'परीक्षा नजिक छ!';
+  } else {
+    const days = Math.ceil(diff / 86400000);
+    document.getElementById('examCountdown').textContent = `${days} दिन बाँकी (कार्तिक १४/१५)`;
+  }
+}
+
+/* ===================== TYPEWRITER MOTIVATION ===================== */
+let motIdx = 0, motChar = 0, motDeleting = false;
+function typeMotivation() {
+  const el = document.getElementById('motivationText');
+  const line = MOTIVATIONS[motIdx];
+  if (!motDeleting) {
+    el.textContent = line.substring(0, motChar + 1);
+    motChar++;
+    if (motChar === line.length) {
+      setTimeout(() => { motDeleting = true; typeMotivation(); }, 10000);
+      return;
+    }
+  } else {
+    el.textContent = line.substring(0, motChar - 1);
+    motChar--;
+    if (motChar === 0) {
+      motDeleting = false;
+      motIdx = (motIdx + 1) % MOTIVATIONS.length;
+    }
+  }
+  setTimeout(typeMotivation, motDeleting ? 25 : 55);
+}
+
+/* ===================== THEME ===================== */
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeIcon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  localStorage.setItem('rbb_theme', isDark ? 'light' : 'dark');
+}
+
+/* ===================== STORAGE HELPERS ===================== */
+function saveProgress() { localStorage.setItem('rbb_progress', JSON.stringify(progress)); }
+function saveUser() { localStorage.setItem('rbb_user', JSON.stringify(user)); }
+function saveNotes() { localStorage.setItem('rbb_notes', JSON.stringify(notes)); }
+function saveMCQs() { localStorage.setItem('rbb_mcqs', JSON.stringify(mcqs)); }
+
+/* ===================== XP / LEVEL / BADGES ===================== */
+const BADGES = [
+  { id:'first', name:'First Step', icon:'🎯', desc:'Complete first quiz' },
+  { id:'streak3', name:'On Fire', icon:'🔥', desc:'3-day streak' },
+  { id:'streak7', name:'Unstoppable', icon:'⚡', desc:'7-day streak' },
+  { id:'perfect', name:'Perfect Score', icon:'💯', desc:'100% in a quiz' },
+  { id:'50q', name:'Half Century', icon:'🏆', desc:'Answer 50 questions' },
+  { id:'100q', name:'Century', icon:'👑', desc:'Answer 100 questions' },
+  { id:'topic', name:'Topic Master', icon:'📚', desc:'Master a full topic' },
+  { id:'level5', name:'Level 5', icon:'⭐', desc:'Reach level 5' },
+  { id:'night', name:'Night Owl', icon:'🦉', desc:'Study after 10 PM' },
+  { id:'early', name:'Early Bird', icon:'🌅', desc:'Study before 6 AM' }
+];
+
+function addXP(amount) {
+  user.xp += amount;
+  const needed = user.level * 100;
+  while (user.xp >= needed) {
+    user.xp -= needed;
+    user.level++;
+    toast(`Level Up! You are now Level ${user.level}`, 'success');
+    if (user.level >= 5) earnBadge('level5');
+  }
+  saveUser();
+  updateUI();
+}
+function earnBadge(id) {
+  if (!user.badges.includes(id)) {
+    user.badges.push(id);
+    saveUser();
+    const b = BADGES.find(x => x.id === id);
+    if (b) toast(`Badge unlocked: ${b.name} ${b.icon}`, 'success');
+  }
+}
+function checkStreak() {
+  const today = new Date().toDateString();
+  if (user.lastDate === today) return;
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+  if (user.lastDate === yesterday.toDateString()) user.streak++;
+  else user.streak = 1;
+  user.lastDate = today;
+  if (user.streak >= 3) earnBadge('streak3');
+  if (user.streak >= 7) earnBadge('streak7');
+  saveUser();
+}
+
+/* ===================== UI UPDATE ===================== */
+function updateUI() {
+  document.getElementById('userLevel').textContent = user.level;
+  document.getElementById('userXP').textContent = user.xp;
+  const needed = user.level * 100;
+  document.getElementById('xpNext').textContent = `${needed - user.xp} XP to next`;
+  document.getElementById('xpBar').style.width = `${(user.xp / needed) * 100}%`;
+  document.getElementById('streak').textContent = user.streak;
+
+  const total = mcqs.length;
+  const done = Object.keys(progress.answered).length;
+  let correctCount = 0;
+  Object.values(progress.correct).forEach(v => { if (v) correctCount++; });
+  const acc = done ? Math.round((correctCount / done) * 100) : 0;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statAccuracy').textContent = acc + '%';
+  document.getElementById('statScore').textContent = user.bestScore;
+
+  renderTopics();
+  renderStrength();
+  renderRecent();
+  renderBadges();
+}
+
+function getTopics() {
+  const map = {};
+  mcqs.forEach(q => {
+    if (!map[q.topic]) map[q.topic] = [];
+    map[q.topic].push(q);
+  });
+  return map;
+}
+
+function renderTopics() {
+  const topics = getTopics();
+  const list = document.getElementById('topicList');
+  const checklist = document.getElementById('topicChecklist');
+  const cards = document.getElementById('topicCards');
+  list.innerHTML = '';
+  checklist.innerHTML = '';
+  cards.innerHTML = '';
+
+  Object.keys(topics).sort().forEach(t => {
+    const qs = topics[t];
+    const done = qs.filter(q => progress.answered[q.id]).length;
+    const short = t.length > 40 ? t.substring(0,38)+'…' : t;
+    const hasNote = !!(notes.topics && notes.topics[t]);
+    const esc = t.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    // Sidebar item with note button
+    const div = document.createElement('div');
+    div.className = 'topic-item';
+    div.style.flexWrap = 'wrap';
+    div.innerHTML = `
+      <input type="checkbox" ${progress.checklist[t]?'checked':''} onchange="toggleChecklist('${esc}',this.checked)">
+      <span style="flex:1;cursor:pointer" onclick="startQuiz('topic','${esc}')">${short} (${done}/${qs.length})</span>
+      <button class="btn btn-sm btn-outline" style="padding:0.2rem 0.45rem;font-size:0.7rem" onclick="event.stopPropagation();openTopicNote('${esc}')" title="View / Edit Note">
+        <i class="fas fa-sticky-note ${hasNote?'text-warning':''}"></i>
+      </button>`;
+    list.appendChild(div);
+
+    // Checklist
+    const li = document.createElement('li');
+    li.innerHTML = `<input type="checkbox" ${progress.checklist[t]?'checked':''} onchange="toggleChecklist('${esc}',this.checked)"> ${short}
+      <button class="btn btn-sm btn-outline" style="margin-left:auto;padding:0.15rem 0.4rem;font-size:0.7rem" onclick="openTopicNote('${esc}')"><i class="fas fa-sticky-note"></i></button>`;
+    checklist.appendChild(li);
+
+    // Cards with note action
+    const card = document.createElement('div');
+    card.className = 'stat-card';
+    card.innerHTML = `
+      <div class="num" style="font-size:1.2rem;cursor:pointer" onclick="startQuiz('topic', '${esc}')">${done}/${qs.length}</div>
+      <div class="label" style="font-size:0.7rem;cursor:pointer" onclick="startQuiz('topic', '${esc}')">${short}</div>
+      <div class="progress-bar-bg mt-1"><div class="progress-bar-fill" style="width:${(done/qs.length)*100}%"></div></div>
+      <button class="btn btn-sm btn-outline w-full mt-1" style="font-size:0.7rem" onclick="openTopicNote('${esc}')">
+        <i class="fas fa-sticky-note ${hasNote?'text-warning':''}"></i> ${hasNote ? 'View Note' : 'Add Note'}
+      </button>`;
+    cards.appendChild(card);
+  });
+
+  // Topic notes select
+  const sel = document.getElementById('topicNoteSelect');
+  if (sel) {
+    sel.innerHTML = '<option value="">Select topic...</option>';
+    Object.keys(topics).forEach(t => {
+      const o = document.createElement('option');
+      o.value = t; o.textContent = t.length>50 ? t.substring(0,48)+'…' : t;
+      sel.appendChild(o);
+    });
+  }
+}
+
+function toggleChecklist(topic, checked) {
+  progress.checklist[topic] = checked;
+  saveProgress();
+  renderTopics();
+}
+
+function renderStrength() {
+  const stats = progress.topicStats || {};
+  const arr = Object.entries(stats).map(([t,s]) => ({
+    topic: t,
+    acc: s.total ? (s.correct / s.total) * 100 : 0,
+    total: s.total
+  })).filter(x => x.total >= 1).sort((a,b) => b.acc - a.acc);
+
+  const strong = arr.slice(0,3);
+  const weak = arr.slice(-3).reverse();
+
+  document.getElementById('strongTopics').innerHTML = strong.length
+    ? strong.map(s => `<div style="font-size:0.85rem;margin-bottom:0.3rem">${s.topic.substring(0,45)}… <span class="text-success">${Math.round(s.acc)}%</span></div>`).join('')
+    : '<span style="color:var(--text2)">Complete more quizzes</span>';
+
+  document.getElementById('weakTopics').innerHTML = weak.length
+    ? weak.map(s => `<div style="font-size:0.85rem;margin-bottom:0.3rem">${s.topic.substring(0,45)}… <span class="text-danger">${Math.round(s.acc)}%</span></div>`).join('')
+    : '<span style="color:var(--text2)">Complete more quizzes</span>';
+}
+
+function renderRecent() {
+  const el = document.getElementById('recentAttempts');
+  if (!user.attempts.length) { el.textContent = 'No attempts yet. Start a quiz!'; return; }
+  el.innerHTML = user.attempts.slice(-5).reverse().map(a =>
+    `<div style="padding:0.4rem 0;border-bottom:1px solid var(--border)">${a.date} — Score: <strong>${a.score}</strong> (${a.correct}/${a.total}) • ${a.mode}</div>`
+  ).join('');
+}
+
+function renderBadges() {
+  const grid = document.getElementById('badgeGrid');
+  grid.innerHTML = BADGES.map(b => `
+    <div class="badge ${user.badges.includes(b.id)?'earned':''}">
+      <div class="icon">${b.icon}</div>
+      <div class="name">${b.name}</div>
+      <div style="font-size:0.65rem;color:var(--text2)">${b.desc}</div>
+    </div>
+  `).join('');
+}
+
+/* ===================== QUIZ LOGIC ===================== */
+function startQuiz(mode, topic=null) {
+  let list = [...mcqs];
+  if (mode === 'topic' && topic) list = list.filter(q => q.topic === topic);
+  else if (mode === 'random') list = list.sort(()=>Math.random()-0.5).slice(0, Math.min(30, list.length));
+  else if (mode === 'weak') {
+    const stats = progress.topicStats || {};
+    const weakTopics = Object.entries(stats).filter(([_,s])=>s.total>=1).sort((a,b)=>(a[1].correct/a[1].total)-(b[1].correct/b[1].total)).slice(0,3).map(x=>x[0]);
+    list = list.filter(q => weakTopics.includes(q.topic));
+    if (!list.length) list = [...mcqs].sort(()=>Math.random()-0.5).slice(0,15);
+  }
+  if (!list.length) { toast('No questions available', 'danger'); return; }
+
+  currentQuiz = list;
+  quizIndex = 0;
+  quizAnswers = {};
+  document.getElementById('homeView').classList.add('hidden');
+  document.getElementById('resultView').classList.add('hidden');
+  document.getElementById('quizView').classList.remove('hidden');
+  document.getElementById('quizTopicLabel').textContent = mode === 'topic' ? topic : (mode === 'all' ? 'Full Mock' : mode);
+  startTimer(45 * 60);
+  renderQuestion();
+  checkStreak();
+  const hour = new Date().getHours();
+  if (hour >= 22 || hour < 5) earnBadge('night');
+  if (hour < 6) earnBadge('early');
+}
+
+function startTimer(seconds) {
+  clearInterval(quizTimerInterval);
+  let left = seconds;
+  const el = document.getElementById('quizTimer');
+  function tick() {
+    const m = Math.floor(left/60).toString().padStart(2,'0');
+    const s = (left%60).toString().padStart(2,'0');
+    el.textContent = `${m}:${s}`;
+    if (left <= 60) el.classList.add('danger');
+    if (left <= 0) { clearInterval(quizTimerInterval); submitQuiz(); return; }
+    left--;
+  }
+  tick();
+  quizTimerInterval = setInterval(tick, 1000);
+}
+
+function renderQuestion() {
+  const q = currentQuiz[quizIndex];
+  document.getElementById('quizProgress').textContent = `Q ${quizIndex+1} / ${currentQuiz.length}`;
+  const card = document.getElementById('questionCard');
+  const selected = quizAnswers[q.id];
+  card.innerHTML = `
+    <div class="q-num">ID: ${q.id} • ${q.difficulty} • ${q.section}</div>
+    <div class="q-text">${q.question}</div>
+    <div class="options">
+      ${Object.entries(q.options).map(([k,v]) => `
+        <div class="option ${selected===k?'selected':''}" onclick="selectOption('${q.id}','${k}')">
+          <div class="opt-letter">${k}</div>
+          <div>${v}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="explanation" id="expl"></div>
+  `;
+  // Nav dots
+  const nav = document.getElementById('qNav');
+  nav.innerHTML = currentQuiz.map((qq,i) => {
+    const ans = quizAnswers[qq.id];
+    let cls = 'btn btn-sm btn-outline';
+    if (ans) cls += ans === qq.correct_answer ? ' btn-success' : ' btn-danger';
+    if (i === quizIndex) cls += ' active';
+    return `<button class="${cls}" style="min-width:36px" onclick="goToQ(${i})">${i+1}</button>`;
+  }).join('');
+}
+
+function selectOption(qid, opt) {
+  quizAnswers[qid] = opt;
+  renderQuestion();
+}
+
+function prevQuestion() { if (quizIndex > 0) { quizIndex--; renderQuestion(); } }
+function nextQuestion() { if (quizIndex < currentQuiz.length-1) { quizIndex++; renderQuestion(); } }
+function goToQ(i) { quizIndex = i; renderQuestion(); }
+
+function submitQuiz() {
+  clearInterval(quizTimerInterval);
+  let correct = 0, wrong = 0;
+  currentQuiz.forEach(q => {
+    const ans = quizAnswers[q.id];
+    progress.answered[q.id] = true;
+    if (ans === q.correct_answer) {
+      correct++;
+      progress.correct[q.id] = true;
+      playCorrect();
+    } else if (ans) {
+      wrong++;
+      progress.correct[q.id] = false;
+      playWrong();
+    }
+    // topic stats
+    if (!progress.topicStats[q.topic]) progress.topicStats[q.topic] = { total:0, correct:0 };
+    progress.topicStats[q.topic].total++;
+    if (ans === q.correct_answer) progress.topicStats[q.topic].correct++;
+  });
+  saveProgress();
+
+  // Scoring: +1 correct, -0.1 wrong (10% negative)
+  const score = Math.max(0, +(correct - wrong * 0.1).toFixed(1));
+  const total = currentQuiz.length;
+  const accuracy = total ? Math.round((correct/total)*100) : 0;
+
+  if (score > user.bestScore) user.bestScore = score;
+  user.attempts.push({ date: new Date().toLocaleDateString(), score, correct, total, mode: document.getElementById('quizTopicLabel').textContent });
+  if (user.attempts.length > 20) user.attempts.shift();
+  addXP(correct * 10 + (accuracy === 100 ? 50 : 0));
+  if (Object.keys(progress.answered).length >= 1) earnBadge('first');
+  if (Object.keys(progress.answered).length >= 50) earnBadge('50q');
+  if (Object.keys(progress.answered).length >= 100) earnBadge('100q');
+  if (accuracy === 100) earnBadge('perfect');
+  saveUser();
+
+  // Show result
+  document.getElementById('quizView').classList.add('hidden');
+  document.getElementById('resultView').classList.remove('hidden');
+  document.getElementById('resScore').textContent = score;
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = wrong;
+  document.getElementById('resAccuracy').textContent = accuracy + '%';
+  document.getElementById('resultEmoji').textContent = accuracy >= 80 ? '🎉' : accuracy >= 50 ? '👍' : '💪';
+  document.getElementById('resultTitle').textContent = accuracy >= 80 ? 'Excellent!' : accuracy >= 50 ? 'Good effort!' : 'Keep practicing!';
+  updateUI();
+}
+
+function reviewAnswers() {
+  const sec = document.getElementById('reviewSection');
+  sec.classList.remove('hidden');
+  sec.innerHTML = '<div class="card-title">Review Answers</div>' + currentQuiz.map((q,i) => {
+    const ans = quizAnswers[q.id];
+    const ok = ans === q.correct_answer;
+    return `<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+      <div style="font-weight:600">${i+1}. ${q.question}</div>
+      <div style="margin-top:0.4rem;font-size:0.9rem">
+        Your answer: <span class="${ok?'text-success':'text-danger'}">${ans||'—'}</span>
+        ${!ok ? ` | Correct: <span class="text-success">${q.correct_answer}</span>` : ''}
+      </div>
+      <div style="font-size:0.85rem;color:var(--text2);margin-top:0.3rem">${q.explanation}</div>
+    </div>`;
+  }).join('');
+}
+
+function showHome() {
+  document.getElementById('quizView').classList.add('hidden');
+  document.getElementById('resultView').classList.add('hidden');
+  document.getElementById('homeView').classList.remove('hidden');
+  updateUI();
+}
+
+/* ===================== REPORT PDF ===================== */
+function downloadReport() {
+  if (!currentQuiz || !currentQuiz.length) {
+    toast('No quiz data to report', 'danger');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 14;
+  const contentW = pageW - margin * 2;
+
+  // Colors
+  const primary = [99, 102, 241];
+  const accent = [6, 182, 212];
+  const success = [34, 197, 94];
+  const danger = [239, 68, 68];
+  const dark = [15, 23, 42];
+  const muted = [100, 116, 139];
+  const lightBg = [241, 245, 249];
+
+  // ---- Helper: header on every page ----
+  function drawHeader(pageNum, totalPages) {
+    doc.setFillColor(...primary);
+    doc.rect(0, 0, pageW, 22, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(13);
+    doc.setFont(undefined, 'bold');
+    doc.text('RBB Level 5 IT Officer', margin, 10);
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'normal');
+    doc.text('Quiz Result Analysis Report', margin, 16);
+    doc.setFontSize(8);
+    doc.text(`Page ${pageNum} / ${totalPages}`, pageW - margin, 14, { align: 'right' });
+  }
+
+  function drawFooter() {
+    doc.setDrawColor(200);
+    doc.setLineWidth(0.3);
+    doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
+    doc.setTextColor(...muted);
+    doc.setFontSize(7);
+    doc.text('Generated by RBB IT Master  •  Confidential – For personal study only', margin, pageH - 6);
+    doc.text(new Date().toLocaleString(), pageW - margin, pageH - 6, { align: 'right' });
+  }
+
+  // Score values
+  const score = document.getElementById('resScore').textContent;
+  const correct = parseInt(document.getElementById('resCorrect').textContent) || 0;
+  const wrong = parseInt(document.getElementById('resWrong').textContent) || 0;
+  const accuracy = document.getElementById('resAccuracy').textContent;
+  const total = currentQuiz.length;
+  const skipped = total - correct - wrong;
+
+  // ========== PAGE 1: Summary ==========
+  drawHeader(1, 1); // will update later
+  let y = 30;
+
+  // Title
+  doc.setTextColor(...dark);
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text('Performance Summary', margin, y);
+  y += 8;
+
+  // Info strip
+  doc.setFillColor(...lightBg);
+  doc.roundedRect(margin, y, contentW, 18, 3, 3, 'F');
+  doc.setFontSize(9);
+  doc.setFont(undefined, 'normal');
+  doc.setTextColor(...muted);
+  doc.text(`Date: ${new Date().toLocaleString()}`, margin + 4, y + 7);
+  doc.text(`Mode: ${document.getElementById('quizTopicLabel')?.textContent || 'Quiz'}`, margin + 4, y + 13);
+  doc.text(`Level ${user.level}  |  XP ${user.xp}  |  Streak ${user.streak} days`, pageW - margin - 4, y + 10, { align: 'right' });
+  y += 26;
+
+  // Score cards row
+  const cardW = (contentW - 9) / 4;
+  const cards = [
+    { label: 'Score', value: score, color: primary },
+    { label: 'Correct', value: String(correct), color: success },
+    { label: 'Wrong', value: String(wrong), color: danger },
+    { label: 'Accuracy', value: accuracy, color: accent }
+  ];
+  cards.forEach((c, i) => {
+    const x = margin + i * (cardW + 3);
+    doc.setFillColor(...c.color);
+    doc.roundedRect(x, y, cardW, 22, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text(c.value, x + cardW / 2, y + 11, { align: 'center' });
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'normal');
+    doc.text(c.label, x + cardW / 2, y + 18, { align: 'center' });
+  });
+  y += 30;
+
+  // Negative marking note
+  doc.setFillColor(254, 243, 199);
+  doc.roundedRect(margin, y, contentW, 10, 2, 2, 'F');
+  doc.setTextColor(146, 64, 14);
+  doc.setFontSize(8);
+  doc.text('Scoring: +1 for correct  •  −0.1 (10% negative marking) for each wrong answer  •  Skipped = 0', margin + 3, y + 6.5);
+  y += 16;
+
+  // Topic-wise breakdown
+  doc.setTextColor(...dark);
+  doc.setFontSize(12);
+  doc.setFont(undefined, 'bold');
+  doc.text('Topic-wise Breakdown', margin, y);
+  y += 6;
+
+  const topicMap = {};
+  currentQuiz.forEach(q => {
+    if (!topicMap[q.topic]) topicMap[q.topic] = { total: 0, correct: 0, wrong: 0 };
+    topicMap[q.topic].total++;
+    const ans = quizAnswers[q.id];
+    if (ans === q.correct_answer) topicMap[q.topic].correct++;
+    else if (ans) topicMap[q.topic].wrong++;
+  });
+
+  // Table header
+  doc.setFillColor(...primary);
+  doc.rect(margin, y, contentW, 8, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(8);
+  doc.setFont(undefined, 'bold');
+  doc.text('Topic', margin + 2, y + 5.5);
+  doc.text('Q', margin + contentW * 0.62, y + 5.5);
+  doc.text('Correct', margin + contentW * 0.72, y + 5.5);
+  doc.text('Wrong', margin + contentW * 0.84, y + 5.5);
+  doc.text('Acc %', margin + contentW * 0.94, y + 5.5);
+  y += 8;
+
+  doc.setFont(undefined, 'normal');
+  let rowIdx = 0;
+  Object.entries(topicMap).forEach(([topic, s]) => {
+    if (y > pageH - 40) {
+      drawFooter();
+      doc.addPage();
+      drawHeader(0, 0);
+      y = 30;
+    }
+    if (rowIdx % 2 === 0) {
+      doc.setFillColor(...lightBg);
+      doc.rect(margin, y, contentW, 7, 'F');
+    }
+    const acc = s.total ? Math.round((s.correct / s.total) * 100) : 0;
+    const shortT = topic.length > 48 ? topic.substring(0, 46) + '…' : topic;
+    doc.setTextColor(...dark);
+    doc.setFontSize(7.5);
+    doc.text(shortT, margin + 2, y + 5);
+    doc.text(String(s.total), margin + contentW * 0.62, y + 5);
+    doc.setTextColor(...success);
+    doc.text(String(s.correct), margin + contentW * 0.72, y + 5);
+    doc.setTextColor(...danger);
+    doc.text(String(s.wrong), margin + contentW * 0.84, y + 5);
+    doc.setTextColor(acc >= 70 ? success[0] : acc >= 40 ? 245 : danger[0], acc >= 70 ? success[1] : acc >= 40 ? 158 : danger[1], acc >= 70 ? success[2] : acc >= 40 ? 11 : danger[2]);
+    doc.text(acc + '%', margin + contentW * 0.94, y + 5);
+    y += 7;
+    rowIdx++;
+  });
+  y += 8;
+
+  // Strongest / Weakest
+  const sorted = Object.entries(topicMap)
+    .map(([t, s]) => ({ t, acc: s.total ? (s.correct / s.total) * 100 : 0, ...s }))
+    .sort((a, b) => b.acc - a.acc);
+
+  if (y > pageH - 50) { drawFooter(); doc.addPage(); drawHeader(0, 0); y = 30; }
+
+  doc.setTextColor(...dark);
+  doc.setFontSize(12);
+  doc.setFont(undefined, 'bold');
+  doc.text('Focus Areas', margin, y);
+  y += 7;
+
+  // Strongest box
+  const boxW = (contentW - 4) / 2;
+  doc.setFillColor(220, 252, 231);
+  doc.roundedRect(margin, y, boxW, 28, 3, 3, 'F');
+  doc.setTextColor(...success);
+  doc.setFontSize(9);
+  doc.setFont(undefined, 'bold');
+  doc.text('Strongest Topics', margin + 3, y + 6);
+  doc.setFont(undefined, 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...dark);
+  sorted.slice(0, 3).forEach((s, i) => {
+    doc.text(`${i + 1}. ${s.t.substring(0, 32)}${s.t.length > 32 ? '…' : ''} (${Math.round(s.acc)}%)`, margin + 3, y + 12 + i * 5);
+  });
+
+  // Weakest box
+  doc.setFillColor(254, 226, 226);
+  doc.roundedRect(margin + boxW + 4, y, boxW, 28, 3, 3, 'F');
+  doc.setTextColor(...danger);
+  doc.setFontSize(9);
+  doc.setFont(undefined, 'bold');
+  doc.text('Needs Focus', margin + boxW + 7, y + 6);
+  doc.setFont(undefined, 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(...dark);
+  sorted.slice(-3).reverse().forEach((s, i) => {
+    doc.text(`${i + 1}. ${s.t.substring(0, 32)}${s.t.length > 32 ? '…' : ''} (${Math.round(s.acc)}%)`, margin + boxW + 7, y + 12 + i * 5);
+  });
+  y += 36;
+
+  // ========== Detailed Answers ==========
+  if (y > pageH - 30) { drawFooter(); doc.addPage(); drawHeader(0, 0); y = 30; }
+
+  doc.setTextColor(...dark);
+  doc.setFontSize(12);
+  doc.setFont(undefined, 'bold');
+  doc.text('Detailed Answer Review', margin, y);
+  y += 8;
+
+  currentQuiz.forEach((q, i) => {
+    const ans = quizAnswers[q.id];
+    const ok = ans === q.correct_answer;
+    const statusColor = ok ? success : (ans ? danger : muted);
+
+    // Estimate height needed
+    const qLines = doc.splitTextToSize(`${i + 1}. ${q.question}`, contentW - 8);
+    const needed = 6 + qLines.length * 4.2 + 14;
+    if (y + needed > pageH - 18) {
+      drawFooter();
+      doc.addPage();
+      drawHeader(0, 0);
+      y = 30;
+    }
+
+    // Status bar
+    doc.setFillColor(...statusColor);
+    doc.rect(margin, y, 3, needed - 2, 'F');
+
+    doc.setFillColor(ok ? 240 : (ans ? 254 : 248), ok ? 253 : (ans ? 242 : 250), ok ? 244 : (ans ? 242 : 250));
+    doc.roundedRect(margin + 3, y, contentW - 3, needed - 2, 2, 2, 'F');
+
+    doc.setTextColor(...dark);
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'bold');
+    doc.text(qLines, margin + 6, y + 5);
+    y += 5 + qLines.length * 4.2;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(...statusColor);
+    const statusLabel = ok ? '✓ Correct' : (ans ? '✗ Wrong' : '— Skipped');
+    doc.text(`${statusLabel}   Your answer: ${ans || '—'}   |   Correct: ${q.correct_answer}`, margin + 6, y + 2);
+    y += 5;
+
+    // Short explanation
+    if (q.explanation) {
+      doc.setTextColor(...muted);
+      doc.setFontSize(7);
+      const expLines = doc.splitTextToSize(q.explanation.substring(0, 180) + (q.explanation.length > 180 ? '…' : ''), contentW - 10);
+      doc.text(expLines.slice(0, 2), margin + 6, y + 2);
+      y += expLines.slice(0, 2).length * 3.5 + 4;
+    } else {
+      y += 4;
+    }
+  });
+
+  // Finalize page numbers
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    // Redraw header page number
+    doc.setFillColor(...primary);
+    doc.rect(pageW - margin - 25, 0, 25 + margin, 22, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.text(`Page ${p} / ${totalPages}`, pageW - margin, 14, { align: 'right' });
+    drawFooter();
+  }
+
+  // First page header title already drawn
+  doc.setPage(1);
+  doc.setFillColor(...primary);
+  doc.rect(0, 0, pageW, 22, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(13);
+  doc.setFont(undefined, 'bold');
+  doc.text('RBB Level 5 IT Officer', margin, 10);
+  doc.setFontSize(9);
+  doc.setFont(undefined, 'normal');
+  doc.text('Quiz Result Analysis Report', margin, 16);
+  doc.setFontSize(8);
+  doc.text(`Page 1 / ${totalPages}`, pageW - margin, 14, { align: 'right' });
+
+  doc.save(`RBB_Quiz_Report_${new Date().toISOString().slice(0, 10)}.pdf`);
+  toast('Stylish report downloaded!', 'success');
+}
+
+/* ===================== IMPORT / EXPORT ===================== */
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (Array.isArray(data) && data[0].question) {
+        mcqs = data;
+        saveMCQs();
+        updateUI();
+        toast(`Imported ${data.length} MCQs`, 'success');
+        closeModal('importModal');
+      } else toast('Invalid JSON format', 'danger');
+    } catch(err) { toast('Parse error', 'danger'); }
+  };
+  reader.readAsText(file);
+});
+
+function importFromText() {
+  try {
+    const data = JSON.parse(document.getElementById('importPreview').value);
+    if (Array.isArray(data) && data[0].question) {
+      mcqs = data;
+      saveMCQs();
+      updateUI();
+      toast(`Imported ${data.length} MCQs`, 'success');
+      closeModal('importModal');
+    } else toast('Invalid format', 'danger');
+  } catch(e) { toast('JSON parse error', 'danger'); }
+}
+
+function exportMCQs() {
+  const blob = new Blob([JSON.stringify(mcqs, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rbb_mcqs_export.json';
+  a.click();
+  toast('MCQs exported', 'success');
+}
+
+function exportProgress() {
+  const blob = new Blob([JSON.stringify({progress, user, notes}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rbb_progress_backup.json';
+  a.click();
+}
+
+function resetProgress() {
+  if (!confirm('Reset all progress, XP and checklist?')) return;
+  progress = { answered: {}, correct: {}, topicStats: {}, checklist: {} };
+  user = { xp:0, level:1, streak:0, lastDate:null, badges:[], bestScore:0, attempts:[] };
+  saveProgress(); saveUser();
+  updateUI();
+  toast('Progress reset', 'success');
+}
+
+/* ===================== NOTES ===================== */
+async function initEditor() {
+  if (editor) return;
+  editor = await ClassicEditor.create(document.querySelector('#ckeditor'), {
+    toolbar: ['heading','|','bold','italic','link','bulletedList','numberedList','|','blockQuote','insertTable','undo','redo']
+  });
+  editor.setData(notes.general || '');
+  editor.model.document.on('change:data', () => {
+    notes.general = editor.getData();
+    saveNotes();
+  });
+}
+
+function saveNote() {
+  if (editor) notes.general = editor.getData();
+  saveNotes();
+  toast('Note saved', 'success');
+}
+
+function downloadNotePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 14;
+  const contentW = pageW - margin * 2;
+
+  // Header
+  doc.setFillColor(99, 102, 241);
+  doc.rect(0, 0, pageW, 24, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(14);
+  doc.setFont(undefined, 'bold');
+  doc.text('My Study Notes – RBB Level 5 IT', margin, 11);
+  doc.setFontSize(8);
+  doc.setFont(undefined, 'normal');
+  doc.text(new Date().toLocaleString(), margin, 18);
+
+  const raw = editor ? editor.getData() : (notes.general || '');
+  const plain = raw.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim() || 'No notes written yet.';
+  const lines = doc.splitTextToSize(plain, contentW);
+  let y = 34;
+  doc.setTextColor(30, 30, 30);
+  doc.setFontSize(10);
+
+  lines.forEach(line => {
+    if (y > pageH - 18) {
+      // footer
+      doc.setDrawColor(200);
+      doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
+      doc.setFontSize(7);
+      doc.setTextColor(120);
+      doc.text('RBB IT Master – Personal Notes', margin, pageH - 6);
+      doc.addPage();
+      doc.setFillColor(99, 102, 241);
+      doc.rect(0, 0, pageW, 14, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.text('My Study Notes (continued)', margin, 9);
+      y = 24;
+      doc.setTextColor(30, 30, 30);
+      doc.setFontSize(10);
+    }
+    doc.text(line, margin, y);
+    y += 5.5;
+  });
+
+  // Final footer
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setDrawColor(200);
+    doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
+    doc.setFontSize(7);
+    doc.setTextColor(120);
+    doc.text('RBB IT Master – Personal Notes', margin, pageH - 6);
+    doc.text(`Page ${p} / ${totalPages}`, pageW - margin, pageH - 6, { align: 'right' });
+  }
+
+  doc.save(`My_Notes_RBB_${new Date().toISOString().slice(0, 10)}.pdf`);
+  toast('Notes PDF downloaded', 'success');
+}
+
+function importHTML() { document.getElementById('htmlFile').click(); }
+function handleHTMLImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { if (editor) editor.setData(ev.target.result); toast('HTML imported', 'success'); };
+  reader.readAsText(file);
+}
+
+function importDOCX() { document.getElementById('docxFile').click(); }
+function handleDOCXImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    mammoth.convertToHtml({ arrayBuffer: ev.target.result })
+      .then(r => { if (editor) editor.setData(r.value); toast('DOCX imported', 'success'); })
+      .catch(() => toast('DOCX parse failed', 'danger'));
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function svgToImage() {
+  const svgCode = prompt('Paste SVG code:');
+  if (!svgCode) return;
+  const blob = new Blob([svgCode], {type:'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width || 400;
+    canvas.height = img.height || 300;
+    canvas.getContext('2d').drawImage(img,0,0);
+    const data = canvas.toDataURL('image/png');
+    if (editor) editor.model.change(writer => {
+      // simple insert as html
+      editor.setData(editor.getData() + `<p><img src="${data}" style="max-width:100%"></p>`);
+    });
+    toast('SVG converted to image', 'success');
+  };
+  img.src = url;
+}
+
+let topicEditor = null;
+let currentTopicForNote = null;
+
+function loadTopicNote() {
+  const t = document.getElementById('topicNoteSelect').value;
+  const content = (notes.topics && notes.topics[t]) ? notes.topics[t] : '<em style="color:var(--text2)">No note yet for this topic. Click "Edit with Editor" to add one.</em>';
+  document.getElementById('topicNoteContent').innerHTML = content;
+}
+
+function openTopicNote(topic) {
+  currentTopicForNote = topic;
+  // Open notes modal on Topic Notes tab and select the topic
+  openModal('notesModal');
+  // Switch to topic notes tab
+  document.querySelectorAll('#notesModal .tab').forEach(t => t.classList.remove('active'));
+  const tabBtn = document.querySelector('#notesModal .tab[data-tab="topicNotes"]');
+  if (tabBtn) tabBtn.classList.add('active');
+  document.getElementById('noteEditorTab').classList.add('hidden');
+  document.getElementById('topicNotesTab').classList.remove('hidden');
+  document.getElementById('aiVerifyTab').classList.add('hidden');
+
+  const sel = document.getElementById('topicNoteSelect');
+  if (sel) {
+    sel.value = topic;
+    loadTopicNote();
+  }
+  // Also open the rich editor directly for better UX
+  setTimeout(() => openTopicNoteEditor(), 150);
+}
+
+function openTopicNoteEditor() {
+  let t = currentTopicForNote || document.getElementById('topicNoteSelect').value;
+  if (!t) { toast('Select a topic first', 'danger'); return; }
+  currentTopicForNote = t;
+  document.getElementById('topicNoteTitle').textContent = t.length > 55 ? t.substring(0,53)+'…' : t;
+  openModal('topicNoteEditorModal');
+  initTopicEditor(t);
+}
+
+async function initTopicEditor(topic) {
+  if (topicEditor) {
+    topicEditor.setData((notes.topics && notes.topics[topic]) || '');
+    return;
+  }
+  topicEditor = await ClassicEditor.create(document.querySelector('#topicCkeditor'), {
+    toolbar: ['heading','|','bold','italic','link','bulletedList','numberedList','|','blockQuote','insertTable','undo','redo']
+  });
+  topicEditor.setData((notes.topics && notes.topics[topic]) || '');
+}
+
+function saveTopicNoteFromEditor() {
+  if (!currentTopicForNote || !topicEditor) return;
+  if (!notes.topics) notes.topics = {};
+  notes.topics[currentTopicForNote] = topicEditor.getData();
+  saveNotes();
+  loadTopicNote();
+  renderTopics(); // refresh note icons
+  toast('Topic note saved!', 'success');
+}
+
+function closeTopicNoteEditor() {
+  closeModal('topicNoteEditorModal');
+}
+
+function generateTopicNotePDF(topic, download = false) {
+  if (!topic || !notes.topics || !notes.topics[topic]) {
+    toast('No note for this topic', 'danger');
+    return null;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 14;
+  const contentW = pageW - margin * 2;
+
+  // Header
+  doc.setFillColor(99, 102, 241);
+  doc.rect(0, 0, pageW, 26, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(13);
+  doc.setFont(undefined, 'bold');
+  doc.text('RBB Level 5 IT – Topic Notes', margin, 11);
+  doc.setFontSize(8);
+  doc.setFont(undefined, 'normal');
+  doc.text(new Date().toLocaleString(), margin, 19);
+
+  // Topic title box
+  doc.setFillColor(241, 245, 249);
+  doc.roundedRect(margin, 32, contentW, 16, 3, 3, 'F');
+  doc.setTextColor(15, 23, 42);
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'bold');
+  const titleLines = doc.splitTextToSize(topic, contentW - 8);
+  doc.text(titleLines.slice(0, 2), margin + 4, 39);
+
+  const plain = notes.topics[topic].replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim() || 'Empty note.';
+  const bodyLines = doc.splitTextToSize(plain, contentW);
+  let y = 56;
+  doc.setFont(undefined, 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(30, 30, 30);
+
+  bodyLines.forEach(line => {
+    if (y > pageH - 18) {
+      doc.setDrawColor(200);
+      doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
+      doc.setFontSize(7);
+      doc.setTextColor(120);
+      doc.text('RBB IT Master – Topic Notes', margin, pageH - 6);
+      doc.addPage();
+      doc.setFillColor(99, 102, 241);
+      doc.rect(0, 0, pageW, 14, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.text('Topic Notes (continued)', margin, 9);
+      y = 24;
+      doc.setTextColor(30, 30, 30);
+      doc.setFontSize(10);
+    }
+    doc.text(line, margin, y);
+    y += 5.5;
+  });
+
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(200);
+    doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
+    doc.setFontSize(7);
+    doc.setTextColor(120);
+    doc.text('RBB IT Master – Topic Notes', margin, pageH - 6);
+    doc.text(`Page ${i} / ${pageCount}`, pageW - margin, pageH - 6, { align: 'right' });
+  }
+
+  if (download) {
+    const safeName = topic.substring(0, 40).replace(/[^a-z0-9]/gi, '_');
+    doc.save(`Note_${safeName}.pdf`);
+    toast('PDF downloaded', 'success');
+  }
+  return doc;
+}
+
+function viewTopicNotePDF() {
+  const t = document.getElementById('topicNoteSelect').value || currentTopicForNote;
+  const doc = generateTopicNotePDF(t, false);
+  if (!doc) return;
+  const blob = doc.output('blob');
+  document.getElementById('pdfFrame').src = URL.createObjectURL(blob);
+  openModal('pdfModal');
+}
+
+function downloadTopicNotePDF() {
+  const t = document.getElementById('topicNoteSelect').value || currentTopicForNote;
+  generateTopicNotePDF(t, true);
+}
+
+function viewCurrentTopicNotePDF() {
+  if (topicEditor && currentTopicForNote) {
+    // temporarily save current editor content for preview
+    if (!notes.topics) notes.topics = {};
+    notes.topics[currentTopicForNote] = topicEditor.getData();
+  }
+  viewTopicNotePDF();
+}
+
+function downloadCurrentTopicNotePDF() {
+  if (topicEditor && currentTopicForNote) {
+    if (!notes.topics) notes.topics = {};
+    notes.topics[currentTopicForNote] = topicEditor.getData();
+    saveNotes();
+  }
+  downloadTopicNotePDF();
+}
+
+function copyPrompt() {
+  const text = document.getElementById('aiPromptBox').innerText;
+  navigator.clipboard.writeText(text).then(() => toast('Prompt copied!', 'success'));
+}
+
+function switchNoteTab(btn) {
+  document.querySelectorAll('#notesModal .tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const tab = btn.dataset.tab;
+  document.getElementById('noteEditorTab').classList.toggle('hidden', tab !== 'editor');
+  document.getElementById('topicNotesTab').classList.toggle('hidden', tab !== 'topicNotes');
+  document.getElementById('aiVerifyTab').classList.toggle('hidden', tab !== 'aiVerify');
+  if (tab === 'editor') initEditor();
+}
+
+/* ===================== MODALS & MISC ===================== */
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  if (id === 'notesModal') initEditor();
+  if (id === 'achievementsModal') renderBadges();
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.querySelector('i').className = type === 'success' ? 'fas fa-check-circle text-success' : 'fas fa-exclamation-circle text-danger';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ===================== INIT ===================== */
+(function init() {
+  const theme = localStorage.getItem('rbb_theme') || 'dark';
+  document.body.setAttribute('data-theme', theme);
+  document.getElementById('themeIcon').className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+  updateNepaliDate();
+  setInterval(updateNepaliDate, 60000);
+  typeMotivation();
+  updateUI();
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+})();
+</script>
+</body>
+</html>
