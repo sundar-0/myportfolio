@@ -1,0 +1,3644 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>नेपाली वर्णमाला Voice Game</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family:
+        "Noto Sans Devanagari",
+        "Mangal",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e0f2fe,
+            #dbeafe,
+            #eef2ff
+        );
+
+    min-height: 100vh;
+    color: #172033;
+}
+
+.container {
+    width: min(950px, 94%);
+    margin: auto;
+    padding: 25px 0 40px;
+}
+
+.card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow:
+        0 15px 45px rgba(15, 23, 42, 0.12);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------------- START SCREEN ---------------- */
+
+#startScreen {
+    text-align: center;
+    margin-top: 8vh;
+}
+
+.logo {
+    font-size: 65px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 34px;
+    margin: 5px 0 10px;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.start-btn {
+    border: none;
+    border-radius: 15px;
+    padding: 15px 32px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, .25);
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ---------------- TOP BAR ---------------- */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 8px 13px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.progress-container {
+    width: 100%;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 50px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #2563eb;
+    transition: width .3s ease;
+}
+
+/* ---------------- QUESTION ---------------- */
+
+.question-area {
+    text-align: center;
+}
+
+.letter-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+}
+
+.big-letter {
+    font-size: 120px;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #1e3a8a;
+}
+
+.speaker-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: none;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 28px;
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 15px rgba(30, 64, 175, .15);
+
+    transition: .2s;
+}
+
+.speaker-btn:hover {
+    transform: scale(1.08);
+    background: #dbeafe;
+}
+
+.speaker-btn:active {
+    transform: scale(.95);
+}
+
+.example {
+    font-size: 31px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.meaning {
+    color: #64748b;
+    font-size: 17px;
+    margin-top: 6px;
+}
+
+/* ---------------- MICROPHONE ---------------- */
+
+.mic-status {
+    margin: 25px auto 15px;
+    width: fit-content;
+
+    padding: 10px 18px;
+    border-radius: 50px;
+
+    background: #dcfce7;
+    color: #166534;
+
+    font-weight: bold;
+}
+
+.mic-status.listening {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34,197,94,.35);
+    }
+
+    70% {
+        box-shadow: 0 0 0 14px rgba(34,197,94,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(34,197,94,0);
+    }
+}
+
+/* ---------------- SPEECH ---------------- */
+
+.heard-box {
+    margin-top: 20px;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.heard-title {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.heard-text {
+    min-height: 40px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #0f172a;
+    word-break: break-word;
+}
+
+.score-box {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #475569;
+}
+
+.score-number {
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* ---------------- FEEDBACK ---------------- */
+
+.feedback {
+    min-height: 55px;
+    margin-top: 18px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.feedback.correct {
+    color: #15803d;
+}
+
+.feedback.wrong {
+    color: #dc2626;
+}
+
+/* ---------------- REPORT ---------------- */
+
+.report {
+    text-align: center;
+}
+
+.report-title {
+    font-size: 35px;
+    margin-bottom: 25px;
+}
+
+.report-percentage {
+    font-size: 65px;
+    font-weight: 900;
+    color: #2563eb;
+}
+
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.report-card {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 16px;
+}
+
+.report-card strong {
+    display: block;
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.history {
+    text-align: left;
+    max-height: 350px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.history-item {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.correct-row {
+    background: #f0fdf4;
+}
+
+.wrong-row {
+    background: #fef2f2;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media(max-width: 600px) {
+
+    .card {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .big-letter {
+        font-size: 90px;
+    }
+
+    .example {
+        font-size: 25px;
+    }
+
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================= START ================= -->
+
+    <div id="startScreen" class="card">
+
+        <div class="logo">🎤</div>
+
+        <h1>नेपाली वर्णमाला Voice Game</h1>
+
+        <div class="subtitle">
+            बोल्नुहोस् → AI-जस्तो fuzzy matching ले जाँच गर्छ
+        </div>
+
+        <button
+            id="startButton"
+            class="start-btn"
+            onclick="startGame()">
+            ▶ खेल सुरु गर्नुहोस्
+        </button>
+
+        <p style="margin-top:20px;color:#64748b;">
+            🔊 Speaker icon थिचेर सही शब्द सुन्न सकिन्छ।
+        </p>
+
+    </div>
+
+
+    <!-- ================= GAME ================= -->
+
+    <div id="gameScreen" class="card hidden">
+
+        <div class="topbar">
+
+            <strong>
+                नेपाली Voice Practice
+            </strong>
+
+            <div class="stats">
+
+                <div class="stat">
+                    प्रश्न:
+                    <span id="questionNumber">1</span>/50
+                </div>
+
+                <div class="stat">
+                    सही:
+                    <span id="correctCount">0</span>
+                </div>
+
+                <div class="stat">
+                    प्रयास:
+                    <span id="attemptCount">0</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-container">
+
+            <div
+                id="progressBar"
+                class="progress-bar">
+            </div>
+
+        </div>
+
+
+        <div class="question-area">
+
+            <div class="letter-row">
+
+                <div
+                    id="bigLetter"
+                    class="big-letter">
+                    अ
+                </div>
+
+                <button
+                    id="speakerButton"
+                    class="speaker-btn"
+                    title="शब्द सुन्नुहोस्"
+                    onclick="speakCurrentWord()">
+                    🔊
+                </button>
+
+            </div>
+
+
+            <div
+                id="example"
+                class="example">
+                अ — अनार
+            </div>
+
+
+            <div
+                id="meaning"
+                class="meaning">
+                अनार
+            </div>
+
+
+            <div
+                id="micStatus"
+                class="mic-status">
+                🎤 तयार हुँदैछ...
+            </div>
+
+
+            <div class="heard-box">
+
+                <div class="heard-title">
+                    बच्चाले भनेको कुरा:
+                </div>
+
+                <div
+                    id="heardText"
+                    class="heard-text">
+                    ...
+                </div>
+
+                <div class="score-box">
+
+                    Fuzzy Match Score:
+                    <span
+                        id="fuzzyScore"
+                        class="score-number">
+                        —
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="feedback"
+                class="feedback">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= REPORT ================= -->
+
+    <div id="reportScreen" class="card hidden">
+
+        <div class="report">
+
+            <div class="report-title">
+                🎉 खेल समाप्त!
+            </div>
+
+            <div
+                id="reportPercentage"
+                class="report-percentage">
+                0%
+            </div>
+
+            <p>
+                समग्र सही उत्तर
+            </p>
+
+
+            <div class="report-grid">
+
+                <div class="report-card">
+
+                    <strong id="reportTotal">
+                        50
+                    </strong>
+
+                    कुल प्रश्न
+
+                </div>
+
+
+                <div class="report-card">
+
+                    <strong id="reportCorrect">
+                        0
+                    </strong>
+
+                    सही
+
+                </div>
+
+
+                <div class="report-card">
+
+                    <strong id="reportWrong">
+                        0
+                    </strong>
+
+                    गलत प्रयास
+
+                </div>
+
+            </div>
+
+
+            <h3>
+                📋 उत्तर विवरण
+            </h3>
+
+            <div
+                id="history"
+                class="history">
+            </div>
+
+
+            <button
+                class="start-btn"
+                onclick="location.reload()">
+
+                🔄 फेरि खेल्नुहोस्
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= AUDIO ================= -->
+
+<audio
+    id="correctSound"
+    preload="auto">
+
+    <source
+        src="correct.m4a"
+        type="audio/mp4">
+
+</audio>
+
+
+<audio
+    id="incorrectSound"
+    preload="auto">
+
+    <source
+        src="incorrect.m4a"
+        type="audio/mp4">
+
+</audio>
+
+
+<script>
+
+/* ============================================================
+   CONFIGURATION
+============================================================ */
+
+const TOTAL_QUESTIONS = 50;
+
+/*
+   Lower value = easier to accept.
+
+   0.50 means approximately 50% similarity.
+
+   For children we deliberately use a forgiving threshold.
+*/
+
+const FUZZY_THRESHOLD = 0.52;
+
+
+/* ============================================================
+   DOM
+============================================================ */
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const gameScreen =
+    document.getElementById("gameScreen");
+
+const reportScreen =
+    document.getElementById("reportScreen");
+
+const bigLetter =
+    document.getElementById("bigLetter");
+
+const example =
+    document.getElementById("example");
+
+const meaning =
+    document.getElementById("meaning");
+
+const heardText =
+    document.getElementById("heardText");
+
+const fuzzyScore =
+    document.getElementById("fuzzyScore");
+
+const feedback =
+    document.getElementById("feedback");
+
+const micStatus =
+    document.getElementById("micStatus");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const questionNumber =
+    document.getElementById("questionNumber");
+
+const correctCountElement =
+    document.getElementById("correctCount");
+
+const attemptCountElement =
+    document.getElementById("attemptCount");
+
+const correctSound =
+    document.getElementById("correctSound");
+
+const incorrectSound =
+    document.getElementById("incorrectSound");
+
+
+/* ============================================================
+   QUESTION BANK
+============================================================ */
+
+const questionBank = [
+
+    {
+        letter:"अ",
+        example:"अ — अनार",
+        meaning:"अनार",
+        speak:"अनार",
+        aliases:[
+            "अ","a",
+            "अनार","anar","anaar",
+            "anar fruit","pomegranate"
+        ]
+    },
+
+    {
+        letter:"आ",
+        example:"आ — आमा",
+        meaning:"आमा",
+        speak:"आमा",
+        aliases:[
+            "आ","aa","a",
+            "आमा","ama","aama",
+            "mother"
+        ]
+    },
+
+    {
+        letter:"इ",
+        example:"इ — इमली",
+        meaning:"इमली",
+        speak:"इमली",
+        aliases:[
+            "इ","i","ih",
+            "इमली","imli","imlee",
+            "imlii","tamarind"
+        ],
+        vowelType:"short-i"
+    },
+
+    {
+        letter:"ई",
+        example:"ई — ईंटा",
+        meaning:"ईंटा",
+        speak:"ईंटा",
+        aliases:[
+            "ई","ee","ii","ī","i",
+            "ईंटा","ईटा",
+            "eenta","inta","ita",
+            "brick"
+        ],
+        vowelType:"long-i"
+    },
+
+    {
+        letter:"उ",
+        example:"उ — उखु",
+        meaning:"उखु",
+        speak:"उखु",
+        aliases:[
+            "उ","u",
+            "उखु","ukhu","ukhuu",
+            "sugarcane"
+        ],
+        vowelType:"short-u"
+    },
+
+    {
+        letter:"ऊ",
+        example:"ऊ — ऊन",
+        meaning:"ऊन",
+        speak:"ऊन",
+        aliases:[
+            "ऊ","oo","uu","ū","u",
+            "ऊन","un","oon",
+            "wool"
+        ],
+        vowelType:"long-u"
+    },
+
+    {
+        letter:"ऋ",
+        example:"ऋ — ऋषि",
+        meaning:"ऋषि",
+        speak:"ऋषि",
+        aliases:[
+            "ऋ","ri","ṛ","ṛi","ree","rhi",
+            "ऋषि","rishi","rsi",
+            "रिशि","रिशी","रिषि",
+            "ऋतु","ritu",
+            "ऋण","rin","rinn"
+        ],
+        speechFamily:"vocalic-r"
+    },
+
+    {
+        letter:"ए",
+        example:"ए — एक",
+        meaning:"एक",
+        speak:"एक",
+        aliases:[
+            "ए","e",
+            "एक","ek","aik","one"
+        ]
+    },
+
+    {
+        letter:"ऐ",
+        example:"ऐ — ऐना",
+        meaning:"ऐना",
+        speak:"ऐना",
+        aliases:[
+            "ऐ","ai",
+            "ऐना","aina","ayna",
+            "mirror"
+        ]
+    },
+
+    {
+        letter:"ओ",
+        example:"ओ — ओखर",
+        meaning:"ओखर",
+        speak:"ओखर",
+        aliases:[
+            "ओ","o",
+            "ओखर","okhar","oakhar",
+            "walnut"
+        ]
+    },
+
+    {
+        letter:"औ",
+        example:"औ — औंला",
+        meaning:"औंला",
+        speak:"औंला",
+        aliases:[
+            "औ","au","ou",
+            "औंला","aula","aunla",
+            "finger"
+        ]
+    },
+
+    {
+        letter:"क",
+        example:"क — कमल",
+        meaning:"कमल",
+        speak:"कमल",
+        aliases:[
+            "क","ka","k",
+            "कमल","kamal","lotus"
+        ]
+    },
+
+    {
+        letter:"ख",
+        example:"ख — खरायो",
+        meaning:"खरायो",
+        speak:"खरायो",
+        aliases:[
+            "ख","kha","kh",
+            "खरायो","kharayo","rabbit"
+        ]
+    },
+
+    {
+        letter:"ग",
+        example:"ग — गाई",
+        meaning:"गाई",
+        speak:"गाई",
+        aliases:[
+            "ग","ga","g",
+            "गाई","gai","gaai",
+            "cow"
+        ]
+    },
+
+    {
+        letter:"घ",
+        example:"घ — घर",
+        meaning:"घर",
+        speak:"घर",
+        aliases:[
+            "घ","gha","gh",
+            "घर","ghar","home","house"
+        ]
+    },
+
+    {
+        letter:"ङ",
+        example:"ङ — अङ्ग",
+        meaning:"नाकबाट आउने 'ङ' ध्वनि",
+        speak:"अङ्ग",
+        aliases:[
+            "ङ","ng","nga","ṅ","ŋ",
+            "अङ्ग","अंग","anga","ang",
+            "रङ","रंग","रङ्ग",
+            "रंग","गुरुङ",
+            "ng sound"
+        ],
+        speechFamily:"velar-nasal"
+    },
+
+    {
+        letter:"च",
+        example:"च — चरा",
+        meaning:"चरा",
+        speak:"चरा",
+        aliases:[
+            "च","cha","ch",
+            "चरा","chara","bird"
+        ]
+    },
+
+    {
+        letter:"छ",
+        example:"छ — छाता",
+        meaning:"छाता",
+        speak:"छाता",
+        aliases:[
+            "छ","chha","cha","chh",
+            "छाता","chhata","chata",
+            "umbrella"
+        ]
+    },
+
+    {
+        letter:"ज",
+        example:"ज — जहाज",
+        meaning:"जहाज",
+        speak:"जहाज",
+        aliases:[
+            "ज","ja","j",
+            "जहाज","jahaj","ship"
+        ]
+    },
+
+    {
+        letter:"झ",
+        example:"झ — झण्डा",
+        meaning:"झण्डा",
+        speak:"झण्डा",
+        aliases:[
+            "झ","jha","jh",
+            "झण्डा","झंडा","jhanda",
+            "flag"
+        ]
+    },
+
+    {
+        letter:"ञ",
+        example:"ञ — ज्ञान",
+        meaning:"ज्ञानमा आउने 'ञ' ध्वनि",
+        speak:"ज्ञान",
+        aliases:[
+            "ञ","nya","ña","ny",
+            "ज्ञान","gyan","gyaan","jnan",
+            "ज्ञान","knowledge"
+        ],
+        speechFamily:"palatal-nasal"
+    },
+
+    {
+        letter:"ट",
+        example:"ट — टमाटर",
+        meaning:"टमाटर",
+        speak:"टमाटर",
+        aliases:[
+            "ट","ta","ṭa",
+            "टमाटर","tamat ar","tamatar",
+            "tomato"
+        ]
+    },
+
+    {
+        letter:"ठ",
+        example:"ठ — ठेला",
+        meaning:"ठेला",
+        speak:"ठेला",
+        aliases:[
+            "ठ","tha","ṭha","th",
+            "ठेला","thela","cart"
+        ]
+    },
+
+    {
+        letter:"ड",
+        example:"ड — डमरु",
+        meaning:"डमरु",
+        speak:"डमरु",
+        aliases:[
+            "ड","da","ḍa","d",
+            "डमरु","damaru","damroo",
+            "drum"
+        ],
+        speechFamily:"retroflex-d"
+    },
+
+    {
+        letter:"ढ",
+        example:"ढ — ढोका",
+        meaning:"ढोका",
+        speak:"ढोका",
+        aliases:[
+            "ढ","dha","ḍha","dh",
+            "ढोका","dhoka","door"
+        ]
+    },
+
+    {
+        letter:"ण",
+        example:"ण — गणेश",
+        meaning:"जिब्रो पछाडि मोडेर आउने नासिक्य ध्वनि",
+        speak:"गणेश",
+        aliases:[
+            "ण","na","n","ṇa","ṇ","ṇa",
+            "गणेश","ganesh","ganesha",
+            "घण्टा","ghanta",
+            "कण्ठ","kantha",
+            "पूर्ण","purna",
+            "वर्ण","varna",
+            "गणना","ganana"
+        ],
+        speechFamily:"retroflex-nasal"
+    },
+
+    {
+        letter:"त",
+        example:"त — तरबुजा",
+        meaning:"तरबुजा",
+        speak:"तरबुजा",
+        aliases:[
+            "त","ta","t",
+            "तरबुजा","tarbuja","watermelon"
+        ]
+    },
+
+    {
+        letter:"थ",
+        example:"थ — थाल",
+        meaning:"थाल",
+        speak:"थाल",
+        aliases:[
+            "थ","tha","th",
+            "थाल","thal","plate"
+        ]
+    },
+
+    {
+        letter:"द",
+        example:"द — दाँत",
+        meaning:"दाँत",
+        speak:"दाँत",
+        aliases:[
+            "द","da","d",
+            "दाँत","दात","daat","dant",
+            "tooth"
+        ]
+    },
+
+    {
+        letter:"ध",
+        example:"ध — धनुष",
+        meaning:"धनुष",
+        speak:"धनुष",
+        aliases:[
+            "ध","dha","dh",
+            "धनुष","dhanush","bow"
+        ]
+    },
+
+    {
+        letter:"न",
+        example:"न — नाक",
+        meaning:"नाक",
+        speak:"नाक",
+        aliases:[
+            "न","na","n",
+            "नाक","nak","naak",
+            "nose"
+        ]
+    },
+
+    {
+        letter:"प",
+        example:"प — पानी",
+        meaning:"पानी",
+        speak:"पानी",
+        aliases:[
+            "प","pa","p",
+            "पानी","pani","paanee",
+            "water"
+        ]
+    },
+
+    {
+        letter:"फ",
+        example:"फ — फूल",
+        meaning:"फूल",
+        speak:"फूल",
+        aliases:[
+            "फ","pha","fa","ph",
+            "फूल","phool","ful",
+            "flower"
+        ]
+    },
+
+    {
+        letter:"ब",
+        example:"ब — बाघ",
+        meaning:"बाघ",
+        speak:"बाघ",
+        aliases:[
+            "ब","ba","b",
+            "बाघ","bagh","baagh",
+            "tiger"
+        ]
+    },
+
+    {
+        letter:"भ",
+        example:"भ — भालु",
+        meaning:"भालु",
+        speak:"भालु",
+        aliases:[
+            "भ","bha","bh",
+            "भालु","bhalu","bear"
+        ]
+    },
+
+    {
+        letter:"म",
+        example:"म — माछा",
+        meaning:"माछा",
+        speak:"माछा",
+        aliases:[
+            "म","ma","m",
+            "माछा","macha","machha",
+            "fish"
+        ]
+    },
+
+    {
+        letter:"य",
+        example:"य — योग",
+        meaning:"योग",
+        speak:"योग",
+        aliases:[
+            "य","ya","y",
+            "योग","yog","yoga"
+        ]
+    },
+
+    {
+        letter:"र",
+        example:"र — रुख",
+        meaning:"रुख",
+        speak:"रुख",
+        aliases:[
+            "र","ra","r",
+            "रुख","rukh","tree"
+        ]
+    },
+
+    {
+        letter:"ल",
+        example:"ल — लट्टु",
+        meaning:"लट्टु",
+        speak:"लट्टु",
+        aliases:[
+            "ल","la","l",
+            "लट्टु","lattu","lattoo",
+            "spinning top"
+        ]
+    },
+
+    {
+        letter:"व",
+        example:"व — वन",
+        meaning:"वन",
+        speak:"वन",
+        aliases:[
+            "व","va","wa","v","w",
+            "वन","ban","van","wan",
+            "forest"
+        ]
+    },
+
+    {
+        letter:"श",
+        example:"श — शंख",
+        meaning:"शंख",
+        speak:"शंख",
+        aliases:[
+            "श","sha","sh",
+            "शंख","shankha","shankh",
+            "conch"
+        ],
+        speechFamily:"sibilant"
+    },
+
+    {
+        letter:"ष",
+        example:"ष — षट्कोण",
+        meaning:"आधुनिक नेपालीमा प्रायः स/श नजिक",
+        speak:"षट्कोण",
+        aliases:[
+            "ष","sha","sh","ṣa","ṣ",
+            "s","sa","स","श",
+            "षट्कोण","shatkon","shatkona",
+            "satkon",
+            "वर्ष","barsha","varsha",
+            "हर्ष","harsha"
+        ],
+        speechFamily:"sibilant"
+    },
+
+    {
+        letter:"स",
+        example:"स — स्याउ",
+        meaning:"स्याउ",
+        speak:"स्याउ",
+        aliases:[
+            "स","sa","s",
+            "स्याउ","syau","syauu",
+            "apple"
+        ]
+    },
+
+    {
+        letter:"ह",
+        example:"ह — हात्ती",
+        meaning:"हात्ती",
+        speak:"हात्ती",
+        aliases:[
+            "ह","ha","h",
+            "हात्ती","hatti","hatti",
+            "elephant"
+        ]
+    },
+
+    /* Additional contextual words */
+
+    {
+        letter:"ई",
+        example:"ई — ईश्वर",
+        meaning:"ईश्वर",
+        speak:"ईश्वर",
+        aliases:[
+            "ईश्वर",
+            "ईशोर",
+            "इश्वर",
+            "इशोर",
+            "ईसोर",
+            "इस्वर",
+            "ईसवर",
+            "ishwar",
+            "ishwor",
+            "ishor",
+            "iswor",
+            "iswar",
+            "eswor",
+            "eswar",
+            "eswor",
+            "e swor",
+            "god",
+            "lord"
+        ],
+        vowelType:"long-i"
+    },
+
+    {
+        letter:"आ",
+        example:"आ — आगो",
+        meaning:"आगो",
+        speak:"आगो",
+        aliases:[
+            "आगो","aago","ago","fire"
+        ]
+    },
+
+    {
+        letter:"क",
+        example:"क — किताब",
+        meaning:"किताब",
+        speak:"किताब",
+        aliases:[
+            "किताब","kitab","kitaab","book"
+        ]
+    },
+
+    {
+        letter:"म",
+        example:"म — ममी",
+        meaning:"ममी",
+        speak:"ममी",
+        aliases:[
+            "ममी","mami","mummy","mommy"
+        ]
+    },
+
+    {
+        letter:"ब",
+        example:"ब — बच्चा",
+        meaning:"बच्चा",
+        speak:"बच्चा",
+        aliases:[
+            "बच्चा","bachha","baccha","child"
+        ]
+    }
+
+];
+
+
+/* ============================================================
+   GAME STATE
+============================================================ */
+
+let questions = [];
+
+let currentIndex = 0;
+
+let correctCount = 0;
+
+let wrongAttempts = 0;
+
+let answerHistory = [];
+
+let gameActive = false;
+
+let answered = false;
+
+let processingAnswer = false;
+
+let recognition = null;
+
+let recognitionSession = 0;
+
+let restartTimer = null;
+
+let recognitionWatchdog = null;
+
+let lastRecognitionTime = 0;
+
+
+/* ============================================================
+   SHUFFLE
+============================================================ */
+
+function shuffle(array) {
+
+    const copy = [...array];
+
+    for (
+        let i = copy.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        [
+            copy[i],
+            copy[j]
+        ] = [
+            copy[j],
+            copy[i]
+        ];
+    }
+
+    return copy;
+}
+
+
+/* ============================================================
+   EXACTLY 50 QUESTIONS
+============================================================ */
+
+function create50Questions() {
+
+    let result = [];
+
+    let pool = shuffle(questionBank);
+
+    while (result.length < TOTAL_QUESTIONS) {
+
+        if (pool.length === 0) {
+            pool = shuffle(questionBank);
+        }
+
+        result.push(pool.pop());
+    }
+
+    return result;
+}
+
+
+/* ============================================================
+   NORMALIZATION
+============================================================ */
+
+function normalizeSpeech(text) {
+
+    if (!text) return "";
+
+    let s = String(text)
+        .toLowerCase()
+        .trim();
+
+    /* Unicode normalization */
+
+    s = s.normalize("NFD");
+
+    /*
+       Remove combining marks from Latin text.
+       Keep Devanagari characters.
+    */
+
+    s = s.replace(
+        /[\u0300-\u036f]/g,
+        ""
+    );
+
+    /* punctuation */
+
+    s = s.replace(
+        /[.,!?;:'"“”‘’\-_/\\()[\]{}]/g,
+        " "
+    );
+
+    /* common English speech recognition variants */
+
+    s = s
+        .replace(/\bishwar\b/g, "ishwor")
+        .replace(/\biswar\b/g, "iswor")
+        .replace(/\beswar\b/g, "eswor")
+        .replace(/\bsh\b/g, "sh")
+        .replace(/\bchh\b/g, "ch")
+        .replace(/\bchh\b/g, "ch");
+
+    /* long vowel normalization */
+
+    s = s
+        .replace(/aa+/g, "a")
+        .replace(/ee+/g, "i")
+        .replace(/ii+/g, "i")
+        .replace(/oo+/g, "u")
+        .replace(/uu+/g, "u");
+
+    /* multiple spaces */
+
+    s = s
+        .replace(/\s+/g, " ")
+        .trim();
+
+    return s;
+}
+
+
+/* ============================================================
+   CHARACTER NORMALIZATION
+============================================================ */
+
+function normalizeForCharacterComparison(text) {
+
+    let s = normalizeSpeech(text);
+
+    /*
+       These substitutions intentionally make
+       child speech more tolerant.
+    */
+
+    s = s
+        .replace(/ph/g, "f")
+        .replace(/bh/g, "b")
+        .replace(/dh/g, "d")
+        .replace(/th/g, "t")
+        .replace(/kh/g, "k")
+        .replace(/gh/g, "g")
+        .replace(/jh/g, "j")
+        .replace(/ch/g, "c")
+        .replace(/sh/g, "s")
+        .replace(/zh/g, "j")
+        .replace(/w/g, "v")
+        .replace(/y/g, "i");
+
+    return s;
+}
+
+
+/* ============================================================
+   LEVENSHTEIN DISTANCE
+============================================================ */
+
+function levenshtein(a, b) {
+
+    a = normalizeForCharacterComparison(a);
+    b = normalizeForCharacterComparison(b);
+
+    if (a === b) return 0;
+
+    if (!a.length) return b.length;
+
+    if (!b.length) return a.length;
+
+    const matrix = [];
+
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+
+    for (let i = 1; i <= b.length; i++) {
+
+        for (let j = 1; j <= a.length; j++) {
+
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+
+                matrix[i][j] =
+                    matrix[i - 1][j - 1];
+
+            } else {
+
+                matrix[i][j] =
+                    Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+            }
+        }
+    }
+
+    return matrix[b.length][a.length];
+}
+
+
+/* ============================================================
+   BASIC SIMILARITY
+============================================================ */
+
+function similarity(a, b) {
+
+    const x = normalizeForCharacterComparison(a);
+
+    const y = normalizeForCharacterComparison(b);
+
+    if (!x || !y) return 0;
+
+    if (x === y) return 1;
+
+    const distance =
+        levenshtein(x, y);
+
+    const maxLength =
+        Math.max(x.length, y.length);
+
+    if (!maxLength) return 1;
+
+    return Math.max(
+        0,
+        1 - distance / maxLength
+    );
+}
+
+
+/* ============================================================
+   TOKEN SIMILARITY
+============================================================ */
+
+function tokenSimilarity(spoken, target) {
+
+    const spokenTokens =
+        normalizeSpeech(spoken)
+            .split(/\s+/)
+            .filter(Boolean);
+
+    const targetTokens =
+        normalizeSpeech(target)
+            .split(/\s+/)
+            .filter(Boolean);
+
+    if (!spokenTokens.length ||
+        !targetTokens.length) {
+
+        return 0;
+    }
+
+    let best = 0;
+
+    for (const s of spokenTokens) {
+
+        for (const t of targetTokens) {
+
+            best = Math.max(
+                best,
+                similarity(s, t)
+            );
+        }
+    }
+
+    return best;
+}
+
+
+/* ============================================================
+   CONTAINS SIMILAR WORD
+============================================================ */
+
+function containsSimilarWord(spoken, target) {
+
+    const s =
+        normalizeSpeech(spoken);
+
+    const t =
+        normalizeSpeech(target);
+
+    if (!s || !t) return 0;
+
+    if (s.includes(t)) {
+        return 1;
+    }
+
+    const words =
+        s.split(/\s+/);
+
+    let best = 0;
+
+    for (const word of words) {
+
+        best = Math.max(
+            best,
+            similarity(word, t)
+        );
+    }
+
+    return best;
+}
+
+
+/* ============================================================
+   PHONETIC NORMALIZATION
+============================================================ */
+
+function phoneticNormalize(text) {
+
+    let s =
+        normalizeForCharacterComparison(text);
+
+    /*
+       Common child / ASR confusions.
+    */
+
+    s = s
+        .replace(/aa/g, "a")
+        .replace(/ee/g, "i")
+        .replace(/ii/g, "i")
+        .replace(/oo/g, "u")
+        .replace(/uu/g, "u")
+
+        .replace(/sh/g, "s")
+        .replace(/ch/g, "c")
+
+        .replace(/ph/g, "f")
+        .replace(/bh/g, "b")
+
+        .replace(/dh/g, "d")
+        .replace(/th/g, "t")
+
+        .replace(/kh/g, "k")
+        .replace(/gh/g, "g")
+
+        .replace(/jh/g, "j")
+
+        .replace(/w/g, "v")
+
+        .replace(/y/g, "i")
+
+        .replace(/h/g, "");
+
+    return s;
+}
+
+
+/* ============================================================
+   PHONETIC SIMILARITY
+============================================================ */
+
+function phoneticSimilarity(a, b) {
+
+    const x =
+        phoneticNormalize(a);
+
+    const y =
+        phoneticNormalize(b);
+
+    if (!x || !y) return 0;
+
+    if (x === y) return 1;
+
+    return similarity(x, y);
+}
+
+
+/* ============================================================
+   SYLLABLE / LENGTH SCORE
+============================================================ */
+
+function lengthScore(a, b) {
+
+    const x =
+        normalizeSpeech(a);
+
+    const y =
+        normalizeSpeech(b);
+
+    if (!x || !y) return 0;
+
+    const difference =
+        Math.abs(x.length - y.length);
+
+    const max =
+        Math.max(x.length, y.length);
+
+    return Math.max(
+        0,
+        1 - difference / max
+    );
+}
+
+
+/* ============================================================
+   SPECIAL SOUND FAMILY
+============================================================ */
+
+function familyScore(spoken, question) {
+
+    const s =
+        normalizeSpeech(spoken);
+
+    if (!question.speechFamily) {
+        return 0;
+    }
+
+    switch (question.speechFamily) {
+
+        case "sibilant":
+
+            if (
+                s.includes("ष") ||
+                s.includes("श") ||
+                s.includes("स") ||
+                s.includes("sha") ||
+                s.includes("sa") ||
+                s.includes("sh")
+            ) {
+                return 0.82;
+            }
+
+            break;
+
+
+        case "velar-nasal":
+
+            if (
+                s.includes("ङ") ||
+                s.includes("ng") ||
+                s.includes("anga") ||
+                s.includes("ang")
+            ) {
+                return 0.90;
+            }
+
+            break;
+
+
+        case "retroflex-nasal":
+
+            if (
+                s.includes("ण") ||
+                s.includes("na") ||
+                s.includes("n")
+            ) {
+                return 0.70;
+            }
+
+            break;
+
+
+        case "retroflex-d":
+
+            if (
+                s.includes("ड") ||
+                s.includes("da") ||
+                s.includes("d")
+            ) {
+                return 0.72;
+            }
+
+            break;
+
+
+        case "vocalic-r":
+
+            if (
+                s.includes("ऋ") ||
+                s.includes("ri") ||
+                s.includes("rishi") ||
+                s.includes("rsi")
+            ) {
+                return 0.88;
+            }
+
+            break;
+    }
+
+    return 0;
+}
+
+
+/* ============================================================
+   VOWEL SCORE
+============================================================ */
+
+function vowelScore(spoken, question) {
+
+    const s =
+        normalizeSpeech(spoken);
+
+    if (!question.vowelType) {
+        return 0;
+    }
+
+    switch (question.vowelType) {
+
+        case "short-i":
+
+            if (
+                s.includes("इ") ||
+                s.includes("i")
+            ) {
+                return 0.78;
+            }
+
+            break;
+
+
+        case "long-i":
+
+            /*
+               IMPORTANT:
+               We intentionally accept "i"
+               and "e" for children.
+
+               ईश्वर can be recognized as:
+
+               ईश्वर
+               इश्वर
+               ईशोर
+               इशोर
+               ishwar
+               ishwor
+               ishor
+               iswor
+               eswor
+               e swor
+            */
+
+            if (
+                s.includes("ई") ||
+                s.includes("इ") ||
+                s.includes("i") ||
+                s.includes("e") ||
+                s.includes("ee")
+            ) {
+                return 0.88;
+            }
+
+            break;
+
+
+        case "short-u":
+
+            if (
+                s.includes("उ") ||
+                s.includes("u")
+            ) {
+                return 0.82;
+            }
+
+            break;
+
+
+        case "long-u":
+
+            if (
+                s.includes("ऊ") ||
+                s.includes("u") ||
+                s.includes("oo")
+            ) {
+                return 0.84;
+            }
+
+            break;
+
+
+        case "vocalic-r":
+
+            if (
+                s.includes("ऋ") ||
+                s.includes("ri") ||
+                s.includes("r")
+            ) {
+                return 0.82;
+            }
+
+            break;
+    }
+
+    return 0;
+}
+
+
+/* ============================================================
+   FUZZY INFERENCE ENGINE
+============================================================ */
+
+function fuzzyInference(
+    spoken,
+    question,
+    recognitionConfidence = 0
+) {
+
+    if (!spoken) {
+        return {
+            score: 0,
+            decision: false,
+            reason: "empty"
+        };
+    }
+
+
+    const aliases =
+        question.aliases || [];
+
+
+    let exactScore = 0;
+    let characterScore = 0;
+    let phoneticScore = 0;
+    let tokenScore = 0;
+    let containsScore = 0;
+    let lengthScoreValue = 0;
+    let familyScoreValue = 0;
+    let vowelScoreValue = 0;
+
+
+    /*
+       Evaluate ALL aliases.
+
+       This is important.
+
+       We don't compare only:
+
+       spoken vs "ईश्वर"
+
+       Instead:
+
+       spoken vs
+       ईश्वर
+       इश्वर
+       ईशोर
+       इशोर
+       ishwor
+       ishor
+       iswor
+       eswor
+       etc.
+    */
+
+    for (const alias of aliases) {
+
+        const normalizedSpoken =
+            normalizeSpeech(spoken);
+
+        const normalizedAlias =
+            normalizeSpeech(alias);
+
+
+        if (
+            normalizedSpoken &&
+            normalizedAlias &&
+            normalizedSpoken === normalizedAlias
+        ) {
+
+            exactScore = 1;
+
+        }
+
+
+        characterScore =
+            Math.max(
+                characterScore,
+                similarity(
+                    spoken,
+                    alias
+                )
+            );
+
+
+        phoneticScore =
+            Math.max(
+                phoneticScore,
+                phoneticSimilarity(
+                    spoken,
+                    alias
+                )
+            );
+
+
+        tokenScore =
+            Math.max(
+                tokenScore,
+                tokenSimilarity(
+                    spoken,
+                    alias
+                )
+            );
+
+
+        containsScore =
+            Math.max(
+                containsScore,
+                containsSimilarWord(
+                    spoken,
+                    alias
+                )
+            );
+
+
+        lengthScoreValue =
+            Math.max(
+                lengthScoreValue,
+                lengthScore(
+                    spoken,
+                    alias
+                )
+            );
+    }
+
+
+    familyScoreValue =
+        familyScore(
+            spoken,
+            question
+        );
+
+
+    vowelScoreValue =
+        vowelScore(
+            spoken,
+            question
+        );
+
+
+    /*
+       ========================================================
+       FUZZY WEIGHTED INFERENCE
+       ========================================================
+
+       Exact              30%
+       Character          22%
+       Phonetic           22%
+       Token              10%
+       Contains            8%
+       Length              3%
+       Sound family        3%
+       Vowel               2%
+
+       The highest evidence dominates.
+    */
+
+    let score =
+        (
+            exactScore * 0.30
+        ) +
+
+        (
+            characterScore * 0.22
+        ) +
+
+        (
+            phoneticScore * 0.22
+        ) +
+
+        (
+            tokenScore * 0.10
+        ) +
+
+        (
+            containsScore * 0.08
+        ) +
+
+        (
+            lengthScoreValue * 0.03
+        ) +
+
+        (
+            familyScoreValue * 0.03
+        ) +
+
+        (
+            vowelScoreValue * 0.02
+        );
+
+
+    /*
+       Recognition confidence should NOT dominate.
+
+       Chrome may have low confidence even when
+       child's answer is actually correct.
+
+       So it only provides a small bonus.
+    */
+
+    if (
+        recognitionConfidence >= 0.70
+    ) {
+
+        score += 0.03;
+
+    } else if (
+        recognitionConfidence >= 0.50
+    ) {
+
+        score += 0.015;
+
+    }
+
+
+    score =
+        Math.min(
+            1,
+            score
+        );
+
+
+    /*
+       Special child-friendly rules
+    */
+
+    const normalized =
+        normalizeSpeech(spoken);
+
+
+    /*
+       If the transcript contains the target
+       approximately, accept it.
+    */
+
+    if (
+        containsScore >= 0.82
+    ) {
+
+        score =
+            Math.max(
+                score,
+                0.78
+            );
+    }
+
+
+    /*
+       Very strong phonetic match.
+    */
+
+    if (
+        phoneticScore >= 0.90
+    ) {
+
+        score =
+            Math.max(
+                score,
+                0.76
+            );
+    }
+
+
+    /*
+       Exact alias always wins.
+    */
+
+    if (
+        exactScore === 1
+    ) {
+
+        score = 1;
+    }
+
+
+    const decision =
+        score >= FUZZY_THRESHOLD;
+
+
+    return {
+
+        score,
+
+        decision,
+
+        exactScore,
+
+        characterScore,
+
+        phoneticScore,
+
+        tokenScore,
+
+        containsScore,
+
+        lengthScore: lengthScoreValue,
+
+        familyScore: familyScoreValue,
+
+        vowelScore: vowelScoreValue,
+
+        normalized
+
+    };
+}
+
+
+/* ============================================================
+   START GAME
+============================================================ */
+
+function startGame() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        alert(
+            "यो browser मा Speech Recognition support छैन। Chrome प्रयोग गर्नुहोस्।"
+        );
+
+        return;
+    }
+
+
+    currentIndex = 0;
+
+    correctCount = 0;
+
+    wrongAttempts = 0;
+
+    answerHistory = [];
+
+    gameActive = true;
+
+    answered = false;
+
+    processingAnswer = false;
+
+
+    /*
+       FIX FOR Q43/Q44 STUCK ISSUE
+
+       Always create EXACTLY 50 questions.
+    */
+
+    questions =
+        create50Questions();
+
+
+    startScreen.classList.add(
+        "hidden"
+    );
+
+    reportScreen.classList.add(
+        "hidden"
+    );
+
+    gameScreen.classList.remove(
+        "hidden"
+    );
+
+
+    updateStats();
+
+    showQuestion();
+
+    startNewRecognition();
+
+}
+
+
+/* ============================================================
+   SHOW QUESTION
+============================================================ */
+
+function showQuestion() {
+
+    if (
+        currentIndex >= questions.length
+    ) {
+
+        finishGame();
+
+        return;
+    }
+
+
+    const q =
+        questions[currentIndex];
+
+
+    answered = false;
+
+    processingAnswer = false;
+
+
+    bigLetter.textContent =
+        q.letter;
+
+    example.textContent =
+        q.example;
+
+    meaning.textContent =
+        q.meaning;
+
+
+    heardText.textContent =
+        "...";
+
+
+    fuzzyScore.textContent =
+        "—";
+
+
+    feedback.textContent =
+        "";
+
+    feedback.className =
+        "feedback";
+
+
+    questionNumber.textContent =
+        currentIndex + 1;
+
+
+    const percentage =
+        (
+            currentIndex /
+            TOTAL_QUESTIONS
+        ) * 100;
+
+
+    progressBar.style.width =
+        `${percentage}%`;
+
+
+    micStatus.textContent =
+        "🎤 सुन्दैछ...";
+
+    micStatus.classList.add(
+        "listening"
+    );
+}
+
+
+/* ============================================================
+   UPDATE STATS
+============================================================ */
+
+function updateStats() {
+
+    correctCountElement.textContent =
+        correctCount;
+
+    attemptCountElement.textContent =
+        wrongAttempts;
+}
+
+
+/* ============================================================
+   START NEW RECOGNITION
+============================================================ */
+
+function startNewRecognition() {
+
+    if (!gameActive) return;
+
+    if (answered) return;
+
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) return;
+
+
+    /*
+       Cancel previous restart.
+    */
+
+    if (restartTimer) {
+
+        clearTimeout(
+            restartTimer
+        );
+
+        restartTimer = null;
+    }
+
+
+    /*
+       Invalidate old session.
+    */
+
+    recognitionSession++;
+
+    const thisSession =
+        recognitionSession;
+
+
+    /*
+       Abort old recognizer safely.
+    */
+
+    if (recognition) {
+
+        try {
+            recognition.onend = null;
+            recognition.onerror = null;
+            recognition.onresult = null;
+
+            recognition.abort();
+
+        } catch (e) {}
+    }
+
+
+    recognition =
+        new SpeechRecognition();
+
+
+    /*
+       IMPORTANT
+
+       continuous=false is intentional.
+
+       Chrome can stop continuous recognition.
+       Therefore we create a fresh session
+       after each result/end event.
+    */
+
+    recognition.continuous = false;
+
+    recognition.interimResults = true;
+
+    recognition.maxAlternatives = 5;
+
+    recognition.lang = "ne-NP";
+
+
+    /*
+       New browsers may support local processing.
+       We do NOT force it because Nepali support
+       may not exist on every machine.
+    */
+
+    if (
+        "processLocally" in recognition
+    ) {
+
+        recognition.processLocally =
+            false;
+    }
+
+
+    lastRecognitionTime =
+        Date.now();
+
+
+    recognition.onstart = () => {
+
+        if (
+            thisSession !==
+            recognitionSession
+        ) return;
+
+
+        lastRecognitionTime =
+            Date.now();
+
+
+        micStatus.textContent =
+            "🎤 LIVE — बोल्नुहोस्";
+
+        micStatus.classList.add(
+            "listening"
+        );
+    };
+
+
+    recognition.onspeechstart = () => {
+
+        lastRecognitionTime =
+            Date.now();
+
+        micStatus.textContent =
+            "🗣️ सुन्दैछ...";
+    };
+
+
+    recognition.onspeechend = () => {
+
+        lastRecognitionTime =
+            Date.now();
+    };
+
+
+    recognition.onsoundstart = () => {
+
+        lastRecognitionTime =
+            Date.now();
+    };
+
+
+    recognition.onsoundend = () => {
+
+        lastRecognitionTime =
+            Date.now();
+    };
+
+
+    recognition.onresult =
+        (event) => {
+
+        if (
+            thisSession !==
+            recognitionSession
+        ) return;
+
+
+        lastRecognitionTime =
+            Date.now();
+
+
+        let finalCandidates = [];
+
+        let interimText = "";
+
+
+        /*
+           Process every result.
+
+           We collect up to 5 alternatives.
+        */
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            const result =
+                event.results[i];
+
+
+            if (
+                result.isFinal
+            ) {
+
+                for (
+                    let j = 0;
+                    j < result.length;
+                    j++
+                ) {
+
+                    finalCandidates.push({
+                        text:
+                            result[j].transcript,
+
+                        confidence:
+                            result[j].confidence || 0
+                    });
+                }
+
+            } else {
+
+                if (
+                    result[0]
+                ) {
+
+                    interimText +=
+                        result[0].transcript +
+                        " ";
+                }
+            }
+        }
+
+
+        /*
+           Show interim speech immediately.
+        */
+
+        if (
+            interimText.trim()
+        ) {
+
+            heardText.textContent =
+                interimText.trim();
+
+            micStatus.textContent =
+                "🗣️ सुन्दैछ...";
+        }
+
+
+        /*
+           Evaluate final candidates.
+        */
+
+        if (
+            finalCandidates.length &&
+            !processingAnswer &&
+            !answered
+        ) {
+
+            evaluateCandidates(
+                finalCandidates
+            );
+        }
+
+    };
+
+
+    recognition.onerror =
+        (event) => {
+
+        if (
+            thisSession !==
+            recognitionSession
+        ) return;
+
+
+        console.log(
+            "Speech error:",
+            event.error
+        );
+
+
+        if (
+            event.error ===
+            "not-allowed" ||
+            event.error ===
+            "service-not-allowed"
+        ) {
+
+            micStatus.textContent =
+                "⚠️ Microphone permission दिनुहोस्";
+
+            micStatus.classList.remove(
+                "listening"
+            );
+
+            return;
+        }
+
+
+        /*
+           Ignore recoverable errors.
+
+           Restart automatically.
+        */
+
+        scheduleRecognitionRestart(
+            500
+        );
+    };
+
+
+    recognition.onend =
+        () => {
+
+        if (
+            thisSession !==
+            recognitionSession
+        ) return;
+
+
+        micStatus.classList.remove(
+            "listening"
+        );
+
+
+        /*
+           This is the main fix for
+           recognition stopping around Q40+.
+        */
+
+        if (
+            gameActive &&
+            !answered &&
+            !processingAnswer
+        ) {
+
+            scheduleRecognitionRestart(
+                250
+            );
+        }
+
+    };
+
+
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        console.log(
+            "Recognition start:",
+            error
+        );
+
+        scheduleRecognitionRestart(
+            700
+        );
+    }
+
+
+    /*
+       WATCHDOG
+
+       If Chrome silently stops responding,
+       restart it.
+    */
+
+    startRecognitionWatchdog();
+}
+
+
+/* ============================================================
+   RECOGNITION WATCHDOG
+============================================================ */
+
+function startRecognitionWatchdog() {
+
+    if (recognitionWatchdog) {
+
+        clearInterval(
+            recognitionWatchdog
+        );
+    }
+
+
+    recognitionWatchdog =
+        setInterval(() => {
+
+        if (!gameActive) {
+
+            clearInterval(
+                recognitionWatchdog
+            );
+
+            return;
+        }
+
+
+        if (
+            answered ||
+            processingAnswer
+        ) return;
+
+
+        const elapsed =
+            Date.now() -
+            lastRecognitionTime;
+
+
+        /*
+           If recognizer appears dead
+           for > 7 seconds, restart.
+        */
+
+        if (
+            elapsed > 7000
+        ) {
+
+            console.log(
+                "Recognition watchdog restart"
+            );
+
+
+            try {
+
+                recognitionSession++;
+
+                if (recognition) {
+                    recognition.abort();
+                }
+
+            } catch (e) {}
+
+
+            scheduleRecognitionRestart(
+                300
+            );
+        }
+
+    }, 2000);
+}
+
+
+/* ============================================================
+   SCHEDULE RESTART
+============================================================ */
+
+function scheduleRecognitionRestart(
+    delay = 300
+) {
+
+    if (!gameActive) return;
+
+    if (answered) return;
+
+    if (processingAnswer) return;
+
+
+    if (restartTimer) {
+
+        clearTimeout(
+            restartTimer
+        );
+    }
+
+
+    restartTimer =
+        setTimeout(() => {
+
+            restartTimer = null;
+
+            if (
+                gameActive &&
+                !answered &&
+                !processingAnswer
+            ) {
+
+                startNewRecognition();
+            }
+
+        }, delay);
+}
+
+
+/* ============================================================
+   EVALUATE MULTIPLE SPEECH CANDIDATES
+============================================================ */
+
+function evaluateCandidates(
+    candidates
+) {
+
+    if (
+        processingAnswer ||
+        answered ||
+        !gameActive
+    ) return;
+
+
+    const question =
+        questions[currentIndex];
+
+
+    /*
+       Run fuzzy inference on ALL
+       recognition alternatives.
+
+       We select the strongest candidate.
+    */
+
+    let bestResult = null;
+
+
+    for (
+        const candidate of candidates
+    ) {
+
+        const result =
+            fuzzyInference(
+                candidate.text,
+                question,
+                candidate.confidence
+            );
+
+
+        if (
+            !bestResult ||
+            result.score >
+            bestResult.score
+        ) {
+
+            bestResult = {
+
+                ...result,
+
+                text:
+                    candidate.text,
+
+                confidence:
+                    candidate.confidence
+            };
+        }
+    }
+
+
+    if (!bestResult) return;
+
+
+    /*
+       Show actual best recognized speech.
+    */
+
+    heardText.textContent =
+        bestResult.text;
+
+
+    fuzzyScore.textContent =
+        Math.round(
+            bestResult.score * 100
+        ) + "%";
+
+
+    console.log(
+        "FUZZY RESULT",
+        {
+            question:
+                question.speak,
+
+            spoken:
+                bestResult.text,
+
+            score:
+                bestResult.score,
+
+            confidence:
+                bestResult.confidence,
+
+            details:
+                bestResult
+        }
+    );
+
+
+    /*
+       ACCEPT
+    */
+
+    if (
+        bestResult.decision
+    ) {
+
+        processCorrectAnswer(
+            bestResult
+        );
+
+        return;
+    }
+
+
+    /*
+       WRONG
+
+       Do not immediately fail the question
+       forever.
+
+       The child can simply speak again.
+    */
+
+    processWrongAnswer(
+        bestResult
+    );
+}
+
+
+/* ============================================================
+   CORRECT ANSWER
+============================================================ */
+
+function processCorrectAnswer(
+    result
+) {
+
+    if (
+        answered ||
+        processingAnswer
+    ) return;
+
+
+    processingAnswer = true;
+
+    answered = true;
+
+
+    correctCount++;
+
+
+    answerHistory.push({
+
+        question:
+            questions[currentIndex],
+
+        spoken:
+            result.text,
+
+        score:
+            result.score,
+
+        correct:
+            true
+
+    });
+
+
+    updateStats();
+
+
+    feedback.textContent =
+        "🎉 एकदम सही!";
+
+
+    feedback.className =
+        "feedback correct";
+
+
+    micStatus.textContent =
+        "✅ सही उत्तर";
+
+
+    micStatus.classList.remove(
+        "listening"
+    );
+
+
+    /*
+       Stop recognition immediately.
+    */
+
+    recognitionSession++;
+
+
+    if (recognition) {
+
+        try {
+
+            recognition.abort();
+
+        } catch (e) {}
+    }
+
+
+    /*
+       Play user's real .m4a recording.
+    */
+
+    playCorrectSound();
+
+
+    /*
+       2-second audio.
+
+       Give it enough time to finish.
+    */
+
+    setTimeout(() => {
+
+        if (!gameActive) return;
+
+
+        currentIndex++;
+
+
+        if (
+            currentIndex >=
+            TOTAL_QUESTIONS
+        ) {
+
+            finishGame();
+
+            return;
+        }
+
+
+        showQuestion();
+
+        startNewRecognition();
+
+    }, 2200);
+}
+
+
+/* ============================================================
+   WRONG ANSWER
+============================================================ */
+
+function processWrongAnswer(
+    result
+) {
+
+    if (
+        processingAnswer ||
+        answered
+    ) return;
+
+
+    processingAnswer = true;
+
+
+    wrongAttempts++;
+
+
+    answerHistory.push({
+
+        question:
+            questions[currentIndex],
+
+        spoken:
+            result.text,
+
+        score:
+            result.score,
+
+        correct:
+            false
+
+    });
+
+
+    updateStats();
+
+
+    feedback.textContent =
+        "🙂 फेरि प्रयास गरौँ!";
+
+
+    feedback.className =
+        "feedback wrong";
+
+
+    micStatus.textContent =
+        "🔁 फेरि बोल्नुहोस्";
+
+
+    micStatus.classList.remove(
+        "listening"
+    );
+
+
+    /*
+       Play actual incorrect.m4a.
+    */
+
+    playIncorrectSound();
+
+
+    /*
+       IMPORTANT:
+
+       Wrong answer does NOT advance
+       to next question.
+
+       Same question stays.
+    */
+
+    recognitionSession++;
+
+
+    if (recognition) {
+
+        try {
+
+            recognition.abort();
+
+        } catch (e) {}
+    }
+
+
+    setTimeout(() => {
+
+        if (!gameActive) return;
+
+        if (answered) return;
+
+
+        processingAnswer = false;
+
+
+        heardText.textContent =
+            "...";
+
+
+        fuzzyScore.textContent =
+            "—";
+
+
+        feedback.textContent =
+            "";
+
+
+        startNewRecognition();
+
+    }, 1200);
+}
+
+
+/* ============================================================
+   CORRECT SOUND
+============================================================ */
+
+function playCorrectSound() {
+
+    try {
+
+        correctSound.pause();
+
+        correctSound.currentTime = 0;
+
+
+        const promise =
+            correctSound.play();
+
+
+        if (
+            promise !== undefined
+        ) {
+
+            promise.catch(
+                error => {
+
+                    console.log(
+                        "Correct audio:",
+                        error
+                    );
+                }
+            );
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Correct audio error:",
+            error
+        );
+    }
+}
+
+
+/* ============================================================
+   INCORRECT SOUND
+============================================================ */
+
+function playIncorrectSound() {
+
+    try {
+
+        incorrectSound.pause();
+
+        incorrectSound.currentTime = 0;
+
+
+        const promise =
+            incorrectSound.play();
+
+
+        if (
+            promise !== undefined
+        ) {
+
+            promise.catch(
+                error => {
+
+                    console.log(
+                        "Incorrect audio:",
+                        error
+                    );
+                }
+            );
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Incorrect audio error:",
+            error
+        );
+    }
+}
+
+
+/* ============================================================
+   SPEAKER / TTS
+============================================================ */
+
+function speakCurrentWord() {
+
+    if (!gameActive) return;
+
+
+    const q =
+        questions[currentIndex];
+
+
+    if (!q) return;
+
+
+    /*
+       Stop previous speech.
+    */
+
+    window.speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            q.speak
+        );
+
+
+    /*
+       Prefer Nepali voice.
+    */
+
+    utterance.lang =
+        "ne-NP";
+
+
+    utterance.rate =
+        0.75;
+
+
+    utterance.pitch =
+        1.0;
+
+
+    utterance.volume =
+        1.0;
+
+
+    /*
+       Try to find Nepali voice.
+    */
+
+    const voices =
+        window.speechSynthesis
+            .getVoices();
+
+
+    const nepaliVoice =
+        voices.find(
+            voice =>
+                voice.lang &&
+                voice.lang
+                    .toLowerCase()
+                    .startsWith("ne")
+        );
+
+
+    if (nepaliVoice) {
+
+        utterance.voice =
+            nepaliVoice;
+    }
+
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+}
+
+
+/*
+   Some browsers load voices asynchronously.
+*/
+
+window.speechSynthesis
+    .onvoiceschanged = () => {
+
+        window.speechSynthesis
+            .getVoices();
+
+    };
+
+
+/* ============================================================
+   FINISH GAME
+============================================================ */
+
+function finishGame() {
+
+    gameActive = false;
+
+    answered = true;
+
+    processingAnswer = false;
+
+
+    if (restartTimer) {
+
+        clearTimeout(
+            restartTimer
+        );
+
+        restartTimer = null;
+    }
+
+
+    if (recognitionWatchdog) {
+
+        clearInterval(
+            recognitionWatchdog
+        );
+
+        recognitionWatchdog = null;
+    }
+
+
+    recognitionSession++;
+
+
+    if (recognition) {
+
+        try {
+
+            recognition.abort();
+
+        } catch (e) {}
+    }
+
+
+    window.speechSynthesis.cancel();
+
+
+    /*
+       Progress = 100%
+    */
+
+    progressBar.style.width =
+        "100%";
+
+
+    gameScreen.classList.add(
+        "hidden"
+    );
+
+    reportScreen.classList.remove(
+        "hidden"
+    );
+
+
+    const percentage =
+        Math.round(
+            (
+                correctCount /
+                TOTAL_QUESTIONS
+            ) * 100
+        );
+
+
+    document.getElementById(
+        "reportPercentage"
+    ).textContent =
+        percentage + "%";
+
+
+    document.getElementById(
+        "reportTotal"
+    ).textContent =
+        TOTAL_QUESTIONS;
+
+
+    document.getElementById(
+        "reportCorrect"
+    ).textContent =
+        correctCount;
+
+
+    document.getElementById(
+        "reportWrong"
+    ).textContent =
+        wrongAttempts;
+
+
+    generateHistory();
+}
+
+
+/* ============================================================
+   HISTORY
+============================================================ */
+
+function generateHistory() {
+
+    const historyElement =
+        document.getElementById(
+            "history"
+        );
+
+
+    historyElement.innerHTML = "";
+
+
+    answerHistory.forEach(
+        (item, index) => {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.className =
+            "history-item " +
+            (
+                item.correct
+                    ? "correct-row"
+                    : "wrong-row"
+            );
+
+
+        div.innerHTML = `
+
+            <strong>
+                ${index + 1}.
+                ${item.question.letter}
+                —
+                ${item.question.speak}
+            </strong>
+
+            <br>
+
+            बच्चाले भने:
+            <b>
+                ${escapeHTML(item.spoken)}
+            </b>
+
+            <br>
+
+            Fuzzy Score:
+            <b>
+                ${Math.round(
+                    item.score * 100
+                )}%
+            </b>
+
+            <span style="float:right;">
+                ${
+                    item.correct
+                    ? "✅ सही"
+                    : "❌ गलत"
+                }
+            </span>
+
+        `;
+
+
+        historyElement.appendChild(
+            div
+        );
+
+    });
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+/* ============================================================
+   PAGE VISIBILITY
+============================================================ */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+    if (
+        document.hidden
+    ) return;
+
+
+    if (
+        gameActive &&
+        !answered &&
+        !processingAnswer
+    ) {
+
+        scheduleRecognitionRestart(
+            300
+        );
+    }
+
+});
+
+
+/* ============================================================
+   KEYBOARD AID
+============================================================ */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+    /*
+       Space = hear target word
+    */
+
+    if (
+        event.code === "Space" &&
+        gameActive
+    ) {
+
+        event.preventDefault();
+
+        speakCurrentWord();
+    }
+
+});
+
+
+</script>
+
+</body>
+</html>

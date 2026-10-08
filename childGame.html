@@ -1,0 +1,3424 @@
+<!DOCTYPE html>
+<html lang="ne">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>बाल आवाज अक्षर खेल</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-family:
+        "Noto Sans Devanagari",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #eef2ff,
+            #f8fafc
+        );
+
+    color: #172033;
+}
+
+
+.container {
+
+    width: min(1000px, 95%);
+
+    background: white;
+
+    border-radius: 28px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.15);
+}
+
+
+.screen {
+    display: none;
+}
+
+
+.screen.active {
+    display: block;
+}
+
+
+h1 {
+
+    text-align: center;
+
+    font-size: 40px;
+
+    margin-top: 0;
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 19px;
+}
+
+
+.start-area {
+
+    text-align: center;
+
+    margin-top: 45px;
+}
+
+
+button {
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 15px 25px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+
+.start-btn {
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 23px;
+
+    padding:
+        18px 45px;
+}
+
+
+.stop-btn {
+
+    background: #dc2626;
+
+    color: white;
+}
+
+
+.question-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+.progress {
+
+    font-size: 21px;
+
+    font-weight: bold;
+}
+
+
+.progress-bar {
+
+    height: 15px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-bottom: 30px;
+}
+
+
+.progress-fill {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: #2563eb;
+
+    transition: width .3s;
+}
+
+
+.question-box {
+
+    text-align: center;
+
+    background: #f8fafc;
+
+    border-radius: 25px;
+
+    padding: 35px 20px;
+}
+
+
+.instruction {
+
+    font-size: 25px;
+
+    color: #475569;
+
+    margin-bottom: 10px;
+}
+
+
+.target {
+
+    font-size: 110px;
+
+    line-height: 1.2;
+
+    font-weight: bold;
+
+    color: #1d4ed8;
+
+    margin: 5px 0;
+}
+
+
+.example {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin-top: 10px;
+}
+
+
+.example span {
+
+    color: #dc2626;
+}
+
+
+.status {
+
+    margin-top: 30px;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.live-dot {
+
+    display: inline-block;
+
+    width: 13px;
+
+    height: 13px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    margin-right: 8px;
+
+    animation: pulse 1s infinite;
+}
+
+
+@keyframes pulse {
+
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: .4;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+.heard {
+
+    margin-top: 20px;
+
+    padding: 18px;
+
+    background: white;
+
+    border: 2px solid #e2e8f0;
+
+    border-radius: 15px;
+
+    font-size: 22px;
+
+    min-height: 65px;
+}
+
+
+.heard-label {
+
+    color: #64748b;
+
+    font-size: 17px;
+
+    display: block;
+
+    margin-bottom: 5px;
+}
+
+
+#heardText {
+
+    color: #111827;
+
+    font-size: 27px;
+
+    font-weight: bold;
+
+    word-break: break-word;
+}
+
+
+.feedback {
+
+    margin-top: 20px;
+
+    min-height: 45px;
+
+    font-size: 30px;
+
+    font-weight: bold;
+}
+
+
+.report-title {
+
+    text-align: center;
+
+    font-size: 38px;
+}
+
+
+.score {
+
+    text-align: center;
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin: 25px;
+}
+
+
+.report-wrapper {
+
+    overflow-x: auto;
+}
+
+
+.report-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 20px;
+}
+
+
+.report-table th,
+.report-table td {
+
+    padding: 12px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    text-align: center;
+}
+
+
+.correct {
+
+    color: #15803d;
+
+    font-weight: bold;
+}
+
+
+.wrong {
+
+    color: #dc2626;
+
+    font-weight: bold;
+}
+
+
+.restart-btn {
+
+    display: block;
+
+    margin:
+        30px auto 0;
+
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.small-note {
+
+    color: #64748b;
+
+    margin-top: 20px;
+
+    font-size: 15px;
+
+    text-align: center;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     START SCREEN
+===================================================== -->
+
+<section id="startScreen"
+         class="screen active">
+
+    <h1>
+        🎤 बाल आवाज अक्षर खेल
+    </h1>
+
+    <p class="subtitle">
+
+        बच्चाले देखाइएको अक्षर वा उदाहरण शब्द
+        बोल्नुहोस्।
+
+    </p>
+
+
+    <div class="start-area">
+
+        <p>
+            🎤 खेल सुरु भएपछि microphone
+            <b>automatic रूपमा लगातार सुन्छ।</b>
+        </p>
+
+        <p>
+            ❌ गलत भए उही प्रश्नमा बस्छ।
+        </p>
+
+        <p>
+            ✅ सही भए मात्र अर्को प्रश्नमा जान्छ।
+        </p>
+
+        <p>
+            👏 सही उत्तरमा loud clapping sound आउँछ।
+        </p>
+
+
+        <button
+            class="start-btn"
+            onclick="startGame()">
+
+            🚀 खेल सुरु गर्नुहोस्
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     GAME SCREEN
+===================================================== -->
+
+<section id="gameScreen"
+         class="screen">
+
+
+    <div class="question-header">
+
+        <div class="progress">
+
+            प्रश्न
+            <span id="currentNumber">
+                1
+            </span>
+            /
+            <span id="totalNumber">
+                50
+            </span>
+
+        </div>
+
+
+        <button
+            class="stop-btn"
+            onclick="stopGame()">
+
+            ⛔ रोक्नुहोस्
+
+        </button>
+
+    </div>
+
+
+    <div class="progress-bar">
+
+        <div
+            id="progressFill"
+            class="progress-fill">
+        </div>
+
+    </div>
+
+
+    <div class="question-box">
+
+
+        <div class="instruction">
+
+            यो शब्द/अक्षर पढ्नुहोस्:
+
+        </div>
+
+
+        <div
+            id="target"
+            class="target">
+
+            इ
+
+        </div>
+
+
+        <div
+            id="example"
+            class="example">
+
+            इ —
+            <span>इमली</span>
+
+        </div>
+
+
+        <div
+            id="status"
+            class="status">
+
+            <span class="live-dot"></span>
+
+            🎤 LIVE — सुन्दैछु...
+
+        </div>
+
+
+        <div class="heard">
+
+            <span class="heard-label">
+                बच्चाले भनेको:
+            </span>
+
+            <strong id="heardText">
+                ...
+            </strong>
+
+        </div>
+
+
+        <div
+            id="feedback"
+            class="feedback">
+        </div>
+
+
+    </div>
+
+
+    <div class="small-note">
+
+        💡 बच्चाले एउटै शब्द धेरै पटक बोल्न सक्छ।
+        सही उत्तर नभएसम्म प्रश्न परिवर्तन हुँदैन।
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     REPORT SCREEN
+===================================================== -->
+
+<section id="reportScreen"
+         class="screen">
+
+
+    <h2 class="report-title">
+
+        🎉 खेल समाप्त!
+
+    </h2>
+
+
+    <div
+        id="score"
+        class="score">
+    </div>
+
+
+    <div class="report-wrapper">
+
+        <table class="report-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>अक्षर / शब्द</th>
+
+                    <th>उदाहरण</th>
+
+                    <th>बच्चाले भनेको</th>
+
+                    <th>Result</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                id="reportBody">
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <button
+        class="restart-btn"
+        onclick="location.reload()">
+
+        🔄 फेरि खेल्नुहोस्
+
+    </button>
+
+</section>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   QUESTION BANK
+========================================================= */
+
+const questionBank = [
+
+
+/* ---------------- VOWELS ---------------- */
+
+{
+    target: "अ",
+    example: "अनार",
+    answers: [
+        "अ",
+        "a",
+        "aa",
+        "अनार",
+        "anar"
+    ]
+},
+
+
+{
+    target: "आ",
+    example: "आम",
+    answers: [
+        "आ",
+        "a",
+        "aa",
+        "आम",
+        "aam"
+    ]
+},
+
+
+{
+    target: "इ",
+    example: "इमली",
+    answers: [
+        "इ",
+        "i",
+        "e",
+        "ee",
+        "इमली",
+        "imli",
+        "imlee"
+    ]
+},
+
+
+{
+    target: "ई",
+    example: "ईख",
+    answers: [
+        "ई",
+        "i",
+        "e",
+        "ee",
+        "ईख",
+        "eekh",
+        "ikh"
+    ]
+},
+
+
+{
+    target: "उ",
+    example: "उखु",
+    answers: [
+        "उ",
+        "u",
+        "oo",
+        "उखु",
+        "ukhu"
+    ]
+},
+
+
+{
+    target: "ऊ",
+    example: "ऊन",
+    answers: [
+        "ऊ",
+        "u",
+        "oo",
+        "ऊन",
+        "oon"
+    ]
+},
+
+
+{
+    target: "ए",
+    example: "एउटा",
+    answers: [
+        "ए",
+        "e",
+        "ay",
+        "एउटा",
+        "auta",
+        "euta"
+    ]
+},
+
+
+{
+    target: "ऐ",
+    example: "ऐना",
+    answers: [
+        "ऐ",
+        "ai",
+        "ay",
+        "ऐना",
+        "aina"
+    ]
+},
+
+
+{
+    target: "ओ",
+    example: "ओखर",
+    answers: [
+        "ओ",
+        "o",
+        "ओखर",
+        "okhar"
+    ]
+},
+
+
+{
+    target: "औ",
+    example: "औंठी",
+    answers: [
+        "औ",
+        "au",
+        "ou",
+        "औंठी",
+        "aunthi"
+    ]
+},
+
+
+/* ---------------- CONSONANTS ---------------- */
+
+{
+    target: "क",
+    example: "कमल",
+    answers: [
+        "क",
+        "ka",
+        "k",
+        "कमल",
+        "kamal"
+    ]
+},
+
+
+{
+    target: "ख",
+    example: "खरायो",
+    answers: [
+        "ख",
+        "kha",
+        "खरायो",
+        "kharayo"
+    ]
+},
+
+
+{
+    target: "ग",
+    example: "गाई",
+    answers: [
+        "ग",
+        "ga",
+        "gai",
+        "गाई"
+    ]
+},
+
+
+{
+    target: "घ",
+    example: "घर",
+    answers: [
+        "घ",
+        "gha",
+        "घर",
+        "ghar"
+    ]
+},
+
+
+{
+    target: "ङ",
+    example: "ङ",
+    answers: [
+        "ङ",
+        "nga",
+        "ng"
+    ]
+},
+
+
+{
+    target: "च",
+    example: "चरा",
+    answers: [
+        "च",
+        "cha",
+        "चरा",
+        "chara"
+    ]
+},
+
+
+{
+    target: "छ",
+    example: "छाता",
+    answers: [
+        "छ",
+        "chha",
+        "छाता",
+        "chhata"
+    ]
+},
+
+
+{
+    target: "ज",
+    example: "जहाज",
+    answers: [
+        "ज",
+        "ja",
+        "जहाज",
+        "jahaj"
+    ]
+},
+
+
+{
+    target: "झ",
+    example: "झोला",
+    answers: [
+        "झ",
+        "jha",
+        "झोला",
+        "jhola"
+    ]
+},
+
+
+{
+    target: "ञ",
+    example: "ञ",
+    answers: [
+        "ञ",
+        "nya",
+        "nyaa",
+        "ña"
+    ]
+},
+
+
+{
+    target: "ट",
+    example: "टमाटर",
+    answers: [
+        "ट",
+        "ta",
+        "ṭa",
+        "टमाटर",
+        "tamatar"
+    ]
+},
+
+
+{
+    target: "ठ",
+    example: "ठूलो",
+    answers: [
+        "ठ",
+        "tha",
+        "ṭha",
+        "ठूलो",
+        "thulo"
+    ]
+},
+
+
+{
+    target: "ड",
+    example: "डमरु",
+    answers: [
+        "ड",
+        "डा",
+        "da",
+        "ḍa",
+        "d",
+        "डमरु",
+        "damaru",
+        "डमरु"
+    ]
+},
+
+
+{
+    target: "ढ",
+    example: "ढोका",
+    answers: [
+        "ढ",
+        "ढा",
+        "dha",
+        "ḍha",
+        "ढोका",
+        "dhoka"
+    ]
+},
+
+
+{
+    target: "ण",
+    example: "गणेश",
+    answers: [
+        "ण",
+        "णा",
+        "na",
+        "ṇa",
+        "गणेश",
+        "ganesh"
+    ]
+},
+
+
+{
+    target: "त",
+    example: "तरबुजा",
+    answers: [
+        "त",
+        "ता",
+        "ta",
+        "तरबुजा",
+        "tarbuja"
+    ]
+},
+
+
+{
+    target: "थ",
+    example: "थाल",
+    answers: [
+        "थ",
+        "था",
+        "tha",
+        "थाल",
+        "thal"
+    ]
+},
+
+
+{
+    target: "द",
+    example: "दाँत",
+    answers: [
+        "द",
+        "दा",
+        "da",
+        "दाँत",
+        "dant",
+        "daant"
+    ]
+},
+
+
+{
+    target: "ध",
+    example: "धनुष",
+    answers: [
+        "ध",
+        "धा",
+        "dha",
+        "धनुष",
+        "dhanush"
+    ]
+},
+
+
+{
+    target: "न",
+    example: "नदी",
+    answers: [
+        "न",
+        "ना",
+        "na",
+        "नदी",
+        "nadi"
+    ]
+},
+
+
+{
+    target: "प",
+    example: "पतंग",
+    answers: [
+        "प",
+        "पा",
+        "pa",
+        "पतंग",
+        "patang"
+    ]
+},
+
+
+{
+    target: "फ",
+    example: "फल",
+    answers: [
+        "फ",
+        "फा",
+        "pha",
+        "fa",
+        "फल",
+        "phal",
+        "fal"
+    ]
+},
+
+
+{
+    target: "ब",
+    example: "बाख्रा",
+    answers: [
+        "ब",
+        "बा",
+        "ba",
+        "बाख्रा",
+        "bakhra"
+    ]
+},
+
+
+{
+    target: "भ",
+    example: "भालु",
+    answers: [
+        "भ",
+        "भा",
+        "bha",
+        "भालु",
+        "bhalu"
+    ]
+},
+
+
+{
+    target: "म",
+    example: "माछा",
+    answers: [
+        "म",
+        "मा",
+        "ma",
+        "माछा",
+        "macha"
+    ]
+},
+
+
+{
+    target: "य",
+    example: "याक",
+    answers: [
+        "य",
+        "या",
+        "ya",
+        "याक",
+        "yak"
+    ]
+},
+
+
+{
+    target: "र",
+    example: "रुख",
+    answers: [
+        "र",
+        "रा",
+        "ra",
+        "रुख",
+        "rukh"
+    ]
+},
+
+
+{
+    target: "ल",
+    example: "लट्टु",
+    answers: [
+        "ल",
+        "ला",
+        "la",
+        "लट्टु",
+        "lattu"
+    ]
+},
+
+
+{
+    target: "व",
+    example: "वन",
+    answers: [
+        "व",
+        "वा",
+        "va",
+        "wa",
+        "वन",
+        "van"
+    ]
+},
+
+
+{
+    target: "श",
+    example: "शंख",
+    answers: [
+        "श",
+        "शा",
+        "sha",
+        "शंख",
+        "shankha"
+    ]
+},
+
+
+{
+    target: "ष",
+    example: "षट्कोण",
+    answers: [
+        "ष",
+        "षा",
+        "sha",
+        "sh",
+        "षट्कोण",
+        "shatkon"
+    ]
+},
+
+
+{
+    target: "स",
+    example: "सर्प",
+    answers: [
+        "स",
+        "सा",
+        "sa",
+        "सर्प",
+        "sarp"
+    ]
+},
+
+
+{
+    target: "ह",
+    example: "हात्ती",
+    answers: [
+        "ह",
+        "हा",
+        "ha",
+        "हात्ती",
+        "hatti"
+    ]
+},
+
+
+/* ---------------- WORDS ---------------- */
+
+{
+    target: "कमल",
+    example: "फूल",
+    answers: [
+        "कमल",
+        "kamal",
+        "फूल",
+        "phool",
+        "lotus"
+    ]
+},
+
+
+{
+    target: "घर",
+    example: "बस्ने ठाउँ",
+    answers: [
+        "घर",
+        "ghar",
+        "home"
+    ]
+},
+
+
+{
+    target: "गाई",
+    example: "जनावर",
+    answers: [
+        "गाई",
+        "gai",
+        "cow"
+    ]
+},
+
+
+{
+    target: "कुकुर",
+    example: "जनावर",
+    answers: [
+        "कुकुर",
+        "kukur",
+        "dog"
+    ]
+},
+
+
+{
+    target: "बिरालो",
+    example: "जनावर",
+    answers: [
+        "बिरालो",
+        "biralo",
+        "cat"
+    ]
+},
+
+
+{
+    target: "माछा",
+    example: "पानीको जनावर",
+    answers: [
+        "माछा",
+        "macha",
+        "fish"
+    ]
+},
+
+
+{
+    target: "आम",
+    example: "फल",
+    answers: [
+        "आम",
+        "aam",
+        "mango"
+    ]
+},
+
+
+{
+    target: "केरा",
+    example: "फल",
+    answers: [
+        "केरा",
+        "kera",
+        "banana"
+    ]
+},
+
+
+{
+    target: "स्याउ",
+    example: "फल",
+    answers: [
+        "स्याउ",
+        "syau",
+        "apple"
+    ]
+},
+
+
+{
+    target: "फूल",
+    example: "बोटमा फुल्ने वस्तु",
+    answers: [
+        "फूल",
+        "phool",
+        "flower"
+    ]
+},
+
+
+{
+    target: "पानी",
+    example: "पिउने वस्तु",
+    answers: [
+        "पानी",
+        "pani",
+        "water"
+    ]
+},
+
+
+{
+    target: "दूध",
+    example: "पिउने वस्तु",
+    answers: [
+        "दूध",
+        "dudh",
+        "milk"
+    ]
+},
+
+
+{
+    target: "सूर्य",
+    example: "आकाशमा देखिने",
+    answers: [
+        "सूर्य",
+        "surya",
+        "sun"
+    ]
+},
+
+
+{
+    target: "चन्द्रमा",
+    example: "रातमा देखिने",
+    answers: [
+        "चन्द्रमा",
+        "chandrama",
+        "moon"
+    ]
+},
+
+
+{
+    target: "आकाश",
+    example: "माथि देखिने",
+    answers: [
+        "आकाश",
+        "akash",
+        "sky"
+    ]
+},
+
+
+/* ---------------- ENGLISH ---------------- */
+
+{
+    target: "CAT",
+    example: "बिरालो",
+    answers: [
+        "cat",
+        "क्याट",
+        "बिरालो"
+    ]
+},
+
+
+{
+    target: "DOG",
+    example: "कुकुर",
+    answers: [
+        "dog",
+        "डग",
+        "कुकुर"
+    ]
+},
+
+
+{
+    target: "SUN",
+    example: "सूर्य",
+    answers: [
+        "sun",
+        "सन",
+        "सूर्य"
+    ]
+},
+
+
+{
+    target: "BALL",
+    example: "बल",
+    answers: [
+        "ball",
+        "बल"
+    ]
+},
+
+
+{
+    target: "APPLE",
+    example: "स्याउ",
+    answers: [
+        "apple",
+        "एप्पल",
+        "स्याउ"
+    ]
+},
+
+
+{
+    target: "BOOK",
+    example: "किताब",
+    answers: [
+        "book",
+        "बुक",
+        "किताब"
+    ]
+}
+
+];
+
+
+/* =========================================================
+   GAME SETTINGS
+========================================================= */
+
+const TOTAL_QUESTIONS = 50;
+
+
+/* =========================================================
+   GAME VARIABLES
+========================================================= */
+
+let questions = [];
+
+let currentIndex = 0;
+
+let correctCount = 0;
+
+let wrongAttempts = 0;
+
+let answerHistory = [];
+
+let gameActive = false;
+
+let answered = false;
+
+let processingAnswer = false;
+
+
+/*
+    Recognition object.
+
+    IMPORTANT:
+    We create a NEW object whenever Chrome ends
+    the previous recognition session.
+*/
+
+let recognition = null;
+
+
+/*
+    Session number prevents an old recognition
+    callback from modifying the new question.
+*/
+
+let recognitionSession = 0;
+
+
+/*
+    Timer used to restart recognition.
+*/
+
+let restartTimer = null;
+
+
+/*
+    Prevent too many recognition restarts.
+*/
+
+let restartInProgress = false;
+
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+let audioContext = null;
+
+let masterGain = null;
+
+let compressor = null;
+
+
+/* =========================================================
+   SHOW SCREEN
+========================================================= */
+
+function showScreen(id) {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+
+            screen.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+}
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array) {
+
+    const arr = [...array];
+
+
+    for (
+        let i = arr.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+
+        [
+            arr[i],
+            arr[j]
+        ] =
+        [
+            arr[j],
+            arr[i]
+        ];
+    }
+
+
+    return arr;
+}
+
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+function startGame() {
+
+    gameActive = true;
+
+    answered = false;
+
+    processingAnswer = false;
+
+    currentIndex = 0;
+
+    correctCount = 0;
+
+    wrongAttempts = 0;
+
+    answerHistory = [];
+
+
+    questions =
+        shuffle(questionBank)
+        .slice(
+            0,
+            TOTAL_QUESTIONS
+        );
+
+
+    document.getElementById(
+        "totalNumber"
+    ).textContent =
+        TOTAL_QUESTIONS;
+
+
+    /*
+        Audio MUST start after user click.
+    */
+
+    initAudio();
+
+
+    showScreen("gameScreen");
+
+
+    showQuestion();
+
+
+    /*
+        Start the FIRST recognition session.
+    */
+
+    startNewRecognition();
+
+
+}
+
+
+/* =========================================================
+   INITIALIZE AUDIO
+========================================================= */
+
+function initAudio() {
+
+    if (audioContext) {
+
+        if (
+            audioContext.state ===
+            "suspended"
+        ) {
+
+            audioContext.resume();
+
+        }
+
+        return;
+    }
+
+
+    const AudioContextClass =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+
+    if (!AudioContextClass) {
+
+        console.warn(
+            "Web Audio API unavailable."
+        );
+
+        return;
+    }
+
+
+    audioContext =
+        new AudioContextClass();
+
+
+    /*
+        Compressor makes applause punchy
+        and prevents ugly clipping.
+    */
+
+    compressor =
+        audioContext
+        .createDynamicsCompressor();
+
+
+    compressor.threshold.value = -16;
+
+    compressor.knee.value = 10;
+
+    compressor.ratio.value = 10;
+
+    compressor.attack.value = 0.002;
+
+    compressor.release.value = 0.15;
+
+
+    masterGain =
+        audioContext.createGain();
+
+
+    /*
+        Loud but controlled.
+    */
+
+    masterGain.gain.value = 0.95;
+
+
+    masterGain.connect(
+        compressor
+    );
+
+
+    compressor.connect(
+        audioContext.destination
+    );
+
+
+    audioContext.resume();
+}
+
+
+/* =========================================================
+   CREATE CLAP NOISE
+========================================================= */
+
+function createClap(
+    startTime,
+    volume,
+    duration
+) {
+
+    if (!audioContext) return;
+
+
+    const sampleRate =
+        audioContext.sampleRate;
+
+
+    const bufferSize =
+        Math.floor(
+            sampleRate * duration
+        );
+
+
+    const buffer =
+        audioContext.createBuffer(
+            1,
+            bufferSize,
+            sampleRate
+        );
+
+
+    const data =
+        buffer.getChannelData(0);
+
+
+    /*
+        Generate short hand-clap style noise.
+
+        Multiple exponential bursts give
+        a much more natural clap than one tone.
+    */
+
+    for (
+        let i = 0;
+        i < bufferSize;
+        i++
+    ) {
+
+        const envelope =
+            Math.exp(
+                -i /
+                (sampleRate * 0.018)
+            );
+
+
+        data[i] =
+            (
+                Math.random() * 2 - 1
+            )
+            *
+            envelope;
+    }
+
+
+    const source =
+        audioContext
+        .createBufferSource();
+
+
+    source.buffer = buffer;
+
+
+    const filter =
+        audioContext
+        .createBiquadFilter();
+
+
+    filter.type = "bandpass";
+
+
+    filter.frequency.value =
+        1400 +
+        Math.random() * 2200;
+
+
+    filter.Q.value = 0.8;
+
+
+    const gain =
+        audioContext
+        .createGain();
+
+
+    gain.gain.setValueAtTime(
+        volume,
+        startTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.01,
+        startTime + duration
+    );
+
+
+    source.connect(filter);
+
+    filter.connect(gain);
+
+    gain.connect(masterGain);
+
+
+    source.start(startTime);
+
+    source.stop(
+        startTime + duration + 0.01
+    );
+}
+
+
+/* =========================================================
+   LOUD CLAPPING EFFECT
+========================================================= */
+
+function playApplause() {
+
+    if (!audioContext) return;
+
+
+    audioContext.resume();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    /*
+        FIRST group:
+        individual hand claps
+    */
+
+    for (
+        let i = 0;
+        i < 28;
+        i++
+    ) {
+
+        const start =
+            now +
+            Math.random() * 1.8;
+
+
+        const volume =
+            0.65 +
+            Math.random() * 0.30;
+
+
+        const duration =
+            0.045 +
+            Math.random() * 0.055;
+
+
+        createClap(
+            start,
+            volume,
+            duration
+        );
+    }
+
+
+    /*
+        SECOND group:
+        slightly delayed claps create
+        crowd-like applause.
+    */
+
+    for (
+        let i = 0;
+        i < 20;
+        i++
+    ) {
+
+        const start =
+            now +
+            0.25 +
+            Math.random() * 1.9;
+
+
+        const volume =
+            0.45 +
+            Math.random() * 0.25;
+
+
+        createClap(
+            start,
+            volume,
+            0.06
+        );
+    }
+}
+
+
+/* =========================================================
+   HUHU SOUND
+========================================================= */
+
+function playHuhu() {
+
+    if (!audioContext) return;
+
+
+    audioContext.resume();
+
+
+    const now =
+        audioContext.currentTime;
+
+
+    [0, 0.32].forEach(
+        (offset, index) => {
+
+            const oscillator =
+                audioContext
+                .createOscillator();
+
+
+            const gain =
+                audioContext
+                .createGain();
+
+
+            oscillator.type =
+                "sawtooth";
+
+
+            const start =
+                now + offset;
+
+
+            oscillator.frequency
+                .setValueAtTime(
+                    index === 0
+                        ? 480
+                        : 430,
+                    start
+                );
+
+
+            oscillator.frequency
+                .exponentialRampToValueAtTime(
+                    170,
+                    start + 0.42
+                );
+
+
+            gain.gain.setValueAtTime(
+                0.55,
+                start
+            );
+
+
+            gain.gain
+                .exponentialRampToValueAtTime(
+                    0.01,
+                    start + 0.45
+                );
+
+
+            oscillator.connect(gain);
+
+            gain.connect(masterGain);
+
+
+            oscillator.start(start);
+
+            oscillator.stop(
+                start + 0.48
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SPEECH RECOGNITION SUPPORT
+========================================================= */
+
+function getSpeechRecognitionClass() {
+
+    return (
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition
+    );
+}
+
+
+/* =========================================================
+   START NEW RECOGNITION SESSION
+========================================================= */
+
+function startNewRecognition() {
+
+    if (!gameActive) return;
+
+    if (answered) return;
+
+    if (processingAnswer) return;
+
+
+    const SpeechRecognition =
+        getSpeechRecognitionClass();
+
+
+    if (!SpeechRecognition) {
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "❌ Chrome Speech Recognition उपलब्ध छैन।";
+
+        return;
+    }
+
+
+    /*
+        Cancel previous restart timer.
+    */
+
+    clearTimeout(
+        restartTimer
+    );
+
+
+    /*
+        Every session gets a unique ID.
+
+        This is VERY important because an old
+        onend/onresult callback cannot interfere
+        with the new recognition session.
+    */
+
+    const sessionId =
+        ++recognitionSession;
+
+
+    try {
+
+        /*
+            Completely new recognition object.
+
+            This fixes the Chrome 5/6 question
+            crash/dead-recognition problem.
+        */
+
+        recognition =
+            new SpeechRecognition();
+
+    } catch (error) {
+
+        console.error(error);
+
+        scheduleNewRecognition();
+
+        return;
+    }
+
+
+    recognition.continuous = true;
+
+    recognition.interimResults = true;
+
+    recognition.maxAlternatives = 5;
+
+
+    /*
+        Nepali speech.
+
+        Roman phonetic output is handled
+        by our answer matching.
+    */
+
+    recognition.lang = "ne-NP";
+
+
+    /* =====================================================
+       ON START
+    ===================================================== */
+
+    recognition.onstart = function() {
+
+        if (
+            sessionId !==
+            recognitionSession
+        ) return;
+
+
+        setLiveStatus();
+
+        console.log(
+            "🎤 NEW LISTENING SESSION:",
+            sessionId
+        );
+    };
+
+
+    /* =====================================================
+       ON RESULT
+    ===================================================== */
+
+    recognition.onresult =
+        function(event) {
+
+        if (
+            sessionId !==
+            recognitionSession
+        ) return;
+
+
+        if (!gameActive) return;
+
+        if (answered) return;
+
+
+        /*
+            Get ONLY the newly received result.
+
+            This prevents the old text from
+            remaining on screen.
+        */
+
+        let latestText = "";
+
+
+        for (
+            let i =
+                event.resultIndex;
+
+            i <
+                event.results.length;
+
+            i++
+        ) {
+
+            const result =
+                event.results[i];
+
+
+            if (
+                result &&
+                result[0]
+            ) {
+
+                latestText +=
+                    " " +
+                    result[0]
+                        .transcript;
+            }
+        }
+
+
+        latestText =
+            latestText.trim();
+
+
+        /*
+            VERY IMPORTANT:
+
+            Update UI immediately.
+
+            Even if Chrome gives an interim
+            result such as:
+
+                "da"
+
+            it is displayed immediately.
+        */
+
+        if (latestText) {
+
+            document.getElementById(
+                "heardText"
+            ).textContent =
+                latestText;
+        }
+
+
+        /*
+            Evaluate FINAL speech.
+
+            Interim speech is only displayed,
+            not marked wrong.
+        */
+
+        let finalText = "";
+
+
+        for (
+            let i =
+                event.resultIndex;
+
+            i <
+                event.results.length;
+
+            i++
+        ) {
+
+            if (
+                event.results[i]
+                    .isFinal
+            ) {
+
+                finalText +=
+                    " " +
+                    event.results[i][0]
+                        .transcript;
+            }
+        }
+
+
+        finalText =
+            finalText.trim();
+
+
+        if (
+            finalText &&
+            !answered &&
+            !processingAnswer
+        ) {
+
+            console.log(
+                "FINAL SPEECH:",
+                finalText
+            );
+
+
+            evaluateSpeech(
+                finalText
+            );
+        }
+
+    };
+
+
+    /* =====================================================
+       ERROR
+    ===================================================== */
+
+    recognition.onerror =
+        function(event) {
+
+        if (
+            sessionId !==
+            recognitionSession
+        ) return;
+
+
+        console.log(
+            "Speech error:",
+            event.error
+        );
+
+
+        /*
+            IMPORTANT:
+
+            Do NOT kill the game on temporary
+            recognition errors.
+        */
+
+        if (
+            event.error ===
+            "no-speech"
+        ) {
+
+            scheduleNewRecognition();
+
+            return;
+        }
+
+
+        if (
+            event.error ===
+            "network"
+        ) {
+
+            /*
+                Chrome sometimes produces network
+                error after several questions.
+
+                Completely replace recognition.
+            */
+
+            scheduleNewRecognition();
+
+            return;
+        }
+
+
+        if (
+            event.error ===
+            "aborted"
+        ) {
+
+            if (
+                gameActive &&
+                !answered
+            ) {
+
+                scheduleNewRecognition();
+            }
+
+            return;
+        }
+
+
+        if (
+            event.error ===
+            "audio-capture"
+        ) {
+
+            document.getElementById(
+                "status"
+            ).innerHTML =
+                "⚠️ Microphone समस्या — microphone जाँच गर्नुहोस्।";
+
+
+            scheduleNewRecognition();
+
+            return;
+        }
+
+
+        if (
+            event.error ===
+            "not-allowed"
+        ) {
+
+            gameActive = false;
+
+
+            document.getElementById(
+                "status"
+            ).innerHTML =
+                "🚫 Microphone permission दिनुहोस्।";
+
+
+            return;
+        }
+
+
+        /*
+            Unknown error:
+
+            keep the game alive.
+        */
+
+        if (
+            gameActive &&
+            !answered
+        ) {
+
+            scheduleNewRecognition();
+        }
+
+    };
+
+
+    /* =====================================================
+       ON END
+    ===================================================== */
+
+    recognition.onend =
+        function() {
+
+        if (
+            sessionId !==
+            recognitionSession
+        ) return;
+
+
+        console.log(
+            "🔄 Recognition session ended:",
+            sessionId
+        );
+
+
+        /*
+            THIS IS THE CORE FIX.
+
+            We don't call start() on the dead
+            recognition object.
+
+            We create a COMPLETELY NEW object.
+        */
+
+        if (
+            gameActive &&
+            !answered &&
+            !processingAnswer
+        ) {
+
+            scheduleNewRecognition();
+        }
+
+    };
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    try {
+
+        recognition.start();
+
+    } catch (error) {
+
+        console.log(
+            "start() error:",
+            error
+        );
+
+
+        /*
+            Instead of crashing,
+            create a fresh session.
+        */
+
+        scheduleNewRecognition();
+    }
+}
+
+
+/* =========================================================
+   SCHEDULE NEW RECOGNITION
+========================================================= */
+
+function scheduleNewRecognition() {
+
+    if (!gameActive) return;
+
+    if (answered) return;
+
+    if (processingAnswer) return;
+
+
+    clearTimeout(
+        restartTimer
+    );
+
+
+    /*
+        350 ms gives Chrome enough time to
+        completely release the old microphone session.
+    */
+
+    restartTimer =
+        setTimeout(
+            function() {
+
+                if (
+                    gameActive &&
+                    !answered &&
+                    !processingAnswer
+                ) {
+
+                    startNewRecognition();
+                }
+
+            },
+            350
+        );
+}
+
+
+/* =========================================================
+   LIVE STATUS
+========================================================= */
+
+function setLiveStatus() {
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+
+        '<span class="live-dot"></span>' +
+        ' 🎤 LIVE — सुन्दैछु...';
+}
+
+
+/* =========================================================
+   SHOW QUESTION
+========================================================= */
+
+function showQuestion() {
+
+    answered = false;
+
+    processingAnswer = false;
+
+
+    const question =
+        questions[currentIndex];
+
+
+    document.getElementById(
+        "currentNumber"
+    ).textContent =
+        currentIndex + 1;
+
+
+    document.getElementById(
+        "target"
+    ).textContent =
+        question.target;
+
+
+    document.getElementById(
+        "example"
+    ).innerHTML =
+
+        question.target +
+        ' — <span>' +
+        question.example +
+        '</span>';
+
+
+    /*
+        IMPORTANT:
+
+        Clear previous child's answer.
+
+        This fixes the bug where previous text
+        remained on the next question.
+    */
+
+    document.getElementById(
+        "heardText"
+    ).textContent =
+        "...";
+
+
+    document.getElementById(
+        "feedback"
+    ).textContent =
+        "";
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+
+        (
+            currentIndex /
+            TOTAL_QUESTIONS *
+            100
+        ) +
+        "%";
+
+
+    setLiveStatus();
+}
+
+
+/* =========================================================
+   NORMALIZE TEXT
+========================================================= */
+
+function normalizeText(text) {
+
+    if (!text) return "";
+
+
+    return text
+
+        .toLowerCase()
+
+        .normalize("NFD")
+
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+
+        .replace(
+            /[.,!?।,:;'"`~\-_/\\()[\]{}]/g,
+            " "
+        )
+
+        .replace(
+            /\s+/g,
+            " "
+        )
+
+        .trim();
+}
+
+
+/* =========================================================
+   COMPACT
+========================================================= */
+
+function compact(text) {
+
+    return normalizeText(text)
+        .replace(
+            /\s+/g,
+            ""
+        );
+}
+
+
+/* =========================================================
+   LEVENSHTEIN
+========================================================= */
+
+function levenshtein(a, b) {
+
+    const matrix = [];
+
+
+    for (
+        let i = 0;
+        i <= b.length;
+        i++
+    ) {
+
+        matrix[i] = [i];
+    }
+
+
+    for (
+        let j = 0;
+        j <= a.length;
+        j++
+    ) {
+
+        matrix[0][j] = j;
+    }
+
+
+    for (
+        let i = 1;
+        i <= b.length;
+        i++
+    ) {
+
+        for (
+            let j = 1;
+            j <= a.length;
+            j++
+        ) {
+
+            if (
+                b.charAt(i - 1) ===
+                a.charAt(j - 1)
+            ) {
+
+                matrix[i][j] =
+                    matrix[i - 1][j - 1];
+
+            } else {
+
+                matrix[i][j] =
+                    Math.min(
+
+                        matrix[i - 1][j - 1] + 1,
+
+                        matrix[i][j - 1] + 1,
+
+                        matrix[i - 1][j] + 1
+                    );
+            }
+        }
+    }
+
+
+    return matrix[b.length][a.length];
+}
+
+
+/* =========================================================
+   SIMILARITY
+========================================================= */
+
+function similarity(a, b) {
+
+    a = compact(a);
+
+    b = compact(b);
+
+
+    if (!a || !b)
+        return 0;
+
+
+    if (a === b)
+        return 1;
+
+
+    const distance =
+        levenshtein(a, b);
+
+
+    return (
+        1 -
+        distance /
+        Math.max(
+            a.length,
+            b.length
+        )
+    );
+}
+
+
+/* =========================================================
+   CHECK SPEECH
+========================================================= */
+
+function isCorrectSpeech(spoken) {
+
+    const question =
+        questions[currentIndex];
+
+
+    const spokenNormalized =
+        normalizeText(spoken);
+
+
+    const spokenCompact =
+        compact(spoken);
+
+
+    if (!spokenCompact)
+        return false;
+
+
+    /*
+        -----------------------------------------------------
+        EXACT MATCH
+        -----------------------------------------------------
+    */
+
+    for (
+        const answer
+        of question.answers
+    ) {
+
+        if (
+            spokenNormalized ===
+            normalizeText(answer)
+        ) {
+
+            return true;
+        }
+
+
+        if (
+            spokenCompact ===
+            compact(answer)
+        ) {
+
+            return true;
+        }
+    }
+
+
+    /*
+        -----------------------------------------------------
+        CONTAINS MATCH
+        -----------------------------------------------------
+
+        Example:
+
+        "डमरु हो"
+
+        should match:
+
+        "डमरु"
+    */
+
+    for (
+        const answer
+        of question.answers
+    ) {
+
+        const ans =
+            compact(answer);
+
+
+        if (
+            ans.length >= 2 &&
+            spokenCompact.includes(ans)
+        ) {
+
+            return true;
+        }
+    }
+
+
+    /*
+        -----------------------------------------------------
+        FUZZY MATCH
+        -----------------------------------------------------
+    */
+
+    for (
+        const answer
+        of question.answers
+    ) {
+
+        const ans =
+            compact(answer);
+
+
+        if (!ans)
+            continue;
+
+
+        const score =
+            similarity(
+                spokenCompact,
+                ans
+            );
+
+
+        /*
+            Long words.
+        */
+
+        if (
+            ans.length >= 5 &&
+            score >= 0.62
+        ) {
+
+            return true;
+        }
+
+
+        /*
+            Medium words.
+        */
+
+        if (
+            ans.length >= 3 &&
+            score >= 0.70
+        ) {
+
+            return true;
+        }
+
+
+        /*
+            Short phonetic answers.
+
+            Important for:
+
+                ड → da
+                इ → e
+                क → ka
+        */
+
+        if (
+            ans.length <= 3 &&
+            score >= 0.75
+        ) {
+
+            return true;
+        }
+    }
+
+
+    return false;
+}
+
+
+/* =========================================================
+   EVALUATE SPEECH
+========================================================= */
+
+function evaluateSpeech(spoken) {
+
+    if (!gameActive)
+        return;
+
+
+    if (answered)
+        return;
+
+
+    if (processingAnswer)
+        return;
+
+
+    processingAnswer = true;
+
+
+    /*
+        Always show the actual recognized
+        speech before evaluating.
+    */
+
+    document.getElementById(
+        "heardText"
+    ).textContent =
+        spoken;
+
+
+    const correct =
+        isCorrectSpeech(spoken);
+
+
+    /* =====================================================
+       CORRECT
+    ===================================================== */
+
+    if (correct) {
+
+        answered = true;
+
+        processingAnswer = true;
+
+
+        correctCount++;
+
+
+        answerHistory.push({
+
+            question:
+                questions[currentIndex]
+                    .target,
+
+            example:
+                questions[currentIndex]
+                    .example,
+
+            spoken:
+                spoken,
+
+            correct:
+                true
+        });
+
+
+        /*
+            Invalidate current recognition
+            session so old callbacks cannot
+            touch the next question.
+        */
+
+        recognitionSession++;
+
+
+        clearTimeout(
+            restartTimer
+        );
+
+
+        /*
+            Stop current recognition.
+        */
+
+        if (recognition) {
+
+            try {
+
+                recognition.stop();
+
+            } catch (e) {
+
+                console.log(e);
+            }
+        }
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+            "🎉 सही उत्तर!";
+
+
+        document.getElementById(
+            "feedback"
+        ).textContent =
+            "👏 एकदम सही!";
+
+
+        /*
+            LOUD CLAPPING
+        */
+
+        playApplause();
+
+
+        /*
+            Move automatically.
+        */
+
+        setTimeout(
+            function() {
+
+                nextQuestion();
+
+            },
+            1800
+        );
+
+
+        return;
+    }
+
+
+    /* =====================================================
+       WRONG
+    ===================================================== */
+
+    wrongAttempts++;
+
+
+    document.getElementById(
+        "feedback"
+    ).textContent =
+        "😭 फेरि प्रयास गरौँ!";
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "❌ मिलेन — फेरि बोल्नुहोस् 🎤";
+
+
+    /*
+        HUHU sound.
+    */
+
+    playHuhu();
+
+
+    /*
+        IMPORTANT:
+
+        We DO NOT change question.
+
+        We DO NOT set answered=true.
+
+        We continue listening.
+    */
+
+    processingAnswer = false;
+
+
+    /*
+        Start another fresh recognition
+        session after the wrong attempt.
+
+        This makes repeated child speech
+        extremely robust.
+    */
+
+    setTimeout(
+        function() {
+
+            if (
+                gameActive &&
+                !answered
+            ) {
+
+                setLiveStatus();
+
+                startNewRecognition();
+            }
+
+        },
+        500
+    );
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextQuestion() {
+
+    if (!gameActive)
+        return;
+
+
+    currentIndex++;
+
+
+    /*
+        FINISHED 50 QUESTIONS
+    */
+
+    if (
+        currentIndex >=
+        TOTAL_QUESTIONS
+    ) {
+
+        finishGame();
+
+        return;
+    }
+
+
+    /*
+        Reset state.
+    */
+
+    answered = false;
+
+    processingAnswer = false;
+
+
+    /*
+        IMPORTANT:
+
+        New question gets a completely
+        clean speech display.
+    */
+
+    showQuestion();
+
+
+    /*
+        Start NEW microphone session.
+    */
+
+    setTimeout(
+        function() {
+
+            if (
+                gameActive &&
+                !answered
+            ) {
+
+                startNewRecognition();
+            }
+
+        },
+        350
+    );
+}
+
+
+/* =========================================================
+   STOP GAME
+========================================================= */
+
+function stopGame() {
+
+    gameActive = false;
+
+    answered = true;
+
+    processingAnswer = false;
+
+
+    clearTimeout(
+        restartTimer
+    );
+
+
+    /*
+        Invalidate all callbacks.
+    */
+
+    recognitionSession++;
+
+
+    if (recognition) {
+
+        try {
+
+            recognition.stop();
+
+        } catch (e) {
+
+            console.log(e);
+        }
+    }
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+        "⛔ खेल रोकियो।";
+}
+
+
+/* =========================================================
+   FINISH GAME
+========================================================= */
+
+function finishGame() {
+
+    gameActive = false;
+
+    answered = true;
+
+    processingAnswer = false;
+
+
+    clearTimeout(
+        restartTimer
+    );
+
+
+    recognitionSession++;
+
+
+    if (recognition) {
+
+        try {
+
+            recognition.stop();
+
+        } catch (e) {
+
+            console.log(e);
+        }
+    }
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        "100%";
+
+
+    createReport();
+
+
+    showScreen(
+        "reportScreen"
+    );
+}
+
+
+/* =========================================================
+   CREATE REPORT
+========================================================= */
+
+function createReport() {
+
+    const percentage =
+        Math.round(
+            correctCount /
+            TOTAL_QUESTIONS *
+            100
+        );
+
+
+    document.getElementById(
+        "score"
+    ).innerHTML =
+
+        `
+        🎯 Score: ${percentage}%
+        <br>
+        ✅ सही प्रश्न: ${correctCount}
+        &nbsp;&nbsp;
+        🔄 गलत प्रयास: ${wrongAttempts}
+        `;
+
+
+    const body =
+        document.getElementById(
+            "reportBody"
+        );
+
+
+    body.innerHTML = "";
+
+
+    answerHistory.forEach(
+        (item, index) => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    <strong>
+                        ${item.question}
+                    </strong>
+                </td>
+
+                <td>
+                    ${item.example}
+                </td>
+
+                <td>
+                    ${item.spoken}
+                </td>
+
+                <td class="correct">
+                    ✓ सही
+                </td>
+
+            `;
+
+
+            body.appendChild(row);
+        }
+    );
+}
+
+
+/* =========================================================
+   BROWSER CHECK
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        const supported =
+            getSpeechRecognitionClass();
+
+
+        if (!supported) {
+
+            console.warn(
+                "Speech Recognition is not supported."
+            );
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
